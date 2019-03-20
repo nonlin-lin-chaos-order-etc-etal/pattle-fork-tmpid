@@ -1,16 +1,32 @@
-# pattle
+# Pattle
 
-An easy to use Matrix app.
+  Pattle is an easy to use Android app for Matrix, with
+  design inspired by other popular IM apps.
 
-## Getting Started
+  The goal of Pattle is to create an app that behaves similiary
+  (and almost exactly) like many modern popular chat apps of today,
+  like WhatsApp, Telegram and Signal. This is not the only goal,
+  however: the primary goal of Pattle is to be a Matrix app that
+  everyone can use, in terms of simplicity.
 
-This project is a starting point for a Flutter application.
+  For more details, see the
+  [design philosophy](https://docs.pattle.im/design/philosophy/).
 
-A few resources to get you started if this is your first Flutter project:
+## Get Pattle
+   
+   Pattle will be available on F-Droid and Google Play when
+   the first stable version has been released.
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
+   Pattle supports all Android version from 4.1 and up.
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+## Design
+
+   All design decisions are documented on
+   [docs.pattle.im](https://docs.pattle.im),
+   [Design](https://docs.pattle.im/design/philosophy/).
+
+## Contributing
+   
+   Contributions are encouraged! See [CONTRIBUTING](CONTRIBUTING.md) for
+   details on how to contribute! 
+
