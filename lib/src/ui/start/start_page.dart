@@ -60,10 +60,7 @@ class StartPage extends StatelessWidget {
                     SizedBox(height: 16),
                     FlatButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => UsernamePage()
-                          )
-                        );
+                        Navigator.pushNamed(context, '/start/username');
                       },
                       child: Text(AppLocalizations.of(context)
                                   .loginWithUsernameButton.toUpperCase()),

@@ -19,13 +19,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
+import 'package:pattle/src/ui/start/advanced_page.dart';
+import 'package:pattle/src/ui/start/phase/identity/username_page.dart';
 import 'package:pattle/src/ui/start/start_page.dart';
 
 class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       onGenerateTitle: (BuildContext context)
       => AppLocalizations.of(context).appName,
@@ -39,7 +40,13 @@ class App extends StatelessWidget {
       supportedLocales: [
         const Locale('en', 'US'),
       ],
-      home: StartPage(),
+      initialRoute: '/start',
+      routes: {
+        '/': (context) => StartPage(),
+        '/start': (context) => StartPage(),
+        '/start/advanced': (context) => AdvancedPage(),
+        '/start/username': (context) => UsernamePage()
+      },
     );
   }
 }

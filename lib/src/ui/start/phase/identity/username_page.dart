@@ -37,10 +37,7 @@ class UsernamePage extends StatelessWidget {
                 margin: EdgeInsets.only(top: 32, right: 16),
                 child: FlatButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => AdvancedPage()
-                        )
-                      );
+                      Navigator.pushNamed(context, '/start/advanced');
                     },
                     child: Text(
                       AppLocalizations.of(context).advanced.toUpperCase()
