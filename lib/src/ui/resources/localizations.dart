@@ -18,6 +18,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+AppLocalizations l(BuildContext context) => AppLocalizations.of(context);
+
 class AppLocalizations {
   AppLocalizations(this.locale);
 
@@ -41,9 +43,18 @@ class AppLocalizations {
     'en': {
       'appName': 'Pattle',
 
-      'loginWithPhoneButton': 'LOGIN WITH PHONE NUMBER',
-      'loginWithEmailButton': 'LOGIN WITH EMAIL',
-      'loginWithUsernameButton': 'LOGIN WITH USERNAME',
+      'advanced': 'Advanced',
+
+      'loginWithPhoneButton': 'Login with phone number',
+      'loginWithEmailButton': 'Login with email',
+      'loginWithUsernameButton': 'Login with username',
+
+      'nextButton': 'NEXT',
+      'username': 'Username',
+      'enterUsername': 'Enter username',
+      'ifYouDontHaveAnAccount': 'If you don\'t have an account, we\'ll create one',
+      'usernameInvalidError': 'Invalid username. May only contain letters, numbers, -, ., =, _ and /',
+      'unknownErrorOccured': 'An unknown error occured'
     },
   };
 
@@ -61,6 +72,34 @@ class AppLocalizations {
 
   String get loginWithUsernameButton {
     return _get('loginWithUsernameButton');
+  }
+
+  String get nextButton {
+    return _get('nextButton');
+  }
+
+  String get username {
+    return _get('username');
+  }
+
+  String get enterUsername {
+    return _get('enterUsername');
+  }
+
+  String get ifYouDontHaveAnAccount {
+    return _get('ifYouDontHaveAnAccount');
+  }
+
+  String get advanced {
+    return _get('advanced');
+  }
+
+  String get usernameInvalidError {
+    return _get('usernameInvalidError');
+  }
+
+  String get unknownErrorOccured {
+    return _get('unknownErrorOccured');
   }
 }
 

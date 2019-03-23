@@ -16,18 +16,18 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
+import 'package:pattle/src/ui/start/phase/identity/username_page.dart';
 
-class StartPage extends StatefulWidget {
-  StartPage({Key key}) : super(key: key);
-
-  @override
-  _StartPageState createState() => _StartPageState();
-}
-
-class _StartPageState extends State<StartPage> {
+class StartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final buttonShape = RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(96)
+    );
+
+    final buttonPadding = EdgeInsets.all(16);
+
     return Scaffold(
       body: Container(
         margin: const EdgeInsets.only(top: 16),
@@ -37,30 +37,38 @@ class _StartPageState extends State<StartPage> {
               children: <Widget>[
                 Text(
                   AppLocalizations.of(context).appName,
-                  style: TextStyle(fontSize: 100),
+                  style: TextStyle(fontSize: 96),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     RaisedButton(
-                      onPressed: () { },
-                      child: Text(AppLocalizations.of(context).loginWithPhoneButton),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(96)),
-                      padding: EdgeInsets.all(16),
+                      onPressed: null,
+                      child: Text(AppLocalizations.of(context)
+                                  .loginWithPhoneButton.toUpperCase()),
+                      shape: buttonShape,
+                      padding: buttonPadding,
                     ),
                     SizedBox(height: 16),
                     OutlineButton(
-                      onPressed: () { },
-                      child: Text(AppLocalizations.of(context).loginWithEmailButton),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(96)),
-                      padding: EdgeInsets.all(16),
+                      onPressed: null,
+                      child: Text(AppLocalizations.of(context)
+                                  .loginWithEmailButton.toUpperCase()),
+                      shape: buttonShape,
+                      padding: buttonPadding,
                     ),
                     SizedBox(height: 16),
                     FlatButton(
-                      onPressed: () { },
-                      child: Text(AppLocalizations.of(context).loginWithUsernameButton),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(96)),
-                      padding: EdgeInsets.all(16),
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => UsernamePage()
+                          )
+                        );
+                      },
+                      child: Text(AppLocalizations.of(context)
+                                  .loginWithUsernameButton.toUpperCase()),
+                      shape: buttonShape,
+                      padding: buttonPadding,
                     ),
                   ],
                 )

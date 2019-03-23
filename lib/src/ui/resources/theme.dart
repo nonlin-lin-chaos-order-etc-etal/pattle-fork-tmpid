@@ -28,7 +28,8 @@ final ThemeData lightTheme = new ThemeData(
   buttonTheme: ButtonThemeData(
     buttonColor: LightColors.red[500],
     textTheme: ButtonTextTheme.primary
-  )
+  ),
+  textTheme: Typography.blackMountainView
 );
 
 class LightColors {
