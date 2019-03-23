@@ -90,6 +90,7 @@ class UsernamePage extends StatelessWidget {
                             _next();
                           },
                           decoration: InputDecoration(
+                            filled: true,
                             helperText: AppLocalizations.of(context).ifYouDontHaveAnAccount,
                             labelText: AppLocalizations.of(context).username,
                             errorText: errorText
