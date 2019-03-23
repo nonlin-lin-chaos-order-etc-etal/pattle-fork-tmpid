@@ -25,6 +25,8 @@ final ThemeData lightTheme = new ThemeData(
   primaryColorBrightness: Brightness.dark,
   accentColorBrightness: Brightness.dark,
 
+  cursorColor: LightColors.red,
+
   buttonTheme: ButtonThemeData(
     buttonColor: LightColors.red[500],
     textTheme: ButtonTextTheme.primary
