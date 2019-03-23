@@ -19,12 +19,14 @@ import 'package:matrix/matrix.dart';
 
 Homeserver _homeserver;
 
+/// Homeserver the app uses. If [uri] is given, replace the instance
+/// with a new homeserver.
 Homeserver homeserver({Uri uri}) {
-  if (_homeserver == null) {
-    if (uri == null) {
-      throw ArgumentError("Homeserver is not initialized and no uri was given");
-    }
+  if (_homeserver == null && uri == null) {
+    throw ArgumentError("Homeserver is not initialized and no uri was given");
+  }
 
+  if (uri != null) {
     _homeserver = Homeserver(uri);
   }
 

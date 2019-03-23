@@ -18,7 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/advanced_page.dart';
-import 'package:pattle/src/ui/start/authentication_bloc.dart';
+import 'package:pattle/src/ui/start/start_bloc.dart';
 
 class UsernamePage extends StatelessWidget {
 
@@ -43,7 +43,7 @@ class UsernamePage extends StatelessWidget {
                       );
                     },
                     child: Text(
-                        AppLocalizations.of(context).advanced.toUpperCase()
+                      AppLocalizations.of(context).advanced.toUpperCase()
                     )
                 )
               )
@@ -67,7 +67,13 @@ class UsernamePage extends StatelessWidget {
                         if (snapshot.hasError) {
                           if (snapshot.error is InvalidUsernameException) {
                             errorText = l(context).usernameInvalidError;
+                          } else if(snapshot.error is InvalidHostnameException) {
+                            errorText = l(context).hostnameInvalidError;
+                          } else if(snapshot.error is InvalidUserIdException) {
+                            errorText = l(context).userIdInvalidError;
                           } else {
+                            debugPrint(snapshot.error.toString());
+                            debugPrintStack();
                             errorText = l(context).unknownErrorOccured;
                           }
                         } else {
@@ -92,7 +98,7 @@ class UsernamePage extends StatelessWidget {
                       onPressed: () {
                         auth.checkUsernameAvailability(username);
                       },
-                        child: Text(AppLocalizations.of(context).nextButton)
+                      child: Text(AppLocalizations.of(context).nextButton)
                     )
                   ],
                 )

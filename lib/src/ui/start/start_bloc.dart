@@ -19,16 +19,18 @@ import 'package:matrix/matrix.dart';
 import 'package:pattle/src/data/homeserver.dart';
 import 'package:rxdart/rxdart.dart';
 
-final auth = AuthenticationBloc();
+final auth = StartBloc();
 
-class AuthenticationBloc {
+class StartBloc {
 
-  Homeserver _homeserver;
+  Homeserver _homeserver = homeserver(uri: Uri.parse("https://matrix.org"));
 
   final isUsernameAvailableSubj = BehaviorSubject<bool>();
   Observable<bool> get isUsernameAvailable => isUsernameAvailableSubj.stream;
 
   void checkUsernameAvailability(String username) {
+    var user;
+
     // Check if there is a ':' in the username,
     // if so, treat it as a full Matrix ID (without or without '@').
     // Otherwise use the local part (with or without '@').
@@ -39,31 +41,47 @@ class AuthenticationBloc {
     // @joe
     if (username.contains(':')) {
       var split = username.split(':');
-      username = split[0];
       String server = split[1];
 
       try {
-        var serverUri = Uri.parse(server);
-
+        var serverUri = Uri.parse("https://$server");
         _homeserver = homeserver(uri: serverUri);
-      } catch (FormatException) {
+
+        // Add an '@' if the username does not have one, to allow
+        // for this input: 'pit:pattle.im'
+        if (!username.startsWith('@')) {
+          username = "@$username";
+        }
+
+        if (!UserId.isValidFullyQualified(username)) {
+          isUsernameAvailableSubj.addError(InvalidUserIdException());
+          return;
+        }
+
+        user = UserId(username).username;
+      } on FormatException {
         isUsernameAvailableSubj.addError(InvalidHostnameException());
+        return;
       }
-    }
+    } else {
+      if (username.startsWith('@')) {
+        username = username.substring(1).toLowerCase();
+      }
 
-    if (username.startsWith('@')) {
-      username = username.substring(1);
-    }
+      if (!Username.isValid(username)) {
+        isUsernameAvailableSubj.addError(InvalidUsernameException());
+        return;
+      }
 
-    if (!Username.isValid(username)) {
-      isUsernameAvailableSubj.addError(InvalidUsernameException());
-      return;
+      user = Username(username);
     }
 
     isUsernameAvailableSubj.addStream(
-        hs.isUsernameAvailable(Username(username)).asStream()
+        _homeserver.isUsernameAvailable(user).asStream()
     );
   }
 }
+
+class InvalidUserIdException implements Exception { }
 
 class InvalidHostnameException implements Exception { }

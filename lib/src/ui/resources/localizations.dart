@@ -54,6 +54,8 @@ class AppLocalizations {
       'enterUsername': 'Enter username',
       'ifYouDontHaveAnAccount': 'If you don\'t have an account, we\'ll create one',
       'usernameInvalidError': 'Invalid username. May only contain letters, numbers, -, ., =, _ and /',
+      'userIdInvalidError': 'Invalid user ID. Must be in the format of \'@name:server.tld\'.',
+      'hostnameInvalidError': 'Invalid hostname',
       'unknownErrorOccured': 'An unknown error occured'
     },
   };
@@ -96,6 +98,14 @@ class AppLocalizations {
 
   String get usernameInvalidError {
     return _get('usernameInvalidError');
+  }
+
+  String get hostnameInvalidError {
+    return _get('hostnameInvalidError');
+  }
+
+  String get userIdInvalidError {
+    return _get('userIdInvalidError');
   }
 
   String get unknownErrorOccured {
