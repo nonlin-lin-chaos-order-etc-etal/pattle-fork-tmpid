@@ -19,16 +19,22 @@ import 'package:matrix/matrix.dart';
 import 'package:pattle/src/data/homeserver.dart';
 import 'package:rxdart/rxdart.dart';
 
-final auth = StartBloc();
+final start = StartBloc();
 
 class StartBloc {
 
   Homeserver _homeserver = homeserver(uri: Uri.parse("https://matrix.org"));
 
-  final isUsernameAvailableSubj = BehaviorSubject<bool>();
-  Observable<bool> get isUsernameAvailable => isUsernameAvailableSubj.stream;
+  final _isUsernameAvailableSubj = BehaviorSubject<bool>();
+  Observable<bool> get isUsernameAvailable => _isUsernameAvailableSubj.stream;
+
+  final _isCheckingForUsernameSubj = BehaviorSubject<bool>();
+  Observable<bool> get isCheckingForUsername =>
+      _isCheckingForUsernameSubj.stream.distinct();
 
   void checkUsernameAvailability(String username) {
+    _isCheckingForUsernameSubj.add(true);
+
     var user;
 
     // Check if there is a ':' in the username,
@@ -54,13 +60,13 @@ class StartBloc {
         }
 
         if (!UserId.isValidFullyQualified(username)) {
-          isUsernameAvailableSubj.addError(InvalidUserIdException());
+          _isUsernameAvailableSubj.addError(InvalidUserIdException());
           return;
         }
 
         user = UserId(username).username;
       } on FormatException {
-        isUsernameAvailableSubj.addError(InvalidHostnameException());
+        _isUsernameAvailableSubj.addError(InvalidHostnameException());
         return;
       }
     } else {
@@ -69,15 +75,19 @@ class StartBloc {
       }
 
       if (!Username.isValid(username)) {
-        isUsernameAvailableSubj.addError(InvalidUsernameException());
+        _isUsernameAvailableSubj.addError(InvalidUsernameException());
         return;
       }
 
       user = Username(username);
     }
 
-    isUsernameAvailableSubj.addStream(
-        _homeserver.isUsernameAvailable(user).asStream()
+    _isUsernameAvailableSubj.addStream(
+        _homeserver.isUsernameAvailable(user)
+          .whenComplete(() {
+            _isCheckingForUsernameSubj.add(false);
+          })
+        .asStream()
     );
   }
 }

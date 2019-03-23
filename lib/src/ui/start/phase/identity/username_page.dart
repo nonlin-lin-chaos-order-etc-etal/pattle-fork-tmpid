@@ -60,7 +60,7 @@ class UsernamePage extends StatelessWidget {
                     ),
                     SizedBox(height: 16),
                     StreamBuilder<bool>(
-                      stream: auth.isUsernameAvailable,
+                      stream: start.isUsernameAvailable,
                       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                         String errorText;
 
@@ -94,11 +94,25 @@ class UsernamePage extends StatelessWidget {
                         }
                     ),
                     SizedBox(height: 16),
-                    RaisedButton(
-                      onPressed: () {
-                        auth.checkUsernameAvailability(username);
-                      },
-                      child: Text(AppLocalizations.of(context).nextButton)
+                    StreamBuilder<bool>(
+                      stream: start.isCheckingForUsername,
+                      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                        final isChecking = snapshot.data == true;
+                        var onPressed;
+
+                        if (!isChecking) {
+                          onPressed = () {
+                            start.checkUsernameAvailability(username);
+                          };
+                        } else {
+                          onPressed = null;
+                        }
+
+                        return RaisedButton(
+                            onPressed: onPressed,
+                            child: Text(AppLocalizations.of(context).nextButton)
+                        );
+                      }
                     )
                   ],
                 )
