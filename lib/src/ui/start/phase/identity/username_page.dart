@@ -24,6 +24,10 @@ class UsernamePage extends StatelessWidget {
 
   String username;
 
+  void _next() {
+    start.checkUsernameAvailability(username);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,6 +86,9 @@ class UsernamePage extends StatelessWidget {
                           onChanged: (value) {
                             username = value;
                           },
+                          onEditingComplete: () {
+                            _next();
+                          },
                           decoration: InputDecoration(
                             helperText: AppLocalizations.of(context).ifYouDontHaveAnAccount,
                             labelText: AppLocalizations.of(context).username,
@@ -99,7 +106,7 @@ class UsernamePage extends StatelessWidget {
 
                         if (!isChecking) {
                           onPressed = () {
-                            start.checkUsernameAvailability(username);
+                            _next();
                           };
                         } else {
                           onPressed = null;
