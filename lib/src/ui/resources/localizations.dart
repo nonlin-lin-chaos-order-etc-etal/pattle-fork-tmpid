@@ -56,7 +56,8 @@ class AppLocalizations {
       'usernameInvalidError': 'Invalid username. May only contain letters, numbers, -, ., =, _ and /',
       'userIdInvalidError': 'Invalid user ID. Must be in the format of \'@name:server.tld\'.',
       'hostnameInvalidError': 'Invalid hostname',
-      'unknownErrorOccured': 'An unknown error occured'
+      'unknownErrorOccured': 'An unknown error occured',
+      'confirmButton': 'CONFIRM'
     },
   };
 
@@ -110,6 +111,10 @@ class AppLocalizations {
 
   String get unknownErrorOccured {
     return _get('unknownErrorOccured');
+  }
+
+  String get confirmButton {
+    return _get('confirmButton');
   }
 }
 

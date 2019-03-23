@@ -16,14 +16,32 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:matrix/matrix.dart';
-import 'package:pattle/src/data/homeserver.dart';
+import 'package:pattle/src/data/homeserver.dart' as data;
 import 'package:rxdart/rxdart.dart';
 
 final start = StartBloc();
 
 class StartBloc {
 
-  Homeserver _homeserver = homeserver(uri: Uri.parse("https://matrix.org"));
+  final _homeserverChangedSubj = BehaviorSubject<bool>();
+  Observable<bool> get homeserverChanged => _homeserverChangedSubj.stream;
+
+  Homeserver homeserver = data.homeserver(uri: Uri.parse("https://matrix.org"));
+
+  void _setHomeserver(Uri uri) {
+    homeserver = data.homeserver(uri: uri);
+    _homeserverChangedSubj.add(true);
+  }
+
+  void setHomeserverUri(String url) {
+    try {
+      var uri = Uri.parse(url);
+
+      _setHomeserver(uri);
+    } on FormatException {
+      _homeserverChangedSubj.addError(InvalidHostnameException());
+    }
+  }
 
   final _isUsernameAvailableSubj = BehaviorSubject<bool>();
   Observable<bool> get isUsernameAvailable => _isUsernameAvailableSubj.stream;
@@ -56,7 +74,7 @@ class StartBloc {
 
       try {
         var serverUri = Uri.parse("https://$server");
-        _homeserver = homeserver(uri: serverUri);
+        _setHomeserver(serverUri);
 
         // Add an '@' if the username does not have one, to allow
         // for this input: 'pit:pattle.im'
@@ -88,7 +106,7 @@ class StartBloc {
     }
 
     _isUsernameAvailableSubj.addStream(
-      Observable(_homeserver.isUsernameAvailable(user).asStream())
+      Observable(homeserver.isUsernameAvailable(user).asStream())
         .doOnEach((notification) {
           _isCheckingForUsernameSubj.add(false);
         })

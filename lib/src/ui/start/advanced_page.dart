@@ -16,20 +16,104 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
+import 'package:pattle/src/ui/start/start_bloc.dart';
 
-class AdvancedPage extends StatelessWidget {
+class AdvancedPage extends StatefulWidget {
+
+  @override
+  State<StatefulWidget> createState() => AdvancedPageState();
+}
+
+class AdvancedPageState extends State<AdvancedPage> {
+  final homeserverTextController = TextEditingController();
+
+  @override
+  void initState() {
+    homeserverTextController.text = start.homeserver.uri.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-            AppLocalizations.of(context).advanced,
-            style: TextStyle(color: Colors.black)
+        appBar: AppBar(
+          title: Text(
+              AppLocalizations.of(context).advanced,
+              style: TextStyle(color: Theme.of(context).primaryColor)
+          ),
+          iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+          elevation: 0,
+          backgroundColor: const Color(0x00000000),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
-        elevation: 0,
-        backgroundColor: const Color(0x00000000),
-      ),
+        body: Container(
+            margin: EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.home,
+                        color: Theme.of(context).hintColor,
+                        size: 32
+                    ),
+                    SizedBox(width: 16),
+                    Flexible(
+                        child: StreamBuilder<bool>(
+                            stream: start.homeserverChanged,
+                            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+
+                              var errorText;
+
+                              if (snapshot.hasError) {
+                                errorText = l(context).hostnameInvalidError;
+                              } else {
+                                errorText = null;
+                              }
+
+                              return TextField(
+                                controller: homeserverTextController,
+                                decoration: InputDecoration(
+                                    filled: true,
+                                    labelText: 'Homeserver',
+                                    hintText: start.homeserver.uri.toString(),
+                                    errorText: errorText
+                                ),
+                              );
+                            }
+                        )
+                    )
+                  ],
+                ),
+                SizedBox(height: 32),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.person,
+                        color: Theme.of(context).hintColor,
+                        size: 32
+                    ),
+                    SizedBox(width: 16),
+                    Flexible(
+                      child: TextField(
+                        decoration: InputDecoration(
+                            filled: true,
+                            labelText: 'Identity server'
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 32),
+                RaisedButton(
+                    onPressed: () {
+                      start.setHomeserverUri(homeserverTextController.text);
+                      Navigator.pop(context);
+                    },
+                    child: Text(AppLocalizations.of(context).confirmButton)
+                )
+              ],
+            )
+        )
     );
   }
 }
