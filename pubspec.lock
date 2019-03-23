@@ -175,7 +175,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "2156a0c2b865a43925902dc7a9a0200bfd1b294e"
+      resolved-ref: f37eb7a7706d40994ad98c4c2a8e73e7166f920b
       url: "https://git.pattle.im/pattle/library/matrix-dart-sdk.git"
     source: git
     version: "0.0.1"
