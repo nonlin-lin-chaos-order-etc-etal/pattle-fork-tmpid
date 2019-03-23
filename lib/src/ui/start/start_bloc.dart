@@ -35,6 +35,11 @@ class StartBloc {
   void checkUsernameAvailability(String username) {
     _isCheckingForUsernameSubj.add(true);
 
+    var addError = (error) {
+      _isUsernameAvailableSubj.addError(error);
+      _isCheckingForUsernameSubj.add(false);
+    };
+
     var user;
 
     // Check if there is a ':' in the username,
@@ -60,13 +65,13 @@ class StartBloc {
         }
 
         if (!UserId.isValidFullyQualified(username)) {
-          _isUsernameAvailableSubj.addError(InvalidUserIdException());
+          addError(InvalidUserIdException());
           return;
         }
 
         user = UserId(username).username;
       } on FormatException {
-        _isUsernameAvailableSubj.addError(InvalidHostnameException());
+        addError(InvalidHostnameException());
         return;
       }
     } else {
@@ -75,7 +80,7 @@ class StartBloc {
       }
 
       if (!Username.isValid(username)) {
-        _isUsernameAvailableSubj.addError(InvalidUsernameException());
+        addError(InvalidUsernameException());
         return;
       }
 
@@ -83,11 +88,10 @@ class StartBloc {
     }
 
     _isUsernameAvailableSubj.addStream(
-        _homeserver.isUsernameAvailable(user)
-          .whenComplete(() {
-            _isCheckingForUsernameSubj.add(false);
-          })
-        .asStream()
+      Observable(_homeserver.isUsernameAvailable(user).asStream())
+        .doOnEach((notification) {
+          _isCheckingForUsernameSubj.add(false);
+        })
     );
   }
 }
