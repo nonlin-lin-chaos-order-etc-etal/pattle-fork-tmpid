@@ -28,5 +28,17 @@
 ## Contributing
    
    Contributions are encouraged! See [CONTRIBUTING](CONTRIBUTING.md) for
-   details on how to contribute! 
+   details on how to contribute!
 
+   For many features, contributions might also be needed for the
+   [Matrix Dart SDK](https://git.pattle.im/pattle/library/matrix-dart-sdk),
+   which is developed for Pattle.
+
+## Building
+
+   Pattle is made with [Flutter](https://flutter.dev/). To build Pattle,
+   you'll need the [Flutter SDK](https://flutter.dev/docs/get-started/install).
+
+   After the Flutter SDK is setup and ready, you can build Pattle with:
+   `flutter build apk` for Android, or
+   `flutter build ios` for iOS.
