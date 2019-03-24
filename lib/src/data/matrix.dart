@@ -32,3 +32,6 @@ Homeserver homeserver({Uri uri}) {
 
   return _homeserver;
 }
+
+/// The user this app manages.
+LocalUser localUser;

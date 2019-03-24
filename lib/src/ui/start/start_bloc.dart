@@ -16,7 +16,8 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:matrix/matrix.dart';
-import 'package:pattle/src/data/homeserver.dart' as data;
+import 'package:pattle/src/data/matrix.dart' as data;
+import 'package:pattle/src/data/matrix.dart';
 import 'package:rxdart/rxdart.dart';
 
 final start = StartBloc();
@@ -27,6 +28,8 @@ class StartBloc {
   Observable<bool> get homeserverChanged => _homeserverChangedSubj.stream;
 
   Homeserver homeserver = data.homeserver(uri: Uri.parse("https://matrix.org"));
+
+  Username _username;
 
   void _setHomeserver(Uri uri) {
     homeserver = data.homeserver(uri: uri);
@@ -43,19 +46,20 @@ class StartBloc {
     }
   }
 
-  final _isUsernameAvailableSubj = BehaviorSubject<bool>();
-  Observable<bool> get isUsernameAvailable => _isUsernameAvailableSubj.stream;
-
-  final _isCheckingForUsernameSubj = BehaviorSubject<bool>();
-  Observable<bool> get isCheckingForUsername =>
-      _isCheckingForUsernameSubj.stream.distinct();
+  final _isUsernameAvailableSubj = BehaviorSubject<UsernameAvailableState>();
+  Observable<UsernameAvailableState> get isUsernameAvailable
+    => _isUsernameAvailableSubj.stream.distinct();
 
   void checkUsernameAvailability(String username) {
-    _isCheckingForUsernameSubj.add(true);
+    if (username == null) {
+      return;
+    }
+
+    _isUsernameAvailableSubj.add(UsernameAvailableState.checking);
 
     var addError = (error) {
       _isUsernameAvailableSubj.addError(error);
-      _isCheckingForUsernameSubj.add(false);
+      _isUsernameAvailableSubj.add(UsernameAvailableState.none);
     };
 
     var user;
@@ -107,11 +111,51 @@ class StartBloc {
 
     _isUsernameAvailableSubj.addStream(
       Observable(homeserver.isUsernameAvailable(user).asStream())
-        .doOnEach((notification) {
-          _isCheckingForUsernameSubj.add(false);
+        .map((available) {
+          if (available) {
+            return UsernameAvailableState.available;
+          } else {
+            return UsernameAvailableState.unavailable;
+          }
+        })
+        .doOnData((state) {
+          if (state == UsernameAvailableState.available
+           || state == UsernameAvailableState.unavailable) {
+            _username = user;
+          }
         })
     );
   }
+
+  final _loginSubj = BehaviorSubject<LoginState>();
+  Observable<LoginState> get loginStream
+  => _loginSubj.stream;
+
+  void login(String password) {
+    _loginSubj.add(LoginState.trying);
+
+    _loginSubj.addStream(
+        Observable(homeserver.login(_username, password).asStream())
+          .map((user) {
+            localUser = user;
+            return LoginState.succeeded;
+          })
+    );
+  }
+
+}
+
+enum UsernameAvailableState {
+  none,
+  checking,
+  unavailable,
+  available
+}
+
+enum LoginState {
+  none,
+  trying,
+  succeeded
 }
 
 class InvalidUserIdException implements Exception { }

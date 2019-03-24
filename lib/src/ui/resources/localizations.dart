@@ -57,7 +57,11 @@ class AppLocalizations {
       'userIdInvalidError': 'Invalid user ID. Must be in the format of \'@name:server.tld\'.',
       'hostnameInvalidError': 'Invalid hostname',
       'unknownErrorOccured': 'An unknown error occured',
-      'confirmButton': 'CONFIRM'
+      'confirmButton': 'CONFIRM',
+      'password': 'Password',
+      'enterPassword': 'Enter password',
+      'login': 'Login',
+      'wrongPassword': 'Wrong password. Please try again.'
     },
   };
 
@@ -115,6 +119,22 @@ class AppLocalizations {
 
   String get confirmButton {
     return _get('confirmButton');
+  }
+
+  String get password {
+    return _get('password');
+  }
+
+  String get enterPassword {
+    return _get('enterPassword');
+  }
+
+  String get login {
+    return _get('login');
+  }
+
+  String get wrongPassword {
+    return _get('wrongPassword');
   }
 }
 

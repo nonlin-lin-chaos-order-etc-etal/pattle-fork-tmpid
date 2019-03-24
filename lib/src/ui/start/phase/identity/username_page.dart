@@ -14,18 +14,44 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
-import 'package:pattle/src/ui/start/advanced_page.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
 
-class UsernamePage extends StatelessWidget {
+class UsernamePage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => UsernamePageState();
+}
 
-  String username;
+class UsernamePageState extends State<UsernamePage> {
+  var usernameController = TextEditingController();
 
-  void _next() {
-    start.checkUsernameAvailability(username);
+  StreamSubscription subscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    subscription = start.isUsernameAvailable.listen((state) {
+      if (state == UsernameAvailableState.available
+          || state == UsernameAvailableState.unavailable) {
+        Navigator.pushNamed(context, "/start/password");
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    subscription.cancel();
+  }
+
+  void _next(BuildContext context) {
+    start.checkUsernameAvailability(usernameController.text);
   }
 
   @override
@@ -36,18 +62,18 @@ class UsernamePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                margin: EdgeInsets.only(top: 32, right: 16),
-                child: FlatButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/start/advanced');
-                  },
-                  child: Text(
-                    AppLocalizations.of(context).advanced.toUpperCase()
-                  )
+                alignment: Alignment.topRight,
+                child: Container(
+                    margin: EdgeInsets.only(top: 32, right: 16),
+                    child: FlatButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/start/advanced');
+                        },
+                        child: Text(
+                            AppLocalizations.of(context).advanced.toUpperCase()
+                        )
+                    )
                 )
-              )
             ),
             Expanded(
               child: Container(
@@ -60,65 +86,63 @@ class UsernamePage extends StatelessWidget {
                       style: TextStyle(fontSize: 24),
                     ),
                     SizedBox(height: 16),
-                    StreamBuilder<bool>(
-                      stream: start.isUsernameAvailable,
-                      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                        String errorText;
+                    StreamBuilder<UsernameAvailableState>(
+                        stream: start.isUsernameAvailable,
+                        builder: (BuildContext context, AsyncSnapshot<UsernameAvailableState> snapshot) {
+                          String errorText;
 
-                        if (snapshot.hasError) {
-                          if (snapshot.error is InvalidUsernameException) {
-                            errorText = l(context).usernameInvalidError;
-                          } else if(snapshot.error is InvalidHostnameException) {
-                            errorText = l(context).hostnameInvalidError;
-                          } else if(snapshot.error is InvalidUserIdException) {
-                            errorText = l(context).userIdInvalidError;
+                          if (snapshot.hasError) {
+                            if (snapshot.error is InvalidUsernameException) {
+                              errorText = l(context).usernameInvalidError;
+                            } else if(snapshot.error is InvalidHostnameException) {
+                              errorText = l(context).hostnameInvalidError;
+                            } else if(snapshot.error is InvalidUserIdException) {
+                              errorText = l(context).userIdInvalidError;
+                            } else {
+                              debugPrint(snapshot.error.toString());
+                              debugPrintStack();
+                              errorText = l(context).unknownErrorOccured;
+                            }
                           } else {
-                            debugPrint(snapshot.error.toString());
-                            debugPrintStack();
-                            errorText = l(context).unknownErrorOccured;
+                            errorText = null;
                           }
-                        } else {
-                          errorText = null;
-                        }
 
-                        return TextField(
-                          autofocus: true,
-                          onChanged: (value) {
-                            username = value;
-                          },
-                          onEditingComplete: () {
-                            _next();
-                          },
-                          decoration: InputDecoration(
-                            filled: true,
-                            helperText: AppLocalizations.of(context).ifYouDontHaveAnAccount,
-                            labelText: AppLocalizations.of(context).username,
-                            errorText: errorText
-                          )
-                        );
+                          return TextField(
+                              autofocus: true,
+                              controller: usernameController,
+                              onEditingComplete: () {
+                                _next(context);
+                              },
+                              decoration: InputDecoration(
+                                  filled: true,
+                                  helperText: AppLocalizations.of(context).ifYouDontHaveAnAccount,
+                                  labelText: AppLocalizations.of(context).username,
+                                  errorText: errorText
+                              )
+                          );
                         }
                     ),
                     SizedBox(height: 16),
-                    StreamBuilder<bool>(
-                      stream: start.isCheckingForUsername,
-                      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                        final isChecking = snapshot.data == true;
-                        var onPressed;
+                    StreamBuilder<UsernameAvailableState>(
+                        stream: start.isUsernameAvailable,
+                        builder: (BuildContext context, AsyncSnapshot<UsernameAvailableState> snapshot) {
+                          final enabled = snapshot.data != UsernameAvailableState.checking;
+                          var onPressed;
 
-                        if (!isChecking) {
-                          onPressed = () {
-                            _next();
-                          };
-                        } else {
-                          onPressed = null;
+                          if (enabled) {
+                            onPressed = () {
+                              _next(context);
+                            };
+                          } else {
+                            onPressed = null;
+                          }
+
+                          return RaisedButton(
+                              onPressed: onPressed,
+                              child: Text(AppLocalizations.of(context).nextButton)
+                          );
                         }
-
-                        return RaisedButton(
-                            onPressed: onPressed,
-                            child: Text(AppLocalizations.of(context).nextButton)
-                        );
-                      }
-                    )
+                    ),
                   ],
                 )
               )

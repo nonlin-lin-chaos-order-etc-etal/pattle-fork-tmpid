@@ -21,6 +21,7 @@ import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/start/advanced_page.dart';
 import 'package:pattle/src/ui/start/phase/identity/username_page.dart';
+import 'package:pattle/src/ui/start/phase/key/password_page.dart';
 import 'package:pattle/src/ui/start/start_page.dart';
 
 class App extends StatelessWidget {
@@ -45,7 +46,8 @@ class App extends StatelessWidget {
         '/': (context) => StartPage(),
         '/start': (context) => StartPage(),
         '/start/advanced': (context) => AdvancedPage(),
-        '/start/username': (context) => UsernamePage()
+        '/start/username': (context) => UsernamePage(),
+        '/start/password': (context) => PasswordPage()
       },
     );
   }
