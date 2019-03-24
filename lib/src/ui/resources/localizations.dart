@@ -18,10 +18,48 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-AppLocalizations l(BuildContext context) => AppLocalizations.of(context);
+Strings l(BuildContext context) => AppLocalizations.of(context).strings;
+
+class Strings {
+
+  const Strings();
+
+  // Common //
+  final appName = 'Pattle';
+  final advanced = 'Advanced';
+  final username = 'Username';
+  final password = 'Password';
+  final confirm = 'Confirm';
+  final login = 'Login';
+  final next = 'Next';
+  final homeserver = 'Homeserver';
+  final identityServer = 'Identity server';
+
+  // StartPage //
+  final loginWithPhone = 'Login with phone number';
+  final loginWithEmail = 'Login with email';
+  final loginWithUsername = 'Login with username';
+
+  // StartPage: UsernamePage //
+  final enterUsername = 'Enter username';
+  final ifYouDontHaveAnAccount = "If you don't have an account, we'll create one";
+  final usernameInvalidError = "Invalid username. May only contain letters, numbers, -, ., =, _ and /";
+  final userIdInvalidError = "Invalid user ID. Must be in the format of '@name:server.tld'";
+  final hostnameInvalidError = 'Invalid hostname';
+  final unknownError = 'An unknown error occured';
+
+  // StartPage: PasswordPage //
+  final enterPassword = 'Enter password';
+  final wrongPasswordError = 'Wrong password. Please try again';
+}
 
 class AppLocalizations {
-  AppLocalizations(this.locale);
+  AppLocalizations(this.locale) {
+    switch(locale.languageCode) {
+      case 'en': _strings = const Strings(); break;
+      default: _strings = const Strings();
+    }
+  }
 
   final Locale locale;
 
@@ -29,113 +67,8 @@ class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  String _get(String id) {
-    var languageCode = locale.languageCode;
-    // Default to English if we have no translation available
-    if (!_localizedValues.containsKey(languageCode)) {
-      languageCode = 'en';
-    }
-
-    return _localizedValues[languageCode][id];
-  }
-
-  static Map<String, Map<String, String>> _localizedValues = {
-    'en': {
-      'appName': 'Pattle',
-
-      'advanced': 'Advanced',
-
-      'loginWithPhoneButton': 'Login with phone number',
-      'loginWithEmailButton': 'Login with email',
-      'loginWithUsernameButton': 'Login with username',
-
-      'nextButton': 'NEXT',
-      'username': 'Username',
-      'enterUsername': 'Enter username',
-      'ifYouDontHaveAnAccount': 'If you don\'t have an account, we\'ll create one',
-      'usernameInvalidError': 'Invalid username. May only contain letters, numbers, -, ., =, _ and /',
-      'userIdInvalidError': 'Invalid user ID. Must be in the format of \'@name:server.tld\'.',
-      'hostnameInvalidError': 'Invalid hostname',
-      'unknownErrorOccured': 'An unknown error occured',
-      'confirmButton': 'CONFIRM',
-      'password': 'Password',
-      'enterPassword': 'Enter password',
-      'login': 'Login',
-      'wrongPassword': 'Wrong password. Please try again.'
-    },
-  };
-
-  String get appName {
-    return _get('appName');
-  }
-
-  String get loginWithPhoneButton {
-    return _get('loginWithPhoneButton');
-  }
-
-  String get loginWithEmailButton {
-    return _get('loginWithEmailButton');
-  }
-
-  String get loginWithUsernameButton {
-    return _get('loginWithUsernameButton');
-  }
-
-  String get nextButton {
-    return _get('nextButton');
-  }
-
-  String get username {
-    return _get('username');
-  }
-
-  String get enterUsername {
-    return _get('enterUsername');
-  }
-
-  String get ifYouDontHaveAnAccount {
-    return _get('ifYouDontHaveAnAccount');
-  }
-
-  String get advanced {
-    return _get('advanced');
-  }
-
-  String get usernameInvalidError {
-    return _get('usernameInvalidError');
-  }
-
-  String get hostnameInvalidError {
-    return _get('hostnameInvalidError');
-  }
-
-  String get userIdInvalidError {
-    return _get('userIdInvalidError');
-  }
-
-  String get unknownErrorOccured {
-    return _get('unknownErrorOccured');
-  }
-
-  String get confirmButton {
-    return _get('confirmButton');
-  }
-
-  String get password {
-    return _get('password');
-  }
-
-  String get enterPassword {
-    return _get('enterPassword');
-  }
-
-  String get login {
-    return _get('login');
-  }
-
-  String get wrongPassword {
-    return _get('wrongPassword');
-  }
+  Strings _strings;
+  Strings get strings => _strings;
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -30,7 +30,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       onGenerateTitle: (BuildContext context)
-      => AppLocalizations.of(context).appName,
+      => l(context).appName,
       theme: lightTheme,
 
       localizationsDelegates: [

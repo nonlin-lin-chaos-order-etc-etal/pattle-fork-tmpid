@@ -35,8 +35,7 @@ class StartPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text(
-                  AppLocalizations.of(context).appName,
+                Text(l(context).appName,
                   style: TextStyle(fontSize: 96),
                 ),
                 Column(
@@ -44,16 +43,14 @@ class StartPage extends StatelessWidget {
                   children: <Widget>[
                     RaisedButton(
                       onPressed: null,
-                      child: Text(AppLocalizations.of(context)
-                                  .loginWithPhoneButton.toUpperCase()),
+                      child: Text(l(context).loginWithPhone.toUpperCase()),
                       shape: buttonShape,
                       padding: buttonPadding,
                     ),
                     SizedBox(height: 16),
                     OutlineButton(
                       onPressed: null,
-                      child: Text(AppLocalizations.of(context)
-                                  .loginWithEmailButton.toUpperCase()),
+                      child: Text(l(context).loginWithEmail.toUpperCase()),
                       shape: buttonShape,
                       padding: buttonPadding,
                     ),
@@ -62,8 +59,7 @@ class StartPage extends StatelessWidget {
                       onPressed: () {
                         Navigator.pushNamed(context, '/start/username');
                       },
-                      child: Text(AppLocalizations.of(context)
-                                  .loginWithUsernameButton.toUpperCase()),
+                      child: Text(l(context).loginWithUsername.toUpperCase()),
                       shape: buttonShape,
                       padding: buttonPadding,
                     ),

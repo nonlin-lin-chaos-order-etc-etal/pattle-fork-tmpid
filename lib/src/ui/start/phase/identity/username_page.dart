@@ -70,7 +70,7 @@ class UsernamePageState extends State<UsernamePage> {
                           Navigator.pushNamed(context, '/start/advanced');
                         },
                         child: Text(
-                            AppLocalizations.of(context).advanced.toUpperCase()
+                            l(context).advanced.toUpperCase()
                         )
                     )
                 )
@@ -82,7 +82,7 @@ class UsernamePageState extends State<UsernamePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      AppLocalizations.of(context).enterUsername,
+                      l(context).enterUsername,
                       style: TextStyle(fontSize: 24),
                     ),
                     SizedBox(height: 16),
@@ -101,7 +101,7 @@ class UsernamePageState extends State<UsernamePage> {
                             } else {
                               debugPrint(snapshot.error.toString());
                               debugPrintStack();
-                              errorText = l(context).unknownErrorOccured;
+                              errorText = l(context).unknownError;
                             }
                           } else {
                             errorText = null;
@@ -115,8 +115,8 @@ class UsernamePageState extends State<UsernamePage> {
                               },
                               decoration: InputDecoration(
                                   filled: true,
-                                  helperText: AppLocalizations.of(context).ifYouDontHaveAnAccount,
-                                  labelText: AppLocalizations.of(context).username,
+                                  helperText: l(context).ifYouDontHaveAnAccount,
+                                  labelText: l(context).username,
                                   errorText: errorText
                               )
                           );
@@ -139,7 +139,7 @@ class UsernamePageState extends State<UsernamePage> {
 
                           return RaisedButton(
                               onPressed: onPressed,
-                              child: Text(AppLocalizations.of(context).nextButton)
+                              child: Text(l(context).next.toUpperCase())
                           );
                         }
                     ),

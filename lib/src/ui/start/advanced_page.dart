@@ -37,7 +37,7 @@ class AdvancedPageState extends State<AdvancedPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-              AppLocalizations.of(context).advanced,
+              l(context).advanced,
               style: TextStyle(color: Theme.of(context).primaryColor)
           ),
           iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
@@ -74,7 +74,7 @@ class AdvancedPageState extends State<AdvancedPage> {
                                 controller: homeserverTextController,
                                 decoration: InputDecoration(
                                     filled: true,
-                                    labelText: 'Homeserver',
+                                    labelText: l(context).homeserver,
                                     hintText: start.homeserver.uri.toString(),
                                     errorText: errorText
                                 ),
@@ -97,7 +97,7 @@ class AdvancedPageState extends State<AdvancedPage> {
                       child: TextField(
                         decoration: InputDecoration(
                             filled: true,
-                            labelText: 'Identity server'
+                            labelText: l(context).identityServer
                         ),
                       ),
                     )
@@ -109,7 +109,7 @@ class AdvancedPageState extends State<AdvancedPage> {
                       start.setHomeserverUri(homeserverTextController.text);
                       Navigator.pop(context);
                     },
-                    child: Text(AppLocalizations.of(context).confirmButton)
+                    child: Text(l(context).confirm.toUpperCase())
                 )
               ],
             )

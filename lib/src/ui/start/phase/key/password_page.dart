@@ -37,7 +37,7 @@ class PasswordPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              AppLocalizations.of(context).enterPassword,
+              l(context).enterPassword,
               style: TextStyle(fontSize: 24),
             ),
             SizedBox(height: 16),
@@ -48,11 +48,11 @@ class PasswordPage extends StatelessWidget {
 
                 if (snapshot.hasError) {
                   if (snapshot.error is ForbiddenException) {
-                    errorText = l(context).wrongPassword;
+                    errorText = l(context).wrongPasswordError;
                   } else {
                     debugPrint(snapshot.error.toString());
                     debugPrintStack();
-                    errorText = l(context).unknownErrorOccured;
+                    errorText = l(context).unknownError;
                   }
                 } else {
                   errorText = null;
@@ -69,7 +69,7 @@ class PasswordPage extends StatelessWidget {
                   obscureText: true,
                   decoration: InputDecoration(
                     filled: true,
-                    labelText: AppLocalizations.of(context).password,
+                    labelText: l(context).password,
                     errorText: errorText
                   )
                 );
@@ -79,7 +79,6 @@ class PasswordPage extends StatelessWidget {
             StreamBuilder<LoginState>(
               stream: start.loginStream,
               builder: (BuildContext context, AsyncSnapshot<LoginState> snapshot) {
-                print("snapshot.data: ${snapshot.data}");
                 final isTrying = snapshot.data == LoginState.trying;
                 var onPressed;
 
@@ -93,7 +92,7 @@ class PasswordPage extends StatelessWidget {
 
                 return RaisedButton(
                   onPressed: onPressed,
-                  child: Text(AppLocalizations.of(context).login.toUpperCase())
+                  child: Text(l(context).login.toUpperCase())
                 );
               }
             )
