@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
+import 'package:pattle/src/ui/util/lower_case_text_formatter.dart';
 
 class UsernamePage extends StatefulWidget {
   @override
@@ -110,6 +111,7 @@ class UsernamePageState extends State<UsernamePage> {
                           return TextField(
                               autofocus: true,
                               controller: usernameController,
+                              inputFormatters: [LowerCaseTextFormatter()],
                               onEditingComplete: () {
                                 _next(context);
                               },
