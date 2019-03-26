@@ -15,9 +15,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
-import 'package:matrix/matrix.dart';
+import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
-import 'package:pattle/src/ui/start/advanced_page.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
 
 class PasswordPage extends StatelessWidget {

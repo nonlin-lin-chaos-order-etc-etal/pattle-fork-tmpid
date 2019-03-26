@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:matrix/matrix.dart';
+import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/data/matrix.dart' as data;
 import 'package:pattle/src/data/matrix.dart';
 import 'package:rxdart/rxdart.dart';

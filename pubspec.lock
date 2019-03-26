@@ -50,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.2"
+  chopper:
+    dependency: transitive
+    description:
+      name: chopper
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.3.0"
   collection:
     dependency: transitive
     description:
@@ -170,15 +177,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.3+1"
-  matrix:
+  matrix_sdk:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: f37eb7a7706d40994ad98c4c2a8e73e7166f920b
-      url: "https://git.pattle.im/pattle/library/matrix-dart-sdk.git"
-    source: git
-    version: "0.0.1"
+      name: matrix_sdk
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   meta:
     dependency: transitive
     description:
@@ -235,6 +240,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.21.0"
+  sembast:
+    dependency: transitive
+    description:
+      name: sembast
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.15.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -275,6 +287,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  synchronized:
+    dependency: transitive
+    description:
+      name: synchronized
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   term_glyph:
     dependency: transitive
     description:

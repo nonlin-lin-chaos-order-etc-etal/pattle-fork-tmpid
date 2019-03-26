@@ -12,8 +12,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  matrix:
-    git: https://git.pattle.im/pattle/library/matrix-dart-sdk.git
+  matrix_sdk: ^0.0.3
 
   rxdart: ^0.21.0
 

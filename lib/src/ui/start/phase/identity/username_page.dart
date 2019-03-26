@@ -17,7 +17,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:matrix/matrix.dart';
+import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
 import 'package:pattle/src/ui/util/lower_case_text_formatter.dart';
