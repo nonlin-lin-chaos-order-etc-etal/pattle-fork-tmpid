@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pattle/src/ui/main/main_page.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/start/advanced_page.dart';
@@ -43,7 +44,8 @@ class App extends StatelessWidget {
       ],
       initialRoute: '/start',
       routes: {
-        '/': (context) => StartPage(),
+        '/': (context) => null,
+        '/main': (context) => MainPage(),
         '/start': (context) => StartPage(),
         '/start/advanced': (context) => AdvancedPage(),
         '/start/username': (context) => UsernamePage(),
