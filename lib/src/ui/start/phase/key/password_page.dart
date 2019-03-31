@@ -14,12 +14,35 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
 
-class PasswordPage extends StatelessWidget {
+class PasswordPageState extends State<PasswordPage> {
+
+  StreamSubscription subscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    password = null;
+
+    subscription = start.loginStream.listen((state) {
+      if (state == LoginState.succeeded) {
+        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    subscription.cancel();
+  }
 
   String password;
 
@@ -31,73 +54,78 @@ class PasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              l(context).enterPassword,
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(height: 16),
-            StreamBuilder<LoginState>(
-              stream: start.loginStream,
-              builder: (BuildContext context, AsyncSnapshot<LoginState> snapshot) {
-                String errorText;
+          margin: EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                l(context).enterPassword,
+                style: TextStyle(fontSize: 24),
+              ),
+              SizedBox(height: 16),
+              StreamBuilder<LoginState>(
+                  stream: start.loginStream,
+                  builder: (BuildContext context, AsyncSnapshot<LoginState> snapshot) {
+                    String errorText;
 
-                if (snapshot.hasError) {
-                  if (snapshot.error is ForbiddenException) {
-                    errorText = l(context).wrongPasswordError;
-                  } else {
-                    debugPrint(snapshot.error.toString());
-                    debugPrintStack();
-                    errorText = l(context).unknownError;
+                    if (snapshot.hasError) {
+                      if (snapshot.error is ForbiddenException) {
+                        errorText = l(context).wrongPasswordError;
+                      } else {
+                        debugPrint(snapshot.error.toString());
+                        debugPrintStack();
+                        errorText = l(context).unknownError;
+                      }
+                    } else {
+                      errorText = null;
+                    }
+
+                    return TextField(
+                        autofocus: true,
+                        onChanged: (value) {
+                          password = value;
+                        },
+                        onEditingComplete: () {
+                          _next();
+                        },
+                        obscureText: true,
+                        decoration: InputDecoration(
+                            filled: true,
+                            labelText: l(context).password,
+                            errorText: errorText
+                        )
+                    );
                   }
-                } else {
-                  errorText = null;
-                }
+              ),
+              SizedBox(height: 16),
+              StreamBuilder<LoginState>(
+                  stream: start.loginStream,
+                  builder: (BuildContext context, AsyncSnapshot<LoginState> snapshot) {
+                    final isTrying = snapshot.data == LoginState.trying;
+                    var onPressed;
 
-                return TextField(
-                  autofocus: true,
-                  onChanged: (value) {
-                    password = value;
-                  },
-                  onEditingComplete: () {
-                    _next();
-                  },
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    filled: true,
-                    labelText: l(context).password,
-                    errorText: errorText
-                  )
-                );
-                }
-            ),
-            SizedBox(height: 16),
-            StreamBuilder<LoginState>(
-              stream: start.loginStream,
-              builder: (BuildContext context, AsyncSnapshot<LoginState> snapshot) {
-                final isTrying = snapshot.data == LoginState.trying;
-                var onPressed;
+                    if (!isTrying) {
+                      onPressed = () {
+                        _next();
+                      };
+                    } else {
+                      onPressed = null;
+                    }
 
-                if (!isTrying) {
-                  onPressed = () {
-                    _next();
-                  };
-                } else {
-                  onPressed = null;
-                }
-
-                return RaisedButton(
-                  onPressed: onPressed,
-                  child: Text(l(context).login.toUpperCase())
-                );
-              }
-            )
-          ],
-        )
+                    return RaisedButton(
+                        onPressed: onPressed,
+                        child: Text(l(context).login.toUpperCase())
+                    );
+                  }
+              )
+            ],
+          )
       ),
     );
   }
+}
+
+class PasswordPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => PasswordPageState();
 }
