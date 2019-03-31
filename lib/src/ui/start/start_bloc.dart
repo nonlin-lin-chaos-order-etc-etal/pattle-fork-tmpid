@@ -16,23 +16,26 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/data/matrix.dart' as data;
-import 'package:pattle/src/data/matrix.dart';
+import 'package:pattle/src/di.dart' as di;
 import 'package:rxdart/rxdart.dart';
 
 final start = StartBloc();
 
 class StartBloc {
 
+  StartBloc() {
+    di.registerHomeserver(Uri.parse("https://matrix.org"));
+  }
+
   final _homeserverChangedSubj = BehaviorSubject<bool>();
   Observable<bool> get homeserverChanged => _homeserverChangedSubj.stream;
 
-  Homeserver homeserver = data.homeserver(uri: Uri.parse("https://matrix.org"));
+  Homeserver get homeserver => di.getHomeserver();
 
   Username _username;
 
   void _setHomeserver(Uri uri) {
-    homeserver = data.homeserver(uri: uri);
+    di.registerHomeserver(uri);
     _homeserverChangedSubj.add(true);
   }
 
@@ -137,7 +140,7 @@ class StartBloc {
     _loginSubj.addStream(
         Observable(homeserver.login(_username, password).asStream())
           .map((user) {
-            localUser = user;
+            di.registerLocalUser(user);
             return LoginState.succeeded;
           })
     );

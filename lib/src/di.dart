@@ -1,4 +1,4 @@
-// Copyright (C) 2019  Wilko Manger
+// Copyright (C) 2019  wilko
 //
 // This file is part of Pattle.
 //
@@ -16,22 +16,18 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:injector/injector.dart';
 
-Homeserver _homeserver;
+final inj = Injector();
 
-/// Homeserver the app uses. If [uri] is given, replace the instance
-/// with a new homeserver.
-Homeserver homeserver({Uri uri}) {
-  if (_homeserver == null && uri == null) {
-    throw ArgumentError("Homeserver is not initialized and no uri was given");
-  }
+Homeserver getHomeserver() => inj.getDependency<Homeserver>();
 
-  if (uri != null) {
-    _homeserver = Homeserver(uri);
-  }
-
-  return _homeserver;
+void registerHomeserver(Uri uri) {
+  inj.registerSingleton((_) => Homeserver(uri), override: true);
 }
 
-/// The user this app manages.
-LocalUser localUser;
+LocalUser getLocalUser() => inj.getDependency<LocalUser>();
+
+void registerLocalUser(LocalUser user) {
+  inj.registerSingleton((_) => user, override: true);
+}
