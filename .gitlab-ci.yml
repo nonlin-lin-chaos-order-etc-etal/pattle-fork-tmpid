@@ -15,8 +15,6 @@ build:
   only:
     refs:
     - tags
-    variables:
-    - $STORE
   script:
   - 'echo "version: ${CI_COMMIT_REF_NAME:1}" >> pubspec.yaml'
   - echo "$STORE" | base64 -d > app/pattle.keystore
@@ -32,8 +30,6 @@ fdroid:
   only:
     refs:
     - tags
-  dependencies:
-  - build
   script:
   - find /mnt/fdroid -type f -name "*.apk" -mtime +5 -delete
   - mv pattle.apk "/mnt/fdroid/repo/pattle-${CI_COMMIT_REF_NAME:1}.apk"
