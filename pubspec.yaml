@@ -1,8 +1,6 @@
 name: pattle
 description: An easy to use Matrix app.
 
-version: 0.0.1
-
 environment:
   sdk: ">=2.1.0 <3.0.0"
 
@@ -12,8 +10,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  matrix_sdk: ^0.0.3
   injector: ^1.0.6
+
+  matrix_sdk: ^0.1.4
+  matrix_sdk_sqflite: ^0.1.2
 
   rxdart: ^0.21.0
 

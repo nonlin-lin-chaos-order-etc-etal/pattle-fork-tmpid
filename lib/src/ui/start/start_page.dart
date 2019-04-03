@@ -16,7 +16,6 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
-import 'package:pattle/src/ui/start/phase/identity/username_page.dart';
 
 class StartPage extends StatelessWidget {
 
@@ -32,43 +31,43 @@ class StartPage extends StatelessWidget {
       body: Container(
         margin: const EdgeInsets.only(top: 16),
         child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Text(l(context).appName,
-                  style: TextStyle(fontSize: 96),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    RaisedButton(
-                      onPressed: null,
-                      child: Text(l(context).loginWithPhone.toUpperCase()),
-                      shape: buttonShape,
-                      padding: buttonPadding,
-                    ),
-                    SizedBox(height: 16),
-                    OutlineButton(
-                      onPressed: null,
-                      child: Text(l(context).loginWithEmail.toUpperCase()),
-                      shape: buttonShape,
-                      padding: buttonPadding,
-                    ),
-                    SizedBox(height: 16),
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/start/username');
-                      },
-                      child: Text(l(context).loginWithUsername.toUpperCase()),
-                      shape: buttonShape,
-                      padding: buttonPadding,
-                    ),
-                  ],
-                )
-              ],
-            )
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text(l(context).appName,
+                style: TextStyle(fontSize: 96),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  RaisedButton(
+                    onPressed: null,
+                    child: Text(l(context).loginWithPhone.toUpperCase()),
+                    shape: buttonShape,
+                    padding: buttonPadding,
+                  ),
+                  SizedBox(height: 16),
+                  OutlineButton(
+                    onPressed: null,
+                    child: Text(l(context).loginWithEmail.toUpperCase()),
+                    shape: buttonShape,
+                    padding: buttonPadding,
+                  ),
+                  SizedBox(height: 16),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, 'start-username');
+                    },
+                    child: Text(l(context).loginWithUsername.toUpperCase()),
+                    shape: buttonShape,
+                    padding: buttonPadding,
+                  ),
+                ],
+              )
+            ],
+          )
         ),
-      ),
+      )
     );
   }
 }

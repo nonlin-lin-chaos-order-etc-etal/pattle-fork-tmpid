@@ -17,7 +17,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:pattle/src/ui/main/main_page.dart';
+import 'package:pattle/src/ui/chat/chat_overview_page.dart';
+import 'package:pattle/src/ui/initial/initial_page.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/start/advanced_page.dart';
@@ -33,7 +34,6 @@ class App extends StatelessWidget {
       onGenerateTitle: (BuildContext context)
       => l(context).appName,
       theme: lightTheme,
-
       localizationsDelegates: [
         const AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -42,14 +42,14 @@ class App extends StatelessWidget {
       supportedLocales: [
         const Locale('en', 'US'),
       ],
-      initialRoute: '/start',
+      initialRoute: 'initial',
       routes: {
-        '/': (context) => null,
-        '/main': (context) => MainPage(),
-        '/start': (context) => StartPage(),
-        '/start/advanced': (context) => AdvancedPage(),
-        '/start/username': (context) => UsernamePage(),
-        '/start/password': (context) => PasswordPage()
+        'initial': (context) => InitialPage(),
+        'chats': (context) => ChatOverviewPage(),
+        'start': (context) => StartPage(),
+        'start-advanced': (context) => AdvancedPage(),
+        'start-username': (context) => UsernamePage(),
+        'start-password': (context) => PasswordPage()
       },
     );
   }

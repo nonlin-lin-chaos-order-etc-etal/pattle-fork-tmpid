@@ -19,7 +19,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:rxdart/rxdart.dart';
 
-final start = StartBloc();
+final bloc = StartBloc();
 
 class StartBloc {
 
@@ -138,11 +138,17 @@ class StartBloc {
     _loginSubj.add(LoginState.trying);
 
     _loginSubj.addStream(
-        Observable(homeserver.login(_username, password).asStream())
-          .map((user) {
-            di.registerLocalUser(user);
-            return LoginState.succeeded;
-          })
+        Observable(
+          homeserver.login(
+            _username,
+             password,
+            store: di.getStore()
+          ).asStream()
+        )
+        .map((user) {
+          di.registerLocalUser(user);
+          return LoginState.succeeded;
+        })
     );
   }
 

@@ -16,31 +16,28 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/model/chat_overview.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
 
-final main = MainBloc();
+final bloc = InitialBloc();
 
-class MainBloc {
-  
-  PublishSubject<List<Room>> _roomsSubj = PublishSubject<List<Room>>();
-  Observable<List<Room>> get rooms => _roomsSubj.stream;
+class InitialBloc {
 
-  Observable<bool> syncStream;
-  
-  void startSync() {
-    Observable(di.getLocalUser().sync())
-        .listen((success) async {
-          print('sync: $success');
-          // Get all rooms and push them as a single list
-          var rooms = List<Room>();
-          if (success) {
-            await for(Room room in di.getLocalUser().rooms.all()) {
-              rooms.add(room);
-            }
-          }
-          print('adding these rooms: ${rooms.length}');
-          _roomsSubj.add(rooms);
-        });
+  final _loggedInSubj = BehaviorSubject<bool>();
+  Observable<bool> get loggedIn
+  => _loggedInSubj.stream;
+
+  void checkIfLoggedIn() async {
+    di.registerStore();
+    var localUser = await LocalUser.fromStore(di.getStore());
+
+    print(localUser);
+
+    if (localUser != null) {
+      di.registerLocalUser(localUser);
+    }
+
+    _loggedInSubj.add(localUser != null);
   }
 }

@@ -1,0 +1,40 @@
+stages:
+- build
+- deploy
+
+build:
+  stage: build
+  image: cirrusci/flutter:latest
+  tags:
+  - docker
+  artifacts:
+    name: pattle-$CI_COMMIT_SHORT_SHA
+    paths:
+    - pattle.apk
+    expire_in: 7 days
+  only:
+    refs:
+    - tags
+    variables:
+    - $STORE
+  script:
+  - 'echo "version: ${CI_COMMIT_REF_NAME:1}" >> pubspec.yaml'
+  - echo "$STORE" | base64 -d > app/pattle.keystore
+  - flutter build apk
+  - mv build/app/outputs/apk/release/app-release.apk pattle.apk
+  after_script:
+  - rm app/pattle.keystore
+
+fdroid:
+  stage: deploy
+  tags:
+  - fdroid
+  only:
+    refs:
+    - tags
+  dependencies:
+  - build:debug-signed
+  script:
+  - find /mnt/fdroid -type f -name "*.apk" -mtime +5 -delete
+  - mv pattle.apk "/mnt/fdroid/repo/pattle-${CI_COMMIT_REF_NAME:1}.apk"
+  - docker run --rm -v /mnt/fdroid:/repo registry.gitlab.com/fdroid/docker-executable-fdroidserver:latest update

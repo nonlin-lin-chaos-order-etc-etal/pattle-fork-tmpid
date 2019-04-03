@@ -29,91 +29,91 @@ class AdvancedPageState extends State<AdvancedPage> {
 
   @override
   void initState() {
-    homeserverTextController.text = start.homeserver.uri.toString();
+    homeserverTextController.text = bloc.homeserver.uri.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-              l(context).advanced,
-              style: TextStyle(color: Theme.of(context).primaryColor)
-          ),
-          iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-          elevation: 0,
-          backgroundColor: const Color(0x00000000),
+      appBar: AppBar(
+        title: Text(
+            l(context).advanced,
+            style: TextStyle(color: Theme.of(context).primaryColor)
         ),
-        body: Container(
-            margin: EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+        iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+        elevation: 0,
+        backgroundColor: const Color(0x00000000),
+      ),
+      body: Container(
+        margin: EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.home,
-                        color: Theme.of(context).hintColor,
-                        size: 32
-                    ),
-                    SizedBox(width: 16),
-                    Flexible(
-                        child: StreamBuilder<bool>(
-                            stream: start.homeserverChanged,
-                            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-
-                              var errorText;
-
-                              if (snapshot.hasError) {
-                                errorText = l(context).hostnameInvalidError;
-                              } else {
-                                errorText = null;
-                              }
-
-                              return TextField(
-                                controller: homeserverTextController,
-                                decoration: InputDecoration(
-                                    filled: true,
-                                    labelText: l(context).homeserver,
-                                    hintText: start.homeserver.uri.toString(),
-                                    errorText: errorText
-                                ),
-                              );
-                            }
-                        )
-                    )
-                  ],
+                Icon(Icons.home,
+                    color: Theme.of(context).hintColor,
+                    size: 32
                 ),
-                SizedBox(height: 32),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.person,
-                        color: Theme.of(context).hintColor,
-                        size: 32
-                    ),
-                    SizedBox(width: 16),
-                    Flexible(
-                      child: TextField(
-                        decoration: InputDecoration(
-                            filled: true,
-                            labelText: l(context).identityServer
-                        ),
-                      ),
+                SizedBox(width: 16),
+                Flexible(
+                    child: StreamBuilder<bool>(
+                        stream: bloc.homeserverChanged,
+                        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+
+                          var errorText;
+
+                          if (snapshot.hasError) {
+                            errorText = l(context).hostnameInvalidError;
+                          } else {
+                            errorText = null;
+                          }
+
+                          return TextField(
+                            controller: homeserverTextController,
+                            decoration: InputDecoration(
+                                filled: true,
+                                labelText: l(context).homeserver,
+                                hintText: bloc.homeserver.uri.toString(),
+                                errorText: errorText
+                            ),
+                          );
+                        }
                     )
-                  ],
-                ),
-                SizedBox(height: 32),
-                RaisedButton(
-                    onPressed: () {
-                      start.setHomeserverUri(homeserverTextController.text);
-                      Navigator.pop(context);
-                    },
-                    child: Text(l(context).confirm.toUpperCase())
                 )
               ],
+            ),
+            SizedBox(height: 32),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.person,
+                    color: Theme.of(context).hintColor,
+                    size: 32
+                ),
+                SizedBox(width: 16),
+                Flexible(
+                  child: TextField(
+                    decoration: InputDecoration(
+                        filled: true,
+                        labelText: l(context).identityServer
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 32),
+            RaisedButton(
+                onPressed: () {
+                  bloc.setHomeserverUri(homeserverTextController.text);
+                  Navigator.pop(context);
+                },
+                child: Text(l(context).confirm.toUpperCase())
             )
+          ],
         )
+      )
     );
   }
 }

@@ -16,32 +16,21 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:matrix_sdk_sqflite/matrix_sdk_sqflite.dart';
-import 'package:injector/injector.dart';
+import 'package:meta/meta.dart';
 
-final inj = Injector();
+/// Chat overview used in the 'chats' page.
+class ChatOverview {
 
-Homeserver getHomeserver() => inj.getDependency<Homeserver>();
+  final RoomId id;
 
-void registerHomeserver(Uri uri) {
-  inj.registerSingleton<Homeserver>((_)
-    => Homeserver(
-      uri
-    ),
-    override: true);
-}
+  String _name;
+  String get name => _name;
 
-Store getStore() => inj.getDependency<Store>();
-void registerStore() {
-  final store = SqfliteStore(path: 'pattle.sqlite');
+  final RoomEvent latestEvent;
 
-  inj.registerSingleton<Store>((_)
-    => store, override: true);
-}
-
-
-LocalUser getLocalUser() => inj.getDependency<LocalUser>();
-
-void registerLocalUser(LocalUser user) {
-  inj.registerSingleton<LocalUser>((_) => user, override: true);
+  ChatOverview({@required this.id,
+                String name,
+                @required this.latestEvent}) {
+    _name = name ?? id.toString();
+  }
 }

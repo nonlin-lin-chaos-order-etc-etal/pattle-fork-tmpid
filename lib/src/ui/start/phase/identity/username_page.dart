@@ -36,10 +36,10 @@ class UsernamePageState extends State<UsernamePage> {
   void initState() {
     super.initState();
 
-    subscription = start.isUsernameAvailable.listen((state) {
+    subscription = bloc.isUsernameAvailable.listen((state) {
       if (state == UsernameAvailableState.available
           || state == UsernameAvailableState.unavailable) {
-        Navigator.pushNamed(context, "/start/password");
+        Navigator.pushNamed(context, "start-password");
       }
     });
   }
@@ -52,7 +52,7 @@ class UsernamePageState extends State<UsernamePage> {
   }
 
   void _next(BuildContext context) {
-    start.checkUsernameAvailability(usernameController.text);
+    bloc.checkUsernameAvailability(usernameController.text);
   }
 
   @override
@@ -68,7 +68,7 @@ class UsernamePageState extends State<UsernamePage> {
                     margin: EdgeInsets.only(top: 32, right: 16),
                     child: FlatButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/start/advanced');
+                          Navigator.pushNamed(context, 'start-advanced');
                         },
                         child: Text(
                             l(context).advanced.toUpperCase()
@@ -88,7 +88,7 @@ class UsernamePageState extends State<UsernamePage> {
                     ),
                     SizedBox(height: 16),
                     StreamBuilder<UsernameAvailableState>(
-                        stream: start.isUsernameAvailable,
+                        stream: bloc.isUsernameAvailable,
                         builder: (BuildContext context, AsyncSnapshot<UsernameAvailableState> snapshot) {
                           String errorText;
 
@@ -126,7 +126,7 @@ class UsernamePageState extends State<UsernamePage> {
                     ),
                     SizedBox(height: 16),
                     StreamBuilder<UsernameAvailableState>(
-                        stream: start.isUsernameAvailable,
+                        stream: bloc.isUsernameAvailable,
                         builder: (BuildContext context, AsyncSnapshot<UsernameAvailableState> snapshot) {
                           final enabled = snapshot.data != UsernameAvailableState.checking;
                           var onPressed;

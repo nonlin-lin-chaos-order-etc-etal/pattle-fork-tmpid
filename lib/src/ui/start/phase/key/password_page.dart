@@ -31,9 +31,9 @@ class PasswordPageState extends State<PasswordPage> {
 
     password = null;
 
-    subscription = start.loginStream.listen((state) {
+    subscription = bloc.loginStream.listen((state) {
       if (state == LoginState.succeeded) {
-        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, 'chats', (route) => false);
       }
     });
   }
@@ -47,79 +47,79 @@ class PasswordPageState extends State<PasswordPage> {
   String password;
 
   void _next() {
-    start.login(password);
+    bloc.login(password);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          margin: EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                l(context).enterPassword,
-                style: TextStyle(fontSize: 24),
-              ),
-              SizedBox(height: 16),
-              StreamBuilder<LoginState>(
-                  stream: start.loginStream,
-                  builder: (BuildContext context, AsyncSnapshot<LoginState> snapshot) {
-                    String errorText;
+        margin: EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              l(context).enterPassword,
+              style: TextStyle(fontSize: 24),
+            ),
+            SizedBox(height: 16),
+            StreamBuilder<LoginState>(
+              stream: bloc.loginStream,
+              builder: (BuildContext context, AsyncSnapshot<LoginState> snapshot) {
+                String errorText;
 
-                    if (snapshot.hasError) {
-                      if (snapshot.error is ForbiddenException) {
-                        errorText = l(context).wrongPasswordError;
-                      } else {
-                        debugPrint(snapshot.error.toString());
-                        debugPrintStack();
-                        errorText = l(context).unknownError;
-                      }
-                    } else {
-                      errorText = null;
-                    }
-
-                    return TextField(
-                        autofocus: true,
-                        onChanged: (value) {
-                          password = value;
-                        },
-                        onEditingComplete: () {
-                          _next();
-                        },
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            filled: true,
-                            labelText: l(context).password,
-                            errorText: errorText
-                        )
-                    );
+                if (snapshot.hasError) {
+                  if (snapshot.error is ForbiddenException) {
+                    errorText = l(context).wrongPasswordError;
+                  } else {
+                    debugPrint(snapshot.error.toString());
+                    debugPrintStack();
+                    errorText = l(context).unknownError;
                   }
-              ),
-              SizedBox(height: 16),
-              StreamBuilder<LoginState>(
-                  stream: start.loginStream,
-                  builder: (BuildContext context, AsyncSnapshot<LoginState> snapshot) {
-                    final isTrying = snapshot.data == LoginState.trying;
-                    var onPressed;
+                } else {
+                  errorText = null;
+                }
 
-                    if (!isTrying) {
-                      onPressed = () {
-                        _next();
-                      };
-                    } else {
-                      onPressed = null;
-                    }
+                return TextField(
+                  autofocus: true,
+                  onChanged: (value) {
+                    password = value;
+                  },
+                  onEditingComplete: () {
+                    _next();
+                  },
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    filled: true,
+                    labelText: l(context).password,
+                    errorText: errorText
+                  )
+                );
+              }
+            ),
+            SizedBox(height: 16),
+            StreamBuilder<LoginState>(
+              stream: bloc.loginStream,
+              builder: (BuildContext context, AsyncSnapshot<LoginState> snapshot) {
+                final isTrying = snapshot.data == LoginState.trying;
+                var onPressed;
 
-                    return RaisedButton(
-                        onPressed: onPressed,
-                        child: Text(l(context).login.toUpperCase())
-                    );
-                  }
-              )
-            ],
-          )
+                if (!isTrying) {
+                  onPressed = () {
+                    _next();
+                  };
+                } else {
+                  onPressed = null;
+                }
+
+                return RaisedButton(
+                  onPressed: onPressed,
+                  child: Text(l(context).login.toUpperCase())
+                );
+              }
+            )
+          ],
+        )
       ),
     );
   }
