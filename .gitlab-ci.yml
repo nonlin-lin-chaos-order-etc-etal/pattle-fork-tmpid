@@ -8,7 +8,7 @@ build:
   tags:
   - docker
   artifacts:
-    name: pattle-$CI_COMMIT_SHORT_SHA
+    name: pattle-${CI_COMMIT_REF_NAME:1}
     paths:
     - pattle.apk
     expire_in: 7 days
@@ -33,7 +33,7 @@ fdroid:
     refs:
     - tags
   dependencies:
-  - build:debug-signed
+  - build
   script:
   - find /mnt/fdroid -type f -name "*.apk" -mtime +5 -delete
   - mv pattle.apk "/mnt/fdroid/repo/pattle-${CI_COMMIT_REF_NAME:1}.apk"
