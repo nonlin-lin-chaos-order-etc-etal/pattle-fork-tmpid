@@ -17,11 +17,11 @@ build:
     - tags
   script:
   - 'echo "version: ${CI_COMMIT_REF_NAME:1}" >> pubspec.yaml'
-  - echo "$STORE" | base64 -d > app/pattle.keystore
+  - echo "$STORE" | base64 -d > android/app/pattle.keystore
   - flutter build apk
   - mv build/app/outputs/apk/release/app-release.apk pattle.apk
   after_script:
-  - rm app/pattle.keystore
+  - rm android/app/pattle.keystore
 
 fdroid:
   stage: deploy
