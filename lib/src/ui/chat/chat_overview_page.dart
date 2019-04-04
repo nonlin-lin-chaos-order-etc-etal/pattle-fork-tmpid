@@ -21,6 +21,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/model/chat_overview.dart';
 import 'package:pattle/src/ui/chat/chat_overview_bloc.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
+import 'package:pattle/src/ui/util/date_format.dart';
 
 class ChatOverviewPageState extends State<ChatOverviewPage> {
 
@@ -85,16 +86,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
       subtitle = event?.sender.toString() ?? 'null';
     }
 
-    // TODO: Better time formatting
-    var t = chat.latestEvent?.time;
-    var time;
-    if (t != null) {
-      var hour = t.hour.toString().padLeft(2, '0');
-      var minute = t.minute.toString().padLeft(2, '0');
-      time = '$hour:$minute';
-    } else {
-      time = '';
-    }
+    var time = formatAsListItem(context, chat.latestEvent?.time);
 
     return ListTile(
       title: Row(

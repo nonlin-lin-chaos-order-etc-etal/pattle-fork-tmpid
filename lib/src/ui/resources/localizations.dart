@@ -34,6 +34,7 @@ class Strings {
   final next = 'Next';
   final homeserver = 'Homeserver';
   final identityServer = 'Identity server';
+  final yesterday = 'Yesterday';
 
   // StartPage //
   final loginWithPhone = 'Login with phone number';
