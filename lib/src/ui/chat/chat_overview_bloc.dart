@@ -49,7 +49,18 @@ class ChatOverviewBloc {
       print(chats.length);
     }
 
-    _chatsSubj.add(List.of(chats));
+    chats.sort((a, b) {
+      if (a.latestEvent != null && b.latestEvent != null) {
+        return a.latestEvent.time.compareTo(b.latestEvent.time);
+      } else if (a.latestEvent != null && b.latestEvent == null) {
+        return 1;
+      } else if (a.latestEvent == null && b.latestEvent != null) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+    _chatsSubj.add(List.of(chats.reversed));
   }
 
   Future<void> startSync() async {
