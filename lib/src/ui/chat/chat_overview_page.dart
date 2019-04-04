@@ -98,8 +98,10 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
           ),
           Text(
             time,
-            style: Theme.of(context).textTheme.subtitle
-                    .copyWith(fontWeight: FontWeight.normal)
+            style: Theme.of(context).textTheme.subtitle.copyWith(
+              fontWeight: FontWeight.normal,
+              color: Colors.black54
+            )
           )
         ]
       ),
