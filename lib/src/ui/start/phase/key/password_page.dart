@@ -89,6 +89,7 @@ class PasswordPageState extends State<PasswordPage> {
                     _next();
                   },
                   obscureText: true,
+                  enableInteractiveSelection: true,
                   decoration: InputDecoration(
                     filled: true,
                     labelText: l(context).password,
