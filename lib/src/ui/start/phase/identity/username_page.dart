@@ -63,18 +63,18 @@ class UsernamePageState extends State<UsernamePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Align(
-                alignment: Alignment.topRight,
-                child: Container(
-                    margin: EdgeInsets.only(top: 32, right: 16),
-                    child: FlatButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, 'start-advanced');
-                        },
-                        child: Text(
-                            l(context).advanced.toUpperCase()
-                        )
-                    )
+              alignment: Alignment.topRight,
+              child: Container(
+                margin: EdgeInsets.only(top: 32, right: 16),
+                child: FlatButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'start-advanced');
+                  },
+                  child: Text(
+                      l(context).advanced.toUpperCase()
+                  )
                 )
+              )
             ),
             Expanded(
               child: Container(
@@ -88,62 +88,63 @@ class UsernamePageState extends State<UsernamePage> {
                     ),
                     SizedBox(height: 16),
                     StreamBuilder<UsernameAvailableState>(
-                        stream: bloc.isUsernameAvailable,
-                        builder: (BuildContext context, AsyncSnapshot<UsernameAvailableState> snapshot) {
-                          String errorText;
+                      stream: bloc.isUsernameAvailable,
+                      builder: (BuildContext context, AsyncSnapshot<UsernameAvailableState> snapshot) {
+                        String errorText;
 
-                          if (snapshot.hasError) {
-                            if (snapshot.error is InvalidUsernameException) {
-                              errorText = l(context).usernameInvalidError;
-                            } else if(snapshot.error is InvalidHostnameException) {
-                              errorText = l(context).hostnameInvalidError;
-                            } else if(snapshot.error is InvalidUserIdException) {
-                              errorText = l(context).userIdInvalidError;
-                            } else {
-                              debugPrint(snapshot.error.toString());
-                              debugPrintStack();
-                              errorText = l(context).unknownError;
-                            }
+                        if (snapshot.hasError) {
+                          if (snapshot.error is InvalidUsernameException) {
+                            errorText = l(context).usernameInvalidError;
+                          } else if(snapshot.error is InvalidHostnameException) {
+                            errorText = l(context).hostnameInvalidError;
+                          } else if(snapshot.error is InvalidUserIdException) {
+                            errorText = l(context).userIdInvalidError;
                           } else {
-                            errorText = null;
+                            debugPrint(snapshot.error.toString());
+                            debugPrintStack();
+                            errorText = l(context).unknownError;
                           }
-
-                          return TextField(
-                              autofocus: true,
-                              controller: usernameController,
-                              inputFormatters: [LowerCaseTextFormatter()],
-                              onEditingComplete: () {
-                                _next(context);
-                              },
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  helperText: l(context).ifYouDontHaveAnAccount,
-                                  labelText: l(context).username,
-                                  errorText: errorText
-                              )
-                          );
+                        } else {
+                          errorText = null;
                         }
+
+                        return TextField(
+                            autofocus: true,
+                            controller: usernameController,
+                            inputFormatters: [LowerCaseTextFormatter()],
+                            onEditingComplete: () {
+                              _next(context);
+                            },
+                            decoration: InputDecoration(
+                                filled: true,
+                                prefixText: '@',
+                                helperText: l(context).ifYouDontHaveAnAccount,
+                                labelText: l(context).username,
+                                errorText: errorText
+                            )
+                        );
+                      }
                     ),
                     SizedBox(height: 16),
                     StreamBuilder<UsernameAvailableState>(
-                        stream: bloc.isUsernameAvailable,
-                        builder: (BuildContext context, AsyncSnapshot<UsernameAvailableState> snapshot) {
-                          final enabled = snapshot.data != UsernameAvailableState.checking;
-                          var onPressed;
+                      stream: bloc.isUsernameAvailable,
+                      builder: (BuildContext context, AsyncSnapshot<UsernameAvailableState> snapshot) {
+                        final enabled = snapshot.data != UsernameAvailableState.checking;
+                        var onPressed;
 
-                          if (enabled) {
-                            onPressed = () {
-                              _next(context);
-                            };
-                          } else {
-                            onPressed = null;
-                          }
-
-                          return RaisedButton(
-                              onPressed: onPressed,
-                              child: Text(l(context).next.toUpperCase())
-                          );
+                        if (enabled) {
+                          onPressed = () {
+                            _next(context);
+                          };
+                        } else {
+                          onPressed = null;
                         }
+
+                        return RaisedButton(
+                            onPressed: onPressed,
+                            child: Text(l(context).next.toUpperCase())
+                        );
+                      }
                     ),
                   ],
                 )
