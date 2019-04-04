@@ -14,8 +14,15 @@
 
 ## Get Pattle
    
-   Pattle will be available on F-Droid and Google Play when
-   the first stable version has been released.
+   Pattle is available on F-droid! To get it via F-droid, add the following repo:
+   
+   https://fdroid.pattle.im.
+
+   The fingerprint is:
+
+   `E9 1F 63 CA 6A E0 4F 8E 7E A5 3E 52 24 2E AF 87 79 55 92 09 B8 A3 42 F1 52 F9 E7 26 5E 3E A7 29`.
+
+   Pattle will be available on Google Play when it's more stable.
 
    Pattle supports all Android version from 4.1 and up.
 
