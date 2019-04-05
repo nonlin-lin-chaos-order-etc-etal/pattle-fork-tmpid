@@ -23,7 +23,12 @@ final inj = Injector();
 
 Homeserver getHomeserver() => inj.getDependency<Homeserver>();
 
-void registerHomeserver(Uri uri) {
+void registerHomeserver(Homeserver homeserver) {
+  inj.registerSingleton<Homeserver>((_)
+    => homeserver, override: true);
+}
+
+void registerHomeserverWith(Uri uri) {
   inj.registerSingleton<Homeserver>((_)
     => Homeserver(
       uri
@@ -44,4 +49,5 @@ LocalUser getLocalUser() => inj.getDependency<LocalUser>();
 
 void registerLocalUser(LocalUser user) {
   inj.registerSingleton<LocalUser>((_) => user, override: true);
+  registerHomeserver(user.homeserver);
 }

@@ -24,7 +24,7 @@ final bloc = StartBloc();
 class StartBloc {
 
   StartBloc() {
-    di.registerHomeserver(Uri.parse("https://matrix.org"));
+    di.registerHomeserverWith(Uri.parse("https://matrix.org"));
   }
 
   final _homeserverChangedSubj = BehaviorSubject<bool>();
@@ -35,7 +35,7 @@ class StartBloc {
   Username _username;
 
   void _setHomeserver(Uri uri) {
-    di.registerHomeserver(uri);
+    di.registerHomeserverWith(uri);
     _homeserverChangedSubj.add(true);
   }
 

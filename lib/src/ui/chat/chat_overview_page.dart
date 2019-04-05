@@ -22,6 +22,8 @@ import 'package:pattle/src/model/chat_overview.dart';
 import 'package:pattle/src/ui/chat/chat_overview_bloc.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
+import 'package:pattle/src/ui/util/matrix_image.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ChatOverviewPageState extends State<ChatOverviewPage> {
 
@@ -63,7 +65,10 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
           case ConnectionState.done:
             var chats = snapshot.data;
             return ListView.separated(
-              separatorBuilder: (context, index) => Divider(height: 1),
+              separatorBuilder: (context, index) => Divider(
+                height: 1,
+                indent: 64,
+              ),
               itemCount: chats.length,
               itemBuilder: (context, index) {
                 var chat = chats[index];
@@ -88,13 +93,43 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
 
     var time = formatAsListItem(context, chat.latestEvent?.time);
 
+    // Avatar
+    var avatar;
+
+    if (chat.avatarUrl != null) {
+      avatar = Container(
+        width: 48,
+        height: 48,
+        child: ClipOval(
+          child: FadeInImage(
+            fit: BoxFit.fill,
+            placeholder: MemoryImage(kTransparentImage),
+            image: MatrixImage(chat.avatarUrl)
+          )
+        ),
+      );
+    } else {
+      avatar = CircleAvatar(
+        radius: 24,
+        child: Text(chat.name[0],
+          style: Theme.of(context).textTheme.display1.copyWith(
+            color: Colors.white,
+            fontSize: 22
+          )
+        )
+      );
+    }
+
     return ListTile(
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
         children: <Widget>[
           Expanded(
-            child: Text(chat.name),
+            child: Text(chat.name,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           ),
           Text(
             time,
@@ -107,9 +142,11 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
       ),
       dense: false,
       onTap: () { },
+      leading: avatar,
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       subtitle: Text(subtitle,
         overflow: TextOverflow.ellipsis,
+        maxLines: 1,
       ),
     );
   }

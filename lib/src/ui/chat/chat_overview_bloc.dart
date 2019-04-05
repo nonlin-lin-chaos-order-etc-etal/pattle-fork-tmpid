@@ -40,13 +40,13 @@ class ChatOverviewBloc {
           .lastWhere((event) => true, orElse: () => null);
 
       var chat = ChatOverview(
-          id: room.id,
-          name: room.name,
-          latestEvent: latestEvent
+        id: room.id,
+        name: room.name,
+        latestEvent: latestEvent,
+        avatarUrl: room.avatarUrl
       );
 
       chats.add(chat);
-      print(chats.length);
     }
 
     chats.sort((a, b) {
@@ -65,7 +65,7 @@ class ChatOverviewBloc {
 
   Future<void> startSync() async {
     // Load from store before sync
-    loadChats();
+    await loadChats();
 
     Observable(_user.sync())
       .listen((success) async {
