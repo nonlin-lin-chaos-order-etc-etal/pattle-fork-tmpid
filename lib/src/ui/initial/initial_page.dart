@@ -17,6 +17,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/initial/initial_bloc.dart';
 
 class InitialPageState extends State<InitialPage> {
@@ -33,9 +34,9 @@ class InitialPageState extends State<InitialPage> {
       var route;
 
       if (loggedIn) {
-        route = 'chats';
+        route = Routes.chats;
       } else {
-        route = 'start';
+        route = Routes.start;
       }
 
       Navigator.pushNamedAndRemoveUntil(context, route, (route) => false);

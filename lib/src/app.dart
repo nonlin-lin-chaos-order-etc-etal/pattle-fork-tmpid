@@ -26,6 +26,18 @@ import 'package:pattle/src/ui/start/phase/identity/username_page.dart';
 import 'package:pattle/src/ui/start/phase/key/password_page.dart';
 import 'package:pattle/src/ui/start/start_page.dart';
 
+class Routes {
+  // Routes
+  static const root = '/';
+  static const chats = '/chats';
+
+  static const start = '/start';
+  static const startAdvanced = '/start/advanced';
+  static const startUsername = '/start/username';
+  static const startPassword = '/start/password';
+}
+
+
 class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -42,14 +54,14 @@ class App extends StatelessWidget {
       supportedLocales: [
         const Locale('en', 'US'),
       ],
-      initialRoute: 'initial',
+      initialRoute: Routes.root,
       routes: {
-        'initial': (context) => InitialPage(),
-        'chats': (context) => ChatOverviewPage(),
-        'start': (context) => StartPage(),
-        'start-advanced': (context) => AdvancedPage(),
-        'start-username': (context) => UsernamePage(),
-        'start-password': (context) => PasswordPage()
+        Routes.root: (context) => InitialPage(),
+        Routes.chats: (context) => ChatOverviewPage(),
+        Routes.start: (context) => StartPage(),
+        Routes.startAdvanced: (context) => AdvancedPage(),
+        Routes.startUsername: (context) => UsernamePage(),
+        Routes.startPassword: (context) => PasswordPage()
       },
     );
   }

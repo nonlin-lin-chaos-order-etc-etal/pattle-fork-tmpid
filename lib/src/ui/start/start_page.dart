@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
+import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 
 class StartPage extends StatelessWidget {
@@ -56,7 +57,7 @@ class StartPage extends StatelessWidget {
                   SizedBox(height: 16),
                   FlatButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, 'start-username');
+                      Navigator.pushNamed(context, Routes.startUsername);
                     },
                     child: Text(l(context).loginWithUsername.toUpperCase()),
                     shape: buttonShape,
