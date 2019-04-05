@@ -24,6 +24,7 @@ import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:pattle/src/di.dart' as di;
 
 class ChatOverviewPageState extends State<ChatOverviewPage> {
 
@@ -47,13 +48,13 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
       ),
       body: Container(
         child: Scrollbar(
-          child: buildOverviewList()
+          child: _buildOverviewList()
         ),
       )
     );
   }
 
-  Widget buildOverviewList() {
+  Widget _buildOverviewList() {
     return StreamBuilder<List<ChatOverview>>(
       stream: bloc.chats,
       builder: (BuildContext context, AsyncSnapshot<List<ChatOverview>> snapshot) {
@@ -71,8 +72,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
               ),
               itemCount: chats.length,
               itemBuilder: (context, index) {
-                var chat = chats[index];
-                return buildChatOverview(chat);
+                return _buildChatOverview(chats[index]);
               }
             );
         }
@@ -80,17 +80,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
     );
   }
 
-  Widget buildChatOverview(ChatOverview chat) {
-
-    final event = chat.latestEvent;
-    var subtitle;
-    // Handle events
-    if (event is TextMessageEvent) {
-      subtitle = event.body ?? 'null';
-    } else {
-      subtitle = event?.sender.toString() ?? 'null';
-    }
-
+  Widget _buildChatOverview(ChatOverview chat) {
     var time = formatAsListItem(context, chat.latestEvent?.time);
 
     // Avatar
@@ -144,11 +134,46 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
       onTap: () { },
       leading: avatar,
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      subtitle: Text(subtitle,
+      subtitle: _buildChatSubtitle(context, chat),
+    );
+  }
+
+  Widget _buildChatSubtitle(BuildContext context, ChatOverview chat) {
+    final event = chat.latestEvent;
+
+    var sender = '';
+    if (chat.latestEvent.sender != di.getLocalUser().id) {
+      sender = '@${event.sender.username}: ';
+    }
+    
+    // Handle events
+    if (event is TextMessageEvent) {
+      return RichText(
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
-      ),
-    );
+        text: TextSpan(
+          style: Theme.of(context).textTheme.body1.copyWith(
+            color: Theme.of(context).textTheme.caption.color
+          ),
+          children: [
+            TextSpan(
+              text: sender,
+              style: TextStyle(
+                fontWeight: FontWeight.bold
+              )
+            ),
+            TextSpan(
+              text: event.body ?? 'null'
+            )
+          ]
+        )
+      );
+    } else {
+      return Text(event?.sender.toString() ?? 'null',
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      );
+    }
   }
 }
 
