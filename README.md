@@ -1,5 +1,8 @@
 # Pattle
 
+  [![](https://img.shields.io/matrix/pattle:matrix.org.svg)](https://matrix.to/#/#pattle:matrix.org)
+  
+
   Pattle is an easy to use Android app for Matrix, with
   design inspired by other popular IM apps.
 
