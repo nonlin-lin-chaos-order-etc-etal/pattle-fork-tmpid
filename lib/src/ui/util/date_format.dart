@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
+import 'package:pattle/src/di.dart' as di;
 
 int _weekOf(DateTime date) {
   int dayOfYear = int.parse(DateFormat("D").format(date));
@@ -57,8 +58,11 @@ String formatAsListItem(BuildContext context, DateTime date) {
   var now = DateTime.now();
 
   if (_isToday(now, date)) {
-    // TODO: Respect 24 hour option
-    return DateFormat.jm().format(date);
+    if (di.getUse24HourFormat()) {
+      return DateFormat.Hm().format(date);
+    } else {
+      return DateFormat.jm().format(date);
+    }
   } else if (_isYesterday(now, date)) {
     return l(context).yesterday;
   } else if (_isThisWeek(now, date)) {

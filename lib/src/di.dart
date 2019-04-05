@@ -51,3 +51,15 @@ void registerLocalUser(LocalUser user) {
   inj.registerSingleton<LocalUser>((_) => user, override: true);
   registerHomeserver(user.homeserver);
 }
+
+const use24HourDependencyName = 'use24HourFormat';
+bool getUse24HourFormat() => inj.getDependency<bool>(
+  dependencyName: use24HourDependencyName
+) ?? false;
+
+void registerUse24HourFormat(bool use24HourFormat) {
+  inj.registerSingleton((_) => use24HourFormat,
+    override: true,
+    dependencyName: use24HourDependencyName
+  );
+}

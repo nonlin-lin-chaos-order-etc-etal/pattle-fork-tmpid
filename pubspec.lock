@@ -156,6 +156,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  respect_24_hour:
+    dependency: "direct main"
+    description:
+      name: respect_24_hour
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   rxdart:
     dependency: "direct main"
     description:

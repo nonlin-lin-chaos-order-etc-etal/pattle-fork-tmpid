@@ -27,6 +27,8 @@ class InitialPageState extends State<InitialPage> {
   void initState() {
     super.initState();
 
+    bloc.init();
+
     subscription = bloc.loggedIn.listen((loggedIn) {
       var route;
 

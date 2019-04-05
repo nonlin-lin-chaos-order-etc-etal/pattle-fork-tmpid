@@ -19,6 +19,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/model/chat_overview.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
+import 'package:respect_24_hour/respect_24_hour.dart';
 
 final bloc = InitialBloc();
 
@@ -27,6 +28,12 @@ class InitialBloc {
   final _loggedInSubj = BehaviorSubject<bool>();
   Observable<bool> get loggedIn
   => _loggedInSubj.stream;
+
+  // General app initialization
+  void init() async {
+    var use24Hour = await Respect24Hour.get24HourFormat;
+    di.registerUse24HourFormat(use24Hour);
+  }
 
   void checkIfLoggedIn() async {
     di.registerStore();
