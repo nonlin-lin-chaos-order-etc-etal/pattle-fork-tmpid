@@ -145,7 +145,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
     if (chat.latestEvent.sender != di.getLocalUser().id) {
       sender = '@${event.sender.username}: ';
     }
-    
+
     // Handle events
     if (event is TextMessageEvent) {
       return RichText(
