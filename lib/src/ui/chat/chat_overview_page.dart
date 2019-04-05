@@ -142,7 +142,8 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
     final event = chat.latestEvent;
 
     var sender = '';
-    if (chat.latestEvent.sender != di.getLocalUser().id) {
+    if (chat.latestEvent != null
+     && chat.latestEvent.sender != di.getLocalUser().id) {
       sender = '@${event.sender.username}: ';
     }
 
