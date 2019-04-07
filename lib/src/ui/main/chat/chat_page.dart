@@ -87,9 +87,9 @@ class ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildEventsList() {
-    return StreamBuilder<List<Event>>(
+    return StreamBuilder<List<MessageEvent>>(
       stream: bloc.events,
-      builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<MessageEvent>> snapshot) {
         print(snapshot.connectionState);
         switch(snapshot.connectionState) {
           case ConnectionState.none:
@@ -101,7 +101,7 @@ class ChatPageState extends State<ChatPage> {
             return ListView.builder(
               itemCount: events.length,
               itemBuilder: (context, index) {
-                final event = events[index] as RoomEvent;
+                final event = events[index];
                 final isMine = event.sender == me.id;
 
                 var previousEvent, nextEvent;

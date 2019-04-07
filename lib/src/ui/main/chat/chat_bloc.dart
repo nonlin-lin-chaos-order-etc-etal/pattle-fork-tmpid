@@ -24,12 +24,11 @@ class ChatBloc {
 
   Room room;
 
-  List<Event> _events = List();
+  List<MessageEvent> _events = List();
 
-  PublishSubject<List<Event>> _eventsSubj = PublishSubject<List<Event>>();
-  Observable<List<Event>> get events
+  Observable<List<MessageEvent>> get events
     => Observable(
-      room.events.all()
+      room.events.messages()
         .forEach((event) => _events.add(event))
         .then((_) => _events)
         .asStream()
