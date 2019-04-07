@@ -105,10 +105,10 @@ class TextMessage extends StatelessWidget {
 
     // Difference between time is greater than 3 min
     var limit = message.time
-        .add(_groupTimeLimit)
+        .subtract(_groupTimeLimit)
         .millisecondsSinceEpoch;
 
-    if (previousEvent.time.millisecondsSinceEpoch >= limit) {
+    if (previousEvent.time.millisecondsSinceEpoch <= limit) {
       return true;
     }
 
