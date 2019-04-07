@@ -30,6 +30,8 @@ class TextMessage extends StatelessWidget {
 
   final bool isMine;
 
+  static const _groupTimeLimit = const Duration(minutes: 3);
+
   // Styling
   static const _radiusForBorder = const Radius.circular(8);
   static const _padding = const EdgeInsets.all(8);
@@ -82,6 +84,18 @@ class TextMessage extends StatelessWidget {
       style: _textStyle(context)
     );
 
+  Widget _buildSender(BuildContext context) {
+    if (_isStartOfGroup()) {
+      return Text(message.sender.toString(),
+        style: _textStyle(context).copyWith(
+          fontWeight: FontWeight.bold
+        ),
+      );
+    } else {
+      return Container(width: 0, height: 0);
+    }
+  }
+
   bool _isStartOfGroup() {
     var previousHasSameSender = previousEvent?.sender == message.sender;
 
@@ -91,7 +105,7 @@ class TextMessage extends StatelessWidget {
 
     // Difference between time is greater than 3 min
     var limit = message.time
-        .add(const Duration(minutes: 3))
+        .add(_groupTimeLimit)
         .millisecondsSinceEpoch;
 
     if (previousEvent.time.millisecondsSinceEpoch >= limit) {
@@ -110,7 +124,7 @@ class TextMessage extends StatelessWidget {
 
     // Difference between time is greater than 3 min
     var limit = message.time
-      .add(const Duration(minutes: 3))
+      .add(_groupTimeLimit)
       .millisecondsSinceEpoch;
 
     if (nextEvent.time.millisecondsSinceEpoch >= limit) {
@@ -214,6 +228,8 @@ class TextMessage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    _buildSender(context),
+                    SizedBox(height: 4),
                     _buildContent(context),
                     SizedBox(height: 4),
                     _buildTime(context)
