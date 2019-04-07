@@ -35,7 +35,9 @@ class TextMessage extends StatelessWidget {
   // Styling
   static const _radiusForBorder = const Radius.circular(8);
   static const _padding = const EdgeInsets.all(8);
-  static const _margin = 16.0;
+  static const _sideMargin = 16.0;
+  static const _betweenMargin = 24.0;
+  static const _betweenGroupMargin = 4.0;
   static const _oppositeMargin = 64.0;
 
   TextMessage({
@@ -134,17 +136,23 @@ class TextMessage extends StatelessWidget {
     return false;
   }
 
-  double _marginBetween() {
+  double _marginBottom() {
     if (_isEndOfGroup()) {
-      return 24;
+      return _betweenMargin;
     } else {
-      return 4;
+      return _betweenGroupMargin;
+    }
+  }
+
+  double _marginTop() {
+    if (previousEvent == null) {
+      return _betweenMargin;
+    } else {
+      return 0;
     }
   }
 
   BorderRadius _borderRadius() {
-    print('isEndOfGroup: ${_isEndOfGroup()}');
-
     const defaultRadius = const BorderRadius.all(_radiusForBorder);
 
     if (isMine) {
@@ -182,8 +190,9 @@ class TextMessage extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.only(
                   left: _oppositeMargin,
-                  right: _margin,
-                  bottom: _marginBetween()
+                  right: _sideMargin,
+                  bottom: _marginBottom(),
+                  top: _marginTop(),
                 ),
                 padding: _padding,
                 decoration: BoxDecoration(
@@ -216,9 +225,10 @@ class TextMessage extends StatelessWidget {
             Flexible(
               child: Container(
                 margin: EdgeInsets.only(
-                  left: _margin,
+                  left: _sideMargin,
                   right: _oppositeMargin,
-                  bottom: _marginBetween()
+                  bottom: _marginBottom(),
+                  top: _marginTop()
                 ),
                 padding: _padding,
                 decoration: BoxDecoration(

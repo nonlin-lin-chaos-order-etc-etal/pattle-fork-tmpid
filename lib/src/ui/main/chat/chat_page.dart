@@ -88,41 +88,41 @@ class ChatPageState extends State<ChatPage> {
 
   Widget _buildEventsList() {
     return StreamBuilder<List<Event>>(
-        stream: bloc.events,
-        builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
-          print(snapshot.connectionState);
-          switch(snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-              return Container();
-            case ConnectionState.active:
-            case ConnectionState.done:
-              var events = snapshot.data;
-              return ListView.builder(
-                itemCount: events.length,
-                itemBuilder: (context, index) {
-                  final event = events[index] as RoomEvent;
-                  final isMine = event.sender == me.id;
+      stream: bloc.events,
+      builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
+        print(snapshot.connectionState);
+        switch(snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return Container();
+          case ConnectionState.active:
+          case ConnectionState.done:
+            var events = snapshot.data;
+            return ListView.builder(
+              itemCount: events.length,
+              itemBuilder: (context, index) {
+                final event = events[index] as RoomEvent;
+                final isMine = event.sender == me.id;
 
-                  var previousEvent, nextEvent;
-                  if (index != 0) {
-                    previousEvent = events[index - 1];
-                  }
-
-                  if (index != events.length - 1) {
-                    nextEvent = events[index + 1];
-                  }
-
-                  return _buildEventItem(
-                    events[index],
-                    previousEvent,
-                    nextEvent,
-                    isMine
-                  );
+                var previousEvent, nextEvent;
+                if (index != 0) {
+                  previousEvent = events[index - 1];
                 }
-              );
-          }
+
+                if (index != events.length - 1) {
+                  nextEvent = events[index + 1];
+                }
+
+                return _buildEventItem(
+                  events[index],
+                  previousEvent,
+                  nextEvent,
+                  isMine
+                );
+              }
+            );
         }
+      }
     );
   }
 
