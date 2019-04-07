@@ -78,7 +78,7 @@ class TextMessage extends StatelessWidget {
 
 
   Widget _buildContent(BuildContext context) =>
-    Text(message.body,
+    Text(message.body ?? '',
       style: _textStyle(context)
     );
 
