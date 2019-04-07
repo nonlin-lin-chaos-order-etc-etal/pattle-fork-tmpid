@@ -47,6 +47,7 @@ class LightColors {
       200: const Color(0xFFD5A09C),
       300: const Color(0xFFC47A74),
       400: const Color(0xFFB75E57),
+      450: const Color(0xFFB15048),
       500: const Color(_redPrimary),
       600: const Color(0xFFA33B33),
       700: const Color(0xFF99322C),

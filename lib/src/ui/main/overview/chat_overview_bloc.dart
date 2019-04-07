@@ -40,7 +40,7 @@ class ChatOverviewBloc {
           .lastWhere((event) => true, orElse: () => null);
 
       var chat = ChatOverview(
-        id: room.id,
+        room: room,
         name: room.name,
         latestEvent: latestEvent,
         avatarUrl: room.avatarUrl

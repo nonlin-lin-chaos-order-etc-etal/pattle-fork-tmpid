@@ -17,8 +17,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:pattle/src/ui/chat/chat_overview_page.dart';
+import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/initial/initial_page.dart';
+import 'package:pattle/src/ui/main/chat/chat_page.dart';
+import 'package:pattle/src/ui/main/overview/chat_overview_page.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/start/advanced_page.dart';
@@ -26,8 +28,39 @@ import 'package:pattle/src/ui/start/phase/identity/username_page.dart';
 import 'package:pattle/src/ui/start/phase/key/password_page.dart';
 import 'package:pattle/src/ui/start/start_page.dart';
 
+
+
+final routes = {
+  Routes.root: (Object params) => MaterialPageRoute(
+    builder: (context) => InitialPage()
+  ),
+  Routes.chats: (Object arguments) => MaterialPageRoute(
+    builder: (context) {
+      if (arguments is Room) {
+        return ChatPage(arguments);
+      } else {
+        return ChatOverviewPage();
+      }
+    }
+  ),
+  Routes.start: (Object params) => MaterialPageRoute(
+    builder: (context) => StartPage()
+  ),
+  Routes.startAdvanced: (Object params) => MaterialPageRoute(
+    builder: (context) => AdvancedPage()
+  ),
+  Routes.startUsername: (Object params) => MaterialPageRoute(
+    builder: (context) => UsernamePage()
+  ),
+  Routes.startPassword: (Object params) => MaterialPageRoute(
+    builder: (context) => PasswordPage()
+  ),
+};
+
 class Routes {
-  // Routes
+
+  Routes._();
+
   static const root = '/';
   static const chats = '/chats';
 
@@ -55,13 +88,8 @@ class App extends StatelessWidget {
         const Locale('en', 'US'),
       ],
       initialRoute: Routes.root,
-      routes: {
-        Routes.root: (context) => InitialPage(),
-        Routes.chats: (context) => ChatOverviewPage(),
-        Routes.start: (context) => StartPage(),
-        Routes.startAdvanced: (context) => AdvancedPage(),
-        Routes.startUsername: (context) => UsernamePage(),
-        Routes.startPassword: (context) => PasswordPage()
+      onGenerateRoute: (settings) {
+        return routes[settings.name](settings.arguments);
       },
     );
   }

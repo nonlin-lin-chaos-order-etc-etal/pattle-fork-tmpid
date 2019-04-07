@@ -40,7 +40,7 @@ class UsernamePageState extends State<UsernamePage> {
     subscription = bloc.isUsernameAvailable.listen((state) {
       if (state == UsernameAvailableState.available
           || state == UsernameAvailableState.unavailable) {
-        Navigator.pushNamed(context, "start-password");
+        Navigator.pushNamed(context, Routes.startPassword);
       }
     });
   }

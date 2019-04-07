@@ -48,6 +48,14 @@ bool _isThisWeek(DateTime now, DateTime date) {
 bool _isThisYear(DateTime now, DateTime date)
   => date.year == now.year;
 
+String formatAsTime(DateTime time) {
+  if (di.getUse24HourFormat()) {
+    return DateFormat.Hm().format(time);
+  } else {
+    return DateFormat.jm().format(time);
+  }
+}
+
 String formatAsListItem(BuildContext context, DateTime date) {
 
   if (date == null) {
@@ -58,11 +66,7 @@ String formatAsListItem(BuildContext context, DateTime date) {
   var now = DateTime.now();
 
   if (_isToday(now, date)) {
-    if (di.getUse24HourFormat()) {
-      return DateFormat.Hm().format(date);
-    } else {
-      return DateFormat.jm().format(date);
-    }
+    return formatAsTime(date);
   } else if (_isYesterday(now, date)) {
     return l(context).yesterday;
   } else if (_isThisWeek(now, date)) {

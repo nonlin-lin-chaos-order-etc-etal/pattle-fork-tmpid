@@ -18,8 +18,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/app.dart';
 import 'package:pattle/src/model/chat_overview.dart';
-import 'package:pattle/src/ui/chat/chat_overview_bloc.dart';
+import 'package:pattle/src/ui/main/overview/chat_overview_bloc.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
@@ -87,15 +88,18 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
     var avatar;
 
     if (chat.avatarUrl != null) {
-      avatar = Container(
-        width: 48,
-        height: 48,
-        child: ClipOval(
-          child: FadeInImage(
-            fit: BoxFit.fill,
-            placeholder: MemoryImage(kTransparentImage),
-            image: MatrixImage(chat.avatarUrl)
-          )
+      avatar = Hero(
+        tag: chat.room.id,
+        child: Container(
+          width: 48,
+          height: 48,
+          child: ClipOval(
+              child: FadeInImage(
+                  fit: BoxFit.fill,
+                  placeholder: MemoryImage(kTransparentImage),
+                  image: MatrixImage(chat.avatarUrl)
+              )
+          ),
         ),
       );
     } else {
@@ -131,7 +135,9 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
         ]
       ),
       dense: false,
-      onTap: () { },
+      onTap: () {
+        Navigator.pushNamed(context, Routes.chats, arguments: chat.room);
+      },
       leading: avatar,
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       subtitle: _buildChatSubtitle(context, chat),

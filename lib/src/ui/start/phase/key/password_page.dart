@@ -18,6 +18,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
 
@@ -33,7 +34,7 @@ class PasswordPageState extends State<PasswordPage> {
 
     subscription = bloc.loginStream.listen((state) {
       if (state == LoginState.succeeded) {
-        Navigator.pushNamedAndRemoveUntil(context, 'chats', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, Routes.chats, (route) => false);
       }
     });
   }
