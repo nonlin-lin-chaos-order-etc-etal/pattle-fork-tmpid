@@ -188,25 +188,30 @@ class TextMessage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Flexible(
-              child: Container(
-                margin: EdgeInsets.only(
+              child: Padding(
+                padding: EdgeInsets.only(
                   left: _oppositeMargin,
                   right: _sideMargin,
                   bottom: _marginBottom(),
                   top: _marginTop(),
                 ),
-                padding: _padding,
-                decoration: BoxDecoration(
+                child: Material(
                   color: LightColors.red[450],
-                  borderRadius: _borderRadius()
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    _buildContent(context),
-                    SizedBox(height: 4),
-                    _buildTime(context)
-                  ],
+                  elevation: 1,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: _borderRadius(),
+                  ),
+                  child: Padding(
+                    padding: _padding,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _buildContent(context),
+                        SizedBox(height: 4),
+                        _buildTime(context)
+                      ],
+                    ),
+                  ),
                 )
               ),
             ),
@@ -224,27 +229,32 @@ class TextMessage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Flexible(
-              child: Container(
-                margin: EdgeInsets.only(
+              child: Padding(
+                padding: EdgeInsets.only(
                   left: _sideMargin,
                   right: _oppositeMargin,
                   bottom: _marginBottom(),
                   top: _marginTop()
                 ),
-                padding: _padding,
-                decoration: BoxDecoration(
+                child: Material(
                   color: Colors.white,
-                  borderRadius: _borderRadius()
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    _buildSender(context),
-                    SizedBox(height: 4),
-                    _buildContent(context),
-                    SizedBox(height: 4),
-                    _buildTime(context)
-                  ],
+                  elevation: 1,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: _borderRadius(),
+                  ),
+                  child: Padding(
+                    padding: _padding,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                        _buildSender(context),
+                        SizedBox(height: 4),
+                        _buildContent(context),
+                        SizedBox(height: 4),
+                        _buildTime(context)
+                        ],
+                      ),
+                  ),
                 )
               ),
             ),
@@ -252,5 +262,4 @@ class TextMessage extends StatelessWidget {
         ),
       ],
     );
-
 }
