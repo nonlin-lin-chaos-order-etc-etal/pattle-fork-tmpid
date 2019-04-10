@@ -171,7 +171,11 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
           )
       );
     } else {
-      return Text(event?.sender?.id.toString() ?? 'null',
+      return Text('Something happened!',
+        style: Theme.of(context).textTheme.body1.copyWith(
+          color: Theme.of(context).textTheme.caption.color,
+          fontStyle: FontStyle.italic
+        ),
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
       );
