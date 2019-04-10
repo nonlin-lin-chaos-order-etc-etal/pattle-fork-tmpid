@@ -204,7 +204,7 @@ class TextMessage extends StatelessWidget {
                   child: Padding(
                     padding: _padding,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         _buildContent(context),
                         SizedBox(height: 4),
