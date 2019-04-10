@@ -37,7 +37,7 @@ class TextMessage extends StatelessWidget {
   static const _radiusForBorder = const Radius.circular(8);
   static const _padding = const EdgeInsets.all(8);
   static const _sideMargin = 16.0;
-  static const _betweenMargin = 24.0;
+  static const _betweenMargin = 16.0;
   static const _betweenGroupMargin = 4.0;
   static const _oppositeMargin = 64.0;
 
