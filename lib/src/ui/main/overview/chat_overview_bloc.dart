@@ -19,6 +19,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/model/chat_overview.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
+import 'package:pattle/src/ui/main/sync_bloc.dart';
 
 final bloc = ChatOverviewBloc();
 
@@ -26,8 +27,6 @@ class ChatOverviewBloc {
   
   PublishSubject<List<ChatOverview>> _chatsSubj = PublishSubject<List<ChatOverview>>();
   Observable<List<ChatOverview>> get chats => _chatsSubj.stream;
-
-  Observable<bool> syncStream;
 
   final LocalUser _user = di.getLocalUser();
 
@@ -67,11 +66,8 @@ class ChatOverviewBloc {
     // Load from store before sync
     await loadChats();
 
-    Observable(_user.sync())
-      .listen((success) async {
-        if (success) {
-          await loadChats();
-        }
-      });
+    syncBloc.start();
+
+    syncBloc.stream.listen((success) async => await loadChats());
   }
 }

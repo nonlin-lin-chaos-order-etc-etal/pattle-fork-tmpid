@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
+import 'package:pattle/src/ui/util/display_name.dart';
 
 
 class TextMessage extends StatelessWidget {
@@ -88,13 +89,13 @@ class TextMessage extends StatelessWidget {
 
   Widget _buildSender(BuildContext context) {
     if (_isStartOfGroup()) {
-      return Text(message.sender.toString(),
+      return Text(displayNameOf(message.sender),
         style: _textStyle(context).copyWith(
-          fontWeight: FontWeight.bold
+            fontWeight: FontWeight.bold
         ),
       );
     } else {
-      return Container(width: 0, height: 0);
+      return Container(height: 0, width: 0);
     }
   }
 

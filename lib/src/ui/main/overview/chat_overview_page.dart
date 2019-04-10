@@ -23,6 +23,7 @@ import 'package:pattle/src/model/chat_overview.dart';
 import 'package:pattle/src/ui/main/overview/chat_overview_bloc.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
+import 'package:pattle/src/ui/util/display_name.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:pattle/src/di.dart' as di;
@@ -147,36 +148,30 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
   Widget _buildChatSubtitle(BuildContext context, ChatOverview chat) {
     final event = chat.latestEvent;
 
-    var sender = '';
-    if (chat.latestEvent != null
-     && chat.latestEvent.sender != di.getLocalUser().id) {
-      sender = '@${event.sender.username}: ';
-    }
-
     // Handle events
     if (event is TextMessageEvent) {
       return RichText(
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-        text: TextSpan(
-          style: Theme.of(context).textTheme.body1.copyWith(
-            color: Theme.of(context).textTheme.caption.color
-          ),
-          children: [
-            TextSpan(
-              text: sender,
-              style: TextStyle(
-                fontWeight: FontWeight.bold
-              )
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          text: TextSpan(
+            style: Theme.of(context).textTheme.body1.copyWith(
+              color: Theme.of(context).textTheme.caption.color
             ),
-            TextSpan(
-              text: event.body ?? 'null'
-            )
-          ]
-        )
+            children: [
+              TextSpan(
+                text: '${displayNameOf(event.sender)}: ',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold
+                )
+              ),
+              TextSpan(
+                text: event.body ?? 'null'
+              )
+            ]
+          )
       );
     } else {
-      return Text(event?.sender.toString() ?? 'null',
+      return Text(event?.sender?.id.toString() ?? 'null',
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
       );

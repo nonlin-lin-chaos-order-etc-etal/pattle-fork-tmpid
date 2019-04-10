@@ -113,6 +113,7 @@ class UsernamePageState extends State<UsernamePage> {
                             autofocus: true,
                             controller: usernameController,
                             inputFormatters: [LowerCaseTextFormatter()],
+                            textCapitalization: TextCapitalization.none,
                             onEditingComplete: () {
                               _next(context);
                             },

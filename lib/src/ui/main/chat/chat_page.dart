@@ -38,6 +38,7 @@ class ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
+    bloc.startLoadingEvents();
   }
 
   @override
@@ -97,24 +98,26 @@ class ChatPageState extends State<ChatPage> {
             return Container();
           case ConnectionState.active:
           case ConnectionState.done:
-            var events = snapshot.data;
+            var chatEvents = snapshot.data;
             return ListView.builder(
-              itemCount: events.length,
+              itemCount: chatEvents.length,
               itemBuilder: (context, index) {
-                final event = events[index];
-                final isMine = event.sender == me.id;
+                final event = chatEvents[index];
+                final isMine = event.sender == me;
+
+                print('${event.sender.name ?? event.sender.id} == me');
 
                 var previousEvent, nextEvent;
                 if (index != 0) {
-                  previousEvent = events[index - 1];
+                  previousEvent = chatEvents[index - 1];
                 }
 
-                if (index != events.length - 1) {
-                  nextEvent = events[index + 1];
+                if (index != chatEvents.length - 1) {
+                  nextEvent = chatEvents[index + 1];
                 }
 
                 return _buildEventItem(
-                  events[index],
+                  event,
                   previousEvent,
                   nextEvent,
                   isMine

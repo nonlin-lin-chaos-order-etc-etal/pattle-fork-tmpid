@@ -1,4 +1,4 @@
-// Copyright (C) 2019  Wilko Manger
+// Copyright (C) 2019  wilko
 //
 // This file is part of Pattle.
 //
@@ -16,30 +16,6 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/ui/main/sync_bloc.dart';
-import 'package:rxdart/rxdart.dart';
 
-class ChatBloc {
 
-  Room room;
-
-  PublishSubject<List<MessageEvent>> _eventSubj = PublishSubject<List<MessageEvent>>();
-  Stream<List<MessageEvent>> get events => _eventSubj.stream;
-
-  Future<void> startLoadingEvents() async {
-    await loadEvents();
-
-    syncBloc.stream.listen((success) async => await loadEvents());
-  }
-
-  Future<void> loadEvents() async {
-    var chatEvents = List<MessageEvent>();
-
-    // Get all rooms and push them as a single list
-    await for(MessageEvent event in room.events.messages()) {
-      chatEvents.add(event);
-    }
-
-    _eventSubj.add(List.of(chatEvents));
-  }
-}
+String displayNameOf(User user) => user.name ?? user.name.split(':')[0];
