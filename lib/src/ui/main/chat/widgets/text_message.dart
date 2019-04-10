@@ -153,30 +153,30 @@ class TextMessage extends StatelessWidget {
     }
   }
 
-  BorderRadius _borderRadius() {
-    const defaultRadius = const BorderRadius.all(_radiusForBorder);
+  ShapeBorder _border() {
+    var radius = const BorderRadius.all(_radiusForBorder);
 
     if (isMine) {
       if (_isEndOfGroup()) {
-        return BorderRadius.only(
+        radius = BorderRadius.only(
           topLeft: _radiusForBorder,
           topRight: _radiusForBorder,
           bottomLeft: _radiusForBorder,
         );
-      } else {
-        return defaultRadius;
       }
     } else {
       if (_isStartOfGroup()) {
-        return BorderRadius.only(
+        radius =  BorderRadius.only(
           topRight: _radiusForBorder,
           bottomLeft: _radiusForBorder,
           bottomRight: _radiusForBorder,
         );
-      } else {
-        return defaultRadius;
       }
     }
+
+    return RoundedRectangleBorder(
+      borderRadius: radius,
+    );
   }
 
   Widget _buildMine(BuildContext context) =>
@@ -198,22 +198,24 @@ class TextMessage extends StatelessWidget {
                 child: Material(
                   color: LightColors.red[450],
                   elevation: 1,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: _borderRadius(),
-                  ),
-                  child: Padding(
-                    padding: _padding,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        _buildContent(context),
-                        SizedBox(height: 4),
-                        _buildTime(context)
-                      ],
+                  shape: _border(),
+                  child: InkWell(
+                    onTap: () { },
+                    customBorder: _border(),
+                    child: Padding(
+                      padding: _padding,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          _buildContent(context),
+                          SizedBox(height: 4),
+                          _buildTime(context)
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ),
+                  )
+                ),
+              )
             ),
           ]
         ),
@@ -239,24 +241,26 @@ class TextMessage extends StatelessWidget {
                 child: Material(
                   color: Colors.white,
                   elevation: 1,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: _borderRadius(),
-                  ),
-                  child: Padding(
-                    padding: _padding,
+                  shape: _border(),
+                  child: InkWell(
+                    onTap: () { },
+                    customBorder: _border(),
+                    child: Padding(
+                      padding: _padding,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                        _buildSender(context),
-                        SizedBox(height: 4),
-                        _buildContent(context),
-                        SizedBox(height: 4),
-                        _buildTime(context)
+                          _buildSender(context),
+                          SizedBox(height: 4),
+                          _buildContent(context),
+                          SizedBox(height: 4),
+                          _buildTime(context)
                         ],
                       ),
-                  ),
-                )
-              ),
+                    ),
+                  )
+                ),
+      )
             ),
           ]
         ),
