@@ -91,7 +91,6 @@ class ChatPageState extends State<ChatPage> {
     return StreamBuilder<List<MessageEvent>>(
       stream: bloc.events,
       builder: (BuildContext context, AsyncSnapshot<List<MessageEvent>> snapshot) {
-        print(snapshot.connectionState);
         switch(snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
@@ -104,8 +103,6 @@ class ChatPageState extends State<ChatPage> {
               itemBuilder: (context, index) {
                 final event = chatEvents[index];
                 final isMine = event.sender == me;
-
-                print('${event.sender.name ?? event.sender.id} == me');
 
                 var previousEvent, nextEvent;
                 if (index != 0) {

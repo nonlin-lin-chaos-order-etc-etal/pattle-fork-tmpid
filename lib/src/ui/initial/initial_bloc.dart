@@ -39,8 +39,6 @@ class InitialBloc {
     di.registerStore();
     var localUser = await LocalUser.fromStore(di.getStore());
 
-    print(localUser);
-
     if (localUser != null) {
       di.registerLocalUser(localUser);
     }
