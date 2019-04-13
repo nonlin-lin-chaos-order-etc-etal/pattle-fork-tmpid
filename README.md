@@ -36,6 +36,10 @@
    [Design](https://docs.pattle.im/design/philosophy/).
 
 ## Contributing
+
+   Before building a debug build, make sure you have a `.env` file in the
+   root of the project. You can just `cp .env.example .env`, because
+   Sentry is not used in debug mode.
    
    Contributions are encouraged! See [CONTRIBUTING](CONTRIBUTING.md) for
    details on how to contribute!
