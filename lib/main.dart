@@ -15,7 +15,13 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pattle/src/app.dart';
+import 'package:pattle/src/sentry.dart' as sentry;
 
-void main() => runApp(App());
+Future<void> main() async {
+  await sentry.init();
+  sentry.wrap(() => runApp(App()));
+}
