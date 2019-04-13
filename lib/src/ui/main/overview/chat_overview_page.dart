@@ -106,7 +106,8 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
     } else {
       avatar = CircleAvatar(
         radius: 24,
-        child: Text(chat.name[0],
+        child: Text(
+          chat.name.length > 1 ? chat.name[0] : chat.room.id.toString()[1],
           style: Theme.of(context).textTheme.display1.copyWith(
             color: Colors.white,
             fontSize: 22
