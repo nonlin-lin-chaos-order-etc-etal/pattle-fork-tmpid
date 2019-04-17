@@ -151,6 +151,10 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
 
     // Handle events
     if (event is TextMessageEvent) {
+      final sender = di.getLocalUser() != event.sender
+          ? '${displayNameOf(event.sender)}: '
+          : '';
+
       return RichText(
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
@@ -160,7 +164,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
             ),
             children: [
               TextSpan(
-                text: '${displayNameOf(event.sender)}: ',
+                text: sender,
                 style: TextStyle(
                     fontWeight: FontWeight.bold
                 )
