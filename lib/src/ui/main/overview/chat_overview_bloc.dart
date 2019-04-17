@@ -35,7 +35,7 @@ class ChatOverviewBloc {
 
     // Get all rooms and push them as a single list
     await for(Room room in _user.rooms.all()) {
-      var latestEvent = await room.events.all()
+      var latestEvent = await room.events.upTo(1)
           .lastWhere((event) => true, orElse: () => null);
 
       var chat = ChatOverview(

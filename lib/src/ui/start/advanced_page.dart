@@ -29,6 +29,7 @@ class AdvancedPageState extends State<AdvancedPage> {
 
   @override
   void initState() {
+    super.initState();
     homeserverTextController.text = bloc.homeserver.uri.toString();
   }
 

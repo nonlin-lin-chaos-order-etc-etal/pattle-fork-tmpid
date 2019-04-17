@@ -151,6 +151,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.15.8"
+  kiwi:
+    dependency: transitive
+    description:
+      name: kiwi
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   logging:
     dependency: transitive
     description:
@@ -171,14 +178,14 @@ packages:
       name: matrix_sdk
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.2"
+    version: "0.2.4"
   matrix_sdk_sqflite:
     dependency: "direct main"
     description:
       name: matrix_sdk_sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.8"
+    version: "0.1.10"
   meta:
     dependency: transitive
     description:

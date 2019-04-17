@@ -31,6 +31,10 @@ class ChatPageState extends State<ChatPage> {
   final ChatBloc bloc = ChatBloc();
   final Room room;
 
+  ScrollController scrollController = ScrollController();
+
+  double get scrollLoadRange => scrollController.position.maxScrollExtent - 700;
+
   ChatPageState(this.room) {
     bloc.room = room;
   }
@@ -39,6 +43,13 @@ class ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     bloc.startLoadingEvents();
+
+    scrollController.addListener(() {
+      if (scrollController.offset >= scrollLoadRange
+       && !scrollController.position.outOfRange) {
+        bloc.requestMoreEvents();
+      }
+    });
   }
 
   @override
@@ -83,14 +94,37 @@ class ChatPageState extends State<ChatPage> {
           ],
         ),
       ),
-      body: _buildEventsList()
+      body: Stack(
+        children: <Widget>[
+          _buildEventsList(),
+          _buildLoadingIndicator()
+        ],
+      )
+    );
+  }
+
+  Widget _buildLoadingIndicator() {
+    return StreamBuilder<bool>(
+      stream: bloc.isLoadingEvents,
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        final isLoading = snapshot.data ?? false;
+
+        return AnimatedOpacity(
+          opacity: isLoading ? 1.0 : 0.0,
+          duration: Duration(milliseconds: 250),
+            child: Container(
+              alignment: Alignment.topCenter,
+              child: RefreshProgressIndicator(),
+            )
+        );
+      }
     );
   }
 
   Widget _buildEventsList() {
-    return StreamBuilder<List<MessageEvent>>(
+    return StreamBuilder<List<RoomEvent>>(
       stream: bloc.events,
-      builder: (BuildContext context, AsyncSnapshot<List<MessageEvent>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<RoomEvent>> snapshot) {
         switch(snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
@@ -99,18 +133,23 @@ class ChatPageState extends State<ChatPage> {
           case ConnectionState.done:
             var chatEvents = snapshot.data;
             return ListView.builder(
+              controller: scrollController,
+              reverse: true,
               itemCount: chatEvents.length,
               itemBuilder: (context, index) {
                 final event = chatEvents[index];
                 final isMine = event.sender == me;
 
                 var previousEvent, nextEvent;
-                if (index != 0) {
-                  previousEvent = chatEvents[index - 1];
+                // Note: Because the items are reversed in the
+                // ListView.builder, the 'previous' event is actually the next
+                // one in the list.
+                if (index != chatEvents.length - 1) {
+                  previousEvent = chatEvents[index + 1];
                 }
 
-                if (index != chatEvents.length - 1) {
-                  nextEvent = chatEvents[index + 1];
+                if (index != 0) {
+                  nextEvent = chatEvents[index - 1];
                 }
 
                 return _buildEventItem(

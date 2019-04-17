@@ -23,8 +23,29 @@ class ChatBloc {
 
   Room room;
 
-  PublishSubject<List<MessageEvent>> _eventSubj = PublishSubject<List<MessageEvent>>();
-  Stream<List<MessageEvent>> get events => _eventSubj.stream;
+  int _eventCount = 20;
+
+  PublishSubject<bool> _isLoadingEventsSubj = PublishSubject<bool>();
+  Stream<bool> get isLoadingEvents => _isLoadingEventsSubj.stream.distinct();
+
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  set isLoading(bool value) {
+    _isLoading = value;
+    if (!isLoading) {
+      _isLoadingEventsSubj.add(false);
+    } else {
+      // If still loading after 2 seconds, notify the UI
+      Future.delayed(const Duration(seconds: 2), () {
+        if (isLoading) {
+          _isLoadingEventsSubj.add(true);
+        }
+      });
+    }
+  }
+
+  PublishSubject<List<RoomEvent>> _eventSubj = PublishSubject<List<RoomEvent>>();
+  Stream<List<RoomEvent>> get events => _eventSubj.stream;
 
   Future<void> startLoadingEvents() async {
     await loadEvents();
@@ -32,11 +53,20 @@ class ChatBloc {
     syncBloc.stream.listen((success) async => await loadEvents());
   }
 
+  Future<void> requestMoreEvents() async {
+    if (!_isLoading) {
+      isLoading = true;
+      _eventCount += 30;
+      await loadEvents();
+      isLoading = false;
+    }
+  }
+
   Future<void> loadEvents() async {
-    var chatEvents = List<MessageEvent>();
+    var chatEvents = List<RoomEvent>();
 
     // Get all rooms and push them as a single list
-    await for(MessageEvent event in room.events.messages()) {
+    await for(RoomEvent event in room.events.upTo(_eventCount)) {
       chatEvents.add(event);
     }
 
