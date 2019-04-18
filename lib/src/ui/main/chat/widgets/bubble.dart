@@ -22,7 +22,7 @@ import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/display_name.dart';
 
 
-class TextMessage extends StatelessWidget {
+class Bubble extends StatelessWidget {
 
   final TextMessageEvent message;
 
@@ -41,7 +41,7 @@ class TextMessage extends StatelessWidget {
   static const _betweenGroupMargin = 4.0;
   static const _oppositeMargin = 64.0;
 
-  TextMessage({
+  Bubble({
     @required this.message,
     @required this.previousEvent,
     @required this.nextEvent,
@@ -83,7 +83,7 @@ class TextMessage extends StatelessWidget {
 
 
   Widget _buildContent(BuildContext context) =>
-    Text(message.body ?? '',
+    Text(message.content.body ?? '',
       style: _textStyle(context)
     );
 
@@ -260,7 +260,7 @@ class TextMessage extends StatelessWidget {
                     ),
                   )
                 ),
-      )
+              )
             ),
           ]
         ),

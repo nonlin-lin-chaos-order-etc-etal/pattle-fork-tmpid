@@ -19,7 +19,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
-import 'package:pattle/src/ui/main/chat/widgets/text_message.dart';
+import 'package:pattle/src/ui/main/chat/widgets/bubble.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 
@@ -29,11 +29,12 @@ class ChatPageState extends State<ChatPage> {
 
   final me = di.getLocalUser();
   final ChatBloc bloc = ChatBloc();
-  final Room room;
+  final JoinedRoom room;
 
   ScrollController scrollController = ScrollController();
-
   double get scrollLoadRange => scrollController.position.maxScrollExtent - 700;
+
+  TextEditingController textController = TextEditingController();
 
   ChatPageState(this.room) {
     bloc.room = room;
@@ -96,9 +97,53 @@ class ChatPageState extends State<ChatPage> {
       ),
       body: Stack(
         children: <Widget>[
-          _buildEventsList(),
+          _buildBody(),
           _buildLoadingIndicator()
         ],
+      )
+    );
+  }
+
+  Widget _buildBody() {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: _buildEventsList()
+        ),
+        _buildInput(),
+      ],
+    );
+  }
+
+  Widget _buildInput() {
+    return Material(
+      elevation: 8,
+      color: LightColors.red[50],
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Material(
+          elevation: 8,
+          borderRadius: BorderRadius.circular(8),
+          child: TextField(
+            controller: textController,
+            textInputAction: TextInputAction.newline,
+            decoration: InputDecoration(
+              border: UnderlineInputBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(8))
+              ),
+              filled: true,
+              fillColor: Colors.white,
+              hintText: 'Type a message',
+              suffixIcon: IconButton(
+                icon: Icon(Icons.send),
+                onPressed: () {
+                  bloc.sendMessage(textController.value.text);
+                  textController.clear();
+                }
+              )
+            ),
+          ),
+        )
       )
     );
   }
@@ -169,7 +214,7 @@ class ChatPageState extends State<ChatPage> {
       Event event, Event previousEvent, Event nextEvent, bool isMine) {
 
     if (event is TextMessageEvent) {
-      return TextMessage(
+      return Bubble(
         message: event,
         previousEvent: previousEvent,
         nextEvent: nextEvent,

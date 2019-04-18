@@ -170,7 +170,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
                 )
               ),
               TextSpan(
-                text: event.body ?? 'null'
+                text: event.content.body ?? 'null'
               )
             ]
           )

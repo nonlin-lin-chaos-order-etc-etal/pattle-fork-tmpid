@@ -21,7 +21,7 @@ import 'package:rxdart/rxdart.dart';
 
 class ChatBloc {
 
-  Room room;
+  JoinedRoom room;
 
   int _eventCount = 20;
 
@@ -71,5 +71,14 @@ class ChatBloc {
     }
 
     _eventSubj.add(List.of(chatEvents));
+  }
+
+  Future<void> sendMessage(String text) async {
+    // TODO: Check if text is just whitespace
+    if (text.isNotEmpty) {
+      await room.send(TextMessage(body: text));
+      await loadEvents();
+    }
+
   }
 }
