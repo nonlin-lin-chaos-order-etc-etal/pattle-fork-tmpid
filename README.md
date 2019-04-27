@@ -19,7 +19,7 @@
    
    Pattle is available on F-droid! To get it via F-droid, add the following repo:
    
-   https://fdroid.pattle.im.
+   https://fdroid.pattle.im/?fingerprint=E91F63CA6AE04F8E7EA53E52242EAF8779559209B8A342F152F9E7265E3EA729
 
    The fingerprint is:
 
