@@ -20,6 +20,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/initial/initial_page.dart';
 import 'package:pattle/src/ui/main/chat/chat_page.dart';
+import 'package:pattle/src/ui/main/chat/image/image_page.dart';
 import 'package:pattle/src/ui/main/overview/chat_overview_page.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
@@ -43,6 +44,9 @@ final routes = {
       }
     }
   ),
+  Routes.image: (Object arguments) => MaterialPageRoute(
+      builder: (context) => ImagePage(arguments)
+  ),
   Routes.start: (Object params) => MaterialPageRoute(
     builder: (context) => StartPage()
   ),
@@ -63,6 +67,7 @@ class Routes {
 
   static const root = '/';
   static const chats = '/chats';
+  static const image = '/image';
 
   static const start = '/start';
   static const startAdvanced = '/start/advanced';

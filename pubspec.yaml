@@ -12,8 +12,8 @@ dependencies:
 
   injector: ^1.0.6
 
-  matrix_sdk: ^0.3.0
-  matrix_sdk_sqflite: ^0.1.11
+  matrix_sdk: 0.3.9
+  matrix_sdk_sqflite: 0.1.12
 
   rxdart: ^0.21.0
 
@@ -27,6 +27,8 @@ dependencies:
   respect_24_hour: ^0.0.2
 
   transparent_image: ^1.0.0
+
+  photo_view: ^0.3.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

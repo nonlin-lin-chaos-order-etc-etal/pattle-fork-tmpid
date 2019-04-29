@@ -56,6 +56,22 @@ String formatAsTime(DateTime time) {
   }
 }
 
+String formatAsDate(BuildContext context, DateTime date) {
+  final now = DateTime.now();
+
+  if (_isToday(now, date)) {
+    return l(context).today;
+  } else if (_isYesterday(now, date)) {
+    return l(context).yesterday;
+  } else if (_isThisWeek(now, date)) {
+    return DateFormat.EEEE().format(date);
+  } else if (_isThisYear(now, date)) {
+    return DateFormat.MMMd().format(date);
+  } else {
+    return DateFormat.yMMMd().format(date);
+  }
+}
+
 String formatAsListItem(BuildContext context, DateTime date) {
 
   if (date == null) {
@@ -67,13 +83,7 @@ String formatAsListItem(BuildContext context, DateTime date) {
 
   if (_isToday(now, date)) {
     return formatAsTime(date);
-  } else if (_isYesterday(now, date)) {
-    return l(context).yesterday;
-  } else if (_isThisWeek(now, date)) {
-    return DateFormat.EEEE().format(date);
-  } else if (_isThisYear(now, date)) {
-    return DateFormat.MMMd().format(date);
   } else {
-    return DateFormat.yMMMd().format(date);
+    return formatAsDate(context, date);
   }
 }

@@ -21,10 +21,13 @@ import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/display_name.dart';
 
+import 'image_bubble.dart';
+import 'text_bubble.dart';
 
-class Bubble extends StatelessWidget {
 
-  final TextMessageEvent message;
+abstract class Bubble extends StatelessWidget {
+
+  final RoomEvent event;
 
   final RoomEvent previousEvent;
   final RoomEvent nextEvent;
@@ -34,19 +37,44 @@ class Bubble extends StatelessWidget {
   static const _groupTimeLimit = const Duration(minutes: 3);
 
   // Styling
-  static const _radiusForBorder = const Radius.circular(8);
-  static const _padding = const EdgeInsets.all(8);
+  static const padding = const EdgeInsets.all(8);
+  static const radiusForBorder = const Radius.circular(8);
   static const _sideMargin = 16.0;
   static const _betweenMargin = 16.0;
   static const _betweenGroupMargin = 4.0;
   static const _oppositeMargin = 64.0;
 
   Bubble({
-    @required this.message,
+    @required this.event,
     @required this.previousEvent,
     @required this.nextEvent,
     @required this.isMine
   });
+
+  factory Bubble.fromEvent({
+    @required RoomEvent event,
+    @required RoomEvent previousEvent,
+    @required RoomEvent nextEvent,
+    @required bool isMine
+  }) {
+    if (event is TextMessageEvent) {
+      return TextBubble(
+        event: event,
+        previousEvent: previousEvent,
+        nextEvent: nextEvent,
+        isMine: isMine
+      );
+    } else if (event is ImageMessageEvent) {
+      return ImageBubble(
+        event: event,
+        previousEvent: previousEvent,
+        nextEvent: nextEvent,
+        isMine: isMine
+      );
+    } else {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +85,15 @@ class Bubble extends StatelessWidget {
     }
   }
 
-  TextStyle _textStyle(BuildContext context) {
+  @protected
+  TextStyle textStyle(BuildContext context, {Color color}) {
     var style = Theme.of(context).textTheme.body1;
 
-    if (isMine) {
+    if (color != null) {
+      style = style.copyWith(
+          color: color
+      );
+    } else if (isMine) {
       style = style.copyWith(
           color: Colors.white
       );
@@ -69,28 +102,27 @@ class Bubble extends StatelessWidget {
     return style;
   }
 
-  Widget _buildTime(BuildContext context) {
-    if (_isEndOfGroup()) {
-      return Text(formatAsTime(message.time),
-          style: _textStyle(context).copyWith(
-            fontSize: 11,
-          )
+  @protected
+  Widget buildTime(BuildContext context, {Color color}) {
+    if (isEndOfGroup) {
+      return Text(formatAsTime(event.time),
+        style: textStyle(context, color: color).copyWith(
+          fontSize: 11,
+        )
       );
     } else {
       return Container(width: 0, height: 0);
     }
   }
 
+  @protected
+  Widget buildContent(BuildContext context);
 
-  Widget _buildContent(BuildContext context) =>
-    Text(message.content.body ?? '',
-      style: _textStyle(context)
-    );
-
-  Widget _buildSender(BuildContext context) {
-    if (_isStartOfGroup()) {
-      return Text(displayNameOf(message.sender),
-        style: _textStyle(context).copyWith(
+  @protected
+  Widget buildSender(BuildContext context, {Color color}) {
+    if (isStartOfGroup) {
+      return Text(displayNameOf(event.sender),
+        style: textStyle(context, color: color).copyWith(
             fontWeight: FontWeight.bold
         ),
       );
@@ -99,46 +131,64 @@ class Bubble extends StatelessWidget {
     }
   }
 
-  bool _isStartOfGroup() {
-    var previousHasSameSender = previousEvent?.sender == message.sender;
+  bool _isStartOfGroup;
+  @protected
+  bool get isStartOfGroup {
+    if (_isStartOfGroup == null) {
+      var previousHasSameSender = previousEvent?.sender == event.sender;
 
-    if (!previousHasSameSender) {
-      return true;
+      if (!previousHasSameSender) {
+        _isStartOfGroup = true;
+        return _isStartOfGroup;
+      }
+
+      // Difference between time is greater than 3 min
+      var limit = event.time
+          .subtract(_groupTimeLimit)
+          .millisecondsSinceEpoch;
+
+      if (previousEvent.time.millisecondsSinceEpoch <= limit) {
+        _isStartOfGroup = true;
+        return _isStartOfGroup;
+      }
+
+      _isStartOfGroup = false;
+      return _isStartOfGroup;
     }
 
-    // Difference between time is greater than 3 min
-    var limit = message.time
-        .subtract(_groupTimeLimit)
-        .millisecondsSinceEpoch;
-
-    if (previousEvent.time.millisecondsSinceEpoch <= limit) {
-      return true;
-    }
-
-    return false;
+    return _isStartOfGroup;
   }
 
-  bool _isEndOfGroup() {
-    var nextHasSameSender = nextEvent?.sender == message.sender;
+  bool _isEndOfGroup;
+  @protected
+  bool get isEndOfGroup {
+    if (_isEndOfGroup == null) {
+      var nextHasSameSender = nextEvent?.sender == event.sender;
 
-    if (!nextHasSameSender) {
-      return true;
+      if (!nextHasSameSender) {
+        _isEndOfGroup = true;
+        return _isEndOfGroup;
+      }
+
+      // Difference between time is greater than 3 min
+      var limit = event.time
+          .add(_groupTimeLimit)
+          .millisecondsSinceEpoch;
+
+      if (nextEvent.time.millisecondsSinceEpoch >= limit) {
+        _isEndOfGroup = true;
+        return _isEndOfGroup;
+      }
+
+      _isEndOfGroup = false;
+      return _isEndOfGroup;
     }
 
-    // Difference between time is greater than 3 min
-    var limit = message.time
-      .add(_groupTimeLimit)
-      .millisecondsSinceEpoch;
-
-    if (nextEvent.time.millisecondsSinceEpoch >= limit) {
-      return true;
-    }
-
-    return false;
+    return _isEndOfGroup;
   }
 
   double _marginBottom() {
-    if (_isEndOfGroup()) {
+    if (isEndOfGroup) {
       return _betweenMargin;
     } else {
       return _betweenGroupMargin;
@@ -153,29 +203,35 @@ class Bubble extends StatelessWidget {
     }
   }
 
-  ShapeBorder _border() {
-    var radius = const BorderRadius.all(_radiusForBorder);
+  @protected
+  BorderRadius borderRadius() {
+    var radius = const BorderRadius.all(radiusForBorder);
 
     if (isMine) {
-      if (_isEndOfGroup()) {
+      if (isEndOfGroup) {
         radius = BorderRadius.only(
-          topLeft: _radiusForBorder,
-          topRight: _radiusForBorder,
-          bottomLeft: _radiusForBorder,
+          topLeft: radiusForBorder,
+          topRight: radiusForBorder,
+          bottomLeft: radiusForBorder,
         );
       }
     } else {
-      if (_isStartOfGroup()) {
+      if (isStartOfGroup) {
         radius =  BorderRadius.only(
-          topRight: _radiusForBorder,
-          bottomLeft: _radiusForBorder,
-          bottomRight: _radiusForBorder,
+          topRight: radiusForBorder,
+          bottomLeft: radiusForBorder,
+          bottomRight: radiusForBorder,
         );
       }
     }
 
+    return radius;
+  }
+
+  @protected
+  ShapeBorder border() {
     return RoundedRectangleBorder(
-      borderRadius: radius,
+      borderRadius: borderRadius(),
     );
   }
 
@@ -198,29 +254,18 @@ class Bubble extends StatelessWidget {
                 child: Material(
                   color: LightColors.red[450],
                   elevation: 1,
-                  shape: _border(),
-                  child: InkWell(
-                    onTap: () { },
-                    customBorder: _border(),
-                    child: Padding(
-                      padding: _padding,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          _buildContent(context),
-                          SizedBox(height: 4),
-                          _buildTime(context)
-                        ],
-                      ),
-                    ),
-                  )
-                ),
+                  shape: border(),
+                  child: buildMine(context)
+                )
               )
             ),
           ]
         ),
       ]
     );
+
+  @protected
+  Widget buildMine(BuildContext context);
 
   Widget _buildTheirs(BuildContext context) =>
     Column(
@@ -241,29 +286,16 @@ class Bubble extends StatelessWidget {
                 child: Material(
                   color: Colors.white,
                   elevation: 1,
-                  shape: _border(),
-                  child: InkWell(
-                    onTap: () { },
-                    customBorder: _border(),
-                    child: Padding(
-                      padding: _padding,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          _buildSender(context),
-                          SizedBox(height: 4),
-                          _buildContent(context),
-                          SizedBox(height: 4),
-                          _buildTime(context)
-                        ],
-                      ),
-                    ),
-                  )
-                ),
+                  shape: border(),
+                  child: buildTheirs(context)
+                )
               )
             ),
           ]
         ),
       ],
     );
+
+  @protected
+  Widget buildTheirs(BuildContext context);
 }

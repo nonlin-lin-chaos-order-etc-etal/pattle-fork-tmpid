@@ -95,11 +95,11 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
           width: 48,
           height: 48,
           child: ClipOval(
-              child: FadeInImage(
-                  fit: BoxFit.fill,
-                  placeholder: MemoryImage(kTransparentImage),
-                  image: MatrixImage(chat.avatarUrl)
-              )
+            child: FadeInImage(
+              fit: BoxFit.fill,
+              placeholder: MemoryImage(kTransparentImage),
+              image: MatrixImage(chat.avatarUrl)
+            )
           ),
         ),
       );
@@ -147,33 +147,66 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
   }
 
   Widget _buildChatSubtitle(BuildContext context, ChatOverview chat) {
+    // TODO: Seperate into functions or perhaps widgets
     final event = chat.latestEvent;
+
+    if (event == null) {
+      return Text('Something happened!',
+        style: Theme.of(context).textTheme.body1.copyWith(
+          color: Theme.of(context).textTheme.caption.color,
+          fontStyle: FontStyle.italic
+        ),
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      );
+    }
+
+    final senderText = di.getLocalUser() != event.sender
+        ? '${displayNameOf(event.sender)}: '
+        : '';
+
+    final sender = TextSpan(
+      text: senderText,
+      style: Theme.of(context).textTheme.body1.copyWith(
+        color: Theme.of(context).textTheme.caption.color,
+        fontWeight: FontWeight.bold
+      )
+    );
 
     // Handle events
     if (event is TextMessageEvent) {
-      final sender = di.getLocalUser() != event.sender
-          ? '${displayNameOf(event.sender)}: '
-          : '';
-
       return RichText(
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          text: TextSpan(
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        text: TextSpan(
+          style: Theme.of(context).textTheme.body1.copyWith(
+            color: Theme.of(context).textTheme.caption.color
+          ),
+          children: [
+            sender,
+            TextSpan(
+              text: event.content.body ?? 'null'
+            )
+          ]
+        )
+      );
+    } else if (event is ImageMessageEvent) {
+      return Row(
+        children: <Widget>[
+          RichText(
+            text: sender,
+          ),
+          Icon(Icons.photo_camera,
+            color: Theme.of(context).textTheme.caption.color,
+            size: 20,
+          ),
+          SizedBox(width: 4),
+          Text(l(context).photo,
             style: Theme.of(context).textTheme.body1.copyWith(
-              color: Theme.of(context).textTheme.caption.color
-            ),
-            children: [
-              TextSpan(
-                text: sender,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold
-                )
-              ),
-              TextSpan(
-                text: event.content.body ?? 'null'
-              )
-            ]
+              color: Theme.of(context).textTheme.caption.color,
+            )
           )
+        ],
       );
     } else {
       return Text('Something happened!',

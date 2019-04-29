@@ -213,16 +213,12 @@ class ChatPageState extends State<ChatPage> {
   Widget _buildEventItem(
       Event event, Event previousEvent, Event nextEvent, bool isMine) {
 
-    if (event is TextMessageEvent) {
-      return Bubble(
-        message: event,
-        previousEvent: previousEvent,
-        nextEvent: nextEvent,
-        isMine: isMine,
-      );
-    } else {
-      return Container();
-    }
+    return Bubble.fromEvent(
+      event: event,
+      previousEvent: previousEvent,
+      nextEvent: nextEvent,
+      isMine: isMine,
+    ) ?? Container();
   }
 }
 
