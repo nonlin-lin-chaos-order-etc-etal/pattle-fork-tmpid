@@ -54,6 +54,17 @@ class Strings {
   // StartPage: PasswordPage //
   final enterPassword = 'Enter password';
   final wrongPasswordError = 'Wrong password. Please try again';
+
+  // Member change events
+  String hasJoined(String name) => '$name has joined';
+
+  String hasLeft(String name) => '$name has left';
+
+  String hasBeenBanned(String banee, String banner)
+    => '$banee has been banned by $banner';
+
+  String hasBeenInvited(String invitee, String inviter)
+    => '$invitee has been invited by $inviter';
 }
 
 class AppLocalizations {

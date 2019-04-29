@@ -22,9 +22,10 @@ import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/display_name.dart';
 
 import 'bubble.dart';
+import 'message_bubble.dart';
 
 
-class TextBubble extends Bubble {
+class TextBubble extends MessageBubble {
 
   @override
   final TextMessageEvent event;
@@ -71,19 +72,19 @@ class TextBubble extends Bubble {
     }
 
     return InkWell(
-        onTap: () { },
-        customBorder: border(),
-        child: Padding(
-          padding: Bubble.padding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              buildContent(context),
-              SizedBox(height: 4),
-              bottom
-            ],
-          ),
-        )
+      onTap: () { },
+      customBorder: border(),
+      child: Padding(
+        padding: Bubble.padding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            buildContent(context),
+            SizedBox(height: 4),
+            bottom
+          ],
+        ),
+      )
     );
   }
 

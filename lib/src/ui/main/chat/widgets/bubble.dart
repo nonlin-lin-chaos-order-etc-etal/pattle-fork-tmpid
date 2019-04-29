@@ -22,6 +22,7 @@ import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/display_name.dart';
 
 import 'image_bubble.dart';
+import 'state/member_bubble.dart';
 import 'text_bubble.dart';
 
 
@@ -34,15 +35,10 @@ abstract class Bubble extends StatelessWidget {
 
   final bool isMine;
 
-  static const _groupTimeLimit = const Duration(minutes: 3);
-
   // Styling
   static const padding = const EdgeInsets.all(8);
   static const radiusForBorder = const Radius.circular(8);
-  static const _sideMargin = 16.0;
-  static const _betweenMargin = 16.0;
-  static const _betweenGroupMargin = 4.0;
-  static const _oppositeMargin = 64.0;
+  static const betweenMargin = 16.0;
 
   Bubble({
     @required this.event,
@@ -71,231 +67,30 @@ abstract class Bubble extends StatelessWidget {
         nextEvent: nextEvent,
         isMine: isMine
       );
+    } else if (event is MemberChangeEvent) {
+      return MemberBubble(
+        event: event,
+        previousEvent: previousEvent,
+        nextEvent: nextEvent,
+        isMine: isMine
+      );
     } else {
       return null;
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    if (isMine) {
-      return _buildMine(context);
-    } else {
-      return _buildTheirs(context);
-    }
-  }
+  Widget build(BuildContext context);
 
   @protected
-  TextStyle textStyle(BuildContext context, {Color color}) {
-    var style = Theme.of(context).textTheme.body1;
-
-    if (color != null) {
-      style = style.copyWith(
-          color: color
-      );
-    } else if (isMine) {
-      style = style.copyWith(
-          color: Colors.white
-      );
-    }
-
-    return style;
-  }
+  double marginBottom() => betweenMargin;
 
   @protected
-  Widget buildTime(BuildContext context, {Color color}) {
-    if (isEndOfGroup) {
-      return Text(formatAsTime(event.time),
-        style: textStyle(context, color: color).copyWith(
-          fontSize: 11,
-        )
-      );
-    } else {
-      return Container(width: 0, height: 0);
-    }
-  }
-
-  @protected
-  Widget buildContent(BuildContext context);
-
-  @protected
-  Widget buildSender(BuildContext context, {Color color}) {
-    if (isStartOfGroup) {
-      return Text(displayNameOf(event.sender),
-        style: textStyle(context, color: color).copyWith(
-            fontWeight: FontWeight.bold
-        ),
-      );
-    } else {
-      return Container(height: 0, width: 0);
-    }
-  }
-
-  bool _isStartOfGroup;
-  @protected
-  bool get isStartOfGroup {
-    if (_isStartOfGroup == null) {
-      var previousHasSameSender = previousEvent?.sender == event.sender;
-
-      if (!previousHasSameSender) {
-        _isStartOfGroup = true;
-        return _isStartOfGroup;
-      }
-
-      // Difference between time is greater than 3 min
-      var limit = event.time
-          .subtract(_groupTimeLimit)
-          .millisecondsSinceEpoch;
-
-      if (previousEvent.time.millisecondsSinceEpoch <= limit) {
-        _isStartOfGroup = true;
-        return _isStartOfGroup;
-      }
-
-      _isStartOfGroup = false;
-      return _isStartOfGroup;
-    }
-
-    return _isStartOfGroup;
-  }
-
-  bool _isEndOfGroup;
-  @protected
-  bool get isEndOfGroup {
-    if (_isEndOfGroup == null) {
-      var nextHasSameSender = nextEvent?.sender == event.sender;
-
-      if (!nextHasSameSender) {
-        _isEndOfGroup = true;
-        return _isEndOfGroup;
-      }
-
-      // Difference between time is greater than 3 min
-      var limit = event.time
-          .add(_groupTimeLimit)
-          .millisecondsSinceEpoch;
-
-      if (nextEvent.time.millisecondsSinceEpoch >= limit) {
-        _isEndOfGroup = true;
-        return _isEndOfGroup;
-      }
-
-      _isEndOfGroup = false;
-      return _isEndOfGroup;
-    }
-
-    return _isEndOfGroup;
-  }
-
-  double _marginBottom() {
-    if (isEndOfGroup) {
-      return _betweenMargin;
-    } else {
-      return _betweenGroupMargin;
-    }
-  }
-
-  double _marginTop() {
+  double marginTop() {
     if (previousEvent == null) {
-      return _betweenMargin;
+      return betweenMargin;
     } else {
       return 0;
     }
   }
-
-  @protected
-  BorderRadius borderRadius() {
-    var radius = const BorderRadius.all(radiusForBorder);
-
-    if (isMine) {
-      if (isEndOfGroup) {
-        radius = BorderRadius.only(
-          topLeft: radiusForBorder,
-          topRight: radiusForBorder,
-          bottomLeft: radiusForBorder,
-        );
-      }
-    } else {
-      if (isStartOfGroup) {
-        radius =  BorderRadius.only(
-          topRight: radiusForBorder,
-          bottomLeft: radiusForBorder,
-          bottomRight: radiusForBorder,
-        );
-      }
-    }
-
-    return radius;
-  }
-
-  @protected
-  ShapeBorder border() {
-    return RoundedRectangleBorder(
-      borderRadius: borderRadius(),
-    );
-  }
-
-  Widget _buildMine(BuildContext context) =>
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Flexible(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: _oppositeMargin,
-                  right: _sideMargin,
-                  bottom: _marginBottom(),
-                  top: _marginTop(),
-                ),
-                child: Material(
-                  color: LightColors.red[450],
-                  elevation: 1,
-                  shape: border(),
-                  child: buildMine(context)
-                )
-              )
-            ),
-          ]
-        ),
-      ]
-    );
-
-  @protected
-  Widget buildMine(BuildContext context);
-
-  Widget _buildTheirs(BuildContext context) =>
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: _sideMargin,
-                  right: _oppositeMargin,
-                  bottom: _marginBottom(),
-                  top: _marginTop()
-                ),
-                child: Material(
-                  color: Colors.white,
-                  elevation: 1,
-                  shape: border(),
-                  child: buildTheirs(context)
-                )
-              )
-            ),
-          ]
-        ),
-      ],
-    );
-
-  @protected
-  Widget buildTheirs(BuildContext context);
 }

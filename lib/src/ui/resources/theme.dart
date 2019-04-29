@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 
 final ThemeData lightTheme = new ThemeData(
   primarySwatch: LightColors.red,
-  accentColor: LightColors.green,
 
   brightness: Brightness.light,
   primaryColorBrightness: Brightness.dark,
@@ -53,24 +52,6 @@ class LightColors {
       700: const Color(0xFF99322C),
       800: const Color(0xFF902A24),
       900: const Color(0xFF7F1C17),
-    },
-  );
-
-  static const _greenPrimary = 0xFF779d34;
-
-  static const MaterialColor green = const MaterialColor(
-    _redPrimary,
-    const <int, Color>{
-      50:  const Color(0xFFEFF3E7),
-      100: const Color(0xFFD6E2C2),
-      200: const Color(0xFFBBCE9A),
-      300: const Color(0xFFA0BA71),
-      400: const Color(0xFF8BAC52),
-      500: const Color(_greenPrimary),
-      600: const Color(0xFF6f952F),
-      700: const Color(0xFF648B27),
-      800: const Color(0xFF5A8121),
-      900: const Color(0xFF476F15),
     },
   );
 }

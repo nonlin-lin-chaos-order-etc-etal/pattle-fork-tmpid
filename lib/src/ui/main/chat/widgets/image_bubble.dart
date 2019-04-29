@@ -21,8 +21,9 @@ import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 
 import 'bubble.dart';
+import 'message_bubble.dart';
 
-class ImageBubble extends Bubble {
+class ImageBubble extends MessageBubble {
 
   @override
   final ImageMessageEvent event;
