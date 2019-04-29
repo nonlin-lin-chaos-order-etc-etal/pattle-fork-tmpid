@@ -185,14 +185,14 @@ packages:
       name: matrix_sdk
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.9"
+    version: "0.4.0"
   matrix_sdk_sqflite:
     dependency: "direct main"
     description:
       name: matrix_sdk_sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.12"
+    version: "0.1.14"
   meta:
     dependency: transitive
     description:

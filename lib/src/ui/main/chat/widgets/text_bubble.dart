@@ -47,22 +47,46 @@ class TextBubble extends Bubble {
     );
 
   @protected
-  Widget buildMine(BuildContext context) =>
-    InkWell(
-      onTap: () { },
-      customBorder: border(),
-      child: Padding(
-        padding: Bubble.padding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            buildContent(context),
-            SizedBox(height: 4),
-            buildTime(context)
-          ],
-        ),
-      )
+  Widget buildMine(BuildContext context) {
+
+    Widget bottom = Container(height: 0, width: 0);
+    if (isEndOfGroup) {
+      final icon = event.sentState == SentState.waiting
+          ? Icons.access_time
+          : Icons.check;
+
+      bottom = Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Icon(icon,
+            color: Colors.white,
+            size: 14
+          ),
+          SizedBox(width: 4),
+          buildTime(context),
+        ],
+      );
+    }
+
+    return InkWell(
+        onTap: () { },
+        customBorder: border(),
+        child: Padding(
+          padding: Bubble.padding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              buildContent(context),
+              SizedBox(height: 4),
+              bottom
+            ],
+          ),
+        )
     );
+  }
+
 
 
   @protected

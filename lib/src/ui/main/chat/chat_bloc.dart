@@ -76,9 +76,10 @@ class ChatBloc {
   Future<void> sendMessage(String text) async {
     // TODO: Check if text is just whitespace
     if (text.isNotEmpty) {
-      await room.send(TextMessage(body: text));
-      await loadEvents();
+      // Refresh the list every time the sent state changes.
+      await for (var sentState in room.send(TextMessage(body: text))) {
+        await loadEvents();
+      }
     }
-
   }
 }
