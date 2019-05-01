@@ -31,7 +31,7 @@ abstract class Subtitle extends StatelessWidget {
   final String senderName;
 
   Subtitle(this.event)
-    : senderName = di.getLocalUser() != event.sender
+    : senderName = event != null && di.getLocalUser() != event.sender
       ? '${displayNameOf(event.sender)}: '
       : '';
 
