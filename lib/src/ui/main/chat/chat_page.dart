@@ -200,28 +200,17 @@ class ChatPageState extends State<ChatPage> {
                   nextEvent = chatEvents[index - 1];
                 }
 
-                return _buildEventItem(
-                  event,
-                  previousEvent,
-                  nextEvent,
-                  isMine
-                );
+                return Bubble.fromEvent(
+                  event: event,
+                  previousEvent: previousEvent,
+                  nextEvent: nextEvent,
+                  isMine: isMine,
+                ) ?? Container();
               }
             );
         }
       }
     );
-  }
-
-  Widget _buildEventItem(
-      Event event, Event previousEvent, Event nextEvent, bool isMine) {
-
-    return Bubble.fromEvent(
-      event: event,
-      previousEvent: previousEvent,
-      nextEvent: nextEvent,
-      isMine: isMine,
-    ) ?? Container();
   }
 }
 
