@@ -56,15 +56,25 @@ class Strings {
   final wrongPasswordError = 'Wrong password. Please try again';
 
   // Member change events
-  String hasJoined(String name) => '$name has joined';
+  List<TextSpan> hasJoined(TextSpan name)
+    => [name, TextSpan(text: ' has joined')];
 
-  String hasLeft(String name) => '$name has left';
+  List<TextSpan> hasLeft(TextSpan name)
+    => [name, TextSpan(text: ' has left')];
 
-  String hasBeenBanned(String banee, String banner)
-    => '$banee has been banned by $banner';
+  List<TextSpan> hasBeenBanned(TextSpan banee, TextSpan banner)
+    => [
+      banee,
+      TextSpan(text: ' has been banned by '),
+      banner
+    ];
 
-  String hasBeenInvited(String invitee, String inviter)
-    => '$invitee has been invited by $inviter';
+  List<TextSpan> hasBeenInvited(TextSpan invitee, TextSpan inviter)
+    => [
+      invitee,
+      TextSpan(text: ' has been invited by '),
+      inviter
+    ];
 }
 
 class AppLocalizations {

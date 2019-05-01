@@ -17,42 +17,32 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/ui/main/chat/util/member_span.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/display_name.dart';
 
-import '../bubble.dart';
-import 'state_bubble.dart';
-
-
-class MemberBubble extends StateBubble {
-
-  final MemberChangeEvent event;
-
-  MemberBubble({
-    @required this.event,
-    @required RoomEvent previousEvent,
-    @required RoomEvent nextEvent,
-    @required bool isMine
-  }) : super(
-    event: event,
-    previousEvent: previousEvent,
-    nextEvent: nextEvent,
-    isMine: isMine
+List<TextSpan> spanFor(BuildContext context, MemberChangeEvent event,
+                       {TextStyle style = const TextStyle(
+                          fontWeight: FontWeight.bold
+                       )}) {
+  final sender = TextSpan(
+    text: displayNameOf(event.sender),
+    style: style
   );
+  final subject = TextSpan(
+    text: displayNameOrId(event.sender.id, event.content.displayName),
+    style: style
+  );
+  var text;
 
-  @protected
-  @override
-  Widget buildContent(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        style: Theme.of(context).textTheme.body1,
-        children: spanFor(context, event,
-          style: TextStyle(
-            fontWeight: FontWeight.w600
-          )
-        )
-      )
-    );
+  if (event is JoinEvent) {
+    text = l(context).hasJoined(subject);
+  } else if (event is LeaveEvent) {
+    text = l(context).hasLeft(subject);
+  } else if (event is InviteEvent) {
+    text = l(context).hasBeenInvited(subject, sender);
+  } else if (event is BanEvent) {
+    text = l(context).hasBeenBanned(subject, sender);
   }
+
+  return text;
 }

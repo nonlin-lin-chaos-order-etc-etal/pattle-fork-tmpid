@@ -23,10 +23,10 @@ import 'package:pattle/src/model/chat_overview.dart';
 import 'package:pattle/src/ui/main/overview/chat_overview_bloc.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
-import 'package:pattle/src/ui/util/display_name.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:pattle/src/di.dart' as di;
+
+import 'widgets/subtitle.dart';
 
 class ChatOverviewPageState extends State<ChatOverviewPage> {
 
@@ -142,82 +142,8 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
       },
       leading: avatar,
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      subtitle: _buildChatSubtitle(context, chat),
+      subtitle: Subtitle.fromEvent(chat.latestEvent)
     );
-  }
-
-  Widget _buildChatSubtitle(BuildContext context, ChatOverview chat) {
-    // TODO: Seperate into functions or perhaps widgets
-    final event = chat.latestEvent;
-
-    if (event == null) {
-      return Text('Something happened!',
-        style: Theme.of(context).textTheme.body1.copyWith(
-          color: Theme.of(context).textTheme.caption.color,
-          fontStyle: FontStyle.italic
-        ),
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-      );
-    }
-
-    final senderText = di.getLocalUser() != event.sender
-        ? '${displayNameOf(event.sender)}: '
-        : '';
-
-    final sender = TextSpan(
-      text: senderText,
-      style: Theme.of(context).textTheme.body1.copyWith(
-        color: Theme.of(context).textTheme.caption.color,
-        fontWeight: FontWeight.bold
-      )
-    );
-
-    // Handle events
-    if (event is TextMessageEvent) {
-      return RichText(
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-        text: TextSpan(
-          style: Theme.of(context).textTheme.body1.copyWith(
-            color: Theme.of(context).textTheme.caption.color
-          ),
-          children: [
-            sender,
-            TextSpan(
-              text: event.content.body ?? 'null'
-            )
-          ]
-        )
-      );
-    } else if (event is ImageMessageEvent) {
-      return Row(
-        children: <Widget>[
-          RichText(
-            text: sender,
-          ),
-          Icon(Icons.photo_camera,
-            color: Theme.of(context).textTheme.caption.color,
-            size: 20,
-          ),
-          SizedBox(width: 4),
-          Text(l(context).photo,
-            style: Theme.of(context).textTheme.body1.copyWith(
-              color: Theme.of(context).textTheme.caption.color,
-            )
-          )
-        ],
-      );
-    } else {
-      return Text('Something happened!',
-        style: Theme.of(context).textTheme.body1.copyWith(
-          color: Theme.of(context).textTheme.caption.color,
-          fontStyle: FontStyle.italic
-        ),
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-      );
-    }
   }
 }
 

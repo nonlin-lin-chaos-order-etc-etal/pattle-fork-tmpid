@@ -21,37 +21,21 @@ import 'package:pattle/src/ui/main/chat/util/member_span.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/display_name.dart';
 
-import '../bubble.dart';
-import 'state_bubble.dart';
+import 'subtitle.dart';
 
+class MemberSubtitle extends Subtitle {
 
-class MemberBubble extends StateBubble {
-
+  @override
   final MemberChangeEvent event;
 
-  MemberBubble({
-    @required this.event,
-    @required RoomEvent previousEvent,
-    @required RoomEvent nextEvent,
-    @required bool isMine
-  }) : super(
-    event: event,
-    previousEvent: previousEvent,
-    nextEvent: nextEvent,
-    isMine: isMine
-  );
+  MemberSubtitle(this.event) : super(event);
 
-  @protected
   @override
-  Widget buildContent(BuildContext context) {
+  Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        style: Theme.of(context).textTheme.body1,
-        children: spanFor(context, event,
-          style: TextStyle(
-            fontWeight: FontWeight.w600
-          )
-        )
+        style: textStyle(context),
+        children: spanFor(context, event)
       )
     );
   }

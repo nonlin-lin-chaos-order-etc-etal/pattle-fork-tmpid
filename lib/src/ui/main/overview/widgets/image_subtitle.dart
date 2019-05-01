@@ -17,42 +17,32 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/ui/main/chat/util/member_span.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
-import 'package:pattle/src/ui/util/display_name.dart';
 
-import '../bubble.dart';
-import 'state_bubble.dart';
+import 'subtitle.dart';
 
+class ImageSubtitle extends Subtitle {
 
-class MemberBubble extends StateBubble {
-
-  final MemberChangeEvent event;
-
-  MemberBubble({
-    @required this.event,
-    @required RoomEvent previousEvent,
-    @required RoomEvent nextEvent,
-    @required bool isMine
-  }) : super(
-    event: event,
-    previousEvent: previousEvent,
-    nextEvent: nextEvent,
-    isMine: isMine
-  );
-
-  @protected
   @override
-  Widget buildContent(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        style: Theme.of(context).textTheme.body1,
-        children: spanFor(context, event,
-          style: TextStyle(
-            fontWeight: FontWeight.w600
-          )
+  final ImageMessageEvent event;
+
+  ImageSubtitle(this.event) : super(event);
+
+  @override
+  Widget build(BuildContext context) =>
+    Row(
+      children: <Widget>[
+        RichText(
+          text: senderSpan(context),
+        ),
+        Icon(Icons.photo_camera,
+          color: Theme.of(context).textTheme.caption.color,
+          size: 20,
+        ),
+        SizedBox(width: 4),
+        Text(l(context).photo,
+          style: textStyle(context)
         )
-      )
+      ],
     );
-  }
 }
