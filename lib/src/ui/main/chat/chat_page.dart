@@ -130,6 +130,8 @@ class ChatPageState extends State<ChatPage> {
           child: TextField(
             controller: textController,
             textInputAction: TextInputAction.newline,
+            autocorrect: true,
+            textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
               border: UnderlineInputBorder(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(8))
