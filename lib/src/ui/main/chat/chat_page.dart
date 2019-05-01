@@ -182,9 +182,7 @@ class ChatPageState extends State<ChatPage> {
             return ListView.builder(
               controller: scrollController,
               reverse: true,
-              physics: const AlwaysScrollableScrollPhysics(
-                parent: const BouncingScrollPhysics()
-              ),
+              physics: const AlwaysScrollableScrollPhysics(),
               itemCount: chatEvents.length,
               itemBuilder: (context, index) {
                 final event = chatEvents[index];
