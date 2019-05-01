@@ -37,6 +37,7 @@ class Strings {
   final today = 'Today';
   final yesterday = 'Yesterday';
   final photo = 'Photo';
+  final typeAMessage = 'Type a message';
 
   // StartPage //
   final loginWithPhone = 'Login with phone number';

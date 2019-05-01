@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
 import 'package:pattle/src/ui/main/chat/widgets/message_bubble.dart';
+import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 
@@ -135,7 +136,7 @@ class ChatPageState extends State<ChatPage> {
               ),
               filled: true,
               fillColor: Colors.white,
-              hintText: 'Type a message',
+              hintText: l(context).typeAMessage,
               suffixIcon: IconButton(
                 icon: Icon(Icons.send),
                 onPressed: () {
