@@ -98,7 +98,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
             child: FadeInImage(
               fit: BoxFit.fill,
               placeholder: MemoryImage(kTransparentImage),
-              image: MatrixImage(chat.avatarUrl)
+              image: MatrixImage(chat.avatarUrl, width: 64, height: 64)
             )
           ),
         ),

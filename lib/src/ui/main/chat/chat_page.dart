@@ -70,7 +70,10 @@ class ChatPageState extends State<ChatPage> {
         tag: room.id,
         child: CircleAvatar(
           backgroundColor: Colors.white,
-          backgroundImage: MatrixImage(room.avatarUrl),
+          backgroundImage: MatrixImage(room.avatarUrl,
+            width: 64,
+            height: 64
+          ),
         )
       );
     }

@@ -27,11 +27,21 @@ class MatrixImage extends ImageProvider<MatrixImage> {
   final Uri uri;
 
   final double scale;
+  final int width, height;
 
-  const MatrixImage(this.uri, { this.scale = 1.0 });
+  /// A Matrx image. If width and height are provided, downloads a thumbnail.
+  const MatrixImage(this.uri, {this.scale = 1.0, this.width, this.height});
 
   Future<Codec> _load(MatrixImage key) async {
-    final bytes = await di.getHomeserver().download(key.uri);
+    var bytes;
+    if (key.width != null && key.height != null) {
+      bytes = await di.getHomeserver().downloadThumbnail(key.uri,
+        width: key.width,
+        height: key.height
+      );
+    } else {
+      bytes = await di.getHomeserver().download(key.uri);
+    }
 
     return PaintingBinding.instance.instantiateImageCodec(bytes);
   }
