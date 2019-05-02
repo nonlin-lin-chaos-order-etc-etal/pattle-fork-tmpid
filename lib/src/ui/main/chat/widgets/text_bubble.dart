@@ -17,9 +17,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/ui/resources/theme.dart';
-import 'package:pattle/src/ui/util/date_format.dart';
-import 'package:pattle/src/ui/util/display_name.dart';
 
 import 'bubble.dart';
 import 'message_bubble.dart';

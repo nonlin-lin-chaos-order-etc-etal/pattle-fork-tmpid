@@ -51,7 +51,11 @@ abstract class StateBubble extends Bubble {
         Flexible(
           child: Center(
             child: Padding(
-              padding: EdgeInsets.only(bottom: Bubble.betweenMargin),
+              padding: EdgeInsets.only(
+                left: Bubble.sideMargin,
+                right: Bubble.sideMargin,
+                bottom: Bubble.betweenMargin
+              ),
               child: Material(
                 elevation: 1,
                 color: LightColors.red[100],

@@ -31,7 +31,6 @@ abstract class MessageBubble extends Bubble {
   static const _groupTimeLimit = const Duration(minutes: 3);
 
   // Styling
-  static const _sideMargin = 16.0;
   static const _betweenGroupMargin = 4.0;
   static const _oppositeMargin = 64.0;
 
@@ -232,7 +231,7 @@ abstract class MessageBubble extends Bubble {
               child: Padding(
                 padding: EdgeInsets.only(
                   left: _oppositeMargin,
-                  right: _sideMargin,
+                  right: Bubble.sideMargin,
                   bottom: marginBottom(),
                   top: marginTop(),
                 ),
@@ -263,7 +262,7 @@ abstract class MessageBubble extends Bubble {
             Flexible(
               child: Padding(
                 padding: EdgeInsets.only(
-                  left: _sideMargin,
+                  left: Bubble.sideMargin,
                   right: _oppositeMargin,
                   bottom: marginBottom(),
                   top: marginTop()

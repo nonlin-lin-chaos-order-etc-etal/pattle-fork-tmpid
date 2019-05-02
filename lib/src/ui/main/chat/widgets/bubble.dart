@@ -39,6 +39,7 @@ abstract class Bubble extends StatelessWidget {
   static const padding = const EdgeInsets.all(8);
   static const radiusForBorder = const Radius.circular(8);
   static const betweenMargin = 16.0;
+  static const sideMargin = 16.0;
 
   Bubble({
     @required this.event,
