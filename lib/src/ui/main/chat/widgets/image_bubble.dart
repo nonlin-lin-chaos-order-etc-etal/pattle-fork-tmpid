@@ -29,11 +29,12 @@ class ImageBubble extends MessageBubble {
   final ImageMessageEvent event;
 
   static const double width = 256;
+  static const double minHeight = 72;
   static const double maxHeight = 292;
 
   double get height {
     return (event.content.info.height / (event.content.info.width / width))
-           .clamp(0, maxHeight);
+           .clamp(minHeight, maxHeight);
   }
 
   ImageBubble({
@@ -132,7 +133,7 @@ class ImageBubble extends MessageBubble {
                 tag: event.id,
                 child: Image(
                   image: MatrixImage(event.content.url),
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.cover,
                 )
               )
             )
