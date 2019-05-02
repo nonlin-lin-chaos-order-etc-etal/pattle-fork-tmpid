@@ -97,7 +97,11 @@ class ChatPageState extends State<ChatPage> {
             SizedBox(
               width: 16,
             ),
-            Text(room.name),
+            Flexible(
+              child: Text(room.name,
+                overflow: TextOverflow.ellipsis
+              ),
+            )
           ],
         ),
       ),
