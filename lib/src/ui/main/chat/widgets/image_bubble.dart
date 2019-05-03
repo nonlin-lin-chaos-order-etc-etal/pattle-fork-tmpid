@@ -60,13 +60,24 @@ class ImageBubble extends MessageBubble {
 
   @override
   Widget buildTime(BuildContext context, {Color color}) {
-    var alignment, borderRadius;
+    var alignment, borderRadius, content;
     if (isMine) {
       alignment = Alignment.bottomRight;
       borderRadius = this.borderRadius();
+
+      content = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          buildSentState(context),
+          SizedBox(width: 4),
+          super.buildTime(context, color: Colors.white)
+        ],
+      );
     } else {
       alignment = Alignment.bottomLeft;
       borderRadius = const BorderRadius.all(Bubble.radiusForBorder);
+
+      content = super.buildTime(context, color: Colors.white);
     }
 
     if (isEndOfGroup) {
@@ -81,7 +92,7 @@ class ImageBubble extends MessageBubble {
             ),
             child: Padding(
               padding: EdgeInsets.all(4),
-              child: super.buildTime(context, color: Colors.white),
+              child: content
             )
           ),
         )

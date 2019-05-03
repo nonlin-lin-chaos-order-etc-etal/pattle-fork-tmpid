@@ -68,7 +68,7 @@ class StartBloc {
     var user;
 
     // Check if there is a ':' in the username,
-    // if so, treat it as a full Matrix ID (without or without '@').
+    // if so, treat it as a full Matrix ID (with or without '@').
     // Otherwise use the local part (with or without '@').
     // So, accept all of these formats:
     // @joe:matrix.org
@@ -76,11 +76,11 @@ class StartBloc {
     // joe
     // @joe
     if (username.contains(':')) {
-      var split = username.split(':');
+      final split = username.split(':');
       String server = split[1];
 
       try {
-        var serverUri = Uri.parse("https://$server");
+        final serverUri = Uri.parse("https://$server");
         _setHomeserver(serverUri);
 
         // Add an '@' if the username does not have one, to allow
@@ -143,7 +143,9 @@ class StartBloc {
             _username,
              password,
             store: di.getStore()
-          ).asStream()
+          ).catchError((error) {
+            throw error;
+          }).asStream()
         )
         .map((user) {
           di.registerLocalUser(user);

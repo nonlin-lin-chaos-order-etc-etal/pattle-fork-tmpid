@@ -49,19 +49,12 @@ class TextBubble extends MessageBubble {
 
     Widget bottom = Container(height: 0, width: 0);
     if (isEndOfGroup) {
-      final icon = event.sentState == SentState.waiting
-          ? Icons.access_time
-          : Icons.check;
-
       bottom = Row(
         mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          Icon(icon,
-            color: Colors.white,
-            size: 14
-          ),
+          buildSentState(context),
           SizedBox(width: 4),
           buildTime(context),
         ],

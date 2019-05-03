@@ -219,6 +219,15 @@ abstract class MessageBubble extends Bubble {
     );
   }
 
+  @protected
+  Widget buildSentState(BuildContext context) =>
+    Icon(event.sentState == SentState.waiting
+          ? Icons.access_time
+          : Icons.check,
+      color: Colors.white,
+      size: 14
+    );
+
   Widget _buildMine(BuildContext context) =>
     Column(
       crossAxisAlignment: CrossAxisAlignment.end,
