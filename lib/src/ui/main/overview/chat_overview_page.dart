@@ -21,6 +21,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/model/chat_overview.dart';
 import 'package:pattle/src/ui/main/overview/chat_overview_bloc.dart';
+import 'package:pattle/src/ui/main/widgets/error.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
@@ -48,10 +49,15 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
       appBar: AppBar(
         title: Text(l(context).appName)
       ),
-      body: Container(
-        child: Scrollbar(
-          child: _buildOverviewList()
-        ),
+      body: Column(
+        children: <Widget>[
+          ErrorBanner(),
+          Expanded(
+            child: Scrollbar(
+              child: _buildOverviewList()
+            ),
+          )
+        ],
       )
     );
   }

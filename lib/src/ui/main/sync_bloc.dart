@@ -25,13 +25,10 @@ final syncBloc = SyncBloc();
 class SyncBloc {
   LocalUser _user = di.getLocalUser();
 
-  PublishSubject<bool> _syncSubj = PublishSubject<bool>();
-  Observable<bool> get stream => _syncSubj.stream;
+  ReplaySubject<SyncState> _syncSubj = ReplaySubject<SyncState>(maxSize: 1);
+  Observable<SyncState> get stream => _syncSubj.stream;
 
   Future<void> start() async {
-    Observable(_user.sync())
-        .listen((success) async {
-      _syncSubj.add(success);
-    });
+    _syncSubj.addStream(_user.sync());
   }
 }

@@ -39,6 +39,9 @@ class Strings {
   final photo = 'Photo';
   final typeAMessage = 'Type a message';
 
+  final connectionLost =
+    'Connection has been lost.\nMake sure your phone has an active internet connection.';
+
   // StartPage //
   final loginWithPhone = 'Login with phone number';
   final loginWithEmail = 'Login with email';
