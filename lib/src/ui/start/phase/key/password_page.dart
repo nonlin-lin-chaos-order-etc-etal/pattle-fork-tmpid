@@ -106,8 +106,12 @@ class PasswordPageState extends State<PasswordPage> {
             StreamBuilder<LoginState>(
               stream: bloc.loginStream,
               builder: (BuildContext context, AsyncSnapshot<LoginState> snapshot) {
-                final isTrying = snapshot.data == LoginState.trying;
+                final state = snapshot.data;
+                final isTrying =
+                  state == LoginState.trying || state == LoginState.stillTrying;
                 var onPressed;
+
+                Widget child = Text(l(context).login.toUpperCase());
 
                 if (!isTrying) {
                   onPressed = () {
@@ -117,9 +121,19 @@ class PasswordPageState extends State<PasswordPage> {
                   onPressed = null;
                 }
 
+                if (state == LoginState.stillTrying) {
+                  child = SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.grey),
+                    )
+                  );
+                }
+
                 return RaisedButton(
                   onPressed: onPressed,
-                  child: Text(l(context).login.toUpperCase())
+                  child: child
                 );
               }
             )

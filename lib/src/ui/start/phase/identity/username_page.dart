@@ -111,20 +111,20 @@ class UsernamePageState extends State<UsernamePage> {
                         }
 
                         return TextField(
-                            autofocus: true,
-                            controller: usernameController,
-                            inputFormatters: [LowerCaseTextFormatter()],
-                            textCapitalization: TextCapitalization.none,
-                            onEditingComplete: () {
-                              _next(context);
-                            },
-                            decoration: InputDecoration(
-                                filled: true,
-                                prefixText: '@',
-                                helperText: l(context).ifYouDontHaveAnAccount,
-                                labelText: l(context).username,
-                                errorText: errorText
-                            )
+                          autofocus: true,
+                          controller: usernameController,
+                          inputFormatters: [LowerCaseTextFormatter()],
+                          textCapitalization: TextCapitalization.none,
+                          onEditingComplete: () {
+                            _next(context);
+                          },
+                          decoration: InputDecoration(
+                            filled: true,
+                            prefixText: '@',
+                            helperText: l(context).ifYouDontHaveAnAccount,
+                            labelText: l(context).username,
+                            errorText: errorText
+                          )
                         );
                       }
                     ),
@@ -132,8 +132,12 @@ class UsernamePageState extends State<UsernamePage> {
                     StreamBuilder<UsernameAvailableState>(
                       stream: bloc.isUsernameAvailable,
                       builder: (BuildContext context, AsyncSnapshot<UsernameAvailableState> snapshot) {
-                        final enabled = snapshot.data != UsernameAvailableState.checking;
+                        final state = snapshot.data;
+                        final enabled =
+                           state != UsernameAvailableState.checking
+                        && state != UsernameAvailableState.stillChecking;
                         var onPressed;
+                        Widget child = Text(l(context).next.toUpperCase());
 
                         if (enabled) {
                           onPressed = () {
@@ -143,9 +147,19 @@ class UsernamePageState extends State<UsernamePage> {
                           onPressed = null;
                         }
 
+                        if (state == UsernameAvailableState.stillChecking) {
+                          child = SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation(Colors.grey),
+                            )
+                          );
+                        }
+
                         return RaisedButton(
-                            onPressed: onPressed,
-                            child: Text(l(context).next.toUpperCase())
+                          onPressed: onPressed,
+                          child: child
                         );
                       }
                     ),

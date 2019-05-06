@@ -193,7 +193,7 @@ class ChatPageState extends State<ChatPage> {
         switch(snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
-            return Container();
+            return Center(child: CircularProgressIndicator());
           case ConnectionState.active:
           case ConnectionState.done:
             var chatEvents = snapshot.data;

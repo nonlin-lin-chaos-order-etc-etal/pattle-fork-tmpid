@@ -34,6 +34,9 @@ class StartBloc {
 
   Username _username;
 
+  /// Duration after which a progress indicator should be shown.
+  static const loadingTime = const Duration(seconds: 3);
+
   void _setHomeserver(Uri uri) {
     di.registerHomeserverWith(uri);
     _homeserverChangedSubj.add(true);
@@ -49,7 +52,7 @@ class StartBloc {
     }
   }
 
-  final _isUsernameAvailableSubj = BehaviorSubject<UsernameAvailableState>();
+  final _isUsernameAvailableSubj = ReplaySubject<UsernameAvailableState>(maxSize: 1);
   Observable<UsernameAvailableState> get isUsernameAvailable
     => _isUsernameAvailableSubj.stream.distinct();
 
@@ -59,6 +62,15 @@ class StartBloc {
     }
 
     _isUsernameAvailableSubj.add(UsernameAvailableState.checking);
+    // If after three seconds it's still checking, change state to
+    // 'stillChecking'.
+    Future.delayed(loadingTime).then((_) {
+      _isUsernameAvailableSubj.stream.listen((state) {
+        if (state == UsernameAvailableState.checking) {
+          _isUsernameAvailableSubj.add(UsernameAvailableState.stillChecking);
+        }
+      });
+    });
 
     var addError = (error) {
       _isUsernameAvailableSubj.addError(error);
@@ -112,22 +124,16 @@ class StartBloc {
       user = Username(username);
     }
 
-    _isUsernameAvailableSubj.addStream(
-      Observable(homeserver.isUsernameAvailable(user).asStream())
-        .map((available) {
-          if (available) {
-            return UsernameAvailableState.available;
-          } else {
-            return UsernameAvailableState.unavailable;
-          }
-        })
-        .doOnData((state) {
-          if (state == UsernameAvailableState.available
-           || state == UsernameAvailableState.unavailable) {
-            _username = user;
-          }
-        })
-    );
+    homeserver.isUsernameAvailable(user).then((available) {
+      if (available) {
+        _isUsernameAvailableSubj.add(UsernameAvailableState.available);
+      } else {
+        _isUsernameAvailableSubj.add(UsernameAvailableState.unavailable);
+      }
+
+      _username = user;
+    })
+    .catchError((error) => _isUsernameAvailableSubj.addError(error));
   }
 
   final _loginSubj = BehaviorSubject<LoginState>();
@@ -137,21 +143,26 @@ class StartBloc {
   void login(String password) {
     _loginSubj.add(LoginState.trying);
 
-    _loginSubj.addStream(
-        Observable(
-          homeserver.login(
-            _username,
-             password,
-            store: di.getStore()
-          ).catchError((error) {
-            throw error;
-          }).asStream()
-        )
-        .map((user) {
-          di.registerLocalUser(user);
-          return LoginState.succeeded;
-        })
-    );
+    // If after three seconds it's still checking, change state to
+    // 'stillTrying'.
+    Future.delayed(loadingTime).then((_) {
+      _loginSubj.stream.listen((state) {
+        if (state == LoginState.trying) {
+          _loginSubj.add(LoginState.stillTrying);
+        }
+      });
+    });
+
+    homeserver.login(
+      _username,
+      password,
+      store: di.getStore()
+    )
+    .then((user) {
+      di.registerLocalUser(user);
+      _loginSubj.add(LoginState.succeeded);
+    })
+    .catchError((error) => _loginSubj.addError(error));
   }
 
 }
@@ -159,6 +170,7 @@ class StartBloc {
 enum UsernameAvailableState {
   none,
   checking,
+  stillChecking,
   unavailable,
   available
 }
@@ -166,6 +178,7 @@ enum UsernameAvailableState {
 enum LoginState {
   none,
   trying,
+  stillTrying,
   succeeded
 }
 
