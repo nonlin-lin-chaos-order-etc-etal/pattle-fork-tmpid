@@ -29,12 +29,14 @@ class ChatOverview {
   String get name => _name;
 
   final RoomEvent latestEvent;
+  final RoomEvent latestEventForSorting;
 
   final Uri avatarUrl;
 
   ChatOverview({@required this.room,
                 String name,
                 @required this.latestEvent,
+                @required this.latestEventForSorting,
                 this.avatarUrl}) {
     _name = name ?? room.id.toString();
   }

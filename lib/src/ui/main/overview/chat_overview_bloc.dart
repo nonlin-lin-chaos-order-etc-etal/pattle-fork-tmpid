@@ -35,13 +35,25 @@ class ChatOverviewBloc {
 
     // Get all rooms and push them as a single list
     await for(Room room in _user.rooms.all()) {
-      var latestEvent = await room.events.upTo(1)
+      final latestEvent = await room.events.upTo(1)
           .lastWhere((event) => true, orElse: () => null);
+
+      var latestEventForSorting = await room.events.upTo(40)
+          .firstWhere((event) => event is! MemberChangeEvent,
+          orElse: () => null);
+
+      // If there is no non-MemberChangeEvent in the last
+      // 40 messages, just settle for the most recent one (which ever
+      // type it is).
+      if (latestEventForSorting == null) {
+        latestEventForSorting = latestEvent;
+      }
 
       var chat = ChatOverview(
         room: room,
         name: room.name,
         latestEvent: latestEvent,
+        latestEventForSorting: latestEventForSorting,
         avatarUrl: room.avatarUrl
       );
 
@@ -49,11 +61,11 @@ class ChatOverviewBloc {
     }
 
     chats.sort((a, b) {
-      if (a.latestEvent != null && b.latestEvent != null) {
-        return a.latestEvent.time.compareTo(b.latestEvent.time);
-      } else if (a.latestEvent != null && b.latestEvent == null) {
+      if (a.latestEventForSorting != null && b.latestEventForSorting != null) {
+        return a.latestEventForSorting.time.compareTo(b.latestEventForSorting.time);
+      } else if (a.latestEventForSorting != null && b.latestEventForSorting == null) {
         return 1;
-      } else if (a.latestEvent == null && b.latestEvent != null) {
+      } else if (a.latestEventForSorting == null && b.latestEventForSorting != null) {
         return -1;
       } else {
         return 0;
