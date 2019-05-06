@@ -38,7 +38,7 @@ class ChatOverviewBloc {
       final latestEvent = await room.events.upTo(1)
           .lastWhere((event) => true, orElse: () => null);
 
-      var latestEventForSorting = await room.events.upTo(40)
+      var latestEventForSorting = await room.events.upTo(10)
           .firstWhere((event) => event is! MemberChangeEvent,
           orElse: () => null);
 

@@ -221,7 +221,7 @@ abstract class MessageBubble extends Bubble {
 
   @protected
   Widget buildSentState(BuildContext context) =>
-    Icon(event.sentState == SentState.waiting
+    Icon(event.sentState != SentState.sent
           ? Icons.access_time
           : Icons.check,
       color: Colors.white,

@@ -29,6 +29,7 @@ class SyncBloc {
   Observable<SyncState> get stream => _syncSubj.stream;
 
   Future<void> start() async {
+    _user.sendAllUnsent();
     _syncSubj.addStream(_user.sync());
   }
 }
