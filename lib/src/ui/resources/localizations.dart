@@ -40,7 +40,12 @@ class Strings {
   final typeAMessage = 'Type a message';
 
   final connectionLost =
-    'Connection has been lost.\nMake sure your phone has an active internet connection.';
+    'Connection has been lost.\n'
+    'Make sure your phone has an active internet connection.';
+
+  final connectionFailed =
+    'Connection failed. '
+    'Check your internet connection';
 
   // StartPage //
   final loginWithPhone = 'Login with phone number';

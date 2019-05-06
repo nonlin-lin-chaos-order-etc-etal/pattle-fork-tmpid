@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
@@ -100,13 +101,13 @@ class UsernamePageState extends State<UsernamePage> {
                             errorText = l(context).hostnameInvalidError;
                           } else if(snapshot.error is InvalidUserIdException) {
                             errorText = l(context).userIdInvalidError;
+                          } else if(snapshot.error is SocketException) {
+                            errorText = l(context).connectionFailed;
                           } else {
                             debugPrint(snapshot.error.toString());
                             debugPrintStack();
                             errorText = l(context).unknownError;
                           }
-                        } else {
-                          errorText = null;
                         }
 
                         return TextField(
