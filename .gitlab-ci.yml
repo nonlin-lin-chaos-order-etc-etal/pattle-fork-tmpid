@@ -1,38 +1,76 @@
 stages:
-- build
-- deploy
+  - prepare
+  - build
+  - deploy
+  - release
+
+.only-tag: &only_tag
+  only:
+    refs:
+      - tags
+      - /^v\d+\.\d+\.\d+$/
+    variables:
+      - $PUB_CREDENTIALS
+      - $CI_API_KEY
+
+changelog:
+  stage: prepare
+  image: registry.git.pattle.im/pattle/util/release-manager:latest
+  <<: *only_tag
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - docker
+  script:
+    - release-manager -action changelog
+  artifacts:
+    paths:
+      - CHANGELOG.md
+    expire_in: 1 week
 
 build:
   stage: build
   image: cirrusci/flutter:latest
+  <<: *only_tag
   tags:
-  - docker
-  artifacts:
-    name: pattle-${CI_COMMIT_REF_NAME:1}
-    paths:
-    - pattle.apk
-    expire_in: 7 days
-  only:
-    refs:
-    - tags
+    - docker
+  dependencies:
+    - changelog
   script:
-  - 'echo "version: ${CI_COMMIT_REF_NAME:1}+$((123 + $CI_PIPELINE_IID))" >> pubspec.yaml'
-  - 'echo "SENTRY_DSN=$SENTRY_DSN" > .env'
-  - echo "$STORE" | base64 -d > android/app/pattle.keystore
-  - flutter build apk
-  - mv build/app/outputs/apk/release/app-release.apk pattle.apk
+    - 'echo "version: ${CI_COMMIT_REF_NAME:1}+$((123 + $CI_PIPELINE_IID))" >> pubspec.yaml'
+    - 'echo "SENTRY_DSN=$SENTRY_DSN" > .env'
+    - echo "$STORE" | base64 -d > android/app/pattle.keystore
+    - flutter build apk
+    - mv build/app/outputs/apk/release/app-release.apk pattle.apk
   after_script:
-  - rm android/app/pattle.keystore
-  - rm .env
+    - rm android/app/pattle.keystore
+    - rm .env
+  artifacts:
+    name: pattle-$CI_COMMIT_REF_NAME
+    paths:
+      - pattle.apk
+    expire_in: 1 week
 
 fdroid:
   stage: deploy
+  <<: *only_tag
   tags:
-  - fdroid
-  only:
-    refs:
-    - tags
+    - fdroid
+  dependencies:
+    - build
   script:
-  - find /mnt/fdroid -type f -name "*.apk" -mtime +5 -delete
-  - mv pattle.apk "/mnt/fdroid/repo/pattle-${CI_COMMIT_REF_NAME:1}.apk"
-  - docker run --rm -v /mnt/fdroid:/repo registry.gitlab.com/fdroid/docker-executable-fdroidserver:latest update
+    - find /mnt/fdroid -type f -name "*.apk" -mtime +5 -delete
+    - mv pattle.apk "/mnt/fdroid/repo/pattle-${CI_COMMIT_REF_NAME:1}.apk"
+    - docker run --rm -v /mnt/fdroid:/repo registry.gitlab.com/fdroid/docker-executable-fdroidserver:latest update
+
+release:
+  stage: release
+  image: registry.git.pattle.im/pattle/util/release-manager:latest
+  <<: *only_tag
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - docker
+  dependencies: []
+  script:
+    - release-manager -action release
