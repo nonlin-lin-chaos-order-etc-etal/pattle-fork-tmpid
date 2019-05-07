@@ -56,18 +56,12 @@ class LightColors {
   );
 
   static const userColors = [
-    const Color(0xFF616F39),
-    const Color(0xFFFF8364),
-    const Color(0xFF74B49B),
-    const Color(0xFF596E79),
-    const Color(0xFF494949),
-    const Color(0xFF957DAD),
-    const Color(0xFF5C8D89),
-    const Color(0xFFEA8A8A),
-    const Color(0xFF516091),
-    const Color(0xFF556FB5),
-    const Color(0xFFE4508F),
-    const Color(0xFF264E70),
-    const Color(0xFF685454)
+    const Color(0xFF79740E),
+    const Color(0xFFB57614),
+    const Color(0xFF076678),
+    const Color(0xFF8F3F71),
+    const Color(0xFF427B58),
+    const Color(0xFF3C3836),
+    const Color(0xFFAF3A03)
   ];
 }
