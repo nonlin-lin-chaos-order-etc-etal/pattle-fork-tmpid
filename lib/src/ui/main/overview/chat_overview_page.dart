@@ -19,7 +19,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
-import 'package:pattle/src/model/chat_overview.dart';
+import 'package:pattle/src/ui/main/overview/models/chat_overview.dart';
 import 'package:pattle/src/ui/main/overview/chat_overview_bloc.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';

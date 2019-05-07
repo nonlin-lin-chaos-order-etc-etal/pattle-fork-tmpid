@@ -16,6 +16,7 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/main/sync_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -44,8 +45,8 @@ class ChatBloc {
     }
   }
 
-  PublishSubject<List<RoomEvent>> _eventSubj = PublishSubject<List<RoomEvent>>();
-  Stream<List<RoomEvent>> get events => _eventSubj.stream;
+  PublishSubject<List<ChatItem>> _itemSubj = PublishSubject<List<ChatItem>>();
+  Stream<List<ChatItem>> get items => _itemSubj.stream;
 
   Future<void> startLoadingEvents() async {
     await loadEvents();
@@ -63,14 +64,26 @@ class ChatBloc {
   }
 
   Future<void> loadEvents() async {
-    var chatEvents = List<RoomEvent>();
+    final chatItems = List<ChatItem>();
 
     // Get all rooms and push them as a single list
+
+    // Remember: 'previous' is actually next in time
+    RoomEvent previousEvent;
     await for(RoomEvent event in room.events.upTo(_eventCount)) {
-      chatEvents.add(event);
+
+      // Insert DateHeader if there's a day difference
+      if (previousEvent != null && event != null
+        && previousEvent.time.day != event.time.day) {
+        chatItems.add(DateItem(previousEvent.time));
+      }
+
+      chatItems.add(ChatEvent(event));
+
+      previousEvent = event;
     }
 
-    _eventSubj.add(List.of(chatEvents));
+    _itemSubj.add(List.of(chatItems));
   }
 
   Future<void> sendMessage(String text) async {

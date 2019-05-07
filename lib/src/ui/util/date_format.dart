@@ -79,7 +79,7 @@ String formatAsListItem(BuildContext context, DateTime date) {
     return 'unknown';
   }
 
-  var now = DateTime.now();
+  final now = DateTime.now();
 
   if (_isToday(now, date)) {
     return formatAsTime(date);

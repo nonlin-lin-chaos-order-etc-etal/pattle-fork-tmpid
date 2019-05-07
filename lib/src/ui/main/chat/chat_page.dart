@@ -19,7 +19,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
+import 'package:pattle/src/ui/main/chat/widgets/date_header.dart';
 import 'package:pattle/src/ui/main/chat/widgets/message_bubble.dart';
+import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
@@ -187,9 +189,9 @@ class ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildEventsList() {
-    return StreamBuilder<List<RoomEvent>>(
-      stream: bloc.events,
-      builder: (BuildContext context, AsyncSnapshot<List<RoomEvent>> snapshot) {
+    return StreamBuilder<List<ChatItem>>(
+      stream: bloc.items,
+      builder: (BuildContext context, AsyncSnapshot<List<ChatItem>> snapshot) {
         switch(snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
@@ -203,27 +205,32 @@ class ChatPageState extends State<ChatPage> {
               physics: const AlwaysScrollableScrollPhysics(),
               itemCount: chatEvents.length,
               itemBuilder: (context, index) {
-                final event = chatEvents[index];
-                final isMine = event.sender == me;
+                final item = chatEvents[index];
+                if (item is ChatEvent) {
+                  final event = item.event;
+                  final isMine = event.sender == me;
 
-                var previousEvent, nextEvent;
-                // Note: Because the items are reversed in the
-                // ListView.builder, the 'previous' event is actually the next
-                // one in the list.
-                if (index != chatEvents.length - 1) {
-                  previousEvent = chatEvents[index + 1];
+                  var previousItem, nextItem;
+                  // Note: Because the items are reversed in the
+                  // ListView.builder, the 'previous' event is actually the next
+                  // one in the list.
+                  if (index != chatEvents.length - 1) {
+                    previousItem = chatEvents[index + 1];
+                  }
+
+                  if (index != 0) {
+                    nextItem = chatEvents[index - 1];
+                  }
+
+                  return Bubble.fromItem(
+                    item: item,
+                    previousItem: previousItem,
+                    nextItem: nextItem,
+                    isMine: isMine,
+                  ) ?? Container();
+                } else if (item is DateItem) {
+                  return DateHeader(item);
                 }
-
-                if (index != 0) {
-                  nextEvent = chatEvents[index - 1];
-                }
-
-                return Bubble.fromEvent(
-                  event: event,
-                  previousEvent: previousEvent,
-                  nextEvent: nextEvent,
-                  isMine: isMine,
-                ) ?? Container();
               }
             );
         }

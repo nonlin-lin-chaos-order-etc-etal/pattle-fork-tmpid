@@ -17,46 +17,45 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/ui/main/chat/util/member_span.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
-import 'package:pattle/src/ui/resources/localizations.dart';
+import 'package:pattle/src/ui/resources/theme.dart';
+import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
-import '../bubble.dart';
-import 'state_bubble.dart';
+import 'image_bubble.dart';
+import 'state/member_bubble.dart';
+import 'text_bubble.dart';
 
 
-class MemberBubble extends StateBubble {
+abstract class Item extends StatelessWidget {
+
+  final ChatItem item;
+
+  final ChatItem previousItem;
+  final ChatItem nextItem;
+
+  // Styling;
+  static const betweenMargin = 16.0;
+  static const sideMargin = 16.0;
+
+  Item({
+    @required this.item,
+    @required this.previousItem,
+    @required this.nextItem,
+  });
 
   @override
-  final MemberChangeEvent event;
-
-  MemberBubble({
-    @required ChatEvent item,
-    @required ChatItem previousItem,
-    @required ChatItem nextItem,
-    @required bool isMine
-  }) :
-    event = item.event,
-    super(
-      item: item,
-      previousItem: previousItem,
-      nextItem: nextItem,
-      isMine: isMine
-    );
+  Widget build(BuildContext context);
 
   @protected
-  @override
-  Widget buildContent(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        style: Theme.of(context).textTheme.body1,
-        children: spanFor(context, event,
-          style: TextStyle(
-            fontWeight: FontWeight.w600
-          )
-        )
-      )
-    );
+  double marginBottom() => betweenMargin;
+
+  @protected
+  double marginTop() {
+    if (previousItem == null) {
+      return betweenMargin;
+    } else {
+      return 0;
+    }
   }
 }

@@ -19,13 +19,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
 import 'bubble.dart';
-import 'image_bubble.dart';
-import 'text_bubble.dart';
+import 'item.dart';
 
 
 abstract class MessageBubble extends Bubble {
@@ -37,14 +37,14 @@ abstract class MessageBubble extends Bubble {
   static const _oppositeMargin = 64.0;
 
   MessageBubble({
-    @required RoomEvent event,
-    @required RoomEvent previousEvent,
-    @required RoomEvent nextEvent,
+    @required ChatEvent item,
+    @required ChatItem previousItem,
+    @required ChatItem nextItem,
     @required bool isMine
   }) :super(
-    event: event,
-    previousEvent: previousEvent,
-    nextEvent: nextEvent,
+    item: item,
+    previousItem: previousItem,
+    nextItem: nextItem,
     isMine: isMine
   );
 
@@ -111,10 +111,14 @@ abstract class MessageBubble extends Bubble {
   @protected
   bool get isStartOfGroup {
     if (_isStartOfGroup == null) {
-      if (previousEvent is StateEvent) {
+      if (previousItem is! ChatEvent
+      || (previousItem is ChatEvent
+        && (previousItem as ChatEvent).event is! MessageEvent)) {
         _isStartOfGroup = true;
         return _isStartOfGroup;
       }
+
+      final previousEvent = (previousItem as ChatEvent).event;
 
       var previousHasSameSender = previousEvent?.sender == event.sender;
 
@@ -144,10 +148,14 @@ abstract class MessageBubble extends Bubble {
   @protected
   bool get isEndOfGroup {
     if (_isEndOfGroup == null) {
-      if (nextEvent is StateEvent) {
+      if (nextItem is! ChatEvent
+      || (nextItem is ChatEvent
+        && (nextItem as ChatEvent).event is! MessageEvent)) {
         _isEndOfGroup = true;
         return _isEndOfGroup;
       }
+
+      final nextEvent = (nextItem as ChatEvent).event;
 
       var nextHasSameSender = nextEvent?.sender == event.sender;
 
@@ -177,7 +185,7 @@ abstract class MessageBubble extends Bubble {
   @override
   double marginBottom() {
     if (isEndOfGroup) {
-      return Bubble.betweenMargin;
+      return Item.betweenMargin;
     } else {
       return _betweenGroupMargin;
     }
@@ -186,8 +194,8 @@ abstract class MessageBubble extends Bubble {
   @protected
   @override
   double marginTop() {
-    if (previousEvent == null) {
-      return Bubble.betweenMargin;
+    if (previousItem == null) {
+      return Item.betweenMargin;
     } else {
       return 0;
     }
@@ -246,7 +254,7 @@ abstract class MessageBubble extends Bubble {
               child: Padding(
                 padding: EdgeInsets.only(
                   left: _oppositeMargin,
-                  right: Bubble.sideMargin,
+                  right: Item.sideMargin,
                   bottom: marginBottom(),
                   top: marginTop(),
                 ),
@@ -277,7 +285,7 @@ abstract class MessageBubble extends Bubble {
             Flexible(
               child: Padding(
                 padding: EdgeInsets.only(
-                  left: Bubble.sideMargin,
+                  left: Item.sideMargin,
                   right: _oppositeMargin,
                   bottom: marginBottom(),
                   top: marginTop()

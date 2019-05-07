@@ -17,62 +17,65 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/ui/resources/theme.dart';
-import 'package:pattle/src/ui/util/date_format.dart';
-import 'package:pattle/src/ui/util/user.dart';
+import 'package:pattle/src/ui/main/models/chat_item.dart';
 
 import 'image_bubble.dart';
+import 'item.dart';
 import 'state/member_bubble.dart';
 import 'text_bubble.dart';
 
 
-abstract class Bubble extends StatelessWidget {
+abstract class Bubble extends Item {
+
+  @override
+  final ChatEvent item;
 
   final RoomEvent event;
-
-  final RoomEvent previousEvent;
-  final RoomEvent nextEvent;
 
   final bool isMine;
 
   // Styling
   static const padding = const EdgeInsets.all(8);
   static const radiusForBorder = const Radius.circular(8);
-  static const betweenMargin = 16.0;
-  static const sideMargin = 16.0;
 
   Bubble({
-    @required this.event,
-    @required this.previousEvent,
-    @required this.nextEvent,
+    @required this.item,
+    @required ChatItem previousItem,
+    @required ChatItem nextItem,
     @required this.isMine
-  });
+  }) :
+    event = item.event,
+    super(
+      item: item,
+      previousItem: previousItem,
+      nextItem: nextItem
+    );
 
-  factory Bubble.fromEvent({
-    @required RoomEvent event,
-    @required RoomEvent previousEvent,
-    @required RoomEvent nextEvent,
+  factory Bubble.fromItem({
+    @required ChatEvent item,
+    @required ChatItem previousItem,
+    @required ChatItem nextItem,
     @required bool isMine
   }) {
-    if (event is TextMessageEvent) {
+    if (item.event is TextMessageEvent) {
       return TextBubble(
-        event: event,
-        previousEvent: previousEvent,
-        nextEvent: nextEvent,
+        item: item,
+        previousItem: previousItem,
+        nextItem: nextItem,
         isMine: isMine
       );
-    } else if (event is ImageMessageEvent) {
+    } else if (item.event is ImageMessageEvent) {
       return ImageBubble(
-        event: event,
-        previousEvent: previousEvent,
-        nextEvent: nextEvent,
+        item: item,
+        previousItem: previousItem,
+        nextItem: nextItem,
         isMine: isMine
       );
-    } else if (event is MemberChangeEvent) {
+    } else if (item.event is MemberChangeEvent) {
       return MemberBubble(
-        event: event,
-        previousEvent: previousEvent,
-        nextEvent: nextEvent,
+        item: item,
+        previousItem: previousItem,
+        nextItem: nextItem,
         isMine: isMine
       );
     } else {
@@ -84,12 +87,12 @@ abstract class Bubble extends StatelessWidget {
   Widget build(BuildContext context);
 
   @protected
-  double marginBottom() => betweenMargin;
+  double marginBottom() => Item.betweenMargin;
 
   @protected
   double marginTop() {
-    if (previousEvent == null) {
-      return betweenMargin;
+    if (previousItem == null) {
+      return Item.betweenMargin;
     } else {
       return 0;
     }

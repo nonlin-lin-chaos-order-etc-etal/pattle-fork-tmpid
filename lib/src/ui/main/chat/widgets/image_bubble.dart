@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
+import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 
 import 'bubble.dart';
@@ -38,16 +39,18 @@ class ImageBubble extends MessageBubble {
   }
 
   ImageBubble({
-    @required this.event,
-    @required RoomEvent previousEvent,
-    @required RoomEvent nextEvent,
+    @required ChatEvent item,
+    @required ChatItem previousItem,
+    @required ChatItem nextItem,
     @required bool isMine
-  }) : super(
-    event: event,
-    previousEvent: previousEvent,
-    nextEvent: nextEvent,
-    isMine: isMine
-  );
+  }) :
+    event = item.event,
+    super(
+      item: item,
+      previousItem: previousItem,
+      nextItem: nextItem,
+      isMine: isMine
+    );
 
   void _onTap(BuildContext context) {
     Navigator.pushNamed(context, Routes.image, arguments: event);

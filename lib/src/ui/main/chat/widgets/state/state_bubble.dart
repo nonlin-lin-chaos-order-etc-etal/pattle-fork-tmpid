@@ -17,10 +17,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 
 import '../bubble.dart';
+import '../item.dart';
 
 
 abstract class StateBubble extends Bubble {
@@ -29,14 +31,14 @@ abstract class StateBubble extends Bubble {
   static const borderRadius = const BorderRadius.all(Bubble.radiusForBorder);
 
   StateBubble({
-    @required StateEvent event,
-    @required RoomEvent previousEvent,
-    @required RoomEvent nextEvent,
+    @required ChatEvent item,
+    @required ChatItem previousItem,
+    @required ChatItem nextItem,
     @required bool isMine
   }) : super(
-    event: event,
-    previousEvent: previousEvent,
-    nextEvent: nextEvent,
+    item: item,
+    previousItem: previousItem,
+    nextItem: nextItem,
     isMine: isMine
   );
 
@@ -52,9 +54,9 @@ abstract class StateBubble extends Bubble {
           child: Center(
             child: Padding(
               padding: EdgeInsets.only(
-                left: Bubble.sideMargin,
-                right: Bubble.sideMargin,
-                bottom: Bubble.betweenMargin
+                left: Item.sideMargin,
+                right: Item.sideMargin,
+                bottom: Item.betweenMargin
               ),
               child: Material(
                 elevation: 1,
