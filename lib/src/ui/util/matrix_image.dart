@@ -15,11 +15,13 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pattle/src/di.dart' as di;
+
+import 'matrix_cache_manager.dart';
 
 class MatrixImage extends ImageProvider<MatrixImage> {
 
@@ -33,15 +35,12 @@ class MatrixImage extends ImageProvider<MatrixImage> {
   const MatrixImage(this.uri, {this.scale = 1.0, this.width, this.height});
 
   Future<Codec> _load(MatrixImage key) async {
-    var bytes;
-    if (key.width != null && key.height != null) {
-      bytes = await di.getHomeserver().downloadThumbnail(key.uri,
-        width: key.width,
-        height: key.height
-      );
-    } else {
-      bytes = await di.getHomeserver().download(key.uri);
-    }
+    final file = await cacheManager.getSingleFile(key.uri.toString(), headers: {
+      'width': key.width.toString(),
+      'height': key.height.toString()
+    });
+
+    final bytes = Uint8List.fromList(await file.readAsBytes());
 
     return PaintingBinding.instance.instantiateImageCodec(bytes);
   }
