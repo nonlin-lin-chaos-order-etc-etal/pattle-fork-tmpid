@@ -18,8 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/chat/util/member_span.dart';
-import 'package:pattle/src/ui/resources/localizations.dart';
-import 'package:pattle/src/ui/util/display_name.dart';
+import 'package:pattle/src/ui/util/user.dart';
 
 import 'subtitle.dart';
 
@@ -35,7 +34,10 @@ class MemberSubtitle extends Subtitle {
     return RichText(
       text: TextSpan(
         style: textStyle(context),
-        children: spanFor(context, event)
+        children: spanFor(context, event, style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: colorOf(event.sender)
+        ))
       )
     );
   }

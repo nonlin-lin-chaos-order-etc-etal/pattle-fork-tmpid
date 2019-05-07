@@ -15,11 +15,13 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
-import 'package:pattle/src/ui/util/display_name.dart';
+import 'package:pattle/src/ui/util/user.dart';
 
 import 'bubble.dart';
 import 'image_bubble.dart';
@@ -93,7 +95,8 @@ abstract class MessageBubble extends Bubble {
     if (isStartOfGroup) {
       return Text(displayNameOf(event.sender),
         style: textStyle(context, color: color).copyWith(
-            fontWeight: FontWeight.bold
+          fontWeight: FontWeight.bold,
+          color: colorOf(event.sender)
         ),
       );
     } else {

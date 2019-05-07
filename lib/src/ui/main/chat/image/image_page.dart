@@ -19,7 +19,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
-import 'package:pattle/src/ui/util/display_name.dart';
+import 'package:pattle/src/ui/util/user.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 import 'package:photo_view/photo_view.dart';
 

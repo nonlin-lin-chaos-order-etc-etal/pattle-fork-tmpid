@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/di.dart' as di;
-import 'package:pattle/src/ui/util/display_name.dart';
+import 'package:pattle/src/ui/util/user.dart';
 
 import 'image_subtitle.dart';
 import 'member_subtitle.dart';
@@ -32,8 +32,8 @@ abstract class Subtitle extends StatelessWidget {
 
   Subtitle(this.event)
     : senderName = event != null && di.getLocalUser() != event.sender
-      ? '${displayNameOf(event.sender)}: '
-      : '';
+      ? displayNameOf(event.sender)
+      : null;
 
   factory Subtitle.fromEvent(Event event) {
     if (event == null) {
@@ -58,10 +58,19 @@ abstract class Subtitle extends StatelessWidget {
 
   TextSpan senderSpan(BuildContext context) =>
     TextSpan(
-      text: senderName,
       style: Theme.of(context).textTheme.body1.copyWith(
-        color: Theme.of(context).textTheme.caption.color,
         fontWeight: FontWeight.bold
-      )
+      ),
+      children: [
+        TextSpan(
+          text: senderName,
+          style: TextStyle(
+            color: colorOf(event.sender),
+          ),
+        ),
+        TextSpan(
+          text: senderName != null ? ': ' : ''
+        )
+      ]
     );
 }

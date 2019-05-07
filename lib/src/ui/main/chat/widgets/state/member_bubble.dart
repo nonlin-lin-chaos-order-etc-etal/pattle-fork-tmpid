@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/chat/util/member_span.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
-import 'package:pattle/src/ui/util/display_name.dart';
+import 'package:pattle/src/ui/util/user.dart';
 
 import '../bubble.dart';
 import 'state_bubble.dart';
