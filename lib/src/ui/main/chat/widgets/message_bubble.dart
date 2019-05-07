@@ -92,11 +92,14 @@ abstract class MessageBubble extends Bubble {
 
   @protected
   Widget buildSender(BuildContext context, {Color color}) {
+    if (color == null) {
+      color = colorOf(event.sender);
+    }
+
     if (isStartOfGroup) {
       return Text(displayNameOf(event.sender),
         style: textStyle(context, color: color).copyWith(
-          fontWeight: FontWeight.bold,
-          color: colorOf(event.sender)
+          fontWeight: FontWeight.bold
         ),
       );
     } else {
