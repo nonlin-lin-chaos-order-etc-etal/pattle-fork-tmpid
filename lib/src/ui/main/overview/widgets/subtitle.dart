@@ -32,8 +32,8 @@ abstract class Subtitle extends StatelessWidget {
 
   Subtitle(this.event)
     : senderName = event != null && di.getLocalUser() != event.sender
-      ? displayNameOf(event.sender)
-      : null;
+      ? '${displayNameOf(event.sender)}: '
+      : '';
 
   factory Subtitle.fromEvent(Event event) {
     if (event == null) {
@@ -58,19 +58,10 @@ abstract class Subtitle extends StatelessWidget {
 
   TextSpan senderSpan(BuildContext context) =>
     TextSpan(
+      text: senderName,
       style: Theme.of(context).textTheme.body1.copyWith(
-        fontWeight: FontWeight.bold
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).textTheme.caption.color
       ),
-      children: [
-        TextSpan(
-          text: senderName,
-          style: TextStyle(
-            color: colorOf(event.sender),
-          ),
-        ),
-        TextSpan(
-          text: senderName != null ? ': ' : ''
-        )
-      ]
     );
 }

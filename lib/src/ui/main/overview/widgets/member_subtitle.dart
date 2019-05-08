@@ -34,10 +34,7 @@ class MemberSubtitle extends Subtitle {
     return RichText(
       text: TextSpan(
         style: textStyle(context),
-        children: spanFor(context, event, style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: colorOf(event.sender)
-        ))
+        children: spanFor(context, event)
       )
     );
   }
