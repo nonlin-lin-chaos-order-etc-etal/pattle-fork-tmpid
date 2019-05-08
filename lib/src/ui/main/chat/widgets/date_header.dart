@@ -34,10 +34,13 @@ class DateHeader extends Item {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.only(bottom: betweenMargin),
+        padding: EdgeInsets.only(
+          top: betweenMargin,
+          bottom: betweenMargin
+        ),
         child: Text(formatAsDate(context, item.date),
           style: Theme.of(context).textTheme.display1.copyWith(
-              fontSize: 22
+              fontSize: 20
           ),
         ),
       )
