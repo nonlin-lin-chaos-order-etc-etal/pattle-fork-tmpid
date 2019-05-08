@@ -39,8 +39,7 @@ class ImageSubtitle extends Subtitle {
           color: Theme.of(context).textTheme.caption.color,
           size: 20,
         ),
-        SizedBox(width: 4),
-        Text(l(context).photo,
+        Text(' ' + l(context).photo,
           style: textStyle(context)
         )
       ],
