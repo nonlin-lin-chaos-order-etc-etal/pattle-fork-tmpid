@@ -18,10 +18,11 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'bubble.dart';
 import 'message_bubble.dart';
-
 
 class TextBubble extends MessageBubble {
 
@@ -42,9 +43,31 @@ class TextBubble extends MessageBubble {
       isMine: isMine
   );
 
+  TextStyle linkStyle(BuildContext context) {
+    if (isMine) {
+      return textStyle(context).copyWith(
+        decoration: TextDecoration.underline
+      );
+    } else {
+      return textStyle(context).copyWith(
+        color: Theme.of(context).primaryColor,
+        decoration: TextDecoration.underline
+      );
+    }
+  }
+
   Widget buildContent(BuildContext context) =>
-    Text(event.content.body ?? '',
-      style: textStyle(context)
+    Html(
+      data: event.content.formattedBody ?? '',
+      useRichText: true,
+      defaultTextStyle: textStyle(context),
+      fillWidth: false,
+      linkStyle: linkStyle(context),
+      onLinkTap: (url) async {
+        if (await canLaunch(url)) {
+          await launch(url);
+        }
+      },
     );
 
   @protected
