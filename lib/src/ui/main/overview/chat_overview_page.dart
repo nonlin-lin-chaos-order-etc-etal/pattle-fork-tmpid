@@ -66,13 +66,19 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
     return StreamBuilder<List<ChatOverview>>(
       stream: bloc.chats,
       builder: (BuildContext context, AsyncSnapshot<List<ChatOverview>> snapshot) {
+        print(snapshot.connectionState);
         switch(snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
             return Center(child: CircularProgressIndicator());
           case ConnectionState.active:
           case ConnectionState.done:
-            var chats = snapshot.data;
+            final chats = snapshot.data;
+
+            if (chats == null || chats.isEmpty) {
+              return Center(child: CircularProgressIndicator());
+            }
+
             return ListView.separated(
               separatorBuilder: (context, index) => Divider(
                 height: 1,

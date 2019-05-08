@@ -43,13 +43,13 @@ class ChatOverviewBloc {
           orElse: () => null);
 
       // If there is no non-MemberChangeEvent in the last
-      // 40 messages, just settle for the most recent one (which ever
+      // 10 messages, just settle for the most recent one (which ever
       // type it is).
       if (latestEventForSorting == null) {
         latestEventForSorting = latestEvent;
       }
 
-      var chat = ChatOverview(
+      final chat = ChatOverview(
         room: room,
         name: room.name,
         latestEvent: latestEvent,
