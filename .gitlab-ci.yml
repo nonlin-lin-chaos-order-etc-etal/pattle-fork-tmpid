@@ -1,5 +1,4 @@
 stages:
-  - prepare
   - build
   - deploy
   - release
@@ -12,21 +11,6 @@ stages:
     variables:
       - $PUB_CREDENTIALS
       - $CI_API_KEY
-
-changelog:
-  stage: prepare
-  image: registry.git.pattle.im/pattle/util/release-manager:latest
-  <<: *only_tag
-  variables:
-    GIT_STRATEGY: none
-  tags:
-    - docker
-  script:
-    - release-manager -action changelog
-  artifacts:
-    paths:
-      - CHANGELOG.md
-    expire_in: 1 week
 
 build:
   stage: build
