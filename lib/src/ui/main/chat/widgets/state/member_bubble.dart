@@ -48,6 +48,9 @@ class MemberBubble extends StateBubble {
   @protected
   @override
   Widget buildContent(BuildContext context) {
+    // Keep default body1 font size so it is a bit smaller
+    // since it is less important than a message
+    // size 14
     return RichText(
       text: TextSpan(
         style: Theme.of(context).textTheme.body1,
