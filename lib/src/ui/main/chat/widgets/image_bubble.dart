@@ -40,16 +40,18 @@ class ImageBubble extends MessageBubble {
 
   ImageBubble({
     @required ChatEvent item,
-    @required ChatItem previousItem,
-    @required ChatItem nextItem,
-    @required bool isMine
+    ChatItem previousItem,
+    ChatItem nextItem,
+    @required bool isMine,
+    bool isRepliedTo = false,
   }) :
     event = item.event,
     super(
       item: item,
       previousItem: previousItem,
       nextItem: nextItem,
-      isMine: isMine
+      isMine: isMine,
+      isRepliedTo: isRepliedTo
     );
 
   void _onTap(BuildContext context) {

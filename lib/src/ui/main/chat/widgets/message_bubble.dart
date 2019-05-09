@@ -36,11 +36,14 @@ abstract class MessageBubble extends Bubble {
   static const _betweenGroupMargin = 4.0;
   static const _oppositeMargin = 64.0;
 
+  final bool isRepliedTo;
+
   MessageBubble({
     @required ChatEvent item,
-    @required ChatItem previousItem,
-    @required ChatItem nextItem,
-    @required bool isMine
+    ChatItem previousItem,
+    ChatItem nextItem,
+    @required bool isMine,
+    this.isRepliedTo = false
   }) :super(
     item: item,
     previousItem: previousItem,
@@ -96,7 +99,7 @@ abstract class MessageBubble extends Bubble {
       color = colorOf(event.sender);
     }
 
-    if (isStartOfGroup) {
+    if (isStartOfGroup || (isRepliedTo && !isMine)) {
       return Text(displayNameOf(event.sender),
         style: textStyle(context, color: color).copyWith(
           fontWeight: FontWeight.bold
@@ -110,6 +113,11 @@ abstract class MessageBubble extends Bubble {
   bool _isStartOfGroup;
   @protected
   bool get isStartOfGroup {
+    if (isRepliedTo) {
+      _isStartOfGroup = false;
+      return _isStartOfGroup;
+    }
+
     if (_isStartOfGroup == null) {
       if (previousItem is! ChatEvent
       || (previousItem is ChatEvent
@@ -147,6 +155,11 @@ abstract class MessageBubble extends Bubble {
   bool _isEndOfGroup;
   @protected
   bool get isEndOfGroup {
+    if (isRepliedTo) {
+      _isEndOfGroup = false;
+      return _isEndOfGroup;
+    }
+
     if (_isEndOfGroup == null) {
       if (nextItem is! ChatEvent
       || (nextItem is ChatEvent
@@ -252,12 +265,13 @@ abstract class MessageBubble extends Bubble {
           children: [
             Flexible(
               child: Padding(
-                padding: EdgeInsets.only(
-                  left: _oppositeMargin,
-                  right: Item.sideMargin,
-                  bottom: marginBottom(),
-                  top: marginTop(),
-                ),
+                padding: !isRepliedTo ?
+                  EdgeInsets.only(
+                    left: _oppositeMargin,
+                    right: Item.sideMargin,
+                    bottom: marginBottom(),
+                    top: marginTop(),
+                  ) : EdgeInsets.only(),
                 child: Material(
                   color: LightColors.red[450],
                   elevation: 1,
@@ -284,17 +298,18 @@ abstract class MessageBubble extends Bubble {
           children: [
             Flexible(
               child: Padding(
-                padding: EdgeInsets.only(
-                  left: Item.sideMargin,
-                  right: _oppositeMargin,
-                  bottom: marginBottom(),
-                  top: marginTop()
-                ),
+                padding: !isRepliedTo ?
+                  EdgeInsets.only(
+                    left: Item.sideMargin,
+                    right: _oppositeMargin,
+                    bottom: marginBottom(),
+                    top: marginTop()
+                  ) : EdgeInsets.only(),
                 child: Material(
                   color: Colors.white,
                   elevation: 1,
                   shape: border(),
-                  child: buildTheirs(context)
+                  child: buildTheirs(context),
                 )
               )
             ),

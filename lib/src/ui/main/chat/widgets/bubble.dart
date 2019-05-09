@@ -40,8 +40,8 @@ abstract class Bubble extends Item {
 
   Bubble({
     @required this.item,
-    @required ChatItem previousItem,
-    @required ChatItem nextItem,
+    ChatItem previousItem,
+    ChatItem nextItem,
     @required this.isMine
   }) :
     event = item.event,
@@ -53,8 +53,8 @@ abstract class Bubble extends Item {
 
   factory Bubble.fromItem({
     @required ChatEvent item,
-    @required ChatItem previousItem,
-    @required ChatItem nextItem,
+    ChatItem previousItem,
+    ChatItem nextItem,
     @required bool isMine
   }) {
     if (item.event is TextMessageEvent) {
@@ -77,6 +77,28 @@ abstract class Bubble extends Item {
         previousItem: previousItem,
         nextItem: nextItem,
         isMine: isMine
+      );
+    } else {
+      return null;
+    }
+  }
+
+  factory Bubble.asReply({
+    @required RoomEvent replyTo,
+    @required bool isMine
+  }) {
+    final item = ChatEvent(replyTo);
+    if (replyTo is TextMessageEvent) {
+      return TextBubble(
+        item: item,
+        isMine: isMine,
+        isRepliedTo: true,
+      );
+    } else if (replyTo is ImageMessageEvent) {
+      return ImageBubble(
+        item: item,
+        isMine: isMine,
+        isRepliedTo: true,
       );
     } else {
       return null;
