@@ -18,8 +18,6 @@ build:
   <<: *only_tag
   tags:
     - docker
-  dependencies:
-    - changelog
   script:
     - 'echo "version: ${CI_COMMIT_REF_NAME:1}+$((123 + $CI_PIPELINE_IID))" >> pubspec.yaml'
     - 'echo "SENTRY_DSN=$SENTRY_DSN" > .env'
