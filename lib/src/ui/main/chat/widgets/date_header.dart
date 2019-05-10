@@ -38,9 +38,9 @@ class DateHeader extends Item {
           top: betweenMargin,
           bottom: betweenMargin
         ),
-        child: Text(formatAsDate(context, item.date),
+        child: Text(formatAsDate(context, item.date).toUpperCase(),
           style: Theme.of(context).textTheme.display1.copyWith(
-              fontSize: 20
+              fontSize: 16
           ),
         ),
       )
