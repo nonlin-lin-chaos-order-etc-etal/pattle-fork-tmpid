@@ -17,6 +17,7 @@
 
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/overview/models/chat_overview.dart';
+import 'package:pattle/src/ui/util/user.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:pattle/src/ui/main/sync_bloc.dart';

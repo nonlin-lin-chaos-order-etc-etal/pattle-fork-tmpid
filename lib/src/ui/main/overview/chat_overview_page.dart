@@ -21,10 +21,12 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/overview/models/chat_overview.dart';
 import 'package:pattle/src/ui/main/overview/chat_overview_bloc.dart';
+import 'package:pattle/src/ui/main/widgets/chat_name.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
+import 'package:pattle/src/ui/util/room.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import 'widgets/subtitle.dart';
@@ -118,13 +120,6 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
     } else {
       avatar = CircleAvatar(
         radius: 24,
-        child: Text(
-          chat.name.length >= 1 ? chat.name[0] : chat.room.id.toString()[1],
-          style: Theme.of(context).textTheme.display1.copyWith(
-            color: Colors.white,
-            fontSize: 22
-          )
-        )
       );
     }
 
@@ -134,9 +129,8 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
         textBaseline: TextBaseline.alphabetic,
         children: <Widget>[
           Expanded(
-            child: Text(chat.name,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
+            child: ChatName(
+              room: chat.room,
             ),
           ),
           Text(

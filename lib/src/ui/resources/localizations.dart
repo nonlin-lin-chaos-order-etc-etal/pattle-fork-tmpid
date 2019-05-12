@@ -38,6 +38,8 @@ class Strings {
   final yesterday = 'Yesterday';
   final photo = 'Photo';
   final typeAMessage = 'Type a message';
+  final you = 'You';
+  final andOthers = 'and others';
 
   final connectionLost =
     'Connection has been lost.\n'

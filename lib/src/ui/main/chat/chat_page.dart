@@ -22,6 +22,7 @@ import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
 import 'package:pattle/src/ui/main/chat/widgets/date_header.dart';
 import 'package:pattle/src/ui/main/chat/widgets/message_bubble.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
+import 'package:pattle/src/ui/main/widgets/chat_name.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
@@ -101,9 +102,7 @@ class ChatPageState extends State<ChatPage> {
               width: 16,
             ),
             Flexible(
-              child: Text(room.name,
-                overflow: TextOverflow.ellipsis
-              ),
+              child: ChatName(room: room),
             )
           ],
         ),

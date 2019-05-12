@@ -15,26 +15,39 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:typed_data';
-
+import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
+import 'package:pattle/src/ui/main/overview/models/chat_overview.dart';
+import 'package:pattle/src/ui/util/room.dart';
 
-/// Chat overview used in the 'chats' page.
-class ChatOverview {
+class ChatName extends StatelessWidget {
 
   final Room room;
 
-  final String name;
+  ChatName({
+    @required this.room
+  });
 
-  final RoomEvent latestEvent;
-  final RoomEvent latestEventForSorting;
+  @override
+  Widget build(BuildContext context) {
+    print('room.name: ${room.name}');
+    if (room.name != null) {
+      return Text(room.name,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      );
+    }
 
-  final Uri avatarUrl;
-
-  ChatOverview({@required this.room,
-                @required this.name,
-                @required this.latestEvent,
-                @required this.latestEventForSorting,
-                this.avatarUrl});
+    return FutureBuilder<String>(
+      future: nameOf(context, room),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        final name = snapshot.data;
+        return Text(name ?? room.id.toString(),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        );
+      },
+    );
+  }
 }
