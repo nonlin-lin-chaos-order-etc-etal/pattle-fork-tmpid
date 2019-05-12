@@ -17,16 +17,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/overview/models/chat_overview.dart';
 import 'package:pattle/src/ui/main/overview/chat_overview_bloc.dart';
 import 'package:pattle/src/ui/main/widgets/chat_name.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
+import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
-import 'package:pattle/src/ui/util/room.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import 'widgets/subtitle.dart';
@@ -119,7 +118,12 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
       );
     } else {
       avatar = CircleAvatar(
+        foregroundColor: Colors.white,
+        backgroundColor: LightColors.red[500],
         radius: 24,
+        // TODO: Use correct icon based on whether the chat is
+        // direct, group or public
+        child: Icon(Icons.group)
       );
     }
 
