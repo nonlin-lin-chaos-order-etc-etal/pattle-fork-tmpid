@@ -27,6 +27,7 @@ import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 import 'package:pattle/src/ui/util/room.dart';
+import 'package:pattle/src/ui/util/user.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import 'widgets/subtitle.dart';
@@ -117,12 +118,15 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
         ),
       );
     } else {
+
       avatar = CircleAvatar(
         foregroundColor: Colors.white,
-        backgroundColor: LightColors.red[500],
+        backgroundColor: chat.room.isDirect
+                        ? colorOf(chat.room.directUser)
+                        : LightColors.red[500],
         radius: 24,
-        child: Icon(chat.room.isDirect
-          ? Icons.person : Icons.group
+        child: Icon(
+          chat.room.isDirect ? Icons.person : Icons.group
         )
       );
     }

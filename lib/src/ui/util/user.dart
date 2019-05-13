@@ -21,7 +21,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 
 
-String displayNameOf(User user) => user.name ?? user.name.split(':')[0];
+String displayNameOf(User user) => user.name ?? user.id.toString().split(':')[0];
 
 String displayNameOrId(UserId id, String name)
   => name ?? id.toString().split(':')[0];
