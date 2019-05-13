@@ -84,6 +84,7 @@ abstract class Bubble extends Item {
   }
 
   factory Bubble.asReply({
+    @required RoomEvent reply,
     @required RoomEvent replyTo,
     @required bool isMine
   }) {
@@ -92,13 +93,13 @@ abstract class Bubble extends Item {
       return TextBubble(
         item: item,
         isMine: isMine,
-        isRepliedTo: true,
+        reply: reply,
       );
     } else if (replyTo is ImageMessageEvent) {
       return ImageBubble(
         item: item,
         isMine: isMine,
-        isRepliedTo: true,
+        reply: reply
       );
     } else {
       return null;

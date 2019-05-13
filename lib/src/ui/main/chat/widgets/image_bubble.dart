@@ -43,7 +43,7 @@ class ImageBubble extends MessageBubble {
     ChatItem previousItem,
     ChatItem nextItem,
     @required bool isMine,
-    bool isRepliedTo = false,
+    RoomEvent reply,
   }) :
     event = item.event,
     super(
@@ -51,7 +51,7 @@ class ImageBubble extends MessageBubble {
       previousItem: previousItem,
       nextItem: nextItem,
       isMine: isMine,
-      isRepliedTo: isRepliedTo
+      reply: reply
     );
 
   void _onTap(BuildContext context) {

@@ -15,14 +15,13 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/user.dart';
+
 
 import 'bubble.dart';
 import 'item.dart';
@@ -36,6 +35,7 @@ abstract class MessageBubble extends Bubble {
   static const _betweenGroupMargin = 4.0;
   static const _oppositeMargin = 64.0;
 
+  final RoomEvent reply;
   final bool isRepliedTo;
 
   MessageBubble({
@@ -43,13 +43,15 @@ abstract class MessageBubble extends Bubble {
     ChatItem previousItem,
     ChatItem nextItem,
     @required bool isMine,
-    this.isRepliedTo = false
-  }) :super(
-    item: item,
-    previousItem: previousItem,
-    nextItem: nextItem,
-    isMine: isMine
-  );
+    this.reply
+  }) :
+    isRepliedTo = reply != null,
+    super(
+      item: item,
+      previousItem: previousItem,
+      nextItem: nextItem,
+      isMine: isMine
+    );
 
   @override
   Widget build(BuildContext context) {
@@ -240,11 +242,9 @@ abstract class MessageBubble extends Bubble {
   }
 
   @protected
-  ShapeBorder border() {
-    return RoundedRectangleBorder(
-      borderRadius: borderRadius(),
-    );
-  }
+  ShapeBorder border() => RoundedRectangleBorder(
+    borderRadius: borderRadius(),
+  );
 
   @protected
   Widget buildSentState(BuildContext context) =>

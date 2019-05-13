@@ -15,6 +15,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
@@ -40,7 +42,7 @@ class TextBubble extends MessageBubble {
     ChatItem previousItem,
     ChatItem nextItem,
     @required bool isMine,
-    bool isRepliedTo = false
+    RoomEvent reply,
   }) :
     event = item.event,
     super(
@@ -48,7 +50,7 @@ class TextBubble extends MessageBubble {
       previousItem: previousItem,
       nextItem: nextItem,
       isMine: isMine,
-      isRepliedTo: isRepliedTo
+      reply: reply
   );
 
   TextStyle _linkStyle(BuildContext context) {
@@ -81,6 +83,7 @@ class TextBubble extends MessageBubble {
               // is not a replied to message (to prevent very long
               // reply chains)
               child: Bubble.asReply(
+                reply: event,
                 replyTo: repliedTo,
                 isMine: repliedTo.sender.id == di.getLocalUser().id
               ),
@@ -131,16 +134,23 @@ class TextBubble extends MessageBubble {
     return InkWell(
       onTap: () { },
       customBorder: border(),
-      child: Padding(
-        padding: Bubble.padding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            _buildRepliedTo(context),
-            buildContent(context),
-            SizedBox(height: 4),
-            bottom
-          ],
+      child: CustomPaint(
+        painter: isRepliedTo && reply.sender == di.getLocalUser()
+          ? ReplyBorderPainter(
+            color: Colors.white
+          )
+          : null,
+        child: Padding(
+          padding: Bubble.padding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              _buildRepliedTo(context),
+              buildContent(context),
+              SizedBox(height: 4),
+              bottom
+            ],
+          ),
         ),
       )
     );
@@ -153,20 +163,55 @@ class TextBubble extends MessageBubble {
     InkWell(
       onTap: () { },
       customBorder: border(),
-      child: Padding(
-        padding: Bubble.padding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            buildSender(context),
-            _buildRepliedTo(context),
-            SizedBox(height: 4),
-            buildContent(context),
-            SizedBox(height: 4),
-            buildTime(context)
-          ],
+      child: CustomPaint(
+        painter: isRepliedTo && reply.sender != di.getLocalUser()
+          ? ReplyBorderPainter(
+            color: colorOf(event.sender),
+          )
+          : null,
+        child: Padding(
+          padding: Bubble.padding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              buildSender(context),
+              _buildRepliedTo(context),
+              SizedBox(height: 4),
+              buildContent(context),
+              SizedBox(height: 4),
+              buildTime(context)
+            ],
+          ),
         ),
       )
     );
+}
+
+class ReplyBorderPainter extends CustomPainter {
+
+  static const width = 4.0;
+
+  final Color color;
+
+  ReplyBorderPainter({@required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(
+        Rect.fromPoints(
+          Offset(0, 0),
+          Offset(width, size.height)
+        ),
+        topLeft: Bubble.radiusForBorder,
+        bottomLeft: Bubble.radiusForBorder
+      ),
+      Paint()..color = color
+    );
+  }
+
+  @override
+  bool shouldRepaint(ReplyBorderPainter oldDelegate)
+    => color != oldDelegate.color;
 
 }
