@@ -99,7 +99,7 @@ abstract class MessageBubble extends Bubble {
       color = colorOf(event.sender);
     }
 
-    if (isStartOfGroup || (isRepliedTo && !isMine)) {
+    if ((isStartOfGroup || (isRepliedTo && !isMine)) && !event.room.isDirect) {
       return Text(displayNameOf(event.sender),
         style: textStyle(context, color: color).copyWith(
           fontWeight: FontWeight.bold

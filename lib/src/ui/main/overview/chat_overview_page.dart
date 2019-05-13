@@ -67,7 +67,6 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
     return StreamBuilder<List<ChatOverview>>(
       stream: bloc.chats,
       builder: (BuildContext context, AsyncSnapshot<List<ChatOverview>> snapshot) {
-        print(snapshot.connectionState);
         switch(snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:

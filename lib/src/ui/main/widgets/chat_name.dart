@@ -18,7 +18,6 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
-import 'package:pattle/src/ui/main/overview/models/chat_overview.dart';
 import 'package:pattle/src/ui/util/room.dart';
 
 class ChatName extends StatelessWidget {
@@ -31,7 +30,6 @@ class ChatName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('room.name: ${room.name}');
     if (room.name != null) {
       return Text(room.name,
         overflow: TextOverflow.ellipsis,

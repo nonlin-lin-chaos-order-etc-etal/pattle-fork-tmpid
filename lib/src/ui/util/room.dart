@@ -30,15 +30,12 @@ Future<String> nameOf(BuildContext context, Room room) async {
     return room.name;
   }
 
-  final members = await room.members.upTo(6).toList();
-  var name = '';
-
-  print('members of ${room.id}');
-
-  for (User user in members) {
-    print('   ' + user.name);
+  if (room.isDirect) {
+    return displayNameOf(room.directUser);
   }
 
+  final members = await room.members.upTo(6).toList();
+  var name = '';
   if (members != null) {
     if (members.length == 1) {
       name = l(context).you;
