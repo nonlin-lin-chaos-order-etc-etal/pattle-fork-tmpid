@@ -121,9 +121,9 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
         foregroundColor: Colors.white,
         backgroundColor: LightColors.red[500],
         radius: 24,
-        // TODO: Use correct icon based on whether the chat is
-        // direct, group or public
-        child: Icon(Icons.group)
+        child: Icon(chat.room.isDirect
+          ? Icons.person : Icons.group
+        )
       );
     }
 
