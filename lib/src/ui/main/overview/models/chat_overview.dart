@@ -30,11 +30,8 @@ class ChatOverview {
   final RoomEvent latestEvent;
   final RoomEvent latestEventForSorting;
 
-  final Uri avatarUrl;
-
   ChatOverview({@required this.room,
                 @required this.name,
                 @required this.latestEvent,
-                @required this.latestEventForSorting,
-                this.avatarUrl});
+                @required this.latestEventForSorting});
 }

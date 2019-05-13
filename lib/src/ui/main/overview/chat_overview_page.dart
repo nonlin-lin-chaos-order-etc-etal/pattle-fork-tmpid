@@ -26,6 +26,7 @@ import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
+import 'package:pattle/src/ui/util/room.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import 'widgets/subtitle.dart';
@@ -98,9 +99,9 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
     var time = formatAsListItem(context, chat.latestEvent?.time);
 
     // Avatar
+    final avatarUrl = avatarUrlOf(chat.room);
     var avatar;
-
-    if (chat.avatarUrl != null) {
+    if (avatarUrl != null) {
       avatar = Hero(
         tag: chat.room.id,
         child: Container(
@@ -110,7 +111,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
             child: FadeInImage(
               fit: BoxFit.cover,
               placeholder: MemoryImage(kTransparentImage),
-              image: MatrixImage(chat.avatarUrl, width: 64, height: 64)
+              image: MatrixImage(avatarUrl, width: 64, height: 64)
             )
           ),
         ),

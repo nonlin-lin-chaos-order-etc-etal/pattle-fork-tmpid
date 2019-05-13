@@ -40,6 +40,10 @@ class MatrixImage extends ImageProvider<MatrixImage> {
       'height': key.height.toString()
     });
 
+    if (file == null) {
+      return null;
+    }
+
     final bytes = Uint8List.fromList(await file.readAsBytes());
 
     return PaintingBinding.instance.instantiateImageCodec(bytes);

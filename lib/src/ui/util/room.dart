@@ -24,6 +24,8 @@ import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/user.dart';
 import 'package:pattle/src/di.dart' as di;
 
+Uri avatarUrlOf(Room room)
+  => room.isDirect? room.directUser.avatarUrl : room.avatarUrl;
 
 Future<String> nameOf(BuildContext context, Room room) async {
   if (room.name != null) {

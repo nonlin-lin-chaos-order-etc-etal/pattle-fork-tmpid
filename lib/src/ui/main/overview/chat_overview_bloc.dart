@@ -54,8 +54,7 @@ class ChatOverviewBloc {
         room: room,
         name: room.name,
         latestEvent: latestEvent,
-        latestEventForSorting: latestEventForSorting,
-        avatarUrl: room.avatarUrl
+        latestEventForSorting: latestEventForSorting
       );
 
       chats.add(chat);

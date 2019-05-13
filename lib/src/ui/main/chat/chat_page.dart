@@ -29,6 +29,7 @@ import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 
 import 'package:pattle/src/di.dart' as di;
+import 'package:pattle/src/ui/util/room.dart';
 
 import 'widgets/bubble.dart';
 
@@ -69,12 +70,13 @@ class ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
 
     Widget avatar = Container();
-    if (room.avatarUrl != null) {
+    final avatarUrl = avatarUrlOf(room);
+    if (avatarUrl != null) {
       avatar = Hero(
         tag: room.id,
         child: CircleAvatar(
           backgroundColor: Colors.white,
-          backgroundImage: MatrixImage(room.avatarUrl,
+          backgroundImage: MatrixImage(avatarUrl,
             width: 64,
             height: 64
           ),
