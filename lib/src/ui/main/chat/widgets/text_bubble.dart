@@ -31,6 +31,7 @@ import 'message_bubble.dart';
 class TextBubble extends MessageBubble {
 
   static const _replyMargin = 8.0;
+  static const _replyLeftPadding = 12.0;
 
   @override
   final TextMessageEvent event;
@@ -116,6 +117,7 @@ class TextBubble extends MessageBubble {
 
   @protected
   Widget buildMine(BuildContext context) {
+    final needsBorder = isRepliedTo && reply.sender == me;
 
     Widget bottom = Container(height: 0, width: 0);
     if (isEndOfGroup) {
@@ -135,13 +137,15 @@ class TextBubble extends MessageBubble {
       onTap: () { },
       customBorder: border(),
       child: CustomPaint(
-        painter: isRepliedTo && reply.sender == di.getLocalUser()
+        painter: needsBorder
           ? ReplyBorderPainter(
             color: Colors.white
           )
           : null,
         child: Padding(
-          padding: Bubble.padding,
+          padding: Bubble.padding.copyWith(
+              left: needsBorder ? _replyLeftPadding : null
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
@@ -156,21 +160,22 @@ class TextBubble extends MessageBubble {
     );
   }
 
-
-
   @protected
-  Widget buildTheirs(BuildContext context) =>
-    InkWell(
-      onTap: () { },
+  Widget buildTheirs(BuildContext context) {
+    final needsBorder = isRepliedTo && reply.sender != me;
+    return InkWell(
+      onTap: () {},
       customBorder: border(),
       child: CustomPaint(
-        painter: isRepliedTo && reply.sender != di.getLocalUser()
-          ? ReplyBorderPainter(
-            color: colorOf(event.sender),
-          )
-          : null,
+        painter: needsBorder
+            ? ReplyBorderPainter(
+          color: colorOf(event.sender),
+        )
+            : null,
         child: Padding(
-          padding: Bubble.padding,
+          padding: Bubble.padding.copyWith(
+              left: needsBorder ? _replyLeftPadding : null
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -185,6 +190,7 @@ class TextBubble extends MessageBubble {
         ),
       )
     );
+  }
 }
 
 class ReplyBorderPainter extends CustomPainter {
