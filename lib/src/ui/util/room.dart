@@ -16,7 +16,6 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
@@ -25,7 +24,7 @@ import 'package:pattle/src/ui/util/user.dart';
 import 'package:pattle/src/di.dart' as di;
 
 Uri avatarUrlOf(Room room)
-  => room.isDirect? room.directUser.avatarUrl : room.avatarUrl;
+  => room.avatarUrl ?? (room.isDirect ? room.directUser.avatarUrl : room.avatarUrl);
 
 Future<String> nameOf(BuildContext context, Room room) async {
   if (room.name != null) {
