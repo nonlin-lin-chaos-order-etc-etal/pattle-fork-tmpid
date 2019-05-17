@@ -22,8 +22,6 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:pattle/src/ui/main/widgets/redacted.dart';
-import 'package:pattle/src/ui/resources/localizations.dart';
-import 'package:pattle/src/ui/util/user.dart';
 
 import 'bubble.dart';
 import 'message_bubble.dart';
@@ -54,7 +52,8 @@ class RedactedBubble extends MessageBubble {
   Widget buildContent(BuildContext context) =>
     Redacted(
       event: event,
-      color: isMine ? Colors.grey[300] : Colors.grey[700]
+      color: isMine ? Colors.grey[300] : Colors.grey[700],
+      textStyle: textStyle(context),
     );
 
   @override

@@ -27,9 +27,14 @@ class Redacted extends StatelessWidget {
 
   final Color color;
   final double iconSize;
+  final TextStyle textStyle;
 
-  const Redacted(
-    {@required this.event, this.color = Colors.grey, this.iconSize}) : super();
+  const Redacted({
+    @required this.event,
+    this.color = Colors.grey,
+    this.iconSize,
+    this.textStyle = const TextStyle()
+  }) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +56,7 @@ class Redacted extends StatelessWidget {
         ),
         RichText(
           text: TextSpan(
-            style: TextStyle(
+            style: textStyle.copyWith(
               fontStyle: FontStyle.italic,
               color: color
             ),
