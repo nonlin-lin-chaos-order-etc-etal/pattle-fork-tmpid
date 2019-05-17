@@ -21,6 +21,7 @@ import 'package:pattle/src/ui/main/models/chat_item.dart';
 
 import 'image_bubble.dart';
 import 'item.dart';
+import 'redacted_bubble.dart';
 import 'state/member_bubble.dart';
 import 'text_bubble.dart';
 
@@ -73,10 +74,17 @@ abstract class Bubble extends Item {
       );
     } else if (item.event is MemberChangeEvent) {
       return MemberBubble(
+          item: item,
+          previousItem: previousItem,
+          nextItem: nextItem,
+          isMine: isMine
+      );
+    } else if (item.event is RedactedEvent) {
+      return RedactedBubble(
         item: item,
         previousItem: previousItem,
         nextItem: nextItem,
-        isMine: isMine
+        isMine: isMine,
       );
     } else {
       return null;

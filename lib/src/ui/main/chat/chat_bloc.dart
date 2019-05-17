@@ -72,6 +72,10 @@ class ChatBloc {
     RoomEvent previousEvent;
     await for(RoomEvent event in room.events.upTo(_eventCount)) {
 
+      if (event is RedactionEvent) {
+        continue;
+      }
+
       // Insert DateHeader if there's a day difference
       if (previousEvent != null && event != null
         && previousEvent.time.day != event.time.day) {

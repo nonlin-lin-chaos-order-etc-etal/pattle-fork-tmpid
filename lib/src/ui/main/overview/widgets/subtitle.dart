@@ -22,6 +22,7 @@ import 'package:pattle/src/ui/util/user.dart';
 
 import 'image_subtitle.dart';
 import 'member_subtitle.dart';
+import 'redacted_subtitle.dart';
 import 'text_subtitle.dart';
 import 'unsupported_subtitle.dart';
 abstract class Subtitle extends StatelessWidget {
@@ -46,6 +47,8 @@ abstract class Subtitle extends StatelessWidget {
       return ImageSubtitle(event);
     } else if (event is MemberChangeEvent) {
       return MemberSubtitle(event);
+    } else if (event is RedactedEvent) {
+      return RedactedSubtitle(event);
     }
 
     return UnsupportedSubtitle(event);

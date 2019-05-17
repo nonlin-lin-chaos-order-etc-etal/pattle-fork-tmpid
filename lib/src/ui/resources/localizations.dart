@@ -49,6 +49,10 @@ class Strings {
     'Connection failed. '
     'Check your internet connection';
 
+  final youDeletedThisMessage = 'You deleted this message';
+  List<TextSpan> hasDeletedThisMessage(TextSpan name)
+    => [name, TextSpan(text: ' deleted this message')];
+
   // StartPage //
   final loginWithPhone = 'Login with phone number';
   final loginWithEmail = 'Login with email';

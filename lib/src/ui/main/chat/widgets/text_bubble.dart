@@ -99,6 +99,7 @@ class TextBubble extends MessageBubble {
     }
   }
 
+  @protected
   Widget buildContent(BuildContext context) {
     return Html(
       data: event.content.formattedBody ?? '',
@@ -114,24 +115,9 @@ class TextBubble extends MessageBubble {
     );
   }
 
-
   @protected
   Widget buildMine(BuildContext context) {
     final needsBorder = isRepliedTo && reply.sender == me;
-
-    Widget bottom = Container(height: 0, width: 0);
-    if (isEndOfGroup) {
-      bottom = Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: <Widget>[
-          buildSentState(context),
-          SizedBox(width: 4),
-          buildTime(context),
-        ],
-      );
-    }
 
     return InkWell(
       onTap: () { },
@@ -152,7 +138,7 @@ class TextBubble extends MessageBubble {
               _buildRepliedTo(context),
               buildContent(context),
               SizedBox(height: 4),
-              bottom
+              buildBottomIfEnd(context)
             ],
           ),
         ),
@@ -171,7 +157,7 @@ class TextBubble extends MessageBubble {
             ? ReplyBorderPainter(
           color: colorOf(event.sender),
         )
-            : null,
+        : null,
         child: Padding(
           padding: Bubble.padding.copyWith(
               left: needsBorder ? _replyLeftPadding : null

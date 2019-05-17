@@ -123,7 +123,7 @@ abstract class MessageBubble extends Bubble {
     if (_isStartOfGroup == null) {
       if (previousItem is! ChatEvent
       || (previousItem is ChatEvent
-        && (previousItem as ChatEvent).event is! MessageEvent)) {
+        && (previousItem as ChatEvent).event is StateEvent)) {
         _isStartOfGroup = true;
         return _isStartOfGroup;
       }
@@ -165,7 +165,7 @@ abstract class MessageBubble extends Bubble {
     if (_isEndOfGroup == null) {
       if (nextItem is! ChatEvent
       || (nextItem is ChatEvent
-        && (nextItem as ChatEvent).event is! MessageEvent)) {
+        && (nextItem as ChatEvent).event is StateEvent)) {
         _isEndOfGroup = true;
         return _isEndOfGroup;
       }
@@ -254,6 +254,25 @@ abstract class MessageBubble extends Bubble {
       color: Colors.white,
       size: 14
     );
+
+  @protected
+  Widget buildBottomIfEnd(BuildContext context) {
+    Widget bottom = Container(height: 0, width: 0);
+    if (isEndOfGroup) {
+      bottom = Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          buildSentState(context),
+          SizedBox(width: 4),
+          buildTime(context),
+        ],
+      );
+    }
+
+    return bottom;
+  }
 
   Widget _buildMine(BuildContext context) =>
     Column(

@@ -36,12 +36,14 @@ class ChatOverviewBloc {
 
     // Get all rooms and push them as a single list
     await for(Room room in _user.rooms.all()) {
-      final latestEvent = await room.events.upTo(1)
-          .lastWhere((event) => true, orElse: () => null);
+      final latestEvent = await room.events.all()
+          .firstWhere((event) => event is! RedactionEvent, orElse: () => null);
 
       var latestEventForSorting = await room.events.upTo(10)
-          .firstWhere((event) => event is! MemberChangeEvent,
-          orElse: () => null);
+          .firstWhere(
+            (event) => event is! MemberChangeEvent && event is! RedactionEvent,
+            orElse: () => null
+          );
 
       // If there is no non-MemberChangeEvent in the last
       // 10 messages, just settle for the most recent one (which ever
