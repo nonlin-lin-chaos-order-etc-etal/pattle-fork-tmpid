@@ -65,6 +65,8 @@ abstract class MessageBubble extends Bubble {
   @protected
   TextStyle textStyle(BuildContext context, {Color color}) {
     var style = Theme.of(context).textTheme.body1;
+    // size 15 14+1
+    style = style.copyWith(fontSize: style.fontSize + 1);
 
     if (color != null) {
       style = style.copyWith(
@@ -82,9 +84,11 @@ abstract class MessageBubble extends Bubble {
   @protected
   Widget buildTime(BuildContext context, {Color color}) {
     if (isEndOfGroup) {
+      final style = textStyle(context, color: color);
       return Text(formatAsTime(event.time),
-        style: textStyle(context, color: color).copyWith(
-          fontSize: 11,
+        style: style.copyWith(
+          // size 12 14+1-3
+          fontSize: style.fontSize - 3,
         )
       );
     } else {

@@ -47,6 +47,9 @@ abstract class StateBubble extends Bubble {
 
   @override
   Widget build(BuildContext context) {
+    // size 12 14-2
+    var timeTextStyle = Theme.of(context).textTheme.body1;
+    timeTextStyle = timeTextStyle.copyWith(fontSize: timeTextStyle.fontSize - 2);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -75,9 +78,7 @@ abstract class StateBubble extends Bubble {
                         buildContent(context),
                         SizedBox(height: 4),
                         Text(formatAsTime(event.time),
-                          style: Theme.of(context).textTheme.body1.copyWith(
-                            fontSize: 11
-                          ),
+                          style: timeTextStyle,
                         )
                       ],
                     )
