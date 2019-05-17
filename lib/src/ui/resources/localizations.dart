@@ -72,22 +72,22 @@ class Strings {
 
   // Member change events
   List<TextSpan> hasJoined(TextSpan name)
-    => [name, TextSpan(text: ' has joined')];
+    => [name, TextSpan(text: ' joined')];
 
   List<TextSpan> hasLeft(TextSpan name)
-    => [name, TextSpan(text: ' has left')];
+    => [name, TextSpan(text: ' left')];
 
   List<TextSpan> hasBeenBanned(TextSpan banee, TextSpan banner)
     => [
       banee,
-      TextSpan(text: ' has been banned by '),
+      TextSpan(text: ' was banned by '),
       banner
     ];
 
   List<TextSpan> hasBeenInvited(TextSpan invitee, TextSpan inviter)
     => [
       invitee,
-      TextSpan(text: ' has been invited by '),
+      TextSpan(text: ' was invited by '),
       inviter
     ];
 }
