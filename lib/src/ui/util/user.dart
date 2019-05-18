@@ -20,11 +20,19 @@ import 'dart:ui';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 
+const _limit = 28;
+String _limited(String name) {
+  if (name != null && name.length >= _limit) {
+    return name.substring(0, _limit) + ' ...';
+  } else {
+    return name;
+  }
+}
 
-String displayNameOf(User user) => user.name ?? user.id.toString().split(':')[0];
+String displayNameOf(User user) => _limited(user.name) ?? user.id.toString().split(':')[0];
 
 String displayNameOrId(UserId id, String name)
-  => name ?? id.toString().split(':')[0];
+  => _limited(name) ?? id.toString().split(':')[0];
 
 Color colorOf(User user) => LightColors.userColors[
     user.id.hashCode % LightColors.userColors.length
