@@ -28,12 +28,18 @@ class ChatName extends StatelessWidget {
     @required this.room
   });
 
+  TextStyle _textStyle() =>
+    TextStyle(
+      fontWeight: FontWeight.w600,
+    );
+
   @override
   Widget build(BuildContext context) {
     if (room.name != null) {
       return Text(room.name,
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
+        style: _textStyle()
       );
     }
 
@@ -44,6 +50,7 @@ class ChatName extends StatelessWidget {
         return Text(name ?? room.id.toString(),
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
+          style: _textStyle(),
         );
       },
     );
