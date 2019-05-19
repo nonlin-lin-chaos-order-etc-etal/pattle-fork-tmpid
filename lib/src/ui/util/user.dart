@@ -29,7 +29,8 @@ String _limited(String name) {
   }
 }
 
-String displayNameOf(User user) => _limited(user.name) ?? user.id.toString().split(':')[0];
+String displayNameOf(User user)
+  => _limited(user.name) ?? user.id.toString().split(':')[0];
 
 String displayNameOrId(UserId id, String name)
   => _limited(name) ?? id.toString().split(':')[0];
