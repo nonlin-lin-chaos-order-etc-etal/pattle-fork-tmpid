@@ -18,6 +18,7 @@
 import 'dart:ui';
 
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:meta/meta.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 
 const _limit = 28;

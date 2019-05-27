@@ -36,7 +36,7 @@ class TextBubble extends MessageBubble {
   @override
   final TextMessageEvent event;
 
-  final LocalUser me = di.getLocalUser();
+  final User me = di.getLocalUser();
 
   TextBubble({
     @required ChatEvent item,
@@ -80,13 +80,13 @@ class TextBubble extends MessageBubble {
                 top: !isMine ? 4 : 0,
                 bottom: _replyMargin,
               ),
-              // Only build the replied to message if this itself
-              // is not a replied to message (to prevent very long
+              // Only build the replied-to message if this itself
+              // is not a replied-to message (to prevent very long
               // reply chains)
               child: Bubble.asReply(
                 reply: event,
                 replyTo: repliedTo,
-                isMine: repliedTo.sender.id == di.getLocalUser().id
+                isMine: repliedTo.sender.isIdenticalTo(me)
               ),
             ) : Container();
           } else {
@@ -117,7 +117,7 @@ class TextBubble extends MessageBubble {
 
   @protected
   Widget buildMine(BuildContext context) {
-    final needsBorder = isRepliedTo && reply.sender == me;
+    final needsBorder = isRepliedTo && reply.sender.isIdenticalTo(me);
 
     return InkWell(
       onTap: () { },
@@ -148,7 +148,7 @@ class TextBubble extends MessageBubble {
 
   @protected
   Widget buildTheirs(BuildContext context) {
-    final needsBorder = isRepliedTo && reply.sender != me;
+    final needsBorder = isRepliedTo && !reply.sender.isIdenticalTo(me);
     return InkWell(
       onTap: () {},
       customBorder: border(),

@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
 import 'package:pattle/src/ui/main/chat/widgets/date_header.dart';
-import 'package:pattle/src/ui/main/chat/widgets/message_bubble.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/main/widgets/chat_name.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
@@ -209,7 +208,7 @@ class ChatPageState extends State<ChatPage> {
                 final item = chatEvents[index];
                 if (item is ChatEvent) {
                   final event = item.event;
-                  final isMine = event.sender == me;
+                  final isMine = event.sender.isIdenticalTo(me);
 
                   var previousItem, nextItem;
                   // Note: Because the items are reversed in the

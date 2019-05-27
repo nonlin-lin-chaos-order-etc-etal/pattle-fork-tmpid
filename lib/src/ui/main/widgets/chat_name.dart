@@ -35,24 +35,28 @@ class ChatName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (room.name != null) {
-      return Text(room.name,
+    final name = nameOf(context, room);
+
+    Widget buildText(String name) =>
+      Text(name,
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
         style: _textStyle()
       );
-    }
 
-    return FutureBuilder<String>(
-      future: nameOf(context, room),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        final name = snapshot.data;
-        return Text(name ?? room.id.toString(),
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: _textStyle(),
-        );
-      },
-    );
+    if (name is! Future) {
+      return buildText(name);
+    } else {
+      return FutureBuilder<String>(
+        future: name,
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          final name = snapshot.connectionState == ConnectionState.active
+                       || snapshot.connectionState == ConnectionState.done
+                       ? snapshot.data : room.id.toString();
+
+          return buildText(name);
+        },
+      );
+    }
   }
 }

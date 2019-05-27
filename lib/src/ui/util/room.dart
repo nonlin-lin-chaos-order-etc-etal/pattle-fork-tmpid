@@ -26,7 +26,7 @@ import 'package:pattle/src/di.dart' as di;
 Uri avatarUrlOf(Room room)
   => room.avatarUrl ?? (room.isDirect ? room.directUser.avatarUrl : room.avatarUrl);
 
-Future<String> nameOf(BuildContext context, Room room) async {
+FutureOr<String> nameOf(BuildContext context, Room room) {
   if (room.name != null) {
     return room.name;
   }
@@ -35,33 +35,38 @@ Future<String> nameOf(BuildContext context, Room room) async {
     return displayNameOf(room.directUser);
   }
 
-  final members = await room.members.upTo(6).toList();
-  var name = '';
-  if (members != null) {
-    if (members.length == 1) {
-      name = l(context).you;
-      // TODO: Check for aliases (public chats)
-    } else {
-      var i = 0;
-      for (User member in members) {
-        if (i > 4) {
-          name += ' ${l(context).andOthers}';
-          break;
-        }
+  // TODO: Make upTo FutureOr
+  return room.members.upTo(6).toList().then((members) {
+    var name = '';
+    if (members != null) {
+      if (members.length == 1) {
+        return l(context).you;
+        // TODO: Check for aliases (public chats)
+      } else {
+        final nonMeMembers = members = members
+          .where((user) => !user.isIdenticalTo(di.getLocalUser()))
+          .toList(growable: false);
 
-        if (i != 0) {
-          name += ', ';
-        }
+        var i = 0;
+        for (User member in nonMeMembers) {
+          if (i > 4) {
+            name += ' ${l(context).andOthers}';
+            break;
+          }
 
-        if (member != di.getLocalUser()) {
           name += displayNameOf(member);
+
+          if (i != nonMeMembers.length - 1) {
+            name += ', ';
+          }
+
           i++;
         }
       }
+    } else {
+      return room.id.toString();
     }
-  } else {
-    return room.id.toString();
-  }
 
-  return name;
+    return name.isNotEmpty ? name : room.id.toString();
+  });
 }
