@@ -70,7 +70,7 @@ class ChatBloc {
 
     // Remember: 'previous' is actually next in time
     RoomEvent previousEvent;
-    await for(RoomEvent event in room.events.upTo(_eventCount)) {
+    await for(RoomEvent event in room.timeline.upTo(_eventCount)) {
 
       if (event is RedactionEvent) {
         continue;

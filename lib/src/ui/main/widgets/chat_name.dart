@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
+import 'package:pattle/src/ui/util/future_or_builder.dart';
 import 'package:pattle/src/ui/util/room.dart';
 
 class ChatName extends StatelessWidget {
@@ -35,28 +36,15 @@ class ChatName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final name = nameOf(context, room);
-
-    Widget buildText(String name) =>
-      Text(name,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-        style: _textStyle()
-      );
-
-    if (name is! Future) {
-      return buildText(name);
-    } else {
-      return FutureBuilder<String>(
-        future: name,
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          final name = snapshot.connectionState == ConnectionState.active
-                       || snapshot.connectionState == ConnectionState.done
-                       ? snapshot.data : room.id.toString();
-
-          return buildText(name);
-        },
-      );
-    }
+    return FutureOrBuilder<String>(
+      futureOr: nameOf(context, room),
+      builder: (BuildContext context, String name) {
+        return Text(name,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: _textStyle()
+        );
+      },
+    );
   }
 }

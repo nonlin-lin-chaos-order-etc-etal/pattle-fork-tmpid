@@ -20,6 +20,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
+import 'package:pattle/src/ui/util/future_or_builder.dart';
 import 'package:pattle/src/ui/util/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pattle/src/di.dart' as di;
@@ -68,12 +69,11 @@ class TextBubble extends MessageBubble {
   }
 
   Widget _buildRepliedTo(BuildContext context) {
-    final repliedId = event.content.inReplyToId;
-    if (repliedId != null) {
-      return FutureBuilder<Event>(
-        future: event.room.events[repliedId],
-        builder: (BuildContext context, AsyncSnapshot<Event> snapshot) {
-          final repliedTo = snapshot.data;
+    if (event.content.inReplyToId != null) {
+      final repliedTo = event.room.timeline[event.content.inReplyToId];
+      return FutureOrBuilder<RoomEvent>(
+        futureOr: repliedTo,
+        builder: (BuildContext context, RoomEvent repliedTo) {
           if (repliedTo != null && repliedTo is TextMessageEvent) {
             return !isRepliedTo ? Padding(
               padding: EdgeInsets.only(
