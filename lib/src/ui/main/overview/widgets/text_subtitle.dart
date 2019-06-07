@@ -28,18 +28,50 @@ class TextSubtitle extends Subtitle {
   TextSubtitle(this.event) : super(event);
 
   @override
-  Widget build(BuildContext context) =>
-    RichText(
-      overflow: TextOverflow.ellipsis,
-      maxLines: 1,
-      text: TextSpan(
-        style: textStyle(context),
-        children: [
-          senderSpan(context),
-          TextSpan(
-            text: event.content.body ?? 'null'
+  Widget build(BuildContext context) {
+    if (event.content.inReplyToId == null) {
+      return RichText(
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        text: TextSpan(
+          style: textStyle(context),
+          children: [
+            senderSpan(context),
+            TextSpan(
+              text: event.content.body ?? 'null'
+            )
+          ]
+        )
+      );
+    } else {
+      // Strip replied-to content
+      final text = event.content.formattedBody
+        .split(RegExp('(<\\/*mx-reply>)'))[2];
+
+      return Row(
+        children: <Widget>[
+          RichText(
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            text: senderSpan(context)
+          ),
+          Icon(
+            Icons.reply,
+            color: Theme.of(context).textTheme.caption.color,
+            size: Subtitle.iconSize
+          ),
+          Expanded(
+            child: RichText(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              text: TextSpan(
+                style: textStyle(context),
+                text: ' ' + text ?? 'null'
+              )
+            ),
           )
-        ]
-      )
-    );
+        ],
+      );
+    }
+  }
 }

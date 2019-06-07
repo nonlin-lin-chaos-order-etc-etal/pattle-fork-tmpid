@@ -37,7 +37,7 @@ class ImageSubtitle extends Subtitle {
         ),
         Icon(Icons.photo_camera,
           color: Theme.of(context).textTheme.caption.color,
-          size: 20,
+          size: Subtitle.iconSize,
         ),
         Text(' ' + l(context).photo,
           style: textStyle(context)

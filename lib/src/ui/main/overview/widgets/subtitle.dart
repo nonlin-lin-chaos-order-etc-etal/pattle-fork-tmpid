@@ -27,6 +27,8 @@ import 'text_subtitle.dart';
 import 'unsupported_subtitle.dart';
 abstract class Subtitle extends StatelessWidget {
 
+  static const iconSize = 20.0;
+
   final RoomEvent event;
   @protected
   final String senderName;
