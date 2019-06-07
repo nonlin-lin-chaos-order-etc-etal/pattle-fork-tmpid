@@ -53,6 +53,7 @@ class MemberBubble extends StateBubble {
     // since it is less important than a message
     // size 14
     return RichText(
+      textAlign: TextAlign.center,
       text: TextSpan(
         style: Theme.of(context).textTheme.body1,
         children: spanFor(context, event,

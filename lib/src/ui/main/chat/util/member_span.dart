@@ -34,7 +34,19 @@ List<TextSpan> spanFor(BuildContext context, MemberChangeEvent event,
   );
   var text;
 
-  if (event is JoinEvent) {
+  if (event is DisplayNameChangeEvent) {
+    final oldName = TextSpan(
+      text: displayNameOrId(event.content.subjectId, event.oldName),
+      style: style
+    );
+
+    final newName = TextSpan(
+      text: displayNameOrId(event.content.subjectId, event.newName),
+      style: style
+    );
+
+    text = l(context).changedTheirNameTo(oldName, newName);
+  } else if (event is JoinEvent) {
     text = l(context).hasJoined(subject);
   } else if (event is LeaveEvent) {
     text = l(context).hasLeft(subject);

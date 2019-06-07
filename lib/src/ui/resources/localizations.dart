@@ -71,6 +71,9 @@ class Strings {
   final wrongPasswordError = 'Wrong password. Please try again';
 
   // Member change events
+  List<TextSpan> changedTheirNameTo(TextSpan oldName, TextSpan newName)
+    => [oldName, TextSpan(text: ' changed their name to '), newName];
+
   List<TextSpan> hasJoined(TextSpan name)
     => [name, TextSpan(text: ' joined')];
 

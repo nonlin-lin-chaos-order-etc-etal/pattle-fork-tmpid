@@ -26,6 +26,11 @@ class ChatBloc {
 
   int _eventCount = 20;
 
+  static const ignoredEvents = [
+    RedactionEvent,
+    AvatarUrlChangeEvent
+  ];
+
   PublishSubject<bool> _isLoadingEventsSubj = PublishSubject<bool>();
   Stream<bool> get isLoadingEvents => _isLoadingEventsSubj.stream.distinct();
 
@@ -66,13 +71,11 @@ class ChatBloc {
   Future<void> loadEvents() async {
     final chatItems = List<ChatItem>();
 
-    // Get all rooms and push them as a single list
-
     // Remember: 'previous' is actually next in time
     RoomEvent previousEvent;
     await for(RoomEvent event in room.timeline.upTo(_eventCount)) {
 
-      if (event is RedactionEvent) {
+      if (ignoredEvents.contains(event.runtimeType)) {
         continue;
       }
 
