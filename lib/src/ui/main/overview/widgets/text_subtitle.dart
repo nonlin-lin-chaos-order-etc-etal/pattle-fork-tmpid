@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/ui/util/user.dart';
 
 import 'subtitle.dart';
 
@@ -29,6 +30,10 @@ class TextSubtitle extends Subtitle {
 
   @override
   Widget build(BuildContext context) {
+    final sender = senderSpan(context,
+      sender: event is EmoteMessageEvent
+              ? displayNameOf(event.sender) + ' ' : null
+    );
     if (event.content.inReplyToId == null) {
       return RichText(
         overflow: TextOverflow.ellipsis,
@@ -36,7 +41,7 @@ class TextSubtitle extends Subtitle {
         text: TextSpan(
           style: textStyle(context),
           children: [
-            senderSpan(context),
+            sender,
             TextSpan(
               text: event.content.body ?? 'null'
             )
@@ -53,7 +58,7 @@ class TextSubtitle extends Subtitle {
           RichText(
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
-            text: senderSpan(context)
+            text: sender
           ),
           Icon(
             Icons.reply,

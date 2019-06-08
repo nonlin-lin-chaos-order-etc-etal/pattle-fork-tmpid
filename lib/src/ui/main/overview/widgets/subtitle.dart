@@ -62,9 +62,9 @@ abstract class Subtitle extends StatelessWidget {
       color: Theme.of(context).textTheme.caption.color
     );
 
-  TextSpan senderSpan(BuildContext context) =>
+  TextSpan senderSpan(BuildContext context, {String sender}) =>
     TextSpan(
-      text: senderName,
+      text: sender ?? senderName,
       style: Theme.of(context).textTheme.body1.copyWith(
         fontWeight: FontWeight.bold,
         color: Theme.of(context).textTheme.caption.color
