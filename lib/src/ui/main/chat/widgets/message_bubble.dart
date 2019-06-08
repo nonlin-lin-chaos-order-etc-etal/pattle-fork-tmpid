@@ -82,6 +82,16 @@ abstract class MessageBubble extends Bubble {
     return style;
   }
 
+  TextStyle senderTextStyle(BuildContext context, {Color color}) {
+    if (color == null) {
+      color = colorOf(event.sender);
+    }
+
+    return textStyle(context, color: color).copyWith(
+      fontWeight: FontWeight.bold
+    );
+  }
+
   @protected
   Widget buildTime(BuildContext context, {Color color}) {
     if (isEndOfGroup) {
@@ -102,15 +112,9 @@ abstract class MessageBubble extends Bubble {
 
   @protected
   Widget buildSender(BuildContext context, {Color color}) {
-    if (color == null) {
-      color = colorOf(event.sender);
-    }
-
     if ((isStartOfGroup || (isRepliedTo && !isMine)) && !event.room.isDirect) {
       return Text(displayNameOf(event.sender),
-        style: textStyle(context, color: color).copyWith(
-          fontWeight: FontWeight.bold
-        ),
+        style: senderTextStyle(context, color: color)
       );
     } else {
       return Container(height: 0, width: 0);

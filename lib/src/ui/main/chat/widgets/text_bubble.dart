@@ -101,7 +101,7 @@ class TextBubble extends MessageBubble {
 
   @protected
   Widget buildContent(BuildContext context) {
-    return Html(
+    final html = Html(
       data: event.content.formattedBody ?? '',
       useRichText: true,
       defaultTextStyle: textStyle(context),
@@ -113,6 +113,23 @@ class TextBubble extends MessageBubble {
         }
       },
     );
+
+    if (event is! EmoteMessageEvent) {
+      return html;
+    } else {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text(displayNameOf(event.sender) + ' ',
+            style: senderTextStyle(context,
+              color: isMine ? Colors.white : null
+            ),
+          ),
+          html
+        ],
+      );
+    }
   }
 
   @protected
@@ -149,25 +166,30 @@ class TextBubble extends MessageBubble {
   @protected
   Widget buildTheirs(BuildContext context) {
     final needsBorder = isRepliedTo && !reply.sender.isIdenticalTo(me);
+
+    // Don't show sender above emotes
+    final sender = event is! EmoteMessageEvent
+                 ? buildSender(context) : Container(width: 0);
+
     return InkWell(
       onTap: () {},
       customBorder: border(),
       child: CustomPaint(
         painter: needsBorder
-            ? ReplyBorderPainter(
-          color: colorOf(event.sender),
-        )
-        : null,
+          ? ReplyBorderPainter(
+            color: colorOf(event.sender),
+          )
+          : null,
         child: Padding(
           padding: Bubble.padding.copyWith(
-              left: needsBorder ? _replyLeftPadding : null
+            left: needsBorder ? _replyLeftPadding : null
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              buildSender(context),
+              sender,
               _buildRepliedTo(context),
-              SizedBox(height: 4),
+              SizedBox(height: sender is! Container ? 4 : 0),
               buildContent(context),
               SizedBox(height: 4),
               buildTime(context)
