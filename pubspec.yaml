@@ -12,8 +12,8 @@ dependencies:
 
   injector: ^1.0.6
 
-  matrix_sdk: ^0.7.2
-  matrix_sdk_sqflite: ^0.4.0
+  matrix_sdk: ^0.8.0
+  matrix_sdk_sqflite: ^0.5.0
 
   rxdart: ^0.21.0
 

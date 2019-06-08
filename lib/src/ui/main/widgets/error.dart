@@ -18,6 +18,8 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
 
 import '../sync_bloc.dart';
 
@@ -59,7 +61,9 @@ class ErrorBannerState extends State<ErrorBanner>
         final state = snapshot.data;
         if (state != null
          && !state.succeeded
-         && state.failReason == SyncFailReason.connection) {
+         && (state.exception is http.ClientException
+              || state.exception is SocketException)
+        ) {
           _controller.forward();
         } else if (state != null
                 && state.succeeded) {
