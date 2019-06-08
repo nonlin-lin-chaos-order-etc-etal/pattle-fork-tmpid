@@ -120,13 +120,16 @@ class TextBubble extends MessageBubble {
       return Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(displayNameOf(event.sender) + ' ',
             style: senderTextStyle(context,
               color: isMine ? Colors.white : null
             ),
           ),
-          html
+          Flexible(
+            child: html,
+          )
         ],
       );
     }
