@@ -116,16 +116,4 @@ abstract class Bubble extends Item {
 
   @override
   Widget build(BuildContext context);
-
-  @protected
-  double marginBottom() => Item.betweenMargin;
-
-  @protected
-  double marginTop() {
-    if (previousItem == null) {
-      return Item.betweenMargin;
-    } else {
-      return 0;
-    }
-  }
 }

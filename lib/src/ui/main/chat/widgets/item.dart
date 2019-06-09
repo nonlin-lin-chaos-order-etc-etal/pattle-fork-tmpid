@@ -51,11 +51,5 @@ abstract class Item extends StatelessWidget {
   double marginBottom() => betweenMargin;
 
   @protected
-  double marginTop() {
-    if (previousItem == null) {
-      return betweenMargin;
-    } else {
-      return 0;
-    }
-  }
+  double marginTop() => previousItem == null ? betweenMargin : 0;
 }

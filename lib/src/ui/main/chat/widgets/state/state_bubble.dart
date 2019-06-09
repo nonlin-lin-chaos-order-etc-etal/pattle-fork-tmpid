@@ -59,7 +59,8 @@ abstract class StateBubble extends Bubble {
               padding: EdgeInsets.only(
                 left: Item.sideMargin,
                 right: Item.sideMargin,
-                bottom: Item.betweenMargin
+                bottom: marginBottom(),
+                top: marginTop()
               ),
               child: Material(
                 elevation: 1,

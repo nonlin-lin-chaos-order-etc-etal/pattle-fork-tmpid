@@ -87,6 +87,5 @@ abstract class Subtitle extends StatelessWidget {
     } else {
       return Container(height: 0, width: 0);
     }
-
   }
 }
