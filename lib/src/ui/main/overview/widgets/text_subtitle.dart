@@ -35,18 +35,25 @@ class TextSubtitle extends Subtitle {
               ? displayNameOf(event.sender) + ' ' : null
     );
     if (event.content.inReplyToId == null) {
-      return RichText(
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-        text: TextSpan(
-          style: textStyle(context),
-          children: [
-            sender,
-            TextSpan(
-              text: event.content.body ?? 'null'
-            )
-          ]
-        )
+      return Row(
+        children: <Widget>[
+          buildSentStateIcon(context),
+          Expanded(
+            child: RichText(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              text: TextSpan(
+                style: textStyle(context),
+                children: [
+                  sender,
+                  TextSpan(
+                      text: event.content.body ?? 'null'
+                  )
+                ]
+              )
+            ),
+          )
+        ],
       );
     } else {
       // Strip replied-to content
@@ -55,6 +62,7 @@ class TextSubtitle extends Subtitle {
 
       return Row(
         children: <Widget>[
+          buildSentStateIcon(context),
           RichText(
             overflow: TextOverflow.ellipsis,
             maxLines: 1,

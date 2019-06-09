@@ -33,9 +33,14 @@ abstract class Subtitle extends StatelessWidget {
   @protected
   final String senderName;
 
+  final bool isMine;
+
   Subtitle(this.event)
-    : senderName =
-      event != null && !event.sender.isIdenticalTo(di.getLocalUser())
+    : isMine = event.sender.isIdenticalTo(di.getLocalUser()),
+      senderName =
+      event != null
+        && !event.sender.isIdenticalTo(di.getLocalUser())
+        && !event.room.isDirect
       ? '${displayNameOf(event.sender)}: '
       : '';
 
@@ -70,4 +75,18 @@ abstract class Subtitle extends StatelessWidget {
         color: Theme.of(context).textTheme.caption.color
       ),
     );
+
+  Widget buildSentStateIcon(BuildContext context) {
+    if (isMine) {
+      return Icon(event.sentState != SentState.sent
+        ? Icons.access_time
+        : Icons.check,
+        size: Subtitle.iconSize,
+        color: Colors.grey,
+      );
+    } else {
+      return Container(height: 0, width: 0);
+    }
+
+  }
 }

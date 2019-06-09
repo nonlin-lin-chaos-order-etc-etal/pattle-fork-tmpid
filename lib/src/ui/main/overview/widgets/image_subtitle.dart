@@ -32,6 +32,7 @@ class ImageSubtitle extends Subtitle {
   Widget build(BuildContext context) =>
     Row(
       children: <Widget>[
+        buildSentStateIcon(context),
         RichText(
           text: senderSpan(context),
         ),
