@@ -70,3 +70,16 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
     return name.isNotEmpty ? name : room.id.toString();
   });
 }
+
+List<Type> ignoredEventsOf(Room room, {@required bool isOverview}) {
+  List<Type> ignored = [
+    RedactionEvent,
+    AvatarUrlChangeEvent
+  ];
+
+  if (isOverview) {
+    ignored.add(DisplayNameChangeEvent);
+  }
+
+  return ignored;
+}

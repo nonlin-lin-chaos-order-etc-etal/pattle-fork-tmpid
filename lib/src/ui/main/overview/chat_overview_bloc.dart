@@ -17,6 +17,7 @@
 
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/overview/models/chat_overview.dart';
+import 'package:pattle/src/ui/util/room.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:pattle/src/ui/main/sync_bloc.dart';
@@ -30,17 +31,12 @@ class ChatOverviewBloc {
 
   final LocalUser _user = di.getLocalUser();
 
-  static const ignoredEvents = [
-    RedactionEvent,
-    DisplayNameChangeEvent,
-    AvatarUrlChangeEvent
-  ];
-
   Future<void> loadChats() async {
     var chats = List<ChatOverview>();
 
     // Get all rooms and push them as a single list
     await for(Room room in _user.rooms.all()) {
+      final ignoredEvents = ignoredEventsOf(room, isOverview: true);
       // TODO: Add optional filter argument to up to call
       final latestEvent = await room.timeline.all()
         .firstWhere((event) => !ignoredEvents.contains(event.runtimeType), orElse: () => null);

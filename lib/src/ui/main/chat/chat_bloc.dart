@@ -18,7 +18,9 @@
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/main/sync_bloc.dart';
+import 'package:pattle/src/ui/util/room.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:pattle/src/di.dart' as di;
 
 class ChatBloc {
 
@@ -26,13 +28,12 @@ class ChatBloc {
 
   int _eventCount = 20;
 
-  static const ignoredEvents = [
-    RedactionEvent,
-    AvatarUrlChangeEvent
-  ];
+  List<Type> get ignoredEvents => ignoredEventsOf(room, isOverview: false);
 
   PublishSubject<bool> _isLoadingEventsSubj = PublishSubject<bool>();
   Stream<bool> get isLoadingEvents => _isLoadingEventsSubj.stream.distinct();
+
+  final me = di.getLocalUser();
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -73,15 +74,38 @@ class ChatBloc {
 
     // Remember: 'previous' is actually next in time
     RoomEvent previousEvent;
-    await for(RoomEvent event in room.timeline.upTo(_eventCount)) {
+    RoomEvent event;
+    await for(event in room.timeline.upTo(_eventCount)) {
 
-      if (ignoredEvents.contains(event.runtimeType)) {
+      var shouldIgnore = false;
+      // In direct chats, don't show the invite event between this user
+      // and the direct user.
+      //
+      // Also in direct chats, don't show the join events between this user
+      // and the direct user.
+      if (room.isDirect) {
+        if (event is InviteEvent) {
+          final iInvitedYou = event.sender.isIdenticalTo(me)
+              && event.content.subject.isIdenticalTo(room.directUser);
+
+          final youInvitedMe = event.sender.isIdenticalTo(room.directUser)
+              && event.content.subject.isIdenticalTo(me);
+
+          shouldIgnore = iInvitedYou || youInvitedMe;
+        } else if (event is JoinEvent) {
+          final subject = event.content.subject;
+          shouldIgnore = subject.isIdenticalTo(me)
+            || subject.isIdenticalTo(room.directUser);
+        }
+      }
+
+      if (ignoredEvents.contains(event.runtimeType) || shouldIgnore) {
         continue;
       }
 
       // Insert DateHeader if there's a day difference
       if (previousEvent != null && event != null
-        && previousEvent.time.day != event.time.day) {
+          && previousEvent.time.day != event.time.day) {
         chatItems.add(DateItem(previousEvent.time));
       }
 
@@ -89,6 +113,9 @@ class ChatBloc {
 
       previousEvent = event;
     }
+
+    // Add DateHeader above all events
+    chatItems.add(DateItem(event.time));
 
     _itemSubj.add(List.of(chatItems));
   }

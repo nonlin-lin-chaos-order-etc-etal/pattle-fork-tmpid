@@ -35,7 +35,7 @@ class DateHeader extends Item {
     return Center(
       child: Padding(
         padding: EdgeInsets.only(
-          top: betweenMargin,
+          top: marginTop(),
           bottom: betweenMargin
         ),
         child: Text(formatAsDate(context, item.date).toUpperCase(),
@@ -46,4 +46,8 @@ class DateHeader extends Item {
       )
     );
   }
+
+  @override
+  double marginTop()
+    => previousItem == null ? betweenMargin * 2 : betweenMargin;
 }
