@@ -29,19 +29,19 @@ List<TextSpan> spanFor(BuildContext context, MemberChangeEvent event,
     style: style
   );
   final subject = TextSpan(
-    text: displayNameOrId(event.sender.id, event.content.displayName),
+    text: displayNameOf(event.content.subject),
     style: style
   );
   var text;
 
   if (event is DisplayNameChangeEvent) {
     final oldName = TextSpan(
-      text: displayNameOrId(event.content.subjectId, event.oldName),
+      text: displayNameOrId(event.content.subject.id, event.oldSubjectName),
       style: style
     );
 
     final newName = TextSpan(
-      text: displayNameOrId(event.content.subjectId, event.newName),
+      text: displayNameOf(event.content.subject),
       style: style
     );
 

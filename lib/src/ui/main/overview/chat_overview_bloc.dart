@@ -49,7 +49,7 @@ class ChatOverviewBloc {
         .firstWhere(
           (event) =>
             (event is! MemberChangeEvent
-             || event is JoinEvent && event.content.subjectId == _user.id)
+             || event is JoinEvent && event.content.subject.id == _user.id)
           && event is! RedactionEvent,
           orElse: () => null
         );
