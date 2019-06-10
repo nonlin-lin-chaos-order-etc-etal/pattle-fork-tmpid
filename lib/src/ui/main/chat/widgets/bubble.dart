@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/ui/main/chat/widgets/state/creation_bubble.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 
 import 'image_bubble.dart';
@@ -74,13 +75,20 @@ abstract class Bubble extends Item {
       );
     } else if (item.event is MemberChangeEvent) {
       return MemberBubble(
-          item: item,
-          previousItem: previousItem,
-          nextItem: nextItem,
-          isMine: isMine
+        item: item,
+        previousItem: previousItem,
+        nextItem: nextItem,
+        isMine: isMine
       );
     } else if (item.event is RedactedEvent) {
       return RedactedBubble(
+        item: item,
+        previousItem: previousItem,
+        nextItem: nextItem,
+        isMine: isMine,
+      );
+    } else if (item.event is RoomCreationEvent) {
+      return CreationBubble(
         item: item,
         previousItem: previousItem,
         nextItem: nextItem,

@@ -70,6 +70,10 @@ class Strings {
   final enterPassword = 'Enter password';
   final wrongPasswordError = 'Wrong password. Please try again';
 
+  // Room creation event
+  List<TextSpan> createdThisGroup(TextSpan name)
+    => [name, TextSpan(text: ' created this group')];
+
   // Member change events
   List<TextSpan> changedTheirNameTo(TextSpan oldName, TextSpan newName)
     => [oldName, TextSpan(text: ' changed their name to '), newName];

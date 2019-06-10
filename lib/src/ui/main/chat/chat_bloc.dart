@@ -99,6 +99,10 @@ class ChatBloc {
         }
       }
 
+      shouldIgnore = shouldIgnore ||
+        event is JoinEvent && event is! DisplayNameChangeEvent
+        && room.creator.isIdenticalTo(event.content.subject);
+
       if (ignoredEvents.contains(event.runtimeType) || shouldIgnore) {
         continue;
       }

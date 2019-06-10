@@ -74,11 +74,15 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
 List<Type> ignoredEventsOf(Room room, {@required bool isOverview}) {
   List<Type> ignored = [
     RedactionEvent,
-    AvatarUrlChangeEvent
+    AvatarChangeEvent
   ];
 
   if (isOverview) {
     ignored.add(DisplayNameChangeEvent);
+  }
+
+  if (room.isDirect) {
+    ignored.add(RoomCreationEvent);
   }
 
   return ignored;
