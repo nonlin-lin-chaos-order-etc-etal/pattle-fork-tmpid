@@ -78,20 +78,20 @@ class Strings {
   List<TextSpan> changedTheirNameTo(TextSpan oldName, TextSpan newName)
     => [oldName, TextSpan(text: ' changed their name to '), newName];
 
-  List<TextSpan> hasJoined(TextSpan name)
+  List<TextSpan> joined(TextSpan name)
     => [name, TextSpan(text: ' joined')];
 
-  List<TextSpan> hasLeft(TextSpan name)
+  List<TextSpan> left(TextSpan name)
     => [name, TextSpan(text: ' left')];
 
-  List<TextSpan> hasBeenBanned(TextSpan banee, TextSpan banner)
+  List<TextSpan> wasBannedBy(TextSpan banee, TextSpan banner)
     => [
       banee,
       TextSpan(text: ' was banned by '),
       banner
     ];
 
-  List<TextSpan> hasBeenInvited(TextSpan invitee, TextSpan inviter)
+  List<TextSpan> wasInvitedBy(TextSpan invitee, TextSpan inviter)
     => [
       invitee,
       TextSpan(text: ' was invited by '),

@@ -47,13 +47,13 @@ List<TextSpan> spanFor(BuildContext context, MemberChangeEvent event,
 
     text = l(context).changedTheirNameTo(oldName, newName);
   } else if (event is JoinEvent) {
-    text = l(context).hasJoined(subject);
+    text = l(context).joined(subject);
   } else if (event is LeaveEvent) {
-    text = l(context).hasLeft(subject);
+    text = l(context).left(subject);
   } else if (event is InviteEvent) {
-    text = l(context).hasBeenInvited(subject, sender);
+    text = l(context).wasInvitedBy(subject, sender);
   } else if (event is BanEvent) {
-    text = l(context).hasBeenBanned(subject, sender);
+    text = l(context).wasBannedBy(subject, sender);
   }
 
   return text;
