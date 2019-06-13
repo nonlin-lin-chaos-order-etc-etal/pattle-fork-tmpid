@@ -41,7 +41,7 @@ class ChatOverviewBloc {
       final latestEvent = await room.timeline.all()
         .firstWhere((event) => !ignoredEvents.contains(event.runtimeType), orElse: () => null);
 
-      var latestEventForSorting = await room.timeline.upTo(10)
+      var latestEventForSorting = await room.timeline.upTo(count: 10)
         .firstWhere(
           (event) =>
             (event is! MemberChangeEvent

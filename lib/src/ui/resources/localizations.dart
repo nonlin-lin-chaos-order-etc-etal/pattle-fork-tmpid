@@ -40,6 +40,9 @@ class Strings {
   final typeAMessage = 'Type a message';
   final you = 'You';
   final andOthers = 'and others';
+  final newGroup = 'New group';
+  final groupName = 'Group name';
+  final participants = 'Participants';
 
   final connectionLost =
     'Connection has been lost.\n'

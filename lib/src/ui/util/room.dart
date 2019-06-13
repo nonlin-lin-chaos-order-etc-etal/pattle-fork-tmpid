@@ -36,7 +36,7 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
   }
 
   // TODO: Make upTo FutureOr
-  return room.members.upTo(6).toList().then((members) {
+  return room.members.upTo(count: 6).toList().then((members) {
     var name = '';
     if (members != null) {
       if (members.length == 1) {

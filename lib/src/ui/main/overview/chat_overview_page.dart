@@ -61,7 +61,13 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
             ),
           )
         ],
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(Routes.chatsNew);
+        },
+        child: Icon(Icons.chat),
+      ),
     );
   }
 

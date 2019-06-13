@@ -1,4 +1,4 @@
-// Copyright (C) 2019  Wilko Manger
+// Copyright (C) 2019  wilko
 //
 // This file is part of Pattle.
 //
@@ -15,26 +15,36 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:pattle/src/ui/util/matrix_image.dart';
 
-import 'package:pattle/src/di.dart' as di;
+class UserAvatar extends StatelessWidget {
 
-final syncBloc = SyncBloc();
+  final User user;
+  final double radius;
 
-class SyncBloc {
-  var started = false;
-  LocalUser _user = di.getLocalUser();
+  UserAvatar({this.user, this.radius});
 
-  ReplaySubject<SyncState> _syncSubj = ReplaySubject<SyncState>(maxSize: 1);
-  Observable<SyncState> get stream => _syncSubj.stream;
-
-  Future<void> start() async {
-    if (!started) {
-      _user.sendAllUnsent();
-      _syncSubj.addStream(_user.sync());
-
-      started = true;
+  @override
+  Widget build(BuildContext context) {
+    if (user.avatarUrl != null) {
+      return CircleAvatar(
+        radius: radius,
+        backgroundImage: MatrixImage(
+          user.avatarUrl,
+          width: 64,
+          height: 64
+        ),
+      );
+    } else {
+      return CircleAvatar(
+        radius: radius,
+        child: Icon(
+          Icons.person,
+          size: radius,
+        ),
+      );
     }
   }
 }

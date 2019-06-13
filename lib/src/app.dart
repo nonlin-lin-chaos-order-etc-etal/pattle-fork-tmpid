@@ -29,13 +29,19 @@ import 'package:pattle/src/ui/start/phase/identity/username_page.dart';
 import 'package:pattle/src/ui/start/phase/key/password_page.dart';
 import 'package:pattle/src/ui/start/start_page.dart';
 
+import 'package:pattle/src/ui/main/overview/create/group/create_group_members_page.dart';
+
+import 'ui/main/overview/create/group/create_group_details_page.dart';
+
 
 
 final routes = {
   Routes.root: (Object params) => MaterialPageRoute(
+    settings: RouteSettings(name: Routes.root),
     builder: (context) => InitialPage()
   ),
   Routes.chats: (Object arguments) => MaterialPageRoute(
+    settings: RouteSettings(name: Routes.chats),
     builder: (context) {
       if (arguments is Room) {
         return ChatPage(arguments);
@@ -44,19 +50,32 @@ final routes = {
       }
     }
   ),
+  Routes.chatsNew: (Object arguments) => MaterialPageRoute(
+    settings: RouteSettings(name: Routes.chatsNew),
+    builder: (context) => CreateGroupMembersPage()
+  ),
+  Routes.chatsNewDetails: (Object arguments) => MaterialPageRoute(
+    settings: RouteSettings(name: Routes.chatsNewDetails),
+    builder: (context) => CreateGroupDetailsPage()
+  ),
   Routes.image: (Object arguments) => MaterialPageRoute(
-      builder: (context) => ImagePage(arguments)
+    settings: RouteSettings(name: Routes.image),
+    builder: (context) => ImagePage(arguments)
   ),
   Routes.start: (Object params) => MaterialPageRoute(
+    settings: RouteSettings(name: Routes.start),
     builder: (context) => StartPage()
   ),
   Routes.startAdvanced: (Object params) => MaterialPageRoute(
+    settings: RouteSettings(name: Routes.startAdvanced),
     builder: (context) => AdvancedPage()
   ),
   Routes.startUsername: (Object params) => MaterialPageRoute(
+    settings: RouteSettings(name: Routes.startUsername),
     builder: (context) => UsernamePage()
   ),
   Routes.startPassword: (Object params) => MaterialPageRoute(
+    settings: RouteSettings(name: Routes.startPassword),
     builder: (context) => PasswordPage()
   ),
 };
@@ -73,6 +92,9 @@ class Routes {
   static const startAdvanced = '/start/advanced';
   static const startUsername = '/start/username';
   static const startPassword = '/start/password';
+
+  static const chatsNew = '/chats/new';
+  static const chatsNewDetails = '/chats/new/details';
 }
 
 

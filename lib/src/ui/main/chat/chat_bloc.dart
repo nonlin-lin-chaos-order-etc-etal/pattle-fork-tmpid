@@ -75,7 +75,7 @@ class ChatBloc {
     // Remember: 'previous' is actually next in time
     RoomEvent previousEvent;
     RoomEvent event;
-    await for(event in room.timeline.upTo(_eventCount)) {
+    await for(event in room.timeline.upTo(count: _eventCount)) {
 
       var shouldIgnore = false;
       // In direct chats, don't show the invite event between this user
