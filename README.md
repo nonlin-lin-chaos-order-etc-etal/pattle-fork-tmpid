@@ -1,6 +1,6 @@
 # Pattle
 
-  [![](https://img.shields.io/matrix/pattle:matrix.org.svg)](https://matrix.to/#/#pattle:matrix.org)
+  [![](https://img.shields.io/matrix/pattle:pattle.im.svg)](https://matrix.to/#/#pattle:pattle.im)
   
   ![Preview](/images/screenshots.png)
 
