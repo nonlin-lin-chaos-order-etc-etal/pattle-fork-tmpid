@@ -16,11 +16,12 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:chopper/chopper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:pattle/src/app.dart';
+import 'package:matrix_sdk/matrix_sdk.dart' as matrix;
 import 'package:sentry/sentry.dart';
 import 'package:package_info/package_info.dart';
 import 'package:device_info/device_info.dart';
@@ -35,24 +36,40 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
   } else {
 
     if (error is Response) {
+      var body;
+      try {
+        body = json.decode(error.body);
+      } on FormatException {
+        body = error.body?.toString();
+      }
+
       _sentry.capture(
         event: Event(
           exception: error,
           stackTrace: stackTrace,
           extra: {
             'status_code': error.statusCode,
-            'body': error.body?.toString(),
+            'body': body,
             'headers': error.headers
           }
         )
       );
-      return;
+    } else if (error is matrix.MatrixException) {
+      _sentry.capture(
+        event: Event(
+          exception: error,
+          stackTrace: stackTrace,
+          extra: {
+            'body': error.body,
+          }
+        )
+      );
+    } else {
+      _sentry.captureException(
+        exception: error,
+        stackTrace: stackTrace,
+      );
     }
-
-    _sentry.captureException(
-      exception: error,
-      stackTrace: stackTrace,
-    );
   }
 }
 
