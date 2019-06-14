@@ -52,6 +52,10 @@ class Strings {
     'Connection failed. '
     'Check your internet connection';
 
+  final anErrorHasOccurred = 'An error has occurred:';
+  final thisErrorHasBeenReported
+    = 'This error has been reported. Please restart Pattle.';
+
   final youDeletedThisMessage = 'You deleted this message';
   List<TextSpan> hasDeletedThisMessage(TextSpan name)
     => [name, TextSpan(text: ' deleted this message')];

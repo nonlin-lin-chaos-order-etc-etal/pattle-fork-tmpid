@@ -34,6 +34,8 @@ class ErrorBannerState extends State<ErrorBanner>
   AnimationController _controller;
   Animation<double> _animation;
 
+  var isConnectionError = false;
+
   @override
   void initState() {
     super.initState();
@@ -59,15 +61,47 @@ class ErrorBannerState extends State<ErrorBanner>
       stream: syncBloc.stream,
       builder: (BuildContext context, AsyncSnapshot<SyncState> snapshot) {
         final state = snapshot.data;
-        if (state != null
-         && !state.succeeded
-         && (state.exception is http.ClientException
-              || state.exception is SocketException)
-        ) {
+
+        final hasSucceeded = state != null && state.succeeded;
+
+        if (!hasSucceeded) {
           _controller.forward();
-        } else if (state != null
-                && state.succeeded) {
+        } else {
           _controller.animateBack(0);
+        }
+
+        Widget icon = Icon(Icons.cloud_off);
+        Widget text = Text(l(context).connectionLost);
+        if (state != null &&
+           (state.exception is SocketException
+             || state.exception is http.ClientException)) {
+          isConnectionError = true;
+        } else if (state != null) {
+          isConnectionError = false;
+        }
+
+        if (state != null && !isConnectionError) {
+          // TODO: Make error messages less complex for end users,
+          // but keep it like this for now (before 1.0).
+          icon = Icon(Icons.bug_report);
+          text = RichText(
+            text: TextSpan(
+              style: DefaultTextStyle.of(context).style,
+              children: [
+                TextSpan(
+                  text: '${l(context).anErrorHasOccurred}\n'
+                ),
+                TextSpan(
+                  text: state.exception.toString(),
+                  style: TextStyle(
+                    fontFamily: 'monospace',
+                    fontWeight: FontWeight.bold
+                  )
+                ),
+                TextSpan(text: '\n${l(context).thisErrorHasBeenReported}')
+              ]
+            )
+          );
         }
 
         return SizeTransition(
@@ -87,11 +121,11 @@ class ErrorBannerState extends State<ErrorBanner>
                 child: Row(
                   children: <Widget>[
                     CircleAvatar(
-                      child: Icon(Icons.cloud_off),
+                      child: icon,
                     ),
                     SizedBox(width: 16),
                     Flexible(
-                      child: Text(l(context).connectionLost)
+                      child: text
                     )
                   ],
                 ),
