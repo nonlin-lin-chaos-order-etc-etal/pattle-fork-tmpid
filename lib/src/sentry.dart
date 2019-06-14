@@ -17,6 +17,7 @@
 
 import 'dart:async';
 
+import 'package:chopper/chopper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pattle/src/app.dart';
@@ -32,6 +33,22 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
   if (_isInDebugMode) {
     print(stackTrace);
   } else {
+
+    if (error is Response) {
+      _sentry.capture(
+        event: Event(
+          exception: error,
+          stackTrace: stackTrace,
+          extra: {
+            'status_code': error.statusCode,
+            'body': error.body?.toString(),
+            'headers': error.headers
+          }
+        )
+      );
+      return;
+    }
+
     _sentry.captureException(
       exception: error,
       stackTrace: stackTrace,
