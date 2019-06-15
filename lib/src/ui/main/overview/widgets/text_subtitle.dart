@@ -47,7 +47,7 @@ class TextSubtitle extends Subtitle {
                 children: [
                   sender,
                   TextSpan(
-                      text: event.content.body ?? 'null'
+                    text: event.content.body ?? 'null'
                   )
                 ]
               )
