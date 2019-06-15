@@ -24,7 +24,7 @@ import 'package:pattle/src/di.dart' as di;
 
 class ChatBloc {
 
-  JoinedRoom room;
+  Room room;
 
   int _eventCount = 20;
 
@@ -125,8 +125,9 @@ class ChatBloc {
   }
 
   Future<void> sendMessage(String text) async {
+    final room = this.room;
     // TODO: Check if text is just whitespace
-    if (text.isNotEmpty) {
+    if (room is JoinedRoom && text.isNotEmpty) {
       // Refresh the list every time the sent state changes.
       await for (var sentState in room.send(TextMessage(body: text))) {
         await loadEvents();

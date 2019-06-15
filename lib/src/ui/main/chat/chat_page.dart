@@ -36,7 +36,7 @@ class ChatPageState extends State<ChatPage> {
 
   final me = di.getLocalUser();
   final ChatBloc bloc = ChatBloc();
-  final JoinedRoom room;
+  final Room room;
 
   ScrollController scrollController = ScrollController();
   double get scrollLoadRange => scrollController.position.maxScrollExtent - 700;
@@ -136,15 +136,17 @@ class ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildInput() {
-    return Material(
-      elevation: 8,
-      color: LightColors.red[50],
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        child: Material(
-          elevation: 8,
-          borderRadius: BorderRadius.circular(8),
-          child: TextField(
+    const elevation = 8.0;
+    if (bloc.room is JoinedRoom) {
+      return Material(
+        elevation: elevation,
+        color: LightColors.red[50],
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: Material(
+            elevation: elevation,
+            borderRadius: BorderRadius.circular(8),
+            child: TextField(
             controller: textController,
             textInputAction: TextInputAction.newline,
             autocorrect: true,
@@ -163,11 +165,24 @@ class ChatPageState extends State<ChatPage> {
                   textController.clear();
                 }
               )
+              ),
             ),
+          )
+        )
+      );
+    } else {
+      return Material(
+        elevation: elevation,
+        color: Colors.white,
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Text(l(context).cantSendMessages,
+            textAlign: TextAlign.center,
           ),
         )
-      )
-    );
+      );
+    }
+
   }
 
   Widget _buildLoadingIndicator() {

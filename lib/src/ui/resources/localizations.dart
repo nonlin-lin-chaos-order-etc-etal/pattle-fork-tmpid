@@ -44,6 +44,9 @@ class Strings {
   final groupName = 'Group name';
   final participants = 'Participants';
 
+  final cantSendMessages
+    = 'You can\'t send messages to this group because you\'re no longer a participant.';
+
   final connectionLost =
     'Connection has been lost.\n'
     'Make sure your phone has an active internet connection.';
