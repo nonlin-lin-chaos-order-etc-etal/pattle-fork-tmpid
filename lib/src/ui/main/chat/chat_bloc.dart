@@ -118,8 +118,10 @@ class ChatBloc {
       previousEvent = event;
     }
 
-    // Add DateHeader above all events
-    chatItems.add(DateItem(event.time));
+    // Add date header above first event in room
+    if (event is RoomCreationEvent) {
+      chatItems.add(DateItem(event.time));
+    }
 
     _itemSubj.add(List.of(chatItems));
   }
