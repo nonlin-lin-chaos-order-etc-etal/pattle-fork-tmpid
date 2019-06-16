@@ -76,7 +76,7 @@ bool get _isInDebugMode {
   bool inDebugMode = false;
 
   // Set to true if running debug mode (where asserts are evaluated)
-  //assert(inDebugMode = false);
+  assert(inDebugMode = true);
 
   return inDebugMode;
 }
