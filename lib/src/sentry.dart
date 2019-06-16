@@ -108,7 +108,7 @@ Future<Event> get _environment async {
       simulator: !info.isPhysicalDevice
     );
 
-  } else {
+  } else if (Platform.isIOS){
     final info = await deviceInfo.iosInfo;
 
     user = User(
@@ -117,12 +117,12 @@ Future<Event> get _environment async {
 
     os = Os(
       name: 'iOS',
-      version: '${info.systemName} ${info.systemVersion}',
+      version: info.systemVersion,
     );
 
     device = Device(
-      name: info.name,
       family: info.model,
+      model: info.name,
       simulator: !info.isPhysicalDevice
     );
   }
