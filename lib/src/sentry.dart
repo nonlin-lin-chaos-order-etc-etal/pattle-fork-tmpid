@@ -48,8 +48,8 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
           stackTrace: stackTrace,
           extra: {
             'status_code': error.statusCode,
-            'body': body,
-            'headers': error.headers
+            'headers': error.headers,
+            'body': body
           }
         )
       );
