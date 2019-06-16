@@ -21,6 +21,7 @@ build:
   script:
     - 'echo "version: ${CI_COMMIT_REF_NAME:1}+$((123 + $CI_PIPELINE_IID))" >> pubspec.yaml'
     - 'echo "SENTRY_DSN=$SENTRY_DSN" > .env'
+    - 'echo "BUILD_TYPE=fdroid" >> .env'
     - echo "$STORE" | base64 -d > android/app/pattle.keystore
     - flutter build apk
     - mv build/app/outputs/apk/release/app-release.apk pattle.apk

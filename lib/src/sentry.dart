@@ -34,7 +34,6 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
   if (_isInDebugMode) {
     print(stackTrace);
   } else {
-
     if (error is Response) {
       var body;
       try {
@@ -77,33 +76,79 @@ bool get _isInDebugMode {
   bool inDebugMode = false;
 
   // Set to true if running debug mode (where asserts are evaluated)
-  assert(inDebugMode = true);
+  //assert(inDebugMode = false);
 
   return inDebugMode;
 }
 
-Future<String> get _environment async {
+Future<Event> get _environment async {
   final deviceInfo = DeviceInfoPlugin();
 
+  User user;
+  Os os;
+  Device device;
+
   if (Platform.isAndroid) {
-    final ai = await deviceInfo.androidInfo;
-    return 'Android ${ai.version.release}: ${ai.model}';
+    final info = await deviceInfo.androidInfo;
+
+    user = User(
+      id: info.androidId
+    );
+
+    os = Os(
+      name: 'Android',
+      version: info.version.release,
+      build: info.version.sdkInt.toString(),
+    );
+
+    device = Device(
+      model: info.model,
+      manufacturer: info.manufacturer,
+      brand: info.brand,
+      simulator: !info.isPhysicalDevice
+    );
+
   } else {
-    final ii = await deviceInfo.iosInfo;
-    return 'iOS ${ii.systemName} ${ii.systemVersion}: ${ii.model}';
+    final info = await deviceInfo.iosInfo;
+
+    user = User(
+      id: info.identifierForVendor
+    );
+
+    os = Os(
+      name: 'iOS',
+      version: '${info.systemName} ${info.systemVersion}',
+    );
+
+    device = Device(
+      name: info.name,
+      family: info.model,
+      simulator: !info.isPhysicalDevice
+    );
   }
+
+  final packageInfo = await PackageInfo.fromPlatform();
+
+  return Event(
+    release: packageInfo.version,
+    userContext: user,
+    contexts: Contexts(
+      device: device,
+      os: os,
+      app: App(
+        build: packageInfo.buildNumber,
+        buildType: DotEnv().env['BUILD_TYPE'],
+      )
+    )
+  );
 }
 
 Future<void> init() async {
   await DotEnv().load();
 
-  final packageInfo = await PackageInfo.fromPlatform();
   _sentry = SentryClient(
     dsn: DotEnv().env['SENTRY_DSN'],
-    environmentAttributes: Event(
-      release: packageInfo.version,
-      environment: await _environment
-    )
+    environmentAttributes: await _environment
   );
 
   FlutterError.onError = (FlutterErrorDetails details) {

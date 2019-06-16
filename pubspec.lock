@@ -296,9 +296,11 @@ packages:
   sentry:
     dependency: "direct main"
     description:
-      name: sentry
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: f08ef8185c2fd27e2eae1a880927add08d2fc119
+      url: "https://git.pattle.im/forks/sentry.git"
+    source: git
     version: "2.2.0"
   sky_engine:
     dependency: transitive

@@ -17,7 +17,9 @@ dependencies:
 
   rxdart: ^0.21.0
 
-  sentry: ^2.2.0
+  # TODO: Use official package when PR is merged
+  sentry:
+    git: https://git.pattle.im/forks/sentry.git
 
   flutter_cache_manager: ^0.3.2
 
