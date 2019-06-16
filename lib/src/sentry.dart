@@ -32,6 +32,15 @@ SentryClient _sentry;
 Future<void> _reportError(dynamic error, dynamic stackTrace) async {
   print('Caught error: $error');
   if (_isInDebugMode) {
+
+    if (error is Response) {
+      print('statusCode: ${error.statusCode}');
+      print('headers: ${error.headers}');
+      print('body: ${error.body}');
+    } else if (error is matrix.MatrixException) {
+      print('body: ${error.body}');
+    }
+
     print(stackTrace);
   } else {
     if (error is Response) {
