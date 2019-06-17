@@ -117,6 +117,11 @@ class App extends StatelessWidget {
       android: (_) => MaterialAppData(
         theme: lightTheme,
       ),
+      ios: (_) => CupertinoAppData(
+        theme: MaterialBasedCupertinoThemeData(
+          materialTheme: lightTheme
+        )
+      ),
     );
   }
 }
