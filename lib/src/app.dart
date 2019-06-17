@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/initial/initial_page.dart';
 import 'package:pattle/src/ui/main/chat/chat_page.dart';
@@ -28,19 +29,15 @@ import 'package:pattle/src/ui/start/advanced_page.dart';
 import 'package:pattle/src/ui/start/phase/identity/username_page.dart';
 import 'package:pattle/src/ui/start/phase/key/password_page.dart';
 import 'package:pattle/src/ui/start/start_page.dart';
-
 import 'package:pattle/src/ui/main/overview/create/group/create_group_members_page.dart';
-
 import 'ui/main/overview/create/group/create_group_details_page.dart';
 
-
-
 final routes = {
-  Routes.root: (Object params) => MaterialPageRoute(
+  Routes.root: (Object params) => platformPageRoute(
     settings: RouteSettings(name: Routes.root),
     builder: (context) => InitialPage()
   ),
-  Routes.chats: (Object arguments) => MaterialPageRoute(
+  Routes.chats: (Object arguments) => platformPageRoute(
     settings: RouteSettings(name: Routes.chats),
     builder: (context) {
       if (arguments is Room) {
@@ -50,31 +47,31 @@ final routes = {
       }
     }
   ),
-  Routes.chatsNew: (Object arguments) => MaterialPageRoute(
+  Routes.chatsNew: (Object arguments) => platformPageRoute(
     settings: RouteSettings(name: Routes.chatsNew),
     builder: (context) => CreateGroupMembersPage()
   ),
-  Routes.chatsNewDetails: (Object arguments) => MaterialPageRoute(
+  Routes.chatsNewDetails: (Object arguments) => platformPageRoute(
     settings: RouteSettings(name: Routes.chatsNewDetails),
     builder: (context) => CreateGroupDetailsPage()
   ),
-  Routes.image: (Object arguments) => MaterialPageRoute(
+  Routes.image: (Object arguments) => platformPageRoute(
     settings: RouteSettings(name: Routes.image),
     builder: (context) => ImagePage(arguments)
   ),
-  Routes.start: (Object params) => MaterialPageRoute(
+  Routes.start: (Object params) => platformPageRoute(
     settings: RouteSettings(name: Routes.start),
     builder: (context) => StartPage()
   ),
-  Routes.startAdvanced: (Object params) => MaterialPageRoute(
+  Routes.startAdvanced: (Object params) => platformPageRoute(
     settings: RouteSettings(name: Routes.startAdvanced),
     builder: (context) => AdvancedPage()
   ),
-  Routes.startUsername: (Object params) => MaterialPageRoute(
+  Routes.startUsername: (Object params) => platformPageRoute(
     settings: RouteSettings(name: Routes.startUsername),
     builder: (context) => UsernamePage()
   ),
-  Routes.startPassword: (Object params) => MaterialPageRoute(
+  Routes.startPassword: (Object params) => platformPageRoute(
     settings: RouteSettings(name: Routes.startPassword),
     builder: (context) => PasswordPage()
   ),
@@ -102,10 +99,9 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return PlatformApp(
       onGenerateTitle: (BuildContext context)
       => l(context).appName,
-      theme: lightTheme,
       localizationsDelegates: [
         const AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -118,6 +114,9 @@ class App extends StatelessWidget {
       onGenerateRoute: (settings) {
         return routes[settings.name](settings.arguments);
       },
+      android: (_) => MaterialAppData(
+        theme: lightTheme,
+      ),
     );
   }
 }

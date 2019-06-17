@@ -14,21 +14,30 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 
 class StartPage extends StatelessWidget {
 
+  // TODO: PR: Make BorderRadius.circular const
+  static const buttonBorderRadius = BorderRadius.all(Radius.circular(96));
+
+  static const buttonShape = RoundedRectangleBorder(
+    borderRadius: buttonBorderRadius
+  );
+
+  static const buttonPadding = EdgeInsets.all(16);
+
+  void _loginWithUsername(BuildContext context) {
+    Navigator.pushNamed(context, Routes.startUsername);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final buttonShape = RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(96)
-    );
-
-    final buttonPadding = EdgeInsets.all(16);
-
-    return Scaffold(
+    return PlatformScaffold(
       body: Container(
         margin: const EdgeInsets.only(top: 16),
         child: Center(
@@ -41,28 +50,56 @@ class StartPage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  RaisedButton(
-                    onPressed: null,
-                    child: Text(l(context).loginWithPhone.toUpperCase()),
-                    shape: buttonShape,
-                    padding: buttonPadding,
+                  PlatformWidget(
+                    android: (_) =>
+                      RaisedButton(
+                        onPressed: null,
+                        child: PlatformText(l(context).loginWithPhone),
+                        shape: buttonShape,
+                        padding: buttonPadding,
+                      ),
+                    ios: (_) =>
+                      CupertinoButton.filled(
+                        onPressed: null,
+                        child: Text(l(context).loginWithPhone),
+                        borderRadius: buttonBorderRadius,
+                        padding: buttonPadding,
+                      )
                   ),
                   SizedBox(height: 16),
-                  OutlineButton(
-                    onPressed: null,
-                    child: Text(l(context).loginWithEmail.toUpperCase()),
-                    shape: buttonShape,
-                    padding: buttonPadding,
+                  PlatformWidget(
+                    android: (_) =>
+                      OutlineButton(
+                        onPressed: null,
+                        child: PlatformText(l(context).loginWithEmail),
+                        shape: buttonShape,
+                        padding: buttonPadding,
+                      ),
+                    ios: (_) =>
+                      CupertinoButton(
+                        onPressed: null,
+                        child: Text(l(context).loginWithEmail),
+                        borderRadius: buttonBorderRadius,
+                        padding: buttonPadding,
+                      )
                   ),
                   SizedBox(height: 16),
-                  FlatButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, Routes.startUsername);
-                    },
-                    child: Text(l(context).loginWithUsername.toUpperCase()),
-                    shape: buttonShape,
-                    padding: buttonPadding,
-                  ),
+                  PlatformWidget(
+                    android: (_) =>
+                        FlatButton(
+                        onPressed: () => _loginWithUsername(context),
+                        child: PlatformText(l(context).loginWithUsername),
+                        shape: buttonShape,
+                        padding: buttonPadding,
+                      ),
+                    ios: (_) =>
+                      CupertinoButton(
+                        onPressed: () => _loginWithUsername(context),
+                        child: Text(l(context).loginWithUsername),
+                        borderRadius: buttonBorderRadius,
+                        padding: buttonPadding,
+                      )
+                  )
                 ],
               )
             ],
