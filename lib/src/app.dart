@@ -100,8 +100,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformApp(
-      onGenerateTitle: (BuildContext context)
-      => l(context).appName,
+      onGenerateTitle: (BuildContext context) => l(context).appName,
       localizationsDelegates: [
         const AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
