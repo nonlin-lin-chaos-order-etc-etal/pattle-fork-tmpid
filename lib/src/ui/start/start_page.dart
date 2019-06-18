@@ -37,6 +37,10 @@ class StartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loginWithPhone = l(context).loginWithPhone.toUpperCase();
+    final loginWithEmail = l(context).loginWithEmail.toUpperCase();
+    final loginWithUsername = l(context).loginWithUsername.toUpperCase();
+
     return PlatformScaffold(
       body: Container(
         margin: const EdgeInsets.only(top: 16),
@@ -54,14 +58,14 @@ class StartPage extends StatelessWidget {
                     android: (_) =>
                       RaisedButton(
                         onPressed: null,
-                        child: PlatformText(l(context).loginWithPhone),
+                        child: Text(loginWithPhone),
                         shape: buttonShape,
                         padding: buttonPadding,
                       ),
                     ios: (_) =>
                       CupertinoButton.filled(
                         onPressed: null,
-                        child: Text(l(context).loginWithPhone),
+                        child: Text(loginWithPhone),
                         borderRadius: buttonBorderRadius,
                         padding: buttonPadding,
                       )
@@ -71,14 +75,14 @@ class StartPage extends StatelessWidget {
                     android: (_) =>
                       OutlineButton(
                         onPressed: null,
-                        child: PlatformText(l(context).loginWithEmail),
+                        child: Text(loginWithEmail),
                         shape: buttonShape,
                         padding: buttonPadding,
                       ),
                     ios: (_) =>
                       CupertinoButton(
                         onPressed: null,
-                        child: Text(l(context).loginWithEmail),
+                        child: Text(loginWithEmail),
                         borderRadius: buttonBorderRadius,
                         padding: buttonPadding,
                       )
@@ -88,14 +92,14 @@ class StartPage extends StatelessWidget {
                     android: (_) =>
                         FlatButton(
                         onPressed: () => _loginWithUsername(context),
-                        child: PlatformText(l(context).loginWithUsername),
+                        child: Text(loginWithUsername),
                         shape: buttonShape,
                         padding: buttonPadding,
                       ),
                     ios: (_) =>
                       CupertinoButton(
                         onPressed: () => _loginWithUsername(context),
-                        child: Text(l(context).loginWithUsername),
+                        child: Text(loginWithUsername),
                         borderRadius: buttonBorderRadius,
                         padding: buttonPadding,
                       )
