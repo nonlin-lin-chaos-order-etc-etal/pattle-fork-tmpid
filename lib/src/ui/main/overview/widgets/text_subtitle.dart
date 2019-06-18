@@ -57,8 +57,11 @@ class TextSubtitle extends Subtitle {
       );
     } else {
       // Strip replied-to content
-      final text = event.content.formattedBody
-        .split(RegExp('(<\\/*mx-reply>)'))[2];
+      var text = event.content.formattedBody;
+      final splitReply = text.split(RegExp('(<\\/*mx-reply>)'));
+      if (splitReply.length >= 3) {
+        text = splitReply[2];
+      }
 
       return Row(
         children: <Widget>[
