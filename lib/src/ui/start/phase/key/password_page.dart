@@ -18,6 +18,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
@@ -54,7 +55,17 @@ class PasswordPageState extends State<PasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    var appBar;
+    // Only show add bar on iOS where a back button is needed
+    if (isCupertino) {
+      appBar = PlatformAppBar(
+        automaticallyImplyLeading: true,
+        title: Text(l(context).password),
+      );
+    }
+
+    return PlatformScaffold(
+      appBar: appBar,
       body: Container(
         margin: EdgeInsets.all(16),
         child: Column(
@@ -84,7 +95,7 @@ class PasswordPageState extends State<PasswordPage> {
                   errorText = null;
                 }
 
-                return TextField(
+                return PlatformTextField(
                   autofocus: true,
                   onChanged: (value) {
                     password = value;
@@ -93,12 +104,14 @@ class PasswordPageState extends State<PasswordPage> {
                     _next();
                   },
                   obscureText: true,
-                  enableInteractiveSelection: true,
-                  decoration: InputDecoration(
-                    filled: true,
-                    labelText: l(context).password,
-                    errorText: errorText
-                  )
+                  android: (_) => MaterialTextFieldData(
+                    enableInteractiveSelection: true,
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: l(context).password,
+                      errorText: errorText
+                    )
+                  ),
                 );
               }
             ),
@@ -111,7 +124,7 @@ class PasswordPageState extends State<PasswordPage> {
                   state == LoginState.trying || state == LoginState.stillTrying;
                 var onPressed;
 
-                Widget child = Text(l(context).login.toUpperCase());
+                Widget child = PlatformText(l(context).login);
 
                 if (!isTrying) {
                   onPressed = () {
@@ -125,13 +138,15 @@ class PasswordPageState extends State<PasswordPage> {
                   child = SizedBox(
                     width: 18,
                     height: 18,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(Colors.grey),
+                    child: PlatformCircularProgressIndicator(
+                      android: (_) => MaterialProgressIndicatorData(
+                        valueColor: AlwaysStoppedAnimation(Colors.grey)
+                      )
                     )
                   );
                 }
 
-                return RaisedButton(
+                return PlatformButton(
                   onPressed: onPressed,
                   child: child
                 );
