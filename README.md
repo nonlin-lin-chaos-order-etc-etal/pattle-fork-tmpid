@@ -1,8 +1,8 @@
 # Pattle
 
-  [![](https://img.shields.io/matrix/pattle:pattle.im.svg)](https://matrix.to/#/#pattle:pattle.im)
+  [![](https://img.shields.io/matrix/app:pattle.im.svg)](https://matrix.to/#/#app:pattle.im)
   
-  ![Preview](/images/screenshots.png)
+  ![Preview](/CHANGELOG/0.5.0.png)
 
   Pattle is an easy to use Android app for Matrix, with
   design inspired by other popular IM apps.
@@ -18,30 +18,25 @@
 
 ## Get Pattle
    
-   Pattle is available on F-droid! To get it via F-droid, add the following repo:
-   
-   https://fdroid.pattle.im/?fingerprint=E91F63CA6AE04F8E7EA53E52242EAF8779559209B8A342F152F9E7265E3EA729
+   Pattle supports Android (from 4.1 and up) and iOS (from 8.0 and up), and in the
+   future Pattle will also be available on desktop and the web.
 
-   The fingerprint is:
+### Android
 
-   `E9 1F 63 CA 6A E0 4F 8E 7E A5 3E 52 24 2E AF 87 79 55 92 09 B8 A3 42 F1 52 F9 E7 26 5E 3E A7 29`.
+    Pattle is available on F-droid! To get it via F-droid, add the following repo:
 
-   Pattle will be available on Google Play when it's more stable.
+    https://fdroid.pattle.im/?fingerprint=E91F63CA6AE04F8E7EA53E52242EAF8779559209B8A342F152F9E7265E3EA729
 
-   Pattle supports all Android version from 4.1 and up.
+    When Pattle is more stable it'll be available on Google Play and in the
+    official F-droid repostiory.
 
-## Design
+### iOS
 
-   All design decisions are documented on
-   [docs.pattle.im](https://docs.pattle.im),
-   [Design](https://docs.pattle.im/design/philosophy/).
+    Pattle will soon be available on Testflight. Later on Pattle will be
+    available in the App Store.
 
 ## Contributing
 
-   Before building a debug build, make sure you have a `.env` file in the
-   root of the project. You can just `cp .env.example .env`, because
-   Sentry is not used in debug mode.
-   
    Contributions are encouraged! See [CONTRIBUTING](CONTRIBUTING.md) for
    details on how to contribute!
 
@@ -53,6 +48,10 @@
 
    Pattle is made with [Flutter](https://flutter.dev/). To build Pattle,
    you'll need the [Flutter SDK](https://flutter.dev/docs/get-started/install).
+
+   Before building a debug build, make sure you have a `.env` file in the
+   root of the project. You can just `cp .env.example .env`, because
+   Sentry is not used in debug mode.
 
    After the Flutter SDK is setup and ready, you can build Pattle with:
    `flutter build apk` for Android, or
