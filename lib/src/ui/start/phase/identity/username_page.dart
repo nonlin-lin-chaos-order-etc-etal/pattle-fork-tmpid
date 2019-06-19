@@ -17,7 +17,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
@@ -59,25 +61,50 @@ class UsernamePageState extends State<UsernamePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final toAdvance = () {
+      Navigator.pushNamed(context, Routes.startAdvanced);
+    };
+
+    var appBar;
+    // Only show add bar on iOS where a back button is needed
+    if (isCupertino) {
+      appBar = PlatformAppBar(
+        automaticallyImplyLeading: true,
+        title: Text(l(context).username),
+        trailingActions: <Widget>[
+          PlatformIconButton(
+            icon: Icon(CupertinoIcons.gear_big),
+            onPressed: toAdvance,
+          )
+        ],
+        ios: (_) => CupertinoNavigationBarData(
+          transitionBetweenRoutes: true
+        ),
+      );
+    }
+
+    Widget advancedButton = Container(height: 0, width: 0);
+    if (isMaterial) {
+      advancedButton = Align(
+        alignment: Alignment.topRight,
+        child: Container(
+          margin: EdgeInsets.only(top: 32, right: 16),
+          child: FlatButton(
+            onPressed: toAdvance,
+            child: Text(l(context).advanced.toUpperCase())
+          )
+        )
+      );
+    }
+
+    return PlatformScaffold(
+      appBar: appBar,
+      iosContentPadding: true,
       body: Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                margin: EdgeInsets.only(top: 32, right: 16),
-                child: FlatButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, Routes.startAdvanced);
-                  },
-                  child: Text(
-                      l(context).advanced.toUpperCase()
-                  )
-                )
-              )
-            ),
+            advancedButton,
             Expanded(
               child: Container(
                 margin: EdgeInsets.all(16),
@@ -110,20 +137,28 @@ class UsernamePageState extends State<UsernamePage> {
                           }
                         }
 
-                        return TextField(
+                        return PlatformTextField(
                           autofocus: true,
                           controller: usernameController,
                           inputFormatters: [LowerCaseTextFormatter()],
                           textCapitalization: TextCapitalization.none,
-                          onEditingComplete: () {
-                            _next(context);
-                          },
-                          decoration: InputDecoration(
-                            filled: true,
-                            prefixText: '@',
-                            helperText: l(context).ifYouDontHaveAnAccount,
-                            labelText: l(context).username,
-                            errorText: errorText
+                          autocorrect: false,
+                          onSubmitted: (_) => _next(context),
+                          android: (_) => MaterialTextFieldData(
+                            decoration: InputDecoration(
+                              filled: true,
+                              prefixText: '@',
+                              helperText: l(context).ifYouDontHaveAnAccount,
+                              labelText: l(context).username,
+                              errorText: errorText
+                            )
+                          ),
+                          ios: (_) => CupertinoTextFieldData(
+                            prefix: Padding(
+                              padding: EdgeInsets.only(left: 8),
+                              child: Text('@'),
+                            ),
+                            prefixMode: OverlayVisibilityMode.always,
                           )
                         );
                       }
@@ -137,7 +172,7 @@ class UsernamePageState extends State<UsernamePage> {
                            state != UsernameAvailableState.checking
                         && state != UsernameAvailableState.stillChecking;
                         var onPressed;
-                        Widget child = Text(l(context).next.toUpperCase());
+                        Widget child = PlatformText(l(context).next);
 
                         if (enabled) {
                           onPressed = () {
@@ -151,13 +186,15 @@ class UsernamePageState extends State<UsernamePage> {
                           child = SizedBox(
                             width: 18,
                             height: 18,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation(Colors.grey),
+                            child: PlatformCircularProgressIndicator(
+                              android: (_) => MaterialProgressIndicatorData(
+                                valueColor: AlwaysStoppedAnimation(Colors.grey)
+                              ),
                             )
                           );
                         }
 
-                        return RaisedButton(
+                        return PlatformButton(
                           onPressed: onPressed,
                           child: child
                         );
