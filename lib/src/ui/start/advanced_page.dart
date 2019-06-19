@@ -14,7 +14,9 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
 
@@ -35,15 +37,21 @@ class AdvancedPageState extends State<AdvancedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
+    return PlatformScaffold(
+      iosContentPadding: true,
+      appBar: PlatformAppBar(
+        title: PlatformWidget(
+          android: (_) => Text(
             l(context).advanced,
             style: TextStyle(color: Theme.of(context).primaryColor)
+          ),
+          ios: (_) => Text(l(context).advanced),
         ),
-        iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-        elevation: 0,
-        backgroundColor: const Color(0x00000000),
+        android: (_) => MaterialAppBarData(
+          iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+          elevation: 0,
+          backgroundColor: const Color(0x00000000),
+        ),
       ),
       body: Container(
         margin: EdgeInsets.all(16),
@@ -53,34 +61,44 @@ class AdvancedPageState extends State<AdvancedPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(Icons.home,
+                PlatformWidget(
+                  android: (_) => Icon(
+                    Icons.home,
                     color: Theme.of(context).hintColor,
                     size: 32
+                  ),
+                  ios: (_) => Icon(
+                    CupertinoIcons.home,
+                    color: Theme.of(context).hintColor,
+                    size: 32
+                  ),
                 ),
                 SizedBox(width: 16),
                 Flexible(
                     child: StreamBuilder<bool>(
-                        stream: bloc.homeserverChanged,
-                        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                      stream: bloc.homeserverChanged,
+                      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
 
-                          var errorText;
+                        var errorText;
 
-                          if (snapshot.hasError) {
-                            errorText = l(context).hostnameInvalidError;
-                          } else {
-                            errorText = null;
-                          }
+                        if (snapshot.hasError) {
+                          errorText = l(context).hostnameInvalidError;
+                        } else {
+                          errorText = null;
+                        }
 
-                          return TextField(
-                            controller: homeserverTextController,
+                        return PlatformTextField(
+                          controller: homeserverTextController,
+                          android: (_) => MaterialTextFieldData(
                             decoration: InputDecoration(
                                 filled: true,
                                 labelText: l(context).homeserver,
                                 hintText: bloc.homeserver.uri.toString(),
                                 errorText: errorText
                             ),
-                          );
-                        }
+                          ),
+                        );
+                      }
                     )
                 )
               ],
@@ -89,28 +107,38 @@ class AdvancedPageState extends State<AdvancedPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(Icons.person,
+                PlatformWidget(
+                  android: (_) => Icon(
+                    Icons.person,
                     color: Theme.of(context).hintColor,
                     size: 32
+                  ),
+                  ios: (_) => Icon(
+                    CupertinoIcons.person,
+                    color: Theme.of(context).hintColor,
+                    size: 32
+                  ),
                 ),
                 SizedBox(width: 16),
                 Flexible(
-                  child: TextField(
-                    decoration: InputDecoration(
+                  child: PlatformTextField(
+                    android: (context) => MaterialTextFieldData(
+                      decoration: InputDecoration(
                         filled: true,
                         labelText: l(context).identityServer
+                      ),
                     ),
                   ),
                 )
               ],
             ),
             SizedBox(height: 32),
-            RaisedButton(
+            PlatformButton(
                 onPressed: () {
                   bloc.setHomeserverUri(homeserverTextController.text);
                   Navigator.pop(context);
                 },
-                child: Text(l(context).confirm.toUpperCase())
+                child: PlatformText(l(context).confirm)
             )
           ],
         )
