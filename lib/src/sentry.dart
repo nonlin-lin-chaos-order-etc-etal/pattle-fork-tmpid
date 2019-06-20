@@ -41,7 +41,10 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
       print('body: ${error.body}');
     }
 
-    print(stackTrace);
+    if (stackTrace != null) {
+      print(stackTrace);
+    }
+
   } else {
     if (error is Response) {
       var body;
