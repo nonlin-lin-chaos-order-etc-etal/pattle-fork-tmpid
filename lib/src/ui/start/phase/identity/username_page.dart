@@ -116,6 +116,7 @@ class UsernamePageState extends State<UsernamePage> {
                     ),
                     SizedBox(height: 16),
                     StreamBuilder<RequestState>(
+                      initialData: RequestState.none,
                       stream: bloc.isUsernameAvailable,
                       builder: (BuildContext context, AsyncSnapshot<RequestState> snapshot) {
                         String errorText;

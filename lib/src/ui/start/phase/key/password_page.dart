@@ -81,6 +81,7 @@ class PasswordPageState extends State<PasswordPage> {
             ),
             SizedBox(height: 16),
             StreamBuilder<RequestState>(
+              initialData: RequestState.none,
               stream: bloc.loginStream,
               builder: (
                 BuildContext context,
