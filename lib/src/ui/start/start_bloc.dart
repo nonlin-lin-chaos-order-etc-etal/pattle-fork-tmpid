@@ -58,35 +58,27 @@ class StartBloc {
     }
   }
 
-  final _isUsernameAvailableSubj = ReplaySubject<RequestState>(maxSize: 1);
+  final _isUsernameAvailableSubj = BehaviorSubject<RequestState>();
   Observable<RequestState> get isUsernameAvailable
     => _isUsernameAvailableSubj.stream.distinct();
 
   static bool _defaultValidate(Function addError) => true;
-  StreamSubscription stillActiveSubscription;
   Future<void> _do({
-    @required Subject<RequestState> subject,
+    @required BehaviorSubject<RequestState> subject,
     Function validate = _defaultValidate,
     @required Request request}) async {
 
-    await stillActiveSubscription?.cancel();
     subject.add(RequestState.active);
 
     // If after three seconds it's still active, change state to
     // 'stillActive'.
     Future.delayed(loadingTime).then((_) async {
-      await stillActiveSubscription?.cancel();
-      stillActiveSubscription = subject.stream.listen((state) {
-        if (state == RequestState.active) {
-          subject.add(RequestState.stillActive);
-        }
-      },
-      );
+      if (subject.value == RequestState.active) {
+        subject.add(RequestState.stillActive);
+      }
     });
 
     final addError = (error) {
-      stillActiveSubscription?.cancel();
-      subject.add(RequestState.none);
       subject.addError(error);
     };
 
