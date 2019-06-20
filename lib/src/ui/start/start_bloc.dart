@@ -17,12 +17,15 @@
 
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:meta/meta.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:rxdart/rxdart.dart';
 
 final bloc = StartBloc();
+
+typedef Request = void Function(Function addError);
+typedef Check = bool Function(Function addError);
 
 class StartBloc {
 
@@ -55,139 +58,170 @@ class StartBloc {
     }
   }
 
-  final _isUsernameAvailableSubj = ReplaySubject<UsernameAvailableState>(maxSize: 1);
-  Observable<UsernameAvailableState> get isUsernameAvailable
+  final _isUsernameAvailableSubj = ReplaySubject<RequestState>(maxSize: 1);
+  Observable<RequestState> get isUsernameAvailable
     => _isUsernameAvailableSubj.stream.distinct();
 
-  StreamSubscription stillCheckingSubscription;
-  Future<void> checkUsernameAvailability(String username) async {
-    if (username == null) {
-      return;
-    }
+  static bool _defaultValidate(Function addError) => true;
+  StreamSubscription stillActiveSubscription;
+  Future<void> _do({
+    @required Subject<RequestState> subject,
+    Function validate = _defaultValidate,
+    @required Request request}) async {
 
-    await stillCheckingSubscription?.cancel();
-    _isUsernameAvailableSubj.add(UsernameAvailableState.checking);
-    // If after three seconds it's still checking, change state to
-    // 'stillChecking'.
+    await stillActiveSubscription?.cancel();
+    subject.add(RequestState.active);
+
+    // If after three seconds it's still active, change state to
+    // 'stillActive'.
     Future.delayed(loadingTime).then((_) async {
-      await stillCheckingSubscription?.cancel();
-      stillCheckingSubscription = _isUsernameAvailableSubj.stream.listen((state) {
-          if (state == UsernameAvailableState.checking) {
-            _isUsernameAvailableSubj.add(UsernameAvailableState.stillChecking);
-          }
-        },
+      await stillActiveSubscription?.cancel();
+      stillActiveSubscription = subject.stream.listen((state) {
+        if (state == RequestState.active) {
+          subject.add(RequestState.stillActive);
+        }
+      },
       );
     });
 
     final addError = (error) {
-      stillCheckingSubscription?.cancel();
-      _isUsernameAvailableSubj.add(UsernameAvailableState.none);
-      _isUsernameAvailableSubj.addError(error);
+      stillActiveSubscription?.cancel();
+      subject.add(RequestState.none);
+      subject.addError(error);
     };
 
-    var user;
+    final validated = validate(addError);
 
-    // Check if there is a ':' in the username,
-    // if so, treat it as a full Matrix ID (with or without '@').
-    // Otherwise use the local part (with or without '@').
-    // So, accept all of these formats:
-    // @joe:matrix.org
-    // joe:matrix.org
-    // joe
-    // @joe
-    if (username.contains(':')) {
-      final split = username.split(':');
-      String server = split[1];
-
-      try {
-        final serverUri = Uri.parse("https://$server");
-        _setHomeserver(serverUri);
-
-        // Add an '@' if the username does not have one, to allow
-        // for this input: 'pit:pattle.im'
-        if (!username.startsWith('@')) {
-          username = "@$username";
-        }
-
-        if (!UserId.isValidFullyQualified(username)) {
-          addError(InvalidUserIdException());
-          return;
-        }
-
-        user = UserId(username).username;
-      } on FormatException {
-        addError(InvalidHostnameException());
-        return;
-      }
-    } else {
-      if (username.startsWith('@')) {
-        username = username.substring(1).toLowerCase();
-      }
-
-      if (!Username.isValid(username)) {
-        addError(InvalidUsernameException());
-        return;
-      }
-
-      user = Username(username);
+    if (!validated) {
+      return;
     }
 
-    homeserver.isUsernameAvailable(user).then((available) {
-      if (available) {
-        _isUsernameAvailableSubj.add(UsernameAvailableState.available);
-      } else {
-        _isUsernameAvailableSubj.add(UsernameAvailableState.unavailable);
-      }
-
-      _username = user;
-    })
-    .catchError((error) => _isUsernameAvailableSubj.addError(error));
+    request(addError);
   }
 
-  final _loginSubj = BehaviorSubject<LoginState>();
-  Observable<LoginState> get loginStream
-  => _loginSubj.stream;
+
+  Future<void> checkUsernameAvailability(String username) async {
+    var user;
+
+    await _do(
+      subject: _isUsernameAvailableSubj,
+      validate: (addError) {
+        if (username == null) {
+          return false;
+        }
+
+        // Check if there is a ':' in the username,
+        // if so, treat it as a full Matrix ID (with or without '@').
+        // Otherwise use the local part (with or without '@').
+        // So, accept all of these formats:
+        // @joe:matrix.org
+        // joe:matrix.org
+        // joe
+        // @joe
+        if (username.contains(':')) {
+          final split = username.split(':');
+          String server = split[1];
+
+          try {
+            final serverUri = Uri.parse("https://$server");
+            _setHomeserver(serverUri);
+
+            // Add an '@' if the username does not have one, to allow
+            // for this input: 'pit:pattle.im'
+            if (!username.startsWith('@')) {
+              username = "@$username";
+            }
+
+            if (!UserId.isValidFullyQualified(username)) {
+              addError(InvalidUserIdException());
+              return false;
+            }
+
+            user = UserId(username).username;
+          } on FormatException {
+            addError(InvalidHostnameException());
+            return false;
+          }
+
+          return true;
+        } else {
+          if (username.startsWith('@')) {
+            username = username.substring(1).toLowerCase();
+          }
+
+          if (!Username.isValid(username)) {
+            addError(InvalidUsernameException());
+            return false;
+          }
+
+          user = Username(username);
+
+          return true;
+        }
+      },
+      request: (addError) {
+        homeserver.isUsernameAvailable(user).then((available) {
+          _isUsernameAvailableSubj.add(RequestSuccessState(
+            data: available
+          ));
+
+          _username = user;
+        })
+        .catchError((error) => _isUsernameAvailableSubj.addError(error));
+      },
+    );
+  }
+
+  final _loginSubj = BehaviorSubject<RequestState>();
+  Observable<RequestState> get loginStream => _loginSubj.stream;
 
   void login(String password) {
-    _loginSubj.add(LoginState.trying);
-
-    // If after three seconds it's still checking, change state to
-    // 'stillTrying'.
-    Future.delayed(loadingTime).then((_) {
-      _loginSubj.stream.listen((state) {
-        if (state == LoginState.trying) {
-          _loginSubj.add(LoginState.stillTrying);
-        }
-      });
-    });
-
-    homeserver.login(
-      _username,
-      password,
-      store: di.getStore()
-    )
-    .then((user) {
-      di.registerLocalUser(user);
-      _loginSubj.add(LoginState.succeeded);
-    })
-    .catchError((error) => _loginSubj.addError(error));
+    _do(
+      subject: _loginSubj,
+      request: (addError) {
+        homeserver.login(
+          _username,
+          password,
+          store: di.getStore()
+        )
+        .then((user) {
+          di.registerLocalUser(user);
+          _loginSubj.add(RequestState.success);
+        })
+        .catchError((error) => _loginSubj.addError(error));
+      }
+    );
   }
 
 }
 
-enum UsernameAvailableState {
-  none,
-  checking,
-  stillChecking,
-  unavailable,
-  available
+class RequestState {
+  final int _value;
+
+  const RequestState(int value) : _value = value;
+
+  static const none = RequestState(0);
+  static const active = RequestState(1);
+  static const stillActive = RequestState(2);
+  static const success = RequestSuccessState();
+
+  @override
+  bool operator ==(other) {
+    if (other is RequestState) {
+      return other._value == this._value;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  int get hashCode => _value.hashCode;
 }
 
-enum LoginState {
-  none,
-  trying,
-  stillTrying,
-  succeeded
+class RequestSuccessState<T> extends RequestState {
+  final T data;
+
+  const RequestSuccessState({this.data}) : super(3);
 }
 
 class InvalidUserIdException implements Exception { }

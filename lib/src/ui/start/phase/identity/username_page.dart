@@ -41,8 +41,7 @@ class UsernamePageState extends State<UsernamePage> {
     super.initState();
 
     subscription = bloc.isUsernameAvailable.listen((state) {
-      if (state == UsernameAvailableState.available
-          || state == UsernameAvailableState.unavailable) {
+      if (state == RequestState.success) {
         Navigator.pushNamed(context, Routes.startPassword);
       }
     });
@@ -116,9 +115,9 @@ class UsernamePageState extends State<UsernamePage> {
                       style: TextStyle(fontSize: 24),
                     ),
                     SizedBox(height: 16),
-                    StreamBuilder<UsernameAvailableState>(
+                    StreamBuilder<RequestState>(
                       stream: bloc.isUsernameAvailable,
-                      builder: (BuildContext context, AsyncSnapshot<UsernameAvailableState> snapshot) {
+                      builder: (BuildContext context, AsyncSnapshot<RequestState> snapshot) {
                         String errorText;
 
                         if (snapshot.hasError) {
@@ -164,13 +163,13 @@ class UsernamePageState extends State<UsernamePage> {
                       }
                     ),
                     SizedBox(height: 16),
-                    StreamBuilder<UsernameAvailableState>(
+                    StreamBuilder<RequestState>(
                       stream: bloc.isUsernameAvailable,
-                      builder: (BuildContext context, AsyncSnapshot<UsernameAvailableState> snapshot) {
+                      builder: (BuildContext context, AsyncSnapshot<RequestState> snapshot) {
                         final state = snapshot.data;
                         final enabled =
-                           state != UsernameAvailableState.checking
-                        && state != UsernameAvailableState.stillChecking;
+                           state != RequestState.active
+                        && state != RequestState.stillActive;
                         var onPressed;
                         Widget child = PlatformText(l(context).next);
 
@@ -182,7 +181,7 @@ class UsernamePageState extends State<UsernamePage> {
                           onPressed = null;
                         }
 
-                        if (state == UsernameAvailableState.stillChecking) {
+                        if (state == RequestState.stillActive) {
                           child = SizedBox(
                             width: 18,
                             height: 18,

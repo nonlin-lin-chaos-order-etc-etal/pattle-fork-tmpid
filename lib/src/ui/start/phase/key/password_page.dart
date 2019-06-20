@@ -35,8 +35,12 @@ class PasswordPageState extends State<PasswordPage> {
     password = null;
 
     subscription = bloc.loginStream.listen((state) {
-      if (state == LoginState.succeeded) {
-        Navigator.pushNamedAndRemoveUntil(context, Routes.chats, (route) => false);
+      if (state == RequestState.success) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.chats,
+          (route) => false
+        );
       }
     });
   }
@@ -76,9 +80,12 @@ class PasswordPageState extends State<PasswordPage> {
               style: TextStyle(fontSize: 24),
             ),
             SizedBox(height: 16),
-            StreamBuilder<LoginState>(
+            StreamBuilder<RequestState>(
               stream: bloc.loginStream,
-              builder: (BuildContext context, AsyncSnapshot<LoginState> snapshot) {
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<RequestState> snapshot) {
+
                 String errorText;
 
                 if (snapshot.hasError) {
@@ -116,12 +123,12 @@ class PasswordPageState extends State<PasswordPage> {
               }
             ),
             SizedBox(height: 16),
-            StreamBuilder<LoginState>(
+            StreamBuilder<RequestState>(
               stream: bloc.loginStream,
-              builder: (BuildContext context, AsyncSnapshot<LoginState> snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<RequestState> snapshot) {
                 final state = snapshot.data;
                 final isTrying =
-                  state == LoginState.trying || state == LoginState.stillTrying;
+                  state == RequestState.active || state == RequestState.stillActive;
                 var onPressed;
 
                 Widget child = PlatformText(l(context).login);
@@ -134,7 +141,7 @@ class PasswordPageState extends State<PasswordPage> {
                   onPressed = null;
                 }
 
-                if (state == LoginState.stillTrying) {
+                if (state == RequestState.stillActive) {
                   child = SizedBox(
                     width: 18,
                     height: 18,
