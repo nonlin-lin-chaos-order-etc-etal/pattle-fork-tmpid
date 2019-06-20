@@ -15,6 +15,9 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:async';
+
+import 'package:async/async.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:rxdart/rxdart.dart';
@@ -56,25 +59,30 @@ class StartBloc {
   Observable<UsernameAvailableState> get isUsernameAvailable
     => _isUsernameAvailableSubj.stream.distinct();
 
-  void checkUsernameAvailability(String username) {
+  StreamSubscription stillCheckingSubscription;
+  Future<void> checkUsernameAvailability(String username) async {
     if (username == null) {
       return;
     }
 
+    await stillCheckingSubscription?.cancel();
     _isUsernameAvailableSubj.add(UsernameAvailableState.checking);
     // If after three seconds it's still checking, change state to
     // 'stillChecking'.
-    Future.delayed(loadingTime).then((_) {
-      _isUsernameAvailableSubj.stream.listen((state) {
-        if (state == UsernameAvailableState.checking) {
-          _isUsernameAvailableSubj.add(UsernameAvailableState.stillChecking);
-        }
-      });
+    Future.delayed(loadingTime).then((_) async {
+      await stillCheckingSubscription?.cancel();
+      stillCheckingSubscription = _isUsernameAvailableSubj.stream.listen((state) {
+          if (state == UsernameAvailableState.checking) {
+            _isUsernameAvailableSubj.add(UsernameAvailableState.stillChecking);
+          }
+        },
+      );
     });
 
-    var addError = (error) {
-      _isUsernameAvailableSubj.addError(error);
+    final addError = (error) {
+      stillCheckingSubscription?.cancel();
       _isUsernameAvailableSubj.add(UsernameAvailableState.none);
+      _isUsernameAvailableSubj.addError(error);
     };
 
     var user;
