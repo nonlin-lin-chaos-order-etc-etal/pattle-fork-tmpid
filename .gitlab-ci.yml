@@ -60,7 +60,7 @@ release:
 
 sentry:
   stage: release
-  image: getsentry/sentry-cli
+  image: getsentry/sentry-cli:latest
   <<: *only_tag
   tags:
     - docker
