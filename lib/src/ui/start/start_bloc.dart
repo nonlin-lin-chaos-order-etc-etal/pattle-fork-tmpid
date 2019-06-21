@@ -60,7 +60,7 @@ class StartBloc {
 
   final _isUsernameAvailableSubj = BehaviorSubject<RequestState>();
   Observable<RequestState> get isUsernameAvailable
-    => _isUsernameAvailableSubj.stream.distinct();
+    => _isUsernameAvailableSubj.stream;
 
   static bool _defaultValidate(Function addError) => true;
   Future<void> _do({
