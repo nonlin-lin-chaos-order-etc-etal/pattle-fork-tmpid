@@ -69,3 +69,4 @@ sentry:
     - export VERSION=${CI_COMMIT_REF_NAME:1}
     - sentry-cli releases new -p pattle $VERSION
     - sentry-cli releases set-commits --auto $VERSION
+    - sentry-cli releases deploys $VERSION new
