@@ -90,7 +90,7 @@ class StartPage extends StatelessWidget {
                   SizedBox(height: 16),
                   PlatformWidget(
                     android: (_) =>
-                        FlatButton(
+                      FlatButton(
                         onPressed: () => _loginWithUsername(context),
                         child: Text(loginWithUsername),
                         shape: buttonShape,
