@@ -144,6 +144,7 @@ Future<Event> get _environment async {
   return Event(
     release: packageInfo.version,
     userContext: user,
+    environment: 'production',
     contexts: Contexts(
       device: device,
       os: os,
