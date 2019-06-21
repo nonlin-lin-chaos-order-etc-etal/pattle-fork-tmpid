@@ -57,3 +57,15 @@ release:
   dependencies: []
   script:
     - release-manager -action release
+
+sentry:
+  stage: release
+  image: getsentry/sentry-cli
+  <<: *only_tag
+  tags:
+    - docker
+  dependencies: []
+  script:
+    - export VERSION=${CI_COMMIT_REF_NAME:1}
+    - sentry-cli releases new -p pattle $VERSION
+    - sentry-cli releases set-commits --auto $VERSION
