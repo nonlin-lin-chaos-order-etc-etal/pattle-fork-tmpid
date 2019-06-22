@@ -18,6 +18,7 @@
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:matrix_sdk_sqflite/matrix_sdk_sqflite.dart';
 import 'package:injector/injector.dart';
+import 'package:url/url.dart';
 
 final inj = Injector();
 
@@ -28,12 +29,9 @@ void registerHomeserver(Homeserver homeserver) {
     => homeserver, override: true);
 }
 
-void registerHomeserverWith(Uri uri) {
+void registerHomeserverWith(Url url) {
   inj.registerSingleton<Homeserver>((_)
-    => Homeserver(
-      uri
-    ),
-    override: true);
+    => Homeserver(url), override: true);
 }
 
 Store getStore() => inj.getDependency<Store>();

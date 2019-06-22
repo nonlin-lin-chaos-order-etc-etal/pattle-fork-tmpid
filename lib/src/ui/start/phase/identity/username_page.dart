@@ -32,13 +32,24 @@ class UsernamePage extends StatefulWidget {
 }
 
 class UsernamePageState extends State<UsernamePage> {
-  var usernameController = TextEditingController();
+  final usernameController = TextEditingController();
 
   StreamSubscription subscription;
 
   @override
   void initState() {
     super.initState();
+
+    usernameController.addListener(() {
+      final text = usernameController.text;
+
+      final split = text.split(':');
+      if (split.length == 2) {
+        String server = split[1];
+        bloc.setHomeserverUrl(server, allowMistake: true);
+      }
+
+    });
 
     subscription = bloc.isUsernameAvailable.listen((state) {
       if (state == RequestState.success) {

@@ -21,6 +21,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:rxdart/rxdart.dart';
+import 'package:url/url.dart';
 
 final bloc = StartBloc();
 
@@ -30,7 +31,7 @@ typedef Check = bool Function(Function addError);
 class StartBloc {
 
   StartBloc() {
-    di.registerHomeserverWith(Uri.parse("https://matrix.org"));
+    di.registerHomeserverWith(Url.parse("https://matrix.org"));
   }
 
   final _homeserverChangedSubj = BehaviorSubject<bool>();
@@ -43,18 +44,23 @@ class StartBloc {
   /// Duration after which a progress indicator should be shown.
   static const loadingTime = const Duration(seconds: 3);
 
-  void _setHomeserver(Uri uri) {
-    di.registerHomeserverWith(uri);
+  void _setHomeserver(Url url) {
+    di.registerHomeserverWith(url);
     _homeserverChangedSubj.add(true);
   }
 
-  void setHomeserverUri(String url) {
+  void setHomeserverUrl(String url, {bool allowMistake = false}) {
     try {
-      var uri = Uri.parse(url);
+      if (!url.startsWith('https://')) {
+        url = 'https://$url';
+      }
+      final parsedUrl = Url.parse(url);
 
-      _setHomeserver(uri);
+      _setHomeserver(parsedUrl);
     } on FormatException {
-      _homeserverChangedSubj.addError(InvalidHostnameException());
+      if (!allowMistake) {
+        _homeserverChangedSubj.addError(InvalidHostnameException());
+      }
     }
   }
 
@@ -115,8 +121,8 @@ class StartBloc {
           String server = split[1];
 
           try {
-            final serverUri = Uri.parse("https://$server");
-            _setHomeserver(serverUri);
+            final serverUrl = Url.parse("https://$server");
+            _setHomeserver(serverUrl);
 
             // Add an '@' if the username does not have one, to allow
             // for this input: 'pit:pattle.im'

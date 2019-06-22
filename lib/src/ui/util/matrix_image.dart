@@ -20,22 +20,23 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:url/url.dart';
 
 import 'matrix_cache_manager.dart';
 
 class MatrixImage extends ImageProvider<MatrixImage> {
 
-  /// Matrix URI pointing to the image.
-  final Uri uri;
+  /// Matrix URL pointing to the image.
+  final Url url;
 
   final double scale;
   final int width, height;
 
   /// A Matrx image. If width and height are provided, downloads a thumbnail.
-  const MatrixImage(this.uri, {this.scale = 1.0, this.width, this.height});
+  const MatrixImage(this.url, {this.scale = 1.0, this.width, this.height});
 
   Future<Codec> _load(MatrixImage key) async {
-    final file = await cacheManager.getSingleFile(key.uri.toString(), headers: {
+    final file = await cacheManager.getSingleFile(key.url.toString(), headers: {
       'width': key.width.toString(),
       'height': key.height.toString()
     });
@@ -68,11 +69,11 @@ class MatrixImage extends ImageProvider<MatrixImage> {
       return false;
 
     final MatrixImage typedOther = other;
-    return uri == typedOther.uri
+    return url == typedOther.url
       && scale == typedOther.scale;
   }
 
   @override
-  int get hashCode => hashValues(uri, scale);
+  int get hashCode => hashValues(url, scale);
 
 }

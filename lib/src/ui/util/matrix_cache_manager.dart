@@ -21,6 +21,7 @@ import 'package:pattle/src/di.dart' as di;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:url/url.dart';
 
 final cacheManager = MatrixCacheManager();
 
@@ -38,11 +39,10 @@ class MatrixCacheManager extends BaseCacheManager {
     return p.join(directory.path, key);
   }
 
-
   static Future<FileFetcherResponse> _fetch(
     String url, {Map<String, String> headers}) async {
 
-    final uri = Uri.parse(url);
+    final parsedUrl = Url.parse(url);
     int width, height;
 
     try {
@@ -52,12 +52,13 @@ class MatrixCacheManager extends BaseCacheManager {
 
     var bytes;
     if (width != null && height != null) {
-      bytes = await homeserver.downloadThumbnail(uri,
+      bytes = await homeserver.downloadThumbnail(
+        parsedUrl,
         width: width,
         height: height
       );
     } else {
-      bytes = await homeserver.download(Uri.parse(url));
+      bytes = await homeserver.download(parsedUrl);
     }
 
     return MatrixFileFetcherResponse(bytes);

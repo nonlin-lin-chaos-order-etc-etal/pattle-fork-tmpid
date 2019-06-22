@@ -32,7 +32,7 @@ class AdvancedPageState extends State<AdvancedPage> {
   @override
   void initState() {
     super.initState();
-    homeserverTextController.text = bloc.homeserver.uri.toString();
+    homeserverTextController.text = bloc.homeserver.url.toString();
   }
 
   @override
@@ -91,10 +91,10 @@ class AdvancedPageState extends State<AdvancedPage> {
                           controller: homeserverTextController,
                           android: (_) => MaterialTextFieldData(
                             decoration: InputDecoration(
-                                filled: true,
-                                labelText: l(context).homeserver,
-                                hintText: bloc.homeserver.uri.toString(),
-                                errorText: errorText
+                              filled: true,
+                              labelText: l(context).homeserver,
+                              hintText: bloc.homeserver.url.toString(),
+                              errorText: errorText
                             ),
                           ),
                         );
@@ -135,7 +135,7 @@ class AdvancedPageState extends State<AdvancedPage> {
             SizedBox(height: 32),
             PlatformButton(
                 onPressed: () {
-                  bloc.setHomeserverUri(homeserverTextController.text);
+                  bloc.setHomeserverUrl(homeserverTextController.text);
                   Navigator.pop(context);
                 },
                 child: PlatformText(l(context).confirm)

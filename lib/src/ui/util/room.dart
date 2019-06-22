@@ -22,8 +22,9 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/user.dart';
 import 'package:pattle/src/di.dart' as di;
+import 'package:url/url.dart';
 
-Uri avatarUrlOf(Room room)
+Url avatarUrlOf(Room room)
   => room.avatarUrl ?? (room.isDirect ? room.directUser.avatarUrl : room.avatarUrl);
 
 FutureOr<String> nameOf(BuildContext context, Room room) {
