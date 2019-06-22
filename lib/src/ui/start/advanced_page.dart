@@ -32,7 +32,7 @@ class AdvancedPageState extends State<AdvancedPage> {
   @override
   void initState() {
     super.initState();
-    homeserverTextController.text = bloc.homeserver.url.toString();
+    homeserverTextController.text = bloc.userIdDomain.toString();
   }
 
   @override
@@ -93,7 +93,7 @@ class AdvancedPageState extends State<AdvancedPage> {
                             decoration: InputDecoration(
                               filled: true,
                               labelText: l(context).homeserver,
-                              hintText: bloc.homeserver.url.toString(),
+                              hintText: bloc.userIdDomain.toString(),
                               errorText: errorText
                             ),
                           ),

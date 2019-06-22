@@ -22,6 +22,7 @@ import 'package:meta/meta.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:rxdart/rxdart.dart';
 import 'package:url/url.dart';
+import 'dart:io';
 
 final bloc = StartBloc();
 
@@ -39,27 +40,36 @@ class StartBloc {
 
   Homeserver get homeserver => di.getHomeserver();
 
+  Url _userIdDomain;
+  Url get userIdDomain => _userIdDomain;
+
   Username _username;
 
   /// Duration after which a progress indicator should be shown.
   static const loadingTime = const Duration(seconds: 3);
 
-  void _setHomeserver(Url url) {
-    di.registerHomeserverWith(url);
+  Future<void> _setHomeserver(Url url) async {
+    await di.registerHomeserverWith(url);
     _homeserverChangedSubj.add(true);
   }
 
-  void setHomeserverUrl(String url, {bool allowMistake = false}) {
+  Future<void> setHomeserverUrl(String url, {bool allowMistake = false}) async {
     try {
       if (!url.startsWith('https://')) {
         url = 'https://$url';
       }
       final parsedUrl = Url.parse(url);
 
-      _setHomeserver(parsedUrl);
+      await _setHomeserver(parsedUrl);
+      print('parsedUrl: ${parsedUrl}');
+      _userIdDomain = parsedUrl;
     } on FormatException {
       if (!allowMistake) {
         _homeserverChangedSubj.addError(InvalidHostnameException());
+      }
+    } on SocketException {
+      if (!allowMistake) {
+        rethrow;
       }
     }
   }

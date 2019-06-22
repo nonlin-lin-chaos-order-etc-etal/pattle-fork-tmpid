@@ -29,9 +29,15 @@ void registerHomeserver(Homeserver homeserver) {
     => homeserver, override: true);
 }
 
-void registerHomeserverWith(Url url) {
-  inj.registerSingleton<Homeserver>((_)
-    => Homeserver(url), override: true);
+Future<void> registerHomeserverWith(Url url) async {
+  Homeserver hs;
+  try {
+    hs = await Homeserver.fromWellKnown(url);
+  } on WellKnownFailPromptException {
+    hs = Homeserver(url);
+  }
+
+  inj.registerSingleton<Homeserver>((_) => hs, override: true);
 }
 
 Store getStore() => inj.getDependency<Store>();
