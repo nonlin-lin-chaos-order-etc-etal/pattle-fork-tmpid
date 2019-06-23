@@ -141,7 +141,9 @@ abstract class MessageBubble extends Bubble {
       final previousEvent = (previousItem as ChatEvent).event;
 
       final previousHasSameSender
-        = previousEvent?.sender?.name == event.sender.name;
+      = previousEvent != null
+          && displayNameOf(previousEvent.sender) == displayNameOf(event.sender)
+          && previousEvent.sender.isIdenticalTo(event.sender);
 
       if (!previousHasSameSender) {
         _isStartOfGroup = true;
@@ -183,7 +185,10 @@ abstract class MessageBubble extends Bubble {
 
       final nextEvent = (nextItem as ChatEvent).event;
 
-      final nextHasSameSender = nextEvent?.sender?.name == event.sender.name;
+      final nextHasSameSender
+        = nextEvent != null
+          && displayNameOf(nextEvent.sender) == displayNameOf(event.sender)
+          && nextEvent.sender.isIdenticalTo(event.sender);
 
       if (!nextHasSameSender) {
         _isEndOfGroup = true;
