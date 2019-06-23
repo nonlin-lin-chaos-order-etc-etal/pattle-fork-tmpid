@@ -14,7 +14,9 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
@@ -39,11 +41,34 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
     super.dispose();
   }
 
+  Future<void> createGroup() async {
+    // TODO: Navigate to newly created
+    await bloc.createRoom();
+    Navigator.of(context).popUntil(
+      (route) => route.settings.name == Routes.chats
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l(context).newGroup)
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: Text(l(context).newGroup),
+        ios: (_) => CupertinoNavigationBarData(
+          backgroundColor: CupertinoTheme.of(context).primaryColor,
+          actionsForegroundColor: Colors.white,
+          title: Text(
+            l(context).appName,
+            style: TextStyle(
+                color: Colors.white
+            ),
+          ),
+          trailing: CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: createGroup,
+            child: Text(l(context).confirm),
+          )
+        ),
       ),
       body: Column(
         children: <Widget>[
@@ -54,14 +79,19 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.all(16),
-                  child: TextField(
+                  child: PlatformTextField(
                     onChanged: (text) {
                       bloc.groupName = text;
                     },
                     maxLines: 1,
-                    decoration: InputDecoration(
-                      labelText: l(context).groupName,
-                      filled: true
+                    android: (_) => MaterialTextFieldData(
+                      decoration: InputDecoration(
+                        labelText: l(context).groupName,
+                        filled: true
+                      ),
+                    ),
+                    ios: (_) => CupertinoTextFieldData(
+                      placeholder: l(context).groupName
                     ),
                   ),
                 )
@@ -74,30 +104,28 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // TODO: Navigate to newly created
-          await bloc.createRoom();
-          Navigator.of(context).popUntil(
-            (route) => route.settings.name == Routes.chats
-          );
-        },
-        child: StreamBuilder<bool>(
-          stream: bloc.isCreatingRoom,
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            final isCreatingRoom = snapshot.data ?? false;
-            if (isCreatingRoom) {
-              return SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                )
-              );
-            } else {
-              return Icon(Icons.check);
-            }
-          },
+      android: (_) => MaterialScaffoldData(
+        floatingActionButton: FloatingActionButton(
+          onPressed: createGroup,
+          child: StreamBuilder<bool>(
+            stream: bloc.isCreatingRoom,
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              final isCreatingRoom = snapshot.data ?? false;
+              if (isCreatingRoom) {
+                return SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: PlatformCircularProgressIndicator(
+                    android: (_) => MaterialProgressIndicatorData(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                );
+              } else {
+                return Icon(Icons.check);
+              }
+            },
+          ),
         ),
       ),
     );
@@ -114,9 +142,12 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
           Flexible(
             child: Padding(
               padding: EdgeInsets.all(8),
-              child: UserAvatar(
-                user: user,
-                radius: 32
+              child: AspectRatio(
+                aspectRatio: 1/1,
+                child: UserAvatar(
+                  user: user,
+                  radius: 32
+                ),
               )
             ),
           ),

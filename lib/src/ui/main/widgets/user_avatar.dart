@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
+import 'package:pattle/src/ui/util/user.dart';
 
 class UserAvatar extends StatelessWidget {
 
@@ -31,6 +32,7 @@ class UserAvatar extends StatelessWidget {
     if (user.avatarUrl != null) {
       return CircleAvatar(
         radius: radius,
+        backgroundColor: Colors.transparent,
         backgroundImage: MatrixImage(
           user.avatarUrl,
           width: 64,
@@ -39,9 +41,11 @@ class UserAvatar extends StatelessWidget {
       );
     } else {
       return CircleAvatar(
+        backgroundColor: colorOf(user),
         radius: radius,
         child: Icon(
           Icons.person,
+          color: Colors.white,
           size: radius,
         ),
       );

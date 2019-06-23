@@ -20,6 +20,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
+import 'package:pattle/src/ui/main/widgets/platform_ink_well.dart';
 import 'package:pattle/src/ui/util/future_or_builder.dart';
 import 'package:pattle/src/ui/util/user.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -139,7 +140,7 @@ class TextBubble extends MessageBubble {
   Widget buildMine(BuildContext context) {
     final needsBorder = isRepliedTo && reply.sender.isIdenticalTo(me);
 
-    return InkWell(
+    return PlatformInkWell(
       onTap: () { },
       customBorder: border(),
       child: CustomPaint(
@@ -174,7 +175,7 @@ class TextBubble extends MessageBubble {
     final sender = event is! EmoteMessageEvent
                  ? buildSender(context) : Container(width: 0);
 
-    return InkWell(
+    return PlatformInkWell(
       onTap: () {},
       customBorder: border(),
       child: CustomPaint(

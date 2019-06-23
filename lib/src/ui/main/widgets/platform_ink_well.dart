@@ -16,42 +16,29 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:meta/meta.dart';
-import 'package:pattle/src/ui/util/future_or_builder.dart';
-import 'package:pattle/src/ui/util/room.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-class ChatName extends StatelessWidget {
+class PlatformInkWell extends PlatformWidgetBase<Widget, InkWell> {
 
-  final Room room;
-
-  TextStyle style;
-
-  ChatName({
-    @required this.room,
-    this.style,
-  }) {
-    if (style == null) {
-      style = TextStyle();
-    }
-  }
-
-  TextStyle _textStyle() =>
-    style.copyWith(
-      fontWeight: FontWeight.w600,
-    );
+  final Widget child;
+  final GestureTapCallback onTap;
+  final ShapeBorder customBorder;
+  PlatformInkWell({this.child, this.onTap, this.customBorder});
 
   @override
-  Widget build(BuildContext context) {
-    return FutureOrBuilder<String>(
-      futureOr: nameOf(context, room),
-      builder: (BuildContext context, String name) {
-        return Text(name,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: _textStyle()
-        );
-      },
+  InkWell createAndroidWidget(BuildContext context) {
+    return InkWell(
+      customBorder: customBorder,
+      onTap: onTap,
+      child: child,
+    );
+  }
+
+  @override
+  Widget createIosWidget(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: child,
     );
   }
 }

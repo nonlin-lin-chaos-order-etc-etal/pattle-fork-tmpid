@@ -16,7 +16,9 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
 import 'package:pattle/src/ui/main/chat/widgets/date_header.dart';
@@ -71,42 +73,68 @@ class ChatPageState extends State<ChatPage> {
     Widget avatar = Container();
     final avatarUrl = avatarUrlOf(room);
     if (avatarUrl != null) {
-      avatar = Hero(
-        tag: room.id,
-        child: CircleAvatar(
-          backgroundColor: Colors.white,
-          backgroundImage: MatrixImage(avatarUrl,
-            width: 64,
-            height: 64
-          ),
-        )
+      final circleAvatar = CircleAvatar(
+        backgroundColor: Colors.white,
+        backgroundImage: MatrixImage(
+          avatarUrl,
+          width: 64,
+          height: 64
+        ),
+      );
+
+      avatar = PlatformWidget(
+        android: (_) => Hero(
+          tag: room.id,
+          child: circleAvatar
+        ),
+        ios: (_) => circleAvatar,
       );
     }
 
-    return Scaffold(
+    return PlatformScaffold(
       backgroundColor: LightColors.red[50],
-      appBar: AppBar(
+      appBar: PlatformAppBar(
         automaticallyImplyLeading: false,
-        titleSpacing: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              padding: EdgeInsets.all(0),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            avatar,
-            SizedBox(
-              width: 16,
-            ),
-            Flexible(
-              child: ChatName(room: room),
-            )
-          ],
+        android: (context) => MaterialAppBarData(
+          titleSpacing: 0,
+          title: Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_back),
+                padding: EdgeInsets.all(0),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              avatar,
+              SizedBox(
+                width: 16,
+              ),
+              Flexible(
+                child: ChatName(room: room),
+              )
+            ],
+          ),
         ),
+        ios: (context) => CupertinoNavigationBarData(
+          automaticallyImplyLeading: true,
+          backgroundColor: CupertinoTheme.of(context).primaryColor,
+          actionsForegroundColor: Colors.white,
+          padding: EdgeInsetsDirectional.only(start: 0),
+          trailing: Padding(
+            padding: EdgeInsets.all(4),
+            child: AspectRatio(
+              aspectRatio: 1/1,
+              child: avatar,
+            ),
+          ),
+          title: ChatName(
+            room: room,
+            style: TextStyle(
+              color: Colors.white
+            )
+          )
+        )
       ),
       body: Column(
         children: <Widget>[
@@ -137,39 +165,67 @@ class ChatPageState extends State<ChatPage> {
 
   Widget _buildInput() {
     const elevation = 8.0;
+    final sendButton = PlatformIconButton(
+      androidIcon: Icon(Icons.send),
+      iosIcon: Icon(CupertinoIcons.forward),
+      onPressed: () {
+        bloc.sendMessage(textController.value.text);
+        textController.clear();
+      }
+    );
+
     if (bloc.room is JoinedRoom) {
       return Material(
-        elevation: elevation,
-        color: LightColors.red[50],
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Material(
-            elevation: elevation,
-            borderRadius: BorderRadius.circular(8),
-            child: TextField(
-            controller: textController,
-            textInputAction: TextInputAction.newline,
-            autocorrect: true,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(
-              border: UnderlineInputBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(8))
+          elevation: elevation,
+          color: LightColors.red[50],
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: PlatformWidget(
+              android: (_) => Material(
+                elevation: elevation,
+                borderRadius: BorderRadius.circular(8),
+                child: TextField(
+                  controller: textController,
+                  textInputAction: TextInputAction.newline,
+                  autocorrect: true,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(8))
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: l(context).typeAMessage,
+                    suffixIcon: sendButton
+                  ),
+                ),
               ),
-              filled: true,
-              fillColor: Colors.white,
-              hintText: l(context).typeAMessage,
-              suffixIcon: IconButton(
-                icon: Icon(Icons.send),
-                onPressed: () {
-                  bloc.sendMessage(textController.value.text);
-                  textController.clear();
-                }
-              )
+              ios: (_) => Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Expanded(
+                    child: CupertinoTextField(
+                      autocorrect: true,
+                      textCapitalization: TextCapitalization.sentences,
+                      controller: textController,
+                      placeholder: l(context).typeAMessage,
+                      suffix: sendButton,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                        border: Border.all(
+                          color: LightColors.red[100],
+                          style: BorderStyle.solid,
+                          width: 0.0
+                        ),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
+            )
           )
-        )
-      );
+        );
     } else {
       return Material(
         elevation: elevation,
@@ -210,7 +266,7 @@ class ChatPageState extends State<ChatPage> {
         switch(snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
-            return Center(child: CircularProgressIndicator());
+            return Center(child: PlatformCircularProgressIndicator());
           case ConnectionState.active:
           case ConnectionState.done:
             var chatEvents = snapshot.data;
