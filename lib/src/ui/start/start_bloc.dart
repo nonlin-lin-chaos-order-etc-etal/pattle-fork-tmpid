@@ -44,6 +44,7 @@ class StartBloc {
   Url get userIdDomain => _userIdDomain;
 
   Username _username;
+  Username get username => _username;
 
   /// Duration after which a progress indicator should be shown.
   static const loadingTime = const Duration(seconds: 3);

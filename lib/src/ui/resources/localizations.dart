@@ -80,6 +80,8 @@ class Strings {
   final enterPassword = 'Enter password';
   final wrongPasswordError = 'Wrong password. Please try again';
 
+  String loggingInAs(String name) => 'Logging in as $name';
+
   // Room creation event
   List<TextSpan> createdThisGroup(TextSpan name)
     => [name, TextSpan(text: ' created this group')];

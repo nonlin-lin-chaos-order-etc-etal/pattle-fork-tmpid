@@ -117,6 +117,9 @@ class PasswordPageState extends State<PasswordPage> {
                     decoration: InputDecoration(
                       filled: true,
                       labelText: l(context).password,
+                      helperText: l(context).loggingInAs(
+                        bloc.username.toString()
+                      ),
                       errorText: errorText
                     )
                   ),
