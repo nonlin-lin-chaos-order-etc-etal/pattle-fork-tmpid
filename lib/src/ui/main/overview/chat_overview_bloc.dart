@@ -35,13 +35,13 @@ class ChatOverviewBloc {
     var chats = List<ChatOverview>();
 
     // Get all rooms and push them as a single list
-    await for(Room room in _user.rooms.all()) {
+    await for(Room room in _user.rooms.get()) {
       final ignoredEvents = ignoredEventsOf(room, isOverview: true);
       // TODO: Add optional filter argument to up to call
-      final latestEvent = await room.timeline.all()
+      final latestEvent = await room.timeline.get()
         .firstWhere((event) => !ignoredEvents.contains(event.runtimeType), orElse: () => null);
 
-      var latestEventForSorting = await room.timeline.upTo(count: 10)
+      var latestEventForSorting = await room.timeline.get(upTo: 10)
         .firstWhere(
           (event) =>
             (event is! MemberChangeEvent
