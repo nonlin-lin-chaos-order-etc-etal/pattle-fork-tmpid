@@ -62,7 +62,6 @@ class StartBloc {
       final parsedUrl = Url.parse(url);
 
       await _setHomeserver(parsedUrl);
-      print('parsedUrl: ${parsedUrl}');
       _userIdDomain = parsedUrl;
     } on FormatException {
       if (!allowMistake) {

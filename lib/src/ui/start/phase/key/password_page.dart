@@ -95,15 +95,13 @@ class PasswordPageState extends State<PasswordPage> {
                   } else if(snapshot.error is SocketException) {
                     errorText = l(context).connectionFailed;
                   } else {
-                    debugPrint(snapshot.error.toString());
-                    debugPrintStack();
                     errorText = l(context).unknownError;
                   }
                 } else {
                   errorText = null;
                 }
 
-                return PlatformTextField(
+                final textField = PlatformTextField(
                   autofocus: true,
                   onChanged: (value) {
                     password = value;
@@ -124,6 +122,31 @@ class PasswordPageState extends State<PasswordPage> {
                     )
                   ),
                 );
+
+                if (isMaterial) {
+                  return textField;
+                } else if (isCupertino) {
+                  return Column(
+                    children: <Widget>[
+                      textField,
+                      Padding(
+                        padding: EdgeInsets.only(top: 8),
+                        child: Container(
+                          height: 32,
+                          child: errorText != null ?
+                          Text(
+                            errorText,
+                            style: TextStyle(
+                              color: Colors.red,
+                            )
+                          ) : Container()
+                        ),
+                      )
+                    ],
+                  ) ;
+                } else {
+                  return textField;
+                }
               }
             ),
             SizedBox(height: 16),
