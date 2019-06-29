@@ -44,8 +44,11 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
   Future<void> createGroup() async {
     // TODO: Navigate to newly created
     await bloc.createRoom();
-    Navigator.of(context).popUntil(
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      Routes.chats,
       (route) => route.settings.name == Routes.chats
+              && route.settings.arguments == null,
+      arguments: bloc.createdRoom
     );
   }
 

@@ -17,6 +17,7 @@
 import 'dart:collection';
 
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/ui/main/sync_bloc.dart';
 import 'package:pattle/src/ui/util/user.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
@@ -37,6 +38,9 @@ class CreateGroupBloc {
   final usersToAdd = List<User>();
 
   String groupName;
+
+  JoinedRoom _createdRoom;
+  JoinedRoom get createdRoom => _createdRoom;
 
   Future<void> loadMembers() async {
     final users = HashSet<User>(
@@ -59,20 +63,21 @@ class CreateGroupBloc {
     );
   }
 
-  Future<RoomId> createRoom() async {
+  Future<void> createRoom() async {
     if (!_isCreatingRoom) {
       _isCreatingRoom = true;
       _isCreatingRoomSubj.add(true);
-      return me.rooms.create(
-          name: groupName,
-          invitees: usersToAdd
-      ).whenComplete(() {
-        _isCreatingRoom = false;
-        _isCreatingRoomSubj.add(false);
-      });
+      final id = await me.rooms.create(name: groupName, invitees: usersToAdd);
 
+      // Await the next sync so the room has been processed
+      final syncState = await syncBloc.stream.first;
+      print('next sync');
+      if (syncState.succeeded) {
+        _createdRoom = await me.rooms[id];
+      }
+
+      _isCreatingRoom = false;
+      _isCreatingRoomSubj.add(false);
     }
-
-    return null;
   }
 }
