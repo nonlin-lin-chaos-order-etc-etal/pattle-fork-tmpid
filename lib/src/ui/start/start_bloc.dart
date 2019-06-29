@@ -32,7 +32,7 @@ typedef Check = bool Function(Function addError);
 class StartBloc {
 
   StartBloc() {
-    di.registerHomeserverWith(Url.parse("https://matrix.org"));
+    setHomeserverUrl("https://matrix.org");
   }
 
   final _homeserverChangedSubj = BehaviorSubject<bool>();
