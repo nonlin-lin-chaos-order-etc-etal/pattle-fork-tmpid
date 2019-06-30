@@ -54,6 +54,8 @@ class ChatBloc {
   PublishSubject<List<ChatItem>> _itemSubj = PublishSubject<List<ChatItem>>();
   Stream<List<ChatItem>> get items => _itemSubj.stream;
 
+  var isInitialLoad = true;
+
   Future<void> startLoadingEvents() async {
     await loadEvents();
 
@@ -114,6 +116,12 @@ class ChatBloc {
       }
 
       chatItems.add(ChatEvent(event));
+
+      // If 10 items are already loaded, show them
+      if (chatItems.length >= 10 && isInitialLoad) {
+        isInitialLoad = false;
+        _itemSubj.add(List.of(chatItems));
+      }
 
       previousEvent = event;
     }
