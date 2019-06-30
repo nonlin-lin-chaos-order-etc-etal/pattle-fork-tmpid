@@ -32,23 +32,33 @@ class ChatOverviewBloc {
   final LocalUser _user = di.getLocalUser();
 
   Future<void> loadChats() async {
-    var chats = List<ChatOverview>();
+    final chats = List<ChatOverview>();
 
     // Get all rooms and push them as a single list
     await for(Room room in _user.rooms.get()) {
       final ignoredEvents = ignoredEventsOf(room, isOverview: true);
-      // TODO: Add optional filter argument to up to call
-      final latestEvent = await room.timeline.get()
-        .firstWhere((event) => !ignoredEvents.contains(event.runtimeType), orElse: () => null);
 
-      var latestEventForSorting = await room.timeline.get(upTo: 10)
-        .firstWhere(
-          (event) =>
-            (event is! MemberChangeEvent
-             || event is JoinEvent && event.content.subject.id == _user.id)
-          && event is! RedactionEvent,
-          orElse: () => null
-        );
+      // TODO: Add optional filter argument to up to call
+      final latestEvent = await room.timeline.get(
+        upTo: 10,
+        allowRemote: false
+      )
+      .firstWhere(
+        (event) => !ignoredEvents.contains(event.runtimeType),
+        orElse: () => null
+      );
+
+      var latestEventForSorting = await room.timeline.get(
+        upTo: 10,
+        allowRemote: false
+      )
+      .firstWhere(
+        (event) =>
+          (event is! MemberChangeEvent
+           || event is JoinEvent && event.content.subject.id == _user.id)
+        && event is! RedactionEvent,
+        orElse: () => null
+      );
 
       // If there is no non-MemberChangeEvent in the last
       // 10 messages, just settle for the most recent one (which ever
