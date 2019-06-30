@@ -71,7 +71,6 @@ class CreateGroupBloc {
 
       // Await the next sync so the room has been processed
       final syncState = await syncBloc.stream.first;
-      print('next sync');
       if (syncState.succeeded) {
         _createdRoom = await me.rooms[id];
       }
