@@ -32,7 +32,8 @@
 
 ### iOS
 
-  Pattle is available on TestFlight: https://testflight.apple.com/join/uTytydST
+  Pattle is available on TestFlight!
+  [Follow the instructions here to install.](https://testflight.apple.com/join/uTytydST)
   
   Later on Pattle will be available in the App Store.
 
