@@ -131,7 +131,7 @@ class ChatBloc {
       chatItems.add(DateItem(event.time));
     }
 
-    _itemSubj.add(List.of(chatItems));
+    _itemSubj.add(chatItems);
   }
 
   Future<void> sendMessage(String text) async {
