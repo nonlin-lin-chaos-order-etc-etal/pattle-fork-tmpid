@@ -134,7 +134,7 @@ Future<Event> get _environment async {
 
     device = Device(
       family: info.model,
-      model: info.name,
+      model: info.utsname.machine,
       simulator: !info.isPhysicalDevice
     );
   }
