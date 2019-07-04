@@ -44,23 +44,14 @@ class CreationBubble extends StateBubble {
       isMine: isMine
     );
 
+
   @protected
   @override
-  Widget buildContent(BuildContext context) {
-    // Keep default body1 font size so it is a bit smaller
-    // since it is less important than a message
-    // size 14
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-        style: Theme.of(context).textTheme.body1,
-        children: l(context).createdThisGroup(TextSpan(
-          text: displayNameOf(event.room.creator),
-          style: TextStyle(
-            fontWeight: FontWeight.w600
-          )
-        ))
+  List<TextSpan> buildContentSpans(BuildContext context) =>
+    l(context).createdThisGroup(
+      TextSpan(
+        text: displayNameOf(event.room.creator),
+        style: defaultEmphasisTextStyle
       )
     );
-  }
 }

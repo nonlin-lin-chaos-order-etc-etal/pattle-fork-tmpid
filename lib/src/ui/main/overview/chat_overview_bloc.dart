@@ -36,6 +36,11 @@ class ChatOverviewBloc {
 
     // Get all rooms and push them as a single list
     await for(Room room in _user.rooms.get()) {
+      // Don't show rooms that have been upgraded
+      if (room.isUpgraded) {
+        continue;
+      }
+
       final ignoredEvents = ignoredEventsOf(room, isOverview: true);
 
       // TODO: Add optional filter argument to up to call

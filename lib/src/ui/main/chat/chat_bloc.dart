@@ -101,9 +101,12 @@ class ChatBloc {
         }
       }
 
-      shouldIgnore = shouldIgnore ||
+      shouldIgnore |=
         event is JoinEvent && event is! DisplayNameChangeEvent
         && room.creator.isIdenticalTo(event.content.subject);
+
+      // Don't show creation events in rooms that are replacements
+      shouldIgnore |= event is RoomCreationEvent && room.isReplacement;
 
       if (ignoredEvents.contains(event.runtimeType) || shouldIgnore) {
         continue;

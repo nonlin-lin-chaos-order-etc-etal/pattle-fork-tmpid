@@ -43,8 +43,26 @@ abstract class StateBubble extends Bubble {
     isMine: isMine
   );
 
+  TextStyle defaultTextStyle(BuildContext context)
+    => Theme.of(context).textTheme.body1;
+
+  TextStyle get defaultEmphasisTextStyle => TextStyle(
+    fontWeight: FontWeight.w600
+  );
+
   @protected
-  Widget buildContent(BuildContext context);
+  List<TextSpan> buildContentSpans(BuildContext context);
+
+  @protected
+  Widget buildContent(BuildContext context) {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        style: defaultTextStyle(context),
+        children: buildContentSpans(context)
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

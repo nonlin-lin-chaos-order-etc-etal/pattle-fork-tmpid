@@ -18,21 +18,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/ui/main/chat/util/member_span.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
-import '../bubble.dart';
 import 'state_bubble.dart';
 
 
-class MemberBubble extends StateBubble {
+class UpgradeBubble extends StateBubble {
 
   @override
-  final MemberChangeEvent event;
+  final RoomUpgradeEvent event;
 
-  MemberBubble({
+  UpgradeBubble({
     @required ChatEvent item,
     @required ChatItem previousItem,
     @required ChatItem nextItem,
@@ -46,11 +44,14 @@ class MemberBubble extends StateBubble {
       isMine: isMine
     );
 
-  @override
+
   @protected
-  List<TextSpan> buildContentSpans(BuildContext context) => spanFor(
-    context,
-    event,
-    style: defaultEmphasisTextStyle
-  );
+  @override
+  List<TextSpan> buildContentSpans(BuildContext context) =>
+    l(context).upgradedThisGroup(
+      TextSpan(
+        text: displayNameOf(event.sender),
+        style: defaultEmphasisTextStyle
+      )
+    );
 }

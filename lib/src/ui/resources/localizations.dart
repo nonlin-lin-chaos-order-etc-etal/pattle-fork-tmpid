@@ -86,6 +86,10 @@ class Strings {
   List<TextSpan> createdThisGroup(TextSpan name)
     => [name, TextSpan(text: ' created this group')];
 
+  // Room upgrade event
+  List<TextSpan> upgradedThisGroup(TextSpan name)
+  => [name, TextSpan(text: ' upgraded this group')];
+
   // Member change events
   List<TextSpan> changedTheirNameTo(TextSpan oldName, TextSpan newName)
     => [oldName, TextSpan(text: ' changed their name to '), newName];
