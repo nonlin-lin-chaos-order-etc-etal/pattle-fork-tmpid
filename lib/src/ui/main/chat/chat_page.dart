@@ -183,7 +183,11 @@ class ChatPageState extends State<ChatPage> {
             child: PlatformWidget(
               android: (_) => Material(
                 elevation: elevation,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8)
+                ),
+                color: Colors.white,
                 child: TextField(
                   controller: textController,
                   textInputAction: TextInputAction.newline,
@@ -191,10 +195,9 @@ class ChatPageState extends State<ChatPage> {
                   textCapitalization: TextCapitalization.sentences,
                   decoration: InputDecoration(
                     border: UnderlineInputBorder(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(8))
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(8))
                     ),
                     filled: true,
-                    fillColor: Colors.white,
                     hintText: l(context).typeAMessage,
                     suffixIcon: sendButton
                   ),
@@ -270,39 +273,44 @@ class ChatPageState extends State<ChatPage> {
           case ConnectionState.active:
           case ConnectionState.done:
             var chatEvents = snapshot.data;
-            return ListView.builder(
+
+            final widgets = List<Widget>();
+            var index = 0;
+            for (final item in chatEvents) {
+              if (item is ChatEvent) {
+                final event = item.event;
+                final isMine = event.sender.isIdenticalTo(me);
+
+                var previousItem, nextItem;
+                // Note: Because the items are reversed in the
+                // ListView.builder, the 'previous' event is actually the next
+                // one in the list.
+                if (index != chatEvents.length - 1) {
+                  previousItem = chatEvents[index + 1];
+                }
+
+                if (index != 0) {
+                  nextItem = chatEvents[index - 1];
+                }
+
+                widgets.add(Bubble.fromItem(
+                  item: item,
+                  previousItem: previousItem,
+                  nextItem: nextItem,
+                  isMine: isMine,
+                ) ?? Container());
+              } else if (item is DateItem) {
+                widgets.add(DateHeader(item));
+              }
+
+              index++;
+            }
+
+            return ListView(
               controller: scrollController,
               reverse: true,
               physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: chatEvents.length,
-              itemBuilder: (context, index) {
-                final item = chatEvents[index];
-                if (item is ChatEvent) {
-                  final event = item.event;
-                  final isMine = event.sender.isIdenticalTo(me);
-
-                  var previousItem, nextItem;
-                  // Note: Because the items are reversed in the
-                  // ListView.builder, the 'previous' event is actually the next
-                  // one in the list.
-                  if (index != chatEvents.length - 1) {
-                    previousItem = chatEvents[index + 1];
-                  }
-
-                  if (index != 0) {
-                    nextItem = chatEvents[index - 1];
-                  }
-
-                  return Bubble.fromItem(
-                    item: item,
-                    previousItem: previousItem,
-                    nextItem: nextItem,
-                    isMine: isMine,
-                  ) ?? Container();
-                } else if (item is DateItem) {
-                  return DateHeader(item);
-                }
-              }
+              children: widgets,
             );
         }
       }
