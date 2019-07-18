@@ -36,16 +36,15 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
     return displayNameOf(room.directUser);
   }
 
-  final futureOrMembers = room.members.get(upTo: 6);
-
   String calculateName(Iterable<User> members) {
+    print('members: $members');
     var name = '';
     if (members != null) {
       if (members.length == 1) {
         return l(context).you;
         // TODO: Check for aliases (public chats)
       } else {
-        final nonMeMembers = members = members
+        final nonMeMembers = members
             .where((user) => !user.isIdenticalTo(di.getLocalUser()))
             .toList(growable: false);
 
