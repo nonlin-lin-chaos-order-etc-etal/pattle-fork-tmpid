@@ -71,6 +71,7 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
     return name.isNotEmpty ? name : room.id.toString();
   }
 
+  final futureOrMembers = room.members.get(upTo: 6);
   if (futureOrMembers is Future<Iterable<User>>) {
     return futureOrMembers.then(calculateName);
   } else {
