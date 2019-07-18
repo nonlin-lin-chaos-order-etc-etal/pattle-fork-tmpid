@@ -35,7 +35,7 @@ class ChatOverviewBloc {
     final chats = List<ChatOverview>();
 
     // Get all rooms and push them as a single list
-    await for(Room room in _user.rooms.get()) {
+    for(Room room in await _user.rooms.get()) {
       // Don't show rooms that have been upgraded
       if (room.isUpgraded) {
         continue;
@@ -44,19 +44,19 @@ class ChatOverviewBloc {
       final ignoredEvents = ignoredEventsOf(room, isOverview: true);
 
       // TODO: Add optional filter argument to up to call
-      final latestEvent = await room.timeline.get(
+      final latestEvent = (await room.timeline.get(
         upTo: 10,
         allowRemote: false
-      )
+      ))
       .firstWhere(
         (event) => !ignoredEvents.contains(event.runtimeType),
         orElse: () => null
       );
 
-      var latestEventForSorting = await room.timeline.get(
+      var latestEventForSorting = (await room.timeline.get(
         upTo: 10,
         allowRemote: false
-      )
+      ))
       .firstWhere(
         (event) =>
           (event is! MemberChangeEvent

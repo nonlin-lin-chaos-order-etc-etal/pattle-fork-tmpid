@@ -74,7 +74,8 @@ class TextBubble extends MessageBubble {
       final repliedTo = event.room.timeline[event.content.inReplyToId];
       return FutureOrBuilder<RoomEvent>(
         futureOr: repliedTo,
-        builder: (BuildContext context, RoomEvent repliedTo) {
+        builder: (BuildContext context, AsyncSnapshot<RoomEvent> snapshot) {
+          final repliedTo = snapshot.data;
           if (repliedTo != null && repliedTo is TextMessageEvent) {
             return !isRepliedTo ? Padding(
               padding: EdgeInsets.only(

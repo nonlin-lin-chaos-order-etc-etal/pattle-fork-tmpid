@@ -45,12 +45,17 @@ class ChatName extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureOrBuilder<String>(
       futureOr: nameOf(context, room),
-      builder: (BuildContext context, String name) {
-        return Text(name,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: _textStyle()
-        );
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.hasData) {
+          final name = snapshot.data;
+          return Text(name,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: _textStyle()
+          );
+        }
+
+        return Container();
       },
     );
   }

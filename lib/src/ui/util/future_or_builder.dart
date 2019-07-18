@@ -19,14 +19,12 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
-typedef Builder<T> = Widget Function(BuildContext context, T data);
-
 /// Builds immediately if the `FutureOr` is the `T`,
 /// other wise build a `FutureBuilder`.
 class FutureOrBuilder<T> extends StatelessWidget {
 
   final FutureOr<T> futureOr;
-  final Builder<T> builder;
+  final AsyncWidgetBuilder<T> builder;
 
   const FutureOrBuilder({
     Key key,
@@ -37,17 +35,12 @@ class FutureOrBuilder<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (futureOr is T) {
-      return builder(context, futureOr);
+      return builder(context, AsyncSnapshot.withData(ConnectionState.done, futureOr));
     } else {
       return FutureBuilder<T>(
         future: futureOr,
-        builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return builder(context, snapshot.data);
-          }
-
-          return Container();
-        });
+        builder: builder
+      );
     }
   }
 

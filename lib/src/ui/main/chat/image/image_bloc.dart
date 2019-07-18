@@ -60,7 +60,7 @@ class ImageBloc {
     final imageMessageEvents = List<ImageMessageEvent>();
 
     RoomEvent event;
-    await for (event in room.timeline.get(allowRemote: false)) {
+    for (event in await room.timeline.get(allowRemote: false)) {
       if (event is ImageMessageEvent) {
         imageMessageEvents.add(event);
       }

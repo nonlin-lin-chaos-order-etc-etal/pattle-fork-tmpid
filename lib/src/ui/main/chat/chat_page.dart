@@ -27,6 +27,7 @@ import 'package:pattle/src/ui/main/widgets/chat_name.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
+import 'package:pattle/src/ui/util/future_or_builder.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 
 import 'package:pattle/src/di.dart' as di;
@@ -45,26 +46,30 @@ class ChatPageState extends State<ChatPage> {
 
   TextEditingController textController = TextEditingController();
 
+  int maxPageCount;
+
   ChatPageState(this.room) {
     bloc.room = room;
   }
 
   @override
-  void initState() {
-    super.initState();
-    bloc.startLoadingEvents();
-
-    scrollController.addListener(() {
-      if (scrollController.offset >= scrollLoadRange
-       && !scrollController.position.outOfRange) {
-        bloc.requestMoreEvents();
-      }
-    });
+  void dispose() {
+    super.dispose();
   }
 
   @override
-  void dispose() {
-    super.dispose();
+  void initState() {
+    super.initState();
+
+    bloc.hasReachedEnd.listen((hasReachedEnd) {
+      if (hasReachedEnd) {
+        setState(() {
+          maxPageCount = bloc.maxPageCount;
+        });
+      }
+    });
+
+    bloc.shouldRefresh.listen((shouldRefresh) => setState(() { }));
   }
 
   @override
@@ -171,6 +176,9 @@ class ChatPageState extends State<ChatPage> {
       onPressed: () {
         bloc.sendMessage(textController.value.text);
         textController.clear();
+        setState(() {
+
+        });
       }
     );
 
@@ -263,57 +271,79 @@ class ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildEventsList() {
-    return StreamBuilder<List<ChatItem>>(
-      stream: bloc.items,
-      builder: (BuildContext context, AsyncSnapshot<List<ChatItem>> snapshot) {
-        switch(snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.waiting:
-            return Center(child: PlatformCircularProgressIndicator());
-          case ConnectionState.active:
-          case ConnectionState.done:
-            var chatEvents = snapshot.data;
+    return ListView.builder(
+      controller: scrollController,
+      reverse: true,
+      itemCount: maxPageCount,
+      itemBuilder: (BuildContext context, int index) {
+        return FutureOrBuilder<List<ChatItem>>(
+          futureOr: bloc.getPage(index),
+          builder: (BuildContext context, AsyncSnapshot<List<ChatItem>> snapshot) {
+            switch(snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 2,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: PlatformCircularProgressIndicator()
+                  ),
+                );
+              case ConnectionState.active:
+              case ConnectionState.done:
 
-            final widgets = List<Widget>();
-            var index = 0;
-            for (final item in chatEvents) {
-              if (item is ChatEvent) {
-                final event = item.event;
-                final isMine = event.sender.isIdenticalTo(me);
+                print('building for $index (hasData: ${snapshot.hasData}');
 
-                var previousItem, nextItem;
-                // Note: Because the items are reversed in the
-                // ListView.builder, the 'previous' event is actually the next
-                // one in the list.
-                if (index != chatEvents.length - 1) {
-                  previousItem = chatEvents[index + 1];
+                if (!snapshot.hasData) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height * 2
+                  );
                 }
 
-                if (index != 0) {
-                  nextItem = chatEvents[index - 1];
+                final chatEvents = snapshot.data;
+
+                final widgets = List<Widget>();
+                var i = 0;
+                for (final item in chatEvents) {
+                  if (item is ChatEvent) {
+                    final event = item.event;
+                    final isMine = event.sender.isIdenticalTo(me);
+
+                    var previousItem, nextItem;
+                    // Note: Because the items are reversed in the
+                    // ListView.builder, the 'previous' event is actually the next
+                    // one in the list.
+                    if (i != chatEvents.length - 1) {
+                      previousItem = chatEvents[i + 1];
+                    }
+
+                    if (i != 0) {
+                      nextItem = chatEvents[i - 1];
+                    }
+
+                    widgets.add(Bubble.fromItem(
+                      item: item,
+                      previousItem: previousItem,
+                      nextItem: nextItem,
+                      isMine: isMine,
+                    ) ?? Container());
+                  } else if (item is DateItem) {
+                    widgets.add(DateHeader(item));
+                  }
+
+                  i++;
                 }
 
-                widgets.add(Bubble.fromItem(
-                  item: item,
-                  previousItem: previousItem,
-                  nextItem: nextItem,
-                  isMine: isMine,
-                ) ?? Container());
-              } else if (item is DateItem) {
-                widgets.add(DateHeader(item));
-              }
-
-              index++;
+                return ListView(
+                  reverse: true,
+                  primary: false,
+                  shrinkWrap: true,
+                  children: widgets,
+                );
             }
-
-            return ListView(
-              controller: scrollController,
-              reverse: true,
-              physics: const AlwaysScrollableScrollPhysics(),
-              children: widgets,
-            );
-        }
-      }
+          },
+        );
+      },
     );
   }
 }

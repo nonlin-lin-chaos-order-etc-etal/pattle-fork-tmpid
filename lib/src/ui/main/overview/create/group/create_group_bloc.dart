@@ -49,8 +49,8 @@ class CreateGroupBloc {
     );
     // Load members of some rooms, in the future
     // this'll be based on activity and what not
-    await for (final room in me.rooms.get(upTo: 10)) {
-      await for (final user in room.members.get(upTo: 20)) {
+    for (final room in await me.rooms.get(upTo: 10)) {
+      for (final user in await room.members.get(upTo: 20)) {
         if (!user.isIdenticalTo(me)) {
           users.add(user);
         }

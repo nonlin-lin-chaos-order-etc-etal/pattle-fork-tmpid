@@ -15,6 +15,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:async';
+
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/main/sync_bloc.dart';
@@ -51,90 +53,89 @@ class ChatBloc {
     }
   }
 
-  PublishSubject<List<ChatItem>> _itemSubj = PublishSubject<List<ChatItem>>();
-  Stream<List<ChatItem>> get items => _itemSubj.stream;
+  int _maxPagesCount;
+  int get maxPageCount => _maxPagesCount;
 
-  var isInitialLoad = true;
+  int _currentPage;
 
-  Future<void> startLoadingEvents() async {
-    await loadEvents();
+  PublishSubject<bool> _hasReachedEndSubj = PublishSubject<bool>();
+  Stream<bool> get hasReachedEnd => _hasReachedEndSubj.stream.distinct();
 
-    syncBloc.stream.listen((success) async => await loadEvents());
-  }
+  PublishSubject<bool> _shouldRefreshSubj = PublishSubject<bool>();
+  Stream<bool> get shouldRefresh => _shouldRefreshSubj.stream;
 
-  Future<void> requestMoreEvents() async {
-    if (!_isLoading) {
-      isLoading = true;
-      _eventCount += 30;
-      await loadEvents();
-      isLoading = false;
-    }
-  }
-
-  Future<void> loadEvents() async {
+  FutureOr<List<ChatItem>> getPage(int page) {
+    _currentPage = page;
     final chatItems = List<ChatItem>();
 
-    // Remember: 'previous' is actually next in time
-    RoomEvent previousEvent;
-    RoomEvent event;
-    await for(event in room.timeline.get(upTo: _eventCount)) {
+    List<ChatItem> toChatItems(Iterable<RoomEvent> events) {
+      // Remember: 'previous' is actually next in time
+      RoomEvent previousEvent;
+      RoomEvent event;
+      for(event in events) {
+        var shouldIgnore = false;
+        // In direct chats, don't show the invite event between this user
+        // and the direct user.
+        //
+        // Also in direct chats, don't show the join events between this user
+        // and the direct user.
+        if (room.isDirect) {
+          if (event is InviteEvent) {
+            final iInvitedYou = event.sender.isIdenticalTo(me)
+                && event.content.subject.isIdenticalTo(room.directUser);
 
-      var shouldIgnore = false;
-      // In direct chats, don't show the invite event between this user
-      // and the direct user.
-      //
-      // Also in direct chats, don't show the join events between this user
-      // and the direct user.
-      if (room.isDirect) {
-        if (event is InviteEvent) {
-          final iInvitedYou = event.sender.isIdenticalTo(me)
-              && event.content.subject.isIdenticalTo(room.directUser);
+            final youInvitedMe = event.sender.isIdenticalTo(room.directUser)
+                && event.content.subject.isIdenticalTo(me);
 
-          final youInvitedMe = event.sender.isIdenticalTo(room.directUser)
-              && event.content.subject.isIdenticalTo(me);
-
-          shouldIgnore = iInvitedYou || youInvitedMe;
-        } else if (event is JoinEvent) {
-          final subject = event.content.subject;
-          shouldIgnore = subject.isIdenticalTo(me)
-            || subject.isIdenticalTo(room.directUser);
+            shouldIgnore = iInvitedYou || youInvitedMe;
+          } else if (event is JoinEvent) {
+            final subject = event.content.subject;
+            shouldIgnore = subject.isIdenticalTo(me)
+                || subject.isIdenticalTo(room.directUser);
+          }
         }
+
+        shouldIgnore |=
+            event is JoinEvent && event is! DisplayNameChangeEvent
+                && room.creator.isIdenticalTo(event.content.subject);
+
+        // Don't show creation events in rooms that are replacements
+        shouldIgnore |= event is RoomCreationEvent && room.isReplacement;
+
+        if (ignoredEvents.contains(event.runtimeType) || shouldIgnore) {
+          continue;
+        }
+
+        // Insert DateHeader if there's a day difference
+        if (previousEvent != null && event != null
+            && previousEvent.time.day != event.time.day) {
+          chatItems.add(DateItem(previousEvent.time));
+        }
+
+        chatItems.add(ChatEvent(event));
+        previousEvent = event;
       }
 
-      shouldIgnore |=
-        event is JoinEvent && event is! DisplayNameChangeEvent
-        && room.creator.isIdenticalTo(event.content.subject);
+      // Add date header above first event in room
+      if (event is RoomCreationEvent) {
+        chatItems.add(DateItem(event.time));
 
-      // Don't show creation events in rooms that are replacements
-      shouldIgnore |= event is RoomCreationEvent && room.isReplacement;
-
-      if (ignoredEvents.contains(event.runtimeType) || shouldIgnore) {
-        continue;
+        _maxPagesCount = _currentPage + 1;
+        _hasReachedEndSubj.add(true);
       }
 
-      // Insert DateHeader if there's a day difference
-      if (previousEvent != null && event != null
-          && previousEvent.time.day != event.time.day) {
-        chatItems.add(DateItem(previousEvent.time));
-      }
-
-      chatItems.add(ChatEvent(event));
-
-      // If 10 items are already loaded, show them
-      if (chatItems.length >= 10 && isInitialLoad) {
-        isInitialLoad = false;
-        _itemSubj.add(List.of(chatItems));
-      }
-
-      previousEvent = event;
+      return chatItems.isNotEmpty ? chatItems : null;
     }
 
-    // Add date header above first event in room
-    if (event is RoomCreationEvent) {
-      chatItems.add(DateItem(event.time));
-    }
+    final futureOrEvents = room.timeline.paginate(page: page);
 
-    _itemSubj.add(chatItems);
+    if (futureOrEvents is Iterable<RoomEvent>) {
+      return toChatItems(futureOrEvents);
+    } else {
+      final future = futureOrEvents as Future<Iterable<RoomEvent>>;
+
+      return future.then((events) => toChatItems(events));
+    }
   }
 
   Future<void> sendMessage(String text) async {
@@ -143,7 +144,7 @@ class ChatBloc {
     if (room is JoinedRoom && text.isNotEmpty) {
       // Refresh the list every time the sent state changes.
       await for (var sentState in room.send(TextMessage(body: text))) {
-        await loadEvents();
+        _shouldRefreshSubj.add(true);
       }
     }
   }

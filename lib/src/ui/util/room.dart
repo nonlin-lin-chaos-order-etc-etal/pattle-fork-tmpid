@@ -36,8 +36,9 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
     return displayNameOf(room.directUser);
   }
 
-  // TODO: Make upTo FutureOr
-  return room.members.get(upTo: 6).toList().then((members) {
+  final futureOrMembers = room.members.get(upTo: 6);
+
+  String calculateName(Iterable<User> members) {
     var name = '';
     if (members != null) {
       if (members.length == 1) {
@@ -45,8 +46,8 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
         // TODO: Check for aliases (public chats)
       } else {
         final nonMeMembers = members = members
-          .where((user) => !user.isIdenticalTo(di.getLocalUser()))
-          .toList(growable: false);
+            .where((user) => !user.isIdenticalTo(di.getLocalUser()))
+            .toList(growable: false);
 
         var i = 0;
         for (User member in nonMeMembers) {
@@ -69,7 +70,13 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
     }
 
     return name.isNotEmpty ? name : room.id.toString();
-  });
+  }
+
+  if (futureOrMembers is Future<Iterable<User>>) {
+    return futureOrMembers.then(calculateName);
+  } else {
+    return calculateName(futureOrMembers);
+  }
 }
 
 List<Type> ignoredEventsOf(Room room, {@required bool isOverview}) {
