@@ -1,6 +1,6 @@
 # Pattle
 
-  [![](https://img.shields.io/matrix/app:pattle.im.svg)](https://matrix.to/#/#app:pattle.im)
+  [![](https://img.shields.io/matrix/app:pattle.im.svg?server_fqdn=matrix.org)](https://matrix.to/#/#app:pattle.im)
   
   ![Preview](/CHANGELOG/0.5.0.png)
 
