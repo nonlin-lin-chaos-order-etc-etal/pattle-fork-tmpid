@@ -50,18 +50,23 @@ class MatrixCacheManager extends BaseCacheManager {
       height = int.parse(headers['height']);
     } on FormatException { }
 
-    var bytes;
+    Stream<List<int>> stream;
     if (width != null && height != null) {
-      bytes = await homeserver.downloadThumbnail(
+      stream = await homeserver.downloadThumbnail(
         parsedUrl,
         width: width,
         height: height
       );
     } else {
-      bytes = await homeserver.download(parsedUrl);
+      stream = await homeserver.download(parsedUrl);
     }
 
-    return MatrixFileFetcherResponse(bytes);
+    final bytes = List<int>();
+    await for (final part in stream) {
+      bytes.addAll(part);
+    }
+
+    return MatrixFileFetcherResponse(Uint8List.fromList(bytes));
   }
 }
 
