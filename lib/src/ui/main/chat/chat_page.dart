@@ -292,8 +292,6 @@ class ChatPageState extends State<ChatPage> {
               case ConnectionState.active:
               case ConnectionState.done:
 
-                print('building for $index (hasData: ${snapshot.hasData}');
-
                 if (!snapshot.hasData) {
                   return SizedBox(
                     height: MediaQuery.of(context).size.height * 2

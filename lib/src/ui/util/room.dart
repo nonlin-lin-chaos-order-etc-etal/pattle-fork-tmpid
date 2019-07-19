@@ -37,7 +37,6 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
   }
 
   String calculateName(Iterable<User> members) {
-    print('members: $members');
     var name = '';
     if (members != null) {
       if (members.length == 1) {
