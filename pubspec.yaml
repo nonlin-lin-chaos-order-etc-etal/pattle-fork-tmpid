@@ -10,21 +10,21 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  injector: ^1.0.6
+  injector: ^1.0.8
 
   matrix_sdk: ^0.19.1
   matrix_sdk_sqflite: ^0.15.0
 
-  rxdart: ^0.21.0
+  rxdart: ^0.22.0
 
   # TODO: Use official package when PR is merged
   sentry:
     git: https://git.pattle.im/forks/sentry.git
 
-  flutter_cache_manager: ^0.3.2
+  flutter_cache_manager: ^1.1.0
 
-  device_info: ^0.4.0+1
-  package_info: ^0.4.0+3
+  device_info: ^0.4.0+2
+  package_info: ^0.4.0+5
 
   # TODO (maybe): Use official package when PR is merged
   flutter_html:
@@ -32,22 +32,22 @@ dependencies:
 
   flutter_dotenv: ^2.0.1
 
-  flutter_platform_widgets: ^0.10.0
+  flutter_platform_widgets: ^0.12.0
 
   respect_24_hour: ^0.0.2
 
   transparent_image: ^1.0.0
 
-  photo_view: ^0.4.1
+  photo_view: ^0.4.2
 
-  url_launcher: ^5.0.2
+  url_launcher: ^5.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.7.0
+  flutter_launcher_icons: ^0.7.2+1
 
   flutter_test:
     sdk: flutter
