@@ -22,6 +22,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
 import 'package:pattle/src/ui/main/chat/widgets/date_header.dart';
+import 'package:pattle/src/ui/main/chat/widgets/loading_bubble.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/main/widgets/chat_name.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
@@ -284,12 +285,14 @@ class ChatPageState extends State<ChatPage> {
             switch(snapshot.connectionState) {
               case ConnectionState.none:
               case ConnectionState.waiting:
-                widget = SizedBox(
-                  height: MediaQuery.of(context).size.height * 2,
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: PlatformCircularProgressIndicator()
-                  ),
+                widget = ListView(
+                    reverse: true,
+                    primary: false,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    children: List.generate(20, (i) => LoadingBubble(
+                      isMine: i % 2 == 0,
+                    ))
                 );
                 break;
               case ConnectionState.active:

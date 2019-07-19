@@ -17,7 +17,6 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
@@ -290,6 +289,8 @@ abstract class MessageBubble extends Bubble {
     return bottom;
   }
 
+  Color mineColor() => LightColors.red[450];
+
   Widget _buildMine(BuildContext context) =>
     Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -308,7 +309,7 @@ abstract class MessageBubble extends Bubble {
                     top: marginTop(),
                   ) : EdgeInsets.only(),
                 child: Material(
-                  color: LightColors.red[450],
+                  color: mineColor(),
                   elevation: 1,
                   shape: border(),
                   child: buildMine(context)
@@ -322,6 +323,8 @@ abstract class MessageBubble extends Bubble {
 
   @protected
   Widget buildMine(BuildContext context);
+
+  Color theirsColor() => Colors.white;
 
   Widget _buildTheirs(BuildContext context) =>
     Column(
@@ -341,7 +344,7 @@ abstract class MessageBubble extends Bubble {
                     top: marginTop()
                   ) : EdgeInsets.only(),
                 child: Material(
-                  color: Colors.white,
+                  color: theirsColor(),
                   elevation: 1,
                   shape: border(),
                   child: buildTheirs(context),
