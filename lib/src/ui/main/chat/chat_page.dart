@@ -279,16 +279,19 @@ class ChatPageState extends State<ChatPage> {
         return FutureOrBuilder<List<ChatItem>>(
           futureOr: bloc.getPage(index),
           builder: (BuildContext context, AsyncSnapshot<List<ChatItem>> snapshot) {
+            Widget widget;
+
             switch(snapshot.connectionState) {
               case ConnectionState.none:
               case ConnectionState.waiting:
-                return SizedBox(
+                widget = SizedBox(
                   height: MediaQuery.of(context).size.height * 2,
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: PlatformCircularProgressIndicator()
                   ),
                 );
+                break;
               case ConnectionState.active:
               case ConnectionState.done:
 
@@ -332,13 +335,16 @@ class ChatPageState extends State<ChatPage> {
                   i++;
                 }
 
-                return ListView(
+                widget = ListView(
                   reverse: true,
                   primary: false,
                   shrinkWrap: true,
                   children: widgets,
                 );
+                break;
             }
+
+            return widget;
           },
         );
       },

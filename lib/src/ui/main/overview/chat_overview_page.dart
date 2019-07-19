@@ -97,10 +97,13 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
     return StreamBuilder<List<ChatOverview>>(
       stream: bloc.chats,
       builder: (BuildContext context, AsyncSnapshot<List<ChatOverview>> snapshot) {
+        Widget widget;
+
         switch(snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
-            return Center(child: PlatformCircularProgressIndicator());
+            widget = Center(child: PlatformCircularProgressIndicator());
+            break;
           case ConnectionState.active:
           case ConnectionState.done:
             final chats = snapshot.data;
@@ -109,7 +112,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
               return Center(child: PlatformCircularProgressIndicator());
             }
 
-            return ListView.separated(
+            widget = ListView.separated(
               separatorBuilder: (context, index) => Divider(
                 height: 1,
                 indent: 64,
@@ -119,7 +122,10 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
                 return _buildChatOverview(chats[index]);
               }
             );
+            break;
         }
+
+        return widget;
       }
     );
   }
