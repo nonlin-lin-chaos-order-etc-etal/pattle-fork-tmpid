@@ -102,6 +102,6 @@ class ChatOverviewBloc {
 
     syncBloc.start();
 
-    syncBloc.stream.listen((success) async => await loadChats());
+    syncBloc.stream.listen((state) async => await loadChats());
   }
 }
