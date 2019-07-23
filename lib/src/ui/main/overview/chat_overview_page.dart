@@ -190,7 +190,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
       },
       leading: avatar,
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      subtitle: Subtitle.fromEvent(chat.latestEvent)
+      subtitle: Subtitle.forChat(chat)
     );
   }
 }

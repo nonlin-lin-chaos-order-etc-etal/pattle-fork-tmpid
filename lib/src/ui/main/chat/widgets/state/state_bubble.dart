@@ -43,6 +43,8 @@ abstract class StateBubble extends Bubble {
     isMine: isMine
   );
 
+  final void Function(BuildContext) onTap = (context) { };
+
   TextStyle defaultTextStyle(BuildContext context)
     => Theme.of(context).textTheme.body1;
 
@@ -89,7 +91,7 @@ abstract class StateBubble extends Bubble {
                   customBorder: RoundedRectangleBorder(
                     borderRadius: borderRadius
                   ),
-                  onTap: () { },
+                  onTap: () => onTap(context),
                   child: Padding(
                     padding: Bubble.padding,
                     child: Column(

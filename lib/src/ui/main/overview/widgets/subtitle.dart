@@ -18,12 +18,15 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/di.dart' as di;
+import 'package:pattle/src/ui/main/overview/models/chat_overview.dart';
+import 'package:pattle/src/ui/main/overview/widgets/typing_subtitle.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
 import 'image_subtitle.dart';
 import 'member_subtitle.dart';
 import 'redacted_subtitle.dart';
 import 'text_subtitle.dart';
+import 'topic_subtitle.dart';
 import 'unsupported_subtitle.dart';
 abstract class Subtitle extends StatelessWidget {
 
@@ -44,22 +47,30 @@ abstract class Subtitle extends StatelessWidget {
       ? '${displayNameOf(event.sender)}: '
       : '';
 
-  factory Subtitle.fromEvent(Event event) {
-    if (event == null) {
+  factory Subtitle.forChat(ChatOverview chat) {
+
+    if (chat.room.isSomeoneElseTyping) {
+      return TypingSubtitle(chat.room);
+    } else {
+      final event = chat.latestEvent;
+      if (event == null) {
+        return UnsupportedSubtitle(event);
+      }
+
+      if (event is TextMessageEvent) {
+        return TextSubtitle(event);
+      } else if (event is ImageMessageEvent) {
+        return ImageSubtitle(event);
+      } else if (event is MemberChangeEvent) {
+        return MemberSubtitle(event);
+      } else if (event is RedactedEvent) {
+        return RedactedSubtitle(event);
+      } else if (event is TopicChangeEvent) {
+        return TopicSubtitle(event);
+      }
+
       return UnsupportedSubtitle(event);
     }
-
-    if (event is TextMessageEvent) {
-      return TextSubtitle(event);
-    } else if (event is ImageMessageEvent) {
-      return ImageSubtitle(event);
-    } else if (event is MemberChangeEvent) {
-      return MemberSubtitle(event);
-    } else if (event is RedactedEvent) {
-      return RedactedSubtitle(event);
-    }
-
-    return UnsupportedSubtitle(event);
   }
 
   TextStyle textStyle(BuildContext context) =>

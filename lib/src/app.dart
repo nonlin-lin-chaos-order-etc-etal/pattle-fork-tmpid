@@ -22,6 +22,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/initial/initial_page.dart';
 import 'package:pattle/src/ui/main/chat/chat_page.dart';
 import 'package:pattle/src/ui/main/chat/image/image_page.dart';
+import 'package:pattle/src/ui/main/chat/settings/chat_settings_page.dart';
 import 'package:pattle/src/ui/main/overview/chat_overview_page.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
@@ -46,6 +47,10 @@ final routes = {
         return ChatOverviewPage();
       }
     }
+  ),
+  Routes.chatsSettings: (Object arguments) => platformPageRoute(
+    settings: RouteSettings(name: Routes.chatsSettings),
+    builder: (context) => ChatSettingsPage(arguments)
   ),
   Routes.chatsNew: (Object arguments) => platformPageRoute(
     settings: RouteSettings(name: Routes.chatsNew),
@@ -83,6 +88,7 @@ class Routes {
 
   static const root = '/';
   static const chats = '/chats';
+  static const chatsSettings = '/chats/settings';
   static const image = '/image';
 
   static const start = '/start';

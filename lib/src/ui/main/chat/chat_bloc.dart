@@ -26,9 +26,13 @@ import 'package:pattle/src/di.dart' as di;
 
 class ChatBloc {
 
-  Room room;
+  final Room room;
 
-  int _eventCount = 20;
+  StreamSubscription syncSub;
+
+  ChatBloc(this.room) {
+    syncSub = syncBloc.stream.listen((_) => _shouldRefreshSubj.add(true));
+  }
 
   List<Type> get ignoredEvents => ignoredEventsOf(room, isOverview: false);
 
@@ -147,5 +151,51 @@ class ChatBloc {
         _shouldRefreshSubj.add(true);
       }
     }
+  }
+
+
+  bool _notifying = false;
+  bool _typing = false;
+  final _stopwatch = Stopwatch();
+  Timer _notTypingTimer;
+  String _lastInput;
+  Future<void> notifyInputChanged(String input) async {
+    final room = this.room as JoinedRoom;
+
+    if (!_notifying) {
+      // Ignore null -> to '' input, triggers when clicking
+      // on the textfield
+      if (_lastInput == null && input.isEmpty) return;
+
+      _lastInput = input;
+
+      _notifying = true;
+
+      _notTypingTimer?.cancel();
+
+      if (_stopwatch.elapsed >= const Duration(seconds: 4) ||
+          !_stopwatch.isRunning) {
+        _typing = true;
+
+        await room.setIsTyping(true, timeout: const Duration(seconds: 7));
+
+        _stopwatch.reset();
+        _stopwatch.start();
+      }
+
+      _notifying = false;
+    }
+
+    _notTypingTimer = Timer(const Duration(seconds: 5), () async {
+      if (_typing) {
+        _typing = false;
+        await room.setIsTyping(false);
+      }
+    });
+  }
+
+
+  void cleanUp() {
+    syncSub.cancel();
   }
 }

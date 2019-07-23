@@ -20,12 +20,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
+import 'package:pattle/src/ui/main/chat/util/typing_span.dart';
 import 'package:pattle/src/ui/main/chat/widgets/date_header.dart';
 import 'package:pattle/src/ui/main/chat/widgets/loading_bubble.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/main/widgets/chat_name.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
+import 'package:pattle/src/ui/main/widgets/title_with_sub.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/future_or_builder.dart';
@@ -39,7 +42,7 @@ import 'widgets/bubble.dart';
 class ChatPageState extends State<ChatPage> {
 
   final me = di.getLocalUser();
-  final ChatBloc bloc = ChatBloc();
+  final ChatBloc bloc;
   final Room room;
 
   ScrollController scrollController = ScrollController();
@@ -49,13 +52,17 @@ class ChatPageState extends State<ChatPage> {
 
   int maxPageCount;
 
-  ChatPageState(this.room) {
-    bloc.room = room;
+  ChatPageState(this.room) : bloc = ChatBloc(room) {
+    textController.addListener(() {
+      bloc.notifyInputChanged(textController.text);
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
+    bloc.cleanUp();
+    textController.dispose();
   }
 
   @override
@@ -97,29 +104,50 @@ class ChatPageState extends State<ChatPage> {
       );
     }
 
+    final settingsGestureDetector = ({Widget child}) {
+      return GestureDetector(
+        onTap: () => Navigator.of(context)
+            .pushNamed(Routes.chatsSettings, arguments: room),
+        child: child,
+      );
+    };
+
+    final title = room.isSomeoneElseTyping
+        ? TitleWithSub(
+            title: ChatName(room: room),
+            subtitle: RichText(
+              text: TextSpan(
+                children: typingSpan(context, room)
+              ),
+            ),
+          )
+        : ChatName(room: room);
+
     return PlatformScaffold(
       backgroundColor: LightColors.red[50],
       appBar: PlatformAppBar(
         automaticallyImplyLeading: false,
         android: (context) => MaterialAppBarData(
           titleSpacing: 0,
-          title: Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.arrow_back),
-                padding: EdgeInsets.all(0),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              avatar,
-              SizedBox(
-                width: 16,
-              ),
-              Flexible(
-                child: ChatName(room: room),
-              )
-            ],
+          title: settingsGestureDetector(
+            child: Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  padding: EdgeInsets.all(0),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                avatar,
+                SizedBox(
+                  width: 16,
+                ),
+                Flexible(
+                  child: title,
+                )
+              ],
+            )
           ),
         ),
         ios: (context) => CupertinoNavigationBarData(
@@ -134,10 +162,12 @@ class ChatPageState extends State<ChatPage> {
               child: avatar,
             ),
           ),
-          title: ChatName(
-            room: room,
-            style: TextStyle(
-              color: Colors.white
+          title: settingsGestureDetector(
+            child: ChatName(
+              room: room,
+              style: TextStyle(
+                color: Colors.white
+              )
             )
           )
         )

@@ -90,6 +90,13 @@ class Strings {
   List<TextSpan> upgradedThisGroup(TextSpan name)
   => [name, TextSpan(text: ' upgraded this group')];
 
+  // Topic change event
+  List<TextSpan> changedDescriptionTapToView(TextSpan name)
+  => [name, TextSpan(text: ' changed the description of this group. Tap to view')];
+
+  List<TextSpan> changedDescription(TextSpan name)
+  => [name, TextSpan(text: ' changed the description of this group')];
+
   // Member change events
   List<TextSpan> changedTheirNameTo(TextSpan oldName, TextSpan newName)
     => [oldName, TextSpan(text: ' changed their name to '), newName];
@@ -113,6 +120,28 @@ class Strings {
       TextSpan(text: ' was invited by '),
       inviter
     ];
+
+  // Typing events
+  List<TextSpan> get typing=> [TextSpan(text: 'typing...')];
+
+  List<TextSpan> isTyping(TextSpan name) => [
+    name,
+    TextSpan(text: ' is typing...'),
+  ];
+
+  List<TextSpan> areTyping(TextSpan first, TextSpan second) => [
+    first,
+    TextSpan(text: ' and '),
+    second,
+    TextSpan(text: ' are typing...')
+  ];
+
+  List<TextSpan> andMoreAreTyping(TextSpan first, TextSpan second) => [
+    first,
+    TextSpan(text: ' and '),
+    second,
+    TextSpan(text: ' and more typing...')
+  ];
 }
 
 class AppLocalizations {
