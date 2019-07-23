@@ -41,22 +41,6 @@ class ChatBloc {
 
   final me = di.getLocalUser();
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
-  set isLoading(bool value) {
-    _isLoading = value;
-    if (!isLoading) {
-      _isLoadingEventsSubj.add(false);
-    } else {
-      // If still loading after 2 seconds, notify the UI
-      Future.delayed(const Duration(seconds: 2), () {
-        if (isLoading) {
-          _isLoadingEventsSubj.add(true);
-        }
-      });
-    }
-  }
-
   int _maxPagesCount;
   int get maxPageCount => _maxPagesCount;
 
