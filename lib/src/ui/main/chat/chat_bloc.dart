@@ -36,9 +36,6 @@ class ChatBloc {
 
   List<Type> get ignoredEvents => ignoredEventsOf(room, isOverview: false);
 
-  PublishSubject<bool> _isLoadingEventsSubj = PublishSubject<bool>();
-  Stream<bool> get isLoadingEvents => _isLoadingEventsSubj.stream.distinct();
-
   final me = di.getLocalUser();
 
   int _maxPagesCount;

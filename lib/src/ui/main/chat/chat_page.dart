@@ -176,12 +176,7 @@ class ChatPageState extends State<ChatPage> {
         children: <Widget>[
           ErrorBanner(),
           Expanded(
-            child: Stack(
-              children: <Widget>[
-                _buildBody(),
-                _buildLoadingIndicator()
-              ],
-            ),
+            child: _buildBody(),
           )
         ],
       )
@@ -281,24 +276,6 @@ class ChatPageState extends State<ChatPage> {
       );
     }
 
-  }
-
-  Widget _buildLoadingIndicator() {
-    return StreamBuilder<bool>(
-      stream: bloc.isLoadingEvents,
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        final isLoading = snapshot.data ?? false;
-
-        return AnimatedOpacity(
-          opacity: isLoading ? 1.0 : 0.0,
-          duration: Duration(milliseconds: 250),
-            child: Container(
-              alignment: Alignment.topCenter,
-              child: RefreshProgressIndicator(),
-            )
-        );
-      }
-    );
   }
 
   Widget _buildEventsList() {
