@@ -31,7 +31,11 @@ class ChatBloc {
   StreamSubscription syncSub;
 
   ChatBloc(this.room) {
-    syncSub = syncBloc.stream.listen((_) => _shouldRefreshSubj.add(true));
+    syncSub = syncBloc.stream.listen((state) {
+      if (state.dirtyRooms.contains(room)) {
+        _shouldRefreshSubj.add(true);
+      }
+    });
   }
 
   List<Type> get ignoredEvents => ignoredEventsOf(room, isOverview: false);
