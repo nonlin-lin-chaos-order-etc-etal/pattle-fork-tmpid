@@ -24,16 +24,12 @@ import 'package:pattle/src/ui/util/room.dart';
 class ChatName extends StatelessWidget {
   final Room room;
 
-  TextStyle style;
+  final TextStyle style;
 
   ChatName({
     @required this.room,
-    this.style,
-  }) {
-    if (style == null) {
-      style = TextStyle();
-    }
-  }
+    this.style = const TextStyle(),
+  });
 
   TextStyle _textStyle() => style.copyWith(
         fontWeight: FontWeight.w600,
