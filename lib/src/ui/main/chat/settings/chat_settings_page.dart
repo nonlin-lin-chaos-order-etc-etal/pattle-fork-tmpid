@@ -174,8 +174,6 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                     final isWaiting = snapshot.connectionState == ConnectionState.waiting;
                     bool allShown = members.length == bloc.room.members.count;
 
-                    print(isWaiting);
-
                     return MediaQuery.removePadding(
                       context: context,
                       removeLeft: true,
@@ -188,7 +186,6 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                             ? members.length + 1
                             : members.length,
                         itemBuilder: (BuildContext context, int index) {
-                          print('build: $index');
                           // Item after all members
                           if (index == members.length) {
                             return _buildShowMoreItem(context, members.length, isWaiting);
