@@ -52,7 +52,7 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
         body = error.body?.toString();
       }
 
-      _sentry.capture(
+      await _sentry.capture(
         event: Event(
           exception: error,
           stackTrace: stackTrace,
@@ -64,7 +64,7 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
         ),
       );
     } else if (error is matrix.MatrixException) {
-      _sentry.capture(
+      await _sentry.capture(
         event: Event(
           exception: error,
           stackTrace: stackTrace,
@@ -74,7 +74,7 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
         ),
       );
     } else {
-      _sentry.captureException(
+      await _sentry.captureException(
         exception: error,
         stackTrace: stackTrace,
       );

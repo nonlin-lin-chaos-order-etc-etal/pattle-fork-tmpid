@@ -23,6 +23,7 @@ import 'package:pattle/src/di.dart' as di;
 import 'package:rxdart/rxdart.dart';
 import 'package:url/url.dart';
 import 'dart:io';
+import 'package:pedantic/pedantic.dart';
 
 final bloc = StartBloc();
 
@@ -87,11 +88,11 @@ class StartBloc {
 
     // If after three seconds it's still active, change state to
     // 'stillActive'.
-    Future.delayed(loadingTime).then((_) async {
+    unawaited(Future.delayed(loadingTime).then((_) async {
       if (subject.value == RequestState.active) {
         subject.add(RequestState.stillActive);
       }
-    });
+    }));
 
     final addError = (error) {
       subject.addError(error);

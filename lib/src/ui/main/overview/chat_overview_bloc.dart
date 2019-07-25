@@ -98,7 +98,7 @@ class ChatOverviewBloc {
     // Load from store before sync
     await loadChats();
 
-    syncBloc.start();
+    await syncBloc.start();
 
     syncBloc.stream.listen((state) async => await loadChats());
   }

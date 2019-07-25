@@ -48,7 +48,10 @@ class MatrixCacheManager extends BaseCacheManager {
     try {
       width = int.parse(headers['width']);
       height = int.parse(headers['height']);
-    } on FormatException {}
+    } on FormatException {
+      width = null;
+      height = null;
+    }
 
     Stream<List<int>> stream;
     if (width != null && height != null) {

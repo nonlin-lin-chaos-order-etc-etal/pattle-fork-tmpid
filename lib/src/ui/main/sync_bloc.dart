@@ -31,8 +31,8 @@ class SyncBloc {
 
   Future<void> start() async {
     if (!started) {
-      _user.sendAllUnsent();
-      _syncSubj.addStream(_user.sync());
+      await _user.sendAllUnsent();
+      await _syncSubj.addStream(_user.sync());
 
       started = true;
     }
