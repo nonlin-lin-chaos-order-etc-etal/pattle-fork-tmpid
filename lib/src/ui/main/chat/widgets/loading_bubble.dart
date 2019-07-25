@@ -22,33 +22,31 @@ import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'message_bubble.dart';
 
 class LoadingBubble extends MessageBubble {
+  static final _mockEvent = TextMessageEvent(
+    TextMessage(
+      body: 'Blabla',
+    ),
+    RoomEventArgs(
+      id: EventId('1234'),
+      sender: User(
+          id: UserId('@wilko:pattle.im'),
+          state: UserState(
+              roomId: RoomId('!343432:pattle.im'),
+              displayName: 'Wilko',
+              since: DateTime.now())),
+      time: DateTime.now(),
+    ),
+  );
+
   @override
-  TextMessageEvent event;
+  final TextMessageEvent event = _mockEvent;
 
   LoadingBubble({
     @required bool isMine,
   }) : super(
-          item: ChatEvent(
-            TextMessageEvent(
-              TextMessage(
-                body: 'Blabla',
-              ),
-              RoomEventArgs(
-                id: EventId('1234'),
-                sender: User(
-                    id: UserId('@wilko:pattle.im'),
-                    state: UserState(
-                        roomId: RoomId('!343432:pattle.im'),
-                        displayName: 'Wilko',
-                        since: DateTime.now())),
-                time: DateTime.now(),
-              ),
-            ),
-          ),
+          item: ChatEvent(_mockEvent),
           isMine: isMine,
-        ) {
-    event = item.event;
-  }
+        );
 
   @override
   State<StatefulWidget> createState() => LoadingBubbleState();
