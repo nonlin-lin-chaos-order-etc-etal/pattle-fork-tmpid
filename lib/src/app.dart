@@ -40,13 +40,8 @@ final routes = {
       ),
   Routes.chats: (Object arguments) => platformPageRoute(
         settings: RouteSettings(name: Routes.chats),
-        builder: (context) {
-          if (arguments is Room) {
-            return ChatPage(arguments);
-          } else {
-            return ChatOverviewPage();
-          }
-        },
+        builder: (context) =>
+            arguments is Room ? ChatPage(arguments) : ChatOverviewPage(),
       ),
   Routes.chatsSettings: (Object arguments) => platformPageRoute(
         settings: RouteSettings(name: Routes.chatsSettings),

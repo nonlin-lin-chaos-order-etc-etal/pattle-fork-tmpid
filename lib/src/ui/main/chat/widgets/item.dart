@@ -16,15 +16,7 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
-import 'package:pattle/src/ui/resources/theme.dart';
-import 'package:pattle/src/ui/util/date_format.dart';
-import 'package:pattle/src/ui/util/user.dart';
-
-import 'image_bubble.dart';
-import 'state/member_bubble.dart';
-import 'text_bubble.dart';
 
 abstract class Item extends StatelessWidget {
   final ChatItem item;

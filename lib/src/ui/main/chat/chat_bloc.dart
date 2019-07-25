@@ -131,7 +131,7 @@ class ChatBloc {
     // TODO: Check if text is just whitespace
     if (room is JoinedRoom && text.isNotEmpty) {
       // Refresh the list every time the sent state changes.
-      await for (var sentState in room.send(TextMessage(body: text))) {
+      await for (var _ in room.send(TextMessage(body: text))) {
         _shouldRefreshSubj.add(true);
       }
     }

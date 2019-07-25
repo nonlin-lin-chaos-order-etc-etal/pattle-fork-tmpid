@@ -15,8 +15,6 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/chat/image/image_bloc.dart';
@@ -50,6 +48,7 @@ class ImagePageState extends State<ImagePage> {
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
     _date =
         '${formatAsDate(context, message.time)}, ${formatAsTime(message.time)}';
   }
@@ -96,14 +95,16 @@ class ImagePageState extends State<ImagePage> {
         BuildContext context,
         AsyncSnapshot<List<ImageMessageEvent>> snapshot,
       ) {
+        Widget widget;
         switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
-            return Center(child: CircularProgressIndicator());
+            widget = Center(child: CircularProgressIndicator());
+            break;
           case ConnectionState.active:
           case ConnectionState.done:
             final events = snapshot.data;
-            return PhotoViewGallery.builder(
+            widget = PhotoViewGallery.builder(
               itemCount: events.length,
               reverse: true,
               builder: (context, index) {
@@ -124,7 +125,10 @@ class ImagePageState extends State<ImagePage> {
                 initialPage: events.indexOf(message),
               ),
             );
+            break;
         }
+
+        return widget;
       },
     );
   }

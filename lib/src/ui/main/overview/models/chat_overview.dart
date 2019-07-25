@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:typed_data';
-
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
 

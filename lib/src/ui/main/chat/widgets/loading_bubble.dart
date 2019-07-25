@@ -15,19 +15,10 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
-import 'package:pattle/src/ui/main/widgets/platform_ink_well.dart';
-import 'package:pattle/src/ui/util/future_or_builder.dart';
-import 'package:pattle/src/ui/util/user.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:pattle/src/di.dart' as di;
-import 'package:flutter_html/flutter_html.dart';
 
-import 'bubble.dart';
 import 'message_bubble.dart';
 
 class LoadingBubble extends MessageBubble {

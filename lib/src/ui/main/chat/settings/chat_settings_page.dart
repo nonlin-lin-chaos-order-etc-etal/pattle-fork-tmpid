@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
 import 'package:pattle/src/ui/main/chat/settings/chat_settings_bloc.dart';
 import 'package:pattle/src/ui/main/widgets/chat_name.dart';
 import 'package:pattle/src/ui/main/widgets/user_item.dart';
@@ -30,7 +29,6 @@ import 'package:pattle/src/di.dart' as di;
 import 'package:pattle/src/ui/util/future_or_builder.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 import 'package:pattle/src/ui/util/room.dart';
-import 'package:pattle/src/ui/util/user.dart';
 
 class ChatSettingsPageState extends State<ChatSettingsPage> {
   final me = di.getLocalUser();

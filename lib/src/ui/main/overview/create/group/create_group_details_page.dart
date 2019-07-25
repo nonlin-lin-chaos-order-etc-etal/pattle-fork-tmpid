@@ -17,12 +17,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
 import 'package:pattle/src/ui/main/widgets/user_avatar.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
-import 'package:pattle/src/ui/util/matrix_image.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
 import 'package:pattle/src/ui/main/overview/create/group/create_group_bloc.dart';
