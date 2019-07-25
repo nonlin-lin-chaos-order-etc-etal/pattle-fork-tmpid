@@ -1,4 +1,5 @@
 stages:
+  - check
   - build
   - deploy
   - release
@@ -11,6 +12,23 @@ stages:
     variables:
       - $PUB_CREDENTIALS
       - $CI_API_KEY
+
+format:
+  stage: check
+  image: google/dart:latest
+  tags:
+    - docker
+  script:
+    - dartfmt . --set-exit-if-changed --fix -n
+
+analyze:
+  stage: check
+  image: google/dart:latest
+  tags:
+    - docker
+  script:
+    - pub get
+    - dartanalyzer . --fatal-infos --fatal-warnings
 
 build:
   stage: build
