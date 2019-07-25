@@ -43,7 +43,7 @@ class Strings {
   final groupName = 'Group name';
   final participants = 'Participants';
   final description = 'Description';
-  final none = 'None';
+  final noDescriptionSet = 'No description has been set';
 
   final cantSendMessages
     = 'You can\'t send messages to this group because you\'re no longer a participant.';

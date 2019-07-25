@@ -118,7 +118,7 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                     ),
                   ),
                   SizedBox(height: 4),
-                  Text(room.topic ?? l(context).none,
+                  Text(room.topic ?? l(context).noDescriptionSet,
                     style: TextStyle(
                       fontStyle: room.topic == null
                           ? FontStyle.italic : FontStyle.normal
