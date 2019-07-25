@@ -112,7 +112,8 @@ class ChatPageState extends State<ChatPage> {
       );
     };
 
-    final title = room.isSomeoneElseTyping
+    // TODO: typingUsers should not contain nulls
+    final title = room.isSomeoneElseTyping && !room.typingUsers.any((u) => u == null)
         ? TitleWithSub(
             title: ChatName(room: room),
             subtitle: RichText(

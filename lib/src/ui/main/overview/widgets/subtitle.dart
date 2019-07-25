@@ -49,7 +49,8 @@ abstract class Subtitle extends StatelessWidget {
 
   factory Subtitle.forChat(ChatOverview chat) {
 
-    if (chat.room.isSomeoneElseTyping) {
+    // TODO: typingUsers should not contain nulls
+    if (chat.room.isSomeoneElseTyping && !chat.room.typingUsers.any((u) => u == null)) {
       return TypingSubtitle(chat.room);
     } else {
       final event = chat.latestEvent;
