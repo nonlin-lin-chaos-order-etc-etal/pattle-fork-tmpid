@@ -17,7 +17,7 @@
 
 import 'package:flutter/material.dart';
 
-final ThemeData lightTheme = new ThemeData(
+final ThemeData lightTheme = ThemeData(
   primarySwatch: LightColors.red,
   brightness: Brightness.light,
   primaryColorBrightness: Brightness.dark,
@@ -35,30 +35,30 @@ class LightColors {
 
   static const _redPrimary = 0xFFAA4139;
 
-  static const MaterialColor red = const MaterialColor(
+  static const MaterialColor red = MaterialColor(
     _redPrimary,
-    const <int, Color>{
-      50: const Color(0xFFf5E8E7),
-      100: const Color(0xFFE6C6C4),
-      200: const Color(0xFFD5A09C),
-      300: const Color(0xFFC47A74),
-      400: const Color(0xFFB75E57),
-      450: const Color(0xFFB15048),
-      500: const Color(_redPrimary),
-      600: const Color(0xFFA33B33),
-      700: const Color(0xFF99322C),
-      800: const Color(0xFF902A24),
-      900: const Color(0xFF7F1C17),
+    <int, Color>{
+      50: Color(0xFFf5E8E7),
+      100: Color(0xFFE6C6C4),
+      200: Color(0xFFD5A09C),
+      300: Color(0xFFC47A74),
+      400: Color(0xFFB75E57),
+      450: Color(0xFFB15048),
+      500: Color(_redPrimary),
+      600: Color(0xFFA33B33),
+      700: Color(0xFF99322C),
+      800: Color(0xFF902A24),
+      900: Color(0xFF7F1C17),
     },
   );
 
   static const userColors = [
-    const Color(0xFF79740E),
-    const Color(0xFFB57614),
-    const Color(0xFF076678),
-    const Color(0xFF8F3F71),
-    const Color(0xFF427B58),
-    const Color(0xFF3C3836),
-    const Color(0xFFAF3A03),
+    Color(0xFF79740E),
+    Color(0xFFB57614),
+    Color(0xFF076678),
+    Color(0xFF8F3F71),
+    Color(0xFF427B58),
+    Color(0xFF3C3836),
+    Color(0xFFAF3A03),
   ];
 }

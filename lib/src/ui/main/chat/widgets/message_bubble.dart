@@ -27,7 +27,7 @@ import 'bubble.dart';
 import 'item.dart';
 
 abstract class MessageBubble extends Bubble {
-  static const groupTimeLimit = const Duration(minutes: 3);
+  static const groupTimeLimit = Duration(minutes: 3);
 
   // Styling
   static const betweenGroupMargin = 4.0;

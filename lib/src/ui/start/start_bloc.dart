@@ -47,7 +47,7 @@ class StartBloc {
   Username get username => _username;
 
   /// Duration after which a progress indicator should be shown.
-  static const loadingTime = const Duration(seconds: 3);
+  static const loadingTime = Duration(seconds: 3);
 
   Future<void> _setHomeserver(Url url) async {
     await di.registerHomeserverWith(url);

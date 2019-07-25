@@ -37,8 +37,8 @@ abstract class Bubble extends Item {
   final bool isMine;
 
   // Styling
-  static const padding = const EdgeInsets.all(8);
-  static const radiusForBorder = const Radius.circular(8);
+  static const padding = EdgeInsets.all(8);
+  static const radiusForBorder = Radius.circular(8);
 
   Bubble({
     @required this.item,

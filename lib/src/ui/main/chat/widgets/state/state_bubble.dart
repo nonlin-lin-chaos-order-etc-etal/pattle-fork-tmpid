@@ -27,7 +27,7 @@ import '../item.dart';
 
 abstract class StateBubble extends Bubble {
   static const horizontalMargin = 64;
-  static const borderRadius = const BorderRadius.all(Bubble.radiusForBorder);
+  static const borderRadius = BorderRadius.all(Bubble.radiusForBorder);
 
   StateBubble({
     @required ChatEvent item,
