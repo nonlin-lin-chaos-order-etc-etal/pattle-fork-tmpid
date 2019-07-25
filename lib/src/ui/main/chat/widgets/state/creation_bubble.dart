@@ -42,10 +42,15 @@ class CreationBubble extends StateBubble {
           isMine: isMine,
         );
 
+  @override
+  State<StatefulWidget> createState() => CreationBubbleState();
+}
+
+class CreationBubbleState extends StateBubbleState<CreationBubble> {
   @protected
   Widget buildContent(BuildContext context) {
     return FutureOrBuilder<User>(
-      futureOr: event.room.creator,
+      futureOr: widget.event.room.creator,
       builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
         return super.buildContent(context);
       },
@@ -57,7 +62,7 @@ class CreationBubble extends StateBubble {
   List<TextSpan> buildContentSpans(BuildContext context) =>
       l(context).createdThisGroup(
         TextSpan(
-          text: displayNameOf(event.room.creator),
+          text: displayNameOf(widget.event.room.creator),
           style: defaultEmphasisTextStyle,
         ),
       );

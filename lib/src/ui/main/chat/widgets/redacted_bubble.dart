@@ -44,10 +44,15 @@ class RedactedBubble extends MessageBubble {
           isMine: isMine,
         );
 
+  @override
+  State<StatefulWidget> createState() => RedactedBubbleState();
+}
+
+class RedactedBubbleState extends MessageBubbleState<RedactedBubble> {
   @protected
   Widget buildContent(BuildContext context) => Redacted(
-        event: event,
-        color: isMine ? Colors.grey[300] : Colors.grey[700],
+        event: widget.event,
+        color: widget.isMine ? Colors.grey[300] : Colors.grey[700],
         textStyle: textStyle(context),
       );
 

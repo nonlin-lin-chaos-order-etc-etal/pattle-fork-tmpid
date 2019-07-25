@@ -50,12 +50,17 @@ class TopicBubble extends StateBubble {
         );
       };
 
+  @override
+  State<StatefulWidget> createState() => TopicBubbleState();
+}
+
+class TopicBubbleState extends StateBubbleState<TopicBubble> {
   @protected
   @override
   List<TextSpan> buildContentSpans(BuildContext context) =>
       l(context).changedDescriptionTapToView(
         TextSpan(
-          text: displayNameOf(event.sender),
+          text: displayNameOf(widget.event.sender),
           style: defaultEmphasisTextStyle,
         ),
       );

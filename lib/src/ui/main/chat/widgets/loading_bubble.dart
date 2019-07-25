@@ -51,6 +51,11 @@ class LoadingBubble extends MessageBubble {
   }
 
   @override
+  State<StatefulWidget> createState() => LoadingBubbleState();
+}
+
+class LoadingBubbleState extends MessageBubbleState<LoadingBubble> {
+  @override
   Color mineColor() => Colors.grey[350];
 
   @protected

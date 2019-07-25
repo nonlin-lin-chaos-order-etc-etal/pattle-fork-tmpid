@@ -41,7 +41,12 @@ class MemberBubble extends StateBubble {
         );
 
   @override
+  State<StatefulWidget> createState() => MemberBubbleState();
+}
+
+class MemberBubbleState extends StateBubbleState<MemberBubble> {
+  @override
   @protected
   List<TextSpan> buildContentSpans(BuildContext context) =>
-      spanFor(context, event, style: defaultEmphasisTextStyle);
+      spanFor(context, widget.event, style: defaultEmphasisTextStyle);
 }

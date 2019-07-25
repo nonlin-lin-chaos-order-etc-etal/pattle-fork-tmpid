@@ -53,17 +53,22 @@ class ImageBubble extends MessageBubble {
           reply: reply,
         );
 
+  @override
+  State<StatefulWidget> createState() => ImageBubbleState();
+}
+
+class ImageBubbleState extends MessageBubbleState<ImageBubble> {
   void _onTap(BuildContext context) {
-    Navigator.pushNamed(context, Routes.image, arguments: event);
+    Navigator.pushNamed(context, Routes.image, arguments: widget.event);
   }
 
   Widget buildContent(BuildContext context) =>
-      Text(event.content.body ?? '', style: textStyle(context));
+      Text(widget.event.content.body ?? '', style: textStyle(context));
 
   @override
   Widget buildTime(BuildContext context, {Color color}) {
     var alignment, borderRadius, content;
-    if (isMine) {
+    if (widget.isMine) {
       alignment = Alignment.bottomRight;
       borderRadius = this.borderRadius();
 
@@ -103,7 +108,7 @@ class ImageBubble extends MessageBubble {
 
   @override
   Widget buildSender(BuildContext context, {Color color}) {
-    if (!isMine && isStartOfGroup) {
+    if (!widget.isMine && isStartOfGroup) {
       return Align(
         alignment: Alignment.topLeft,
         child: Padding(
@@ -126,8 +131,8 @@ class ImageBubble extends MessageBubble {
   }
 
   Widget _build(BuildContext context) => Container(
-        width: width,
-        height: height,
+        width: ImageBubble.width,
+        height: widget.height,
         decoration: BoxDecoration(borderRadius: borderRadius()),
         child: Stack(
           children: <Widget>[
@@ -135,9 +140,9 @@ class ImageBubble extends MessageBubble {
               child: ClipRRect(
                 borderRadius: borderRadius(),
                 child: Hero(
-                  tag: event.id,
+                  tag: widget.event.id,
                   child: Image(
-                    image: MatrixImage(event.content.url),
+                    image: MatrixImage(widget.event.content.url),
                     fit: BoxFit.cover,
                   ),
                 ),

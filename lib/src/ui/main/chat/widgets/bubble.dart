@@ -134,7 +134,4 @@ abstract class Bubble extends Item {
       return null;
     }
   }
-
-  @override
-  Widget build(BuildContext context);
 }

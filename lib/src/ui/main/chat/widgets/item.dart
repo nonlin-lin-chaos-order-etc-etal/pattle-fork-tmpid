@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 
-abstract class Item extends StatelessWidget {
+abstract class Item extends StatefulWidget {
   final ChatItem item;
 
   final ChatItem previousItem;
@@ -33,13 +33,16 @@ abstract class Item extends StatelessWidget {
     @required this.previousItem,
     @required this.nextItem,
   });
+}
 
+abstract class ItemState<T extends Item> extends State<T>
+    with AutomaticKeepAliveClientMixin {
   @override
-  Widget build(BuildContext context);
+  final bool wantKeepAlive = true;
 
   @protected
-  double marginBottom() => betweenMargin;
+  double marginBottom() => Item.betweenMargin;
 
   @protected
-  double marginTop() => previousItem == null ? betweenMargin : 0;
+  double marginTop() => widget.previousItem == null ? Item.betweenMargin : 0;
 }

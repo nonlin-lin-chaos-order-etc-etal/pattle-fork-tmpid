@@ -41,12 +41,17 @@ class UpgradeBubble extends StateBubble {
           isMine: isMine,
         );
 
+  @override
+  State<StatefulWidget> createState() => UpgradeBubbleState();
+}
+
+class UpgradeBubbleState extends StateBubbleState<UpgradeBubble> {
   @protected
   @override
   List<TextSpan> buildContentSpans(BuildContext context) =>
       l(context).upgradedThisGroup(
         TextSpan(
-          text: displayNameOf(event.sender),
+          text: displayNameOf(widget.event.sender),
           style: defaultEmphasisTextStyle,
         ),
       );

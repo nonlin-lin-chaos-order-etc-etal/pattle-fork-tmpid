@@ -41,7 +41,9 @@ abstract class StateBubble extends Bubble {
             isMine: isMine);
 
   final void Function(BuildContext) onTap = (context) {};
+}
 
+abstract class StateBubbleState<T extends StateBubble> extends ItemState<T> {
   TextStyle defaultTextStyle(BuildContext context) =>
       Theme.of(context).textTheme.body1;
 
@@ -54,15 +56,17 @@ abstract class StateBubble extends Bubble {
   @protected
   Widget buildContent(BuildContext context) {
     return RichText(
-        textAlign: TextAlign.center,
-        text: TextSpan(
-          style: defaultTextStyle(context),
-          children: buildContentSpans(context),
-        ));
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        style: defaultTextStyle(context),
+        children: buildContentSpans(context),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     // size 12 14-2
     var timeTextStyle = Theme.of(context).textTheme.body1;
     timeTextStyle = timeTextStyle.copyWith(
@@ -83,12 +87,12 @@ abstract class StateBubble extends Bubble {
               child: Material(
                 elevation: 1,
                 color: LightColors.red[100],
-                borderRadius: borderRadius,
+                borderRadius: StateBubble.borderRadius,
                 child: PlatformInkWell(
                   customBorder: RoundedRectangleBorder(
-                    borderRadius: borderRadius,
+                    borderRadius: StateBubble.borderRadius,
                   ),
-                  onTap: () => onTap(context),
+                  onTap: () => widget.onTap(context),
                   child: Padding(
                     padding: Bubble.padding,
                     child: Column(
@@ -97,7 +101,7 @@ abstract class StateBubble extends Bubble {
                         buildContent(context),
                         SizedBox(height: 4),
                         Text(
-                          formatAsTime(event.time),
+                          formatAsTime(widget.event.time),
                           style: timeTextStyle,
                         ),
                       ],

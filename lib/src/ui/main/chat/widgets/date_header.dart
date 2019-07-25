@@ -30,15 +30,21 @@ class DateHeader extends Item {
   DateHeader(this.item);
 
   @override
+  State<StatefulWidget> createState() => DateHeaderState();
+}
+
+class DateHeaderState extends ItemState<DateHeader> {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Center(
       child: Padding(
         padding: EdgeInsets.only(
           top: marginTop(),
-          bottom: betweenMargin,
+          bottom: DateHeader.betweenMargin,
         ),
         child: Text(
-          formatAsDate(context, item.date).toUpperCase(),
+          formatAsDate(context, widget.item.date).toUpperCase(),
           style: Theme.of(context).textTheme.display1.copyWith(
                 fontSize: 16,
               ),
@@ -48,6 +54,7 @@ class DateHeader extends Item {
   }
 
   @override
-  double marginTop() =>
-      previousItem == null ? betweenMargin * 2 : betweenMargin;
+  double marginTop() => widget.previousItem == null
+      ? DateHeader.betweenMargin * 2
+      : DateHeader.betweenMargin;
 }

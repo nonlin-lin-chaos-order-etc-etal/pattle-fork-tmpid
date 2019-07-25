@@ -27,11 +27,11 @@ import 'bubble.dart';
 import 'item.dart';
 
 abstract class MessageBubble extends Bubble {
-  static const _groupTimeLimit = const Duration(minutes: 3);
+  static const groupTimeLimit = const Duration(minutes: 3);
 
   // Styling
-  static const _betweenGroupMargin = 4.0;
-  static const _oppositeMargin = 64.0;
+  static const betweenGroupMargin = 4.0;
+  static const oppositeMargin = 64.0;
 
   final RoomEvent reply;
   final bool isRepliedTo;
@@ -49,10 +49,14 @@ abstract class MessageBubble extends Bubble {
           nextItem: nextItem,
           isMine: isMine,
         );
+}
 
+abstract class MessageBubbleState<T extends MessageBubble>
+    extends ItemState<T> {
   @override
   Widget build(BuildContext context) {
-    if (isMine) {
+    super.build(context);
+    if (widget.isMine) {
       return _buildMine(context);
     } else {
       return _buildTheirs(context);
@@ -69,7 +73,7 @@ abstract class MessageBubble extends Bubble {
       style = style.copyWith(
         color: color,
       );
-    } else if (isMine) {
+    } else if (widget.isMine) {
       style = style.copyWith(
         color: Colors.white,
       );
@@ -80,7 +84,7 @@ abstract class MessageBubble extends Bubble {
 
   TextStyle senderTextStyle(BuildContext context, {Color color}) {
     if (color == null) {
-      color = colorOf(event.sender);
+      color = colorOf(widget.event.sender);
     }
 
     return textStyle(context, color: color).copyWith(
@@ -93,7 +97,7 @@ abstract class MessageBubble extends Bubble {
     if (isEndOfGroup) {
       final style = textStyle(context, color: color);
       return Text(
-        formatAsTime(event.time),
+        formatAsTime(widget.event.time),
         style: style.copyWith(
           // size 12 14+1-3
           fontSize: style.fontSize - 3,
@@ -109,9 +113,10 @@ abstract class MessageBubble extends Bubble {
 
   @protected
   Widget buildSender(BuildContext context, {Color color}) {
-    if ((isStartOfGroup || (isRepliedTo && !isMine)) && !event.room.isDirect) {
+    if ((isStartOfGroup || (widget.isRepliedTo && !widget.isMine)) &&
+        !widget.event.room.isDirect) {
       return Text(
-        displayNameOf(event.sender, context),
+        displayNameOf(widget.event.sender, context),
         style: senderTextStyle(context, color: color),
       );
     } else {
@@ -122,24 +127,25 @@ abstract class MessageBubble extends Bubble {
   bool _isStartOfGroup;
   @protected
   bool get isStartOfGroup {
-    if (isRepliedTo) {
+    if (widget.isRepliedTo) {
       _isStartOfGroup = false;
       return _isStartOfGroup;
     }
 
     if (_isStartOfGroup == null) {
-      if (previousItem is! ChatEvent ||
-          (previousItem is ChatEvent &&
-              (previousItem as ChatEvent).event is StateEvent)) {
+      if (widget.previousItem is! ChatEvent ||
+          (widget.previousItem is ChatEvent &&
+              (widget.previousItem as ChatEvent).event is StateEvent)) {
         _isStartOfGroup = true;
         return _isStartOfGroup;
       }
 
-      final previousEvent = (previousItem as ChatEvent).event;
+      final previousEvent = (widget.previousItem as ChatEvent).event;
 
       final previousHasSameSender = previousEvent != null &&
-          displayNameOf(previousEvent.sender) == displayNameOf(event.sender) &&
-          previousEvent.sender == event.sender;
+          displayNameOf(previousEvent.sender) ==
+              displayNameOf(widget.event.sender) &&
+          previousEvent.sender == widget.event.sender;
 
       if (!previousHasSameSender) {
         _isStartOfGroup = true;
@@ -147,7 +153,9 @@ abstract class MessageBubble extends Bubble {
       }
 
       // Difference between time is greater than 3 min
-      final limit = event.time.subtract(_groupTimeLimit).millisecondsSinceEpoch;
+      final limit = widget.event.time
+          .subtract(MessageBubble.groupTimeLimit)
+          .millisecondsSinceEpoch;
 
       if (previousEvent.time.millisecondsSinceEpoch <= limit) {
         _isStartOfGroup = true;
@@ -164,24 +172,25 @@ abstract class MessageBubble extends Bubble {
   bool _isEndOfGroup;
   @protected
   bool get isEndOfGroup {
-    if (isRepliedTo) {
+    if (widget.isRepliedTo) {
       _isEndOfGroup = false;
       return _isEndOfGroup;
     }
 
     if (_isEndOfGroup == null) {
-      if (nextItem is! ChatEvent ||
-          (nextItem is ChatEvent &&
-              (nextItem as ChatEvent).event is StateEvent)) {
+      if (widget.nextItem is! ChatEvent ||
+          (widget.nextItem is ChatEvent &&
+              (widget.nextItem as ChatEvent).event is StateEvent)) {
         _isEndOfGroup = true;
         return _isEndOfGroup;
       }
 
-      final nextEvent = (nextItem as ChatEvent).event;
+      final nextEvent = (widget.nextItem as ChatEvent).event;
 
       final nextHasSameSender = nextEvent != null &&
-          displayNameOf(nextEvent.sender) == displayNameOf(event.sender) &&
-          nextEvent.sender == event.sender;
+          displayNameOf(nextEvent.sender) ==
+              displayNameOf(widget.event.sender) &&
+          nextEvent.sender == widget.event.sender;
 
       if (!nextHasSameSender) {
         _isEndOfGroup = true;
@@ -189,7 +198,9 @@ abstract class MessageBubble extends Bubble {
       }
 
       // Difference between time is greater than 3 min
-      final limit = event.time.add(_groupTimeLimit).millisecondsSinceEpoch;
+      final limit = widget.event.time
+          .add(MessageBubble.groupTimeLimit)
+          .millisecondsSinceEpoch;
 
       if (nextEvent.time.millisecondsSinceEpoch >= limit) {
         _isEndOfGroup = true;
@@ -209,14 +220,14 @@ abstract class MessageBubble extends Bubble {
     if (isEndOfGroup) {
       return Item.betweenMargin;
     } else {
-      return _betweenGroupMargin;
+      return MessageBubble.betweenGroupMargin;
     }
   }
 
   @protected
   @override
   double marginTop() {
-    if (previousItem == null) {
+    if (widget.previousItem == null) {
       return Item.betweenMargin;
     } else {
       return 0;
@@ -227,7 +238,7 @@ abstract class MessageBubble extends Bubble {
   BorderRadius borderRadius() {
     var radius = const BorderRadius.all(Bubble.radiusForBorder);
 
-    if (isMine) {
+    if (widget.isMine) {
       if (isEndOfGroup) {
         radius = BorderRadius.only(
           topLeft: Bubble.radiusForBorder,
@@ -255,7 +266,9 @@ abstract class MessageBubble extends Bubble {
 
   @protected
   Widget buildSentState(BuildContext context) => Icon(
-        event.sentState != SentState.sent ? Icons.access_time : Icons.check,
+        widget.event.sentState != SentState.sent
+            ? Icons.access_time
+            : Icons.check,
         color: Colors.white,
         size: 14,
       );
@@ -290,9 +303,9 @@ abstract class MessageBubble extends Bubble {
             children: [
               Flexible(
                 child: Padding(
-                  padding: !isRepliedTo
+                  padding: !widget.isRepliedTo
                       ? EdgeInsets.only(
-                          left: _oppositeMargin,
+                          left: MessageBubble.oppositeMargin,
                           right: Item.sideMargin,
                           bottom: marginBottom(),
                           top: marginTop(),
@@ -325,10 +338,10 @@ abstract class MessageBubble extends Bubble {
             children: [
               Flexible(
                 child: Padding(
-                  padding: !isRepliedTo
+                  padding: !widget.isRepliedTo
                       ? EdgeInsets.only(
                           left: Item.sideMargin,
-                          right: _oppositeMargin,
+                          right: MessageBubble.oppositeMargin,
                           bottom: marginBottom(),
                           top: marginTop(),
                         )

@@ -29,8 +29,8 @@ import 'bubble.dart';
 import 'message_bubble.dart';
 
 class TextBubble extends MessageBubble {
-  static const _replyMargin = 8.0;
-  static const _replyLeftPadding = 12.0;
+  static const replyMargin = 8.0;
+  static const replyLeftPadding = 12.0;
 
   @override
   final TextMessageEvent event;
@@ -52,8 +52,13 @@ class TextBubble extends MessageBubble {
           reply: reply,
         );
 
+  @override
+  State<StatefulWidget> createState() => TextBubbleState();
+}
+
+class TextBubbleState extends MessageBubbleState<TextBubble> {
   TextStyle _linkStyle(BuildContext context) {
-    if (isMine) {
+    if (widget.isMine) {
       return textStyle(context).copyWith(
         decoration: TextDecoration.underline,
       );
@@ -66,26 +71,27 @@ class TextBubble extends MessageBubble {
   }
 
   Widget _buildRepliedTo(BuildContext context) {
-    if (event.content.inReplyToId != null) {
-      final repliedTo = event.room.timeline[event.content.inReplyToId];
+    if (widget.event.content.inReplyToId != null) {
+      final repliedTo =
+          widget.event.room.timeline[widget.event.content.inReplyToId];
       return FutureOrBuilder<RoomEvent>(
         futureOr: repliedTo,
         builder: (BuildContext context, AsyncSnapshot<RoomEvent> snapshot) {
           final repliedTo = snapshot.data;
           if (repliedTo != null && repliedTo is TextMessageEvent) {
-            return !isRepliedTo
+            return !widget.isRepliedTo
                 ? Padding(
                     padding: EdgeInsets.only(
-                      top: !isMine ? 4 : 0,
-                      bottom: _replyMargin,
+                      top: !widget.isMine ? 4 : 0,
+                      bottom: TextBubble.replyMargin,
                     ),
                     // Only build the replied-to message if this itself
                     // is not a replied-to message (to prevent very long
                     // reply chains)
                     child: Bubble.asReply(
-                      reply: event,
+                      reply: widget.event,
                       replyTo: repliedTo,
-                      isMine: repliedTo.sender == me,
+                      isMine: repliedTo.sender == widget.me,
                     ),
                   )
                 : Container();
@@ -102,7 +108,7 @@ class TextBubble extends MessageBubble {
   @protected
   Widget buildContent(BuildContext context) {
     final html = Html(
-      data: event.content.formattedBody ?? '',
+      data: widget.event.content.formattedBody ?? '',
       useRichText: true,
       defaultTextStyle: textStyle(context),
       fillWidth: false,
@@ -114,7 +120,7 @@ class TextBubble extends MessageBubble {
       },
     );
 
-    if (event is! EmoteMessageEvent) {
+    if (widget.event is! EmoteMessageEvent) {
       return html;
     } else {
       return Row(
@@ -123,10 +129,10 @@ class TextBubble extends MessageBubble {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            displayNameOf(event.sender, context) + ' ',
+            displayNameOf(widget.event.sender, context) + ' ',
             style: senderTextStyle(
               context,
-              color: isMine ? Colors.white : null,
+              color: widget.isMine ? Colors.white : null,
             ),
           ),
           Flexible(
@@ -139,7 +145,7 @@ class TextBubble extends MessageBubble {
 
   @protected
   Widget buildMine(BuildContext context) {
-    final needsBorder = isRepliedTo && reply.sender == me;
+    final needsBorder = widget.isRepliedTo && widget.reply.sender == widget.me;
 
     return PlatformInkWell(
       onTap: () {},
@@ -148,7 +154,7 @@ class TextBubble extends MessageBubble {
         painter: needsBorder ? ReplyBorderPainter(color: Colors.white) : null,
         child: Padding(
           padding: Bubble.padding.copyWith(
-            left: needsBorder ? _replyLeftPadding : null,
+            left: needsBorder ? TextBubble.replyLeftPadding : null,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -166,10 +172,10 @@ class TextBubble extends MessageBubble {
 
   @protected
   Widget buildTheirs(BuildContext context) {
-    final needsBorder = isRepliedTo && reply.sender != me;
+    final needsBorder = widget.isRepliedTo && widget.reply.sender != widget.me;
 
     // Don't show sender above emotes
-    final sender = event is! EmoteMessageEvent
+    final sender = widget.event is! EmoteMessageEvent
         ? buildSender(context)
         : Container(width: 0);
 
@@ -179,12 +185,12 @@ class TextBubble extends MessageBubble {
       child: CustomPaint(
         painter: needsBorder
             ? ReplyBorderPainter(
-                color: colorOf(event.sender),
+                color: colorOf(widget.event.sender),
               )
             : null,
         child: Padding(
           padding: Bubble.padding.copyWith(
-            left: needsBorder ? _replyLeftPadding : null,
+            left: needsBorder ? TextBubble.replyLeftPadding : null,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,11 +219,12 @@ class ReplyBorderPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.drawRRect(
-        RRect.fromRectAndCorners(
-            Rect.fromPoints(Offset(0, 0), Offset(width, size.height)),
-            topLeft: Bubble.radiusForBorder,
-            bottomLeft: Bubble.radiusForBorder),
-        Paint()..color = color);
+      RRect.fromRectAndCorners(
+          Rect.fromPoints(Offset(0, 0), Offset(width, size.height)),
+          topLeft: Bubble.radiusForBorder,
+          bottomLeft: Bubble.radiusForBorder),
+      Paint()..color = color,
+    );
   }
 
   @override
