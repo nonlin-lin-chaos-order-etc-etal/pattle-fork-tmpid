@@ -21,6 +21,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
 import 'package:pattle/src/ui/main/widgets/user_avatar.dart';
+import 'package:pattle/src/ui/main/widgets/user_item.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
@@ -92,66 +93,17 @@ class CreateGroupMembersPageState extends State<CreateGroupMembersPage> {
         if (users != null) {
           return ListView.builder(
             itemCount: users.length,
-            itemBuilder: (BuildContext context, int index)
-              => _buildUser(context, users[index]),
+            itemBuilder: (BuildContext context, int index) =>
+                UserItem(
+                  user: users[index],
+                  checkable: true,
+                  onSelected: () => bloc.usersToAdd.add(users[index]),
+                  onUnselected: () => bloc.usersToAdd.remove(users[index]),
+                ),
           );
         } else {
           return Container();
         }
-      },
-    );
-  }
-
-  Widget _buildUser(BuildContext context, User user) {
-    final avatarSize = 42.0;
-
-    Widget avatar = UserAvatar(
-      user: user,
-      radius: avatarSize * 0.5,
-    );
-
-    // TODO: Add checkmark animation
-    if (bloc.usersToAdd.contains(user)) {
-      avatar = Stack(
-        overflow: Overflow.visible,
-        children: <Widget>[
-          avatar,
-          SizedBox(
-            width: avatarSize,
-            height: avatarSize,
-            child: Align(
-              alignment: Alignment(1.5, 1.5),
-              child: ClipOval(
-                child: Container(
-                  color: Colors.white,
-                  child: Icon(
-                    Icons.check_circle,
-                    color: LightColors.red,
-                  ),
-                )
-              )
-            ),
-          )
-        ],
-      );
-    }
-
-    return ListTile(
-      leading: avatar,
-      title: Text(
-        displayNameOf(user),
-        style: TextStyle(
-          fontWeight: FontWeight.w600
-        ),
-      ),
-      onTap: () {
-        setState(() {
-          if (bloc.usersToAdd.contains(user)) {
-            bloc.usersToAdd.remove(user);
-          } else {
-            bloc.usersToAdd.add(user);
-          }
-        });
       },
     );
   }

@@ -43,15 +43,12 @@ class CreateGroupBloc {
   JoinedRoom get createdRoom => _createdRoom;
 
   Future<void> loadMembers() async {
-    final users = HashSet<User>(
-      equals: (User a, User b) => a.isIdenticalTo(b),
-      hashCode: (User user) => user.id.hashCode
-    );
+    final users = Set<User>();
     // Load members of some rooms, in the future
     // this'll be based on activity and what not
     for (final room in await me.rooms.get(upTo: 10)) {
       for (final user in await room.members.get(upTo: 20)) {
-        if (!user.isIdenticalTo(me)) {
+        if (user != me) {
           users.add(user);
         }
       }

@@ -32,7 +32,7 @@ class TextSubtitle extends Subtitle {
   Widget build(BuildContext context) {
     final sender = senderSpan(context,
       sender: event is EmoteMessageEvent
-              ? displayNameOf(event.sender) + ' ' : null
+              ? displayNameOf(event.sender, context) + ' ' : null
     );
     if (event.content.inReplyToId == null) {
       return Row(

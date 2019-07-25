@@ -33,7 +33,7 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
   }
 
   if (room.isDirect) {
-    return displayNameOf(room.directUser);
+    return displayNameOf(room.directUser, context);
   }
 
   String calculateName(Iterable<User> members) {
@@ -44,7 +44,7 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
         // TODO: Check for aliases (public chats)
       } else {
         final nonMeMembers = members
-            .where((user) => !user.isIdenticalTo(di.getLocalUser()))
+            .where((user) => user != di.getLocalUser())
             .toList(growable: false);
 
         var i = 0;
@@ -54,7 +54,7 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
             break;
           }
 
-          name += displayNameOf(member);
+          name += displayNameOf(member, context);
 
           if (i != nonMeMembers.length - 1) {
             name += ', ';

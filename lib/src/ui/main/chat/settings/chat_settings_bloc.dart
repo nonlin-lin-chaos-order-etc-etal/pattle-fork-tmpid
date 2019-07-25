@@ -30,4 +30,33 @@ class ChatSettingsBloc {
   final Room room;
 
   ChatSettingsBloc(this.room);
+
+  FutureOr<List<User>> getMembers({bool all = false}) {
+
+    FutureOr<List<User>> filter(Iterable<User> members) {
+      final list = members.toList();
+
+      final futureOrMe = room.members[di.getLocalUser().id];
+
+      FutureOr<List<User>> reorder(User me) {
+        list.remove(me);
+        list.insert(0, me);
+        return list;
+      }
+
+      if (futureOrMe is Future<User>) {
+        return futureOrMe.then(reorder);
+      } else {
+        return reorder(futureOrMe);
+      }
+    }
+
+    final futureOrMembers = room.members.get(upTo: !all ? 6 : room.members.count);
+
+    if (futureOrMembers is Future<Iterable<User>>) {
+      return futureOrMembers.then(filter);
+    } else {
+      return filter(futureOrMembers);
+    }
+  }
 }

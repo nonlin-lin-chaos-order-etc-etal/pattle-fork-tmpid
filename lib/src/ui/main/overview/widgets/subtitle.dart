@@ -39,10 +39,10 @@ abstract class Subtitle extends StatelessWidget {
   final bool isMine;
 
   Subtitle(this.event)
-    : isMine = event?.sender?.isIdenticalTo(di.getLocalUser()),
+    : isMine = event?.sender == di.getLocalUser(),
       senderName =
       event != null
-        && !event.sender.isIdenticalTo(di.getLocalUser())
+        && event.sender != di.getLocalUser()
         && !event.room.isDirect
       ? '${displayNameOf(event.sender)}: '
       : '';

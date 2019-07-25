@@ -113,7 +113,7 @@ abstract class MessageBubble extends Bubble {
   @protected
   Widget buildSender(BuildContext context, {Color color}) {
     if ((isStartOfGroup || (isRepliedTo && !isMine)) && !event.room.isDirect) {
-      return Text(displayNameOf(event.sender),
+      return Text(displayNameOf(event.sender, context),
         style: senderTextStyle(context, color: color)
       );
     } else {
@@ -142,7 +142,7 @@ abstract class MessageBubble extends Bubble {
       final previousHasSameSender
       = previousEvent != null
           && displayNameOf(previousEvent.sender) == displayNameOf(event.sender)
-          && previousEvent.sender.isIdenticalTo(event.sender);
+          && previousEvent.sender == event.sender;
 
       if (!previousHasSameSender) {
         _isStartOfGroup = true;
@@ -187,7 +187,7 @@ abstract class MessageBubble extends Bubble {
       final nextHasSameSender
         = nextEvent != null
           && displayNameOf(nextEvent.sender) == displayNameOf(event.sender)
-          && nextEvent.sender.isIdenticalTo(event.sender);
+          && nextEvent.sender == event.sender;
 
       if (!nextHasSameSender) {
         _isEndOfGroup = true;

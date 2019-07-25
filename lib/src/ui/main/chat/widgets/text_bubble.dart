@@ -88,7 +88,7 @@ class TextBubble extends MessageBubble {
               child: Bubble.asReply(
                 reply: event,
                 replyTo: repliedTo,
-                isMine: repliedTo.sender.isIdenticalTo(me)
+                isMine: repliedTo.sender == me
               ),
             ) : Container();
           } else {
@@ -124,7 +124,7 @@ class TextBubble extends MessageBubble {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(displayNameOf(event.sender) + ' ',
+          Text(displayNameOf(event.sender, context) + ' ',
             style: senderTextStyle(context,
               color: isMine ? Colors.white : null
             ),
@@ -139,7 +139,7 @@ class TextBubble extends MessageBubble {
 
   @protected
   Widget buildMine(BuildContext context) {
-    final needsBorder = isRepliedTo && reply.sender.isIdenticalTo(me);
+    final needsBorder = isRepliedTo && reply.sender == me;
 
     return PlatformInkWell(
       onTap: () { },
@@ -170,7 +170,7 @@ class TextBubble extends MessageBubble {
 
   @protected
   Widget buildTheirs(BuildContext context) {
-    final needsBorder = isRepliedTo && !reply.sender.isIdenticalTo(me);
+    final needsBorder = isRepliedTo && reply.sender != me;
 
     // Don't show sender above emotes
     final sender = event is! EmoteMessageEvent

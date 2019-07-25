@@ -39,7 +39,7 @@ class Redacted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<TextSpan> text;
-    if (event.redaction.sender.isIdenticalTo(di.getLocalUser())) {
+    if (event.redaction.sender == di.getLocalUser()) {
       text = [TextSpan(text: ' ${l(context).youDeletedThisMessage}')];
     } else {
       text = l(context).hasDeletedThisMessage(

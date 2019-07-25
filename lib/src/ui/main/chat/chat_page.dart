@@ -318,7 +318,7 @@ class ChatPageState extends State<ChatPage> {
                 for (final item in chatEvents) {
                   if (item is ChatEvent) {
                     final event = item.event;
-                    final isMine = event.sender.isIdenticalTo(me);
+                    final isMine = event.sender == me;
 
                     var previousItem, nextItem;
                     // Note: Because the items are reversed in the

@@ -17,9 +17,11 @@
 
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:meta/meta.dart';
+import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
+import 'package:pattle/src/di.dart' as di;
 
 const _limit = 28;
 String _limited(String name) {
@@ -30,12 +32,20 @@ String _limited(String name) {
   }
 }
 
-String displayNameOf(User user)
-  => _limited(user.name) ?? user.id.toString().split(':')[0];
+/// Get the proper display name for [user].
+///
+/// If [context] is provided, the local user will be 'You' instead
+/// of their actual display name.
+///
+/// This is however not always desired, mostly only when showing the
+/// display name to the end user.
+String displayNameOf(User user, [BuildContext context]) =>
+    context != null && user == di.getLocalUser()
+        ? l(context).you
+        : _limited(user?.name) ?? user.id.toString().split(':')[0];
 
-String displayNameOrId(UserId id, String name)
-  => _limited(name) ?? id.toString().split(':')[0];
+String displayNameOrId(UserId id, String name) =>
+    _limited(name) ?? id.toString().split(':')[0];
 
-Color colorOf(User user) => LightColors.userColors[
-    user.id.hashCode % LightColors.userColors.length
-  ];
+Color colorOf(User user) =>
+    LightColors.userColors[user.id.hashCode % LightColors.userColors.length];

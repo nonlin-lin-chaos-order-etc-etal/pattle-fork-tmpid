@@ -155,7 +155,7 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
             ),
           ),
           Text(
-            displayNameOf(user),
+            displayNameOf(user, context),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,

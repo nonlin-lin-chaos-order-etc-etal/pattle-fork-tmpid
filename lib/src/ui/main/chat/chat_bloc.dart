@@ -70,23 +70,23 @@ class ChatBloc {
         // and the direct user.
         if (room.isDirect) {
           if (event is InviteEvent) {
-            final iInvitedYou = event.sender.isIdenticalTo(me)
-                && event.content.subject.isIdenticalTo(room.directUser);
+            final iInvitedYou = event.sender == me
+                && event.content.subject == room.directUser;
 
-            final youInvitedMe = event.sender.isIdenticalTo(room.directUser)
-                && event.content.subject.isIdenticalTo(me);
+            final youInvitedMe = event.sender == room.directUser
+                && event.content.subject == me;
 
             shouldIgnore = iInvitedYou || youInvitedMe;
           } else if (event is JoinEvent) {
             final subject = event.content.subject;
-            shouldIgnore = subject.isIdenticalTo(me)
-                || subject.isIdenticalTo(room.directUser);
+            shouldIgnore = subject == me
+                || subject == room.directUser;
           }
         }
 
         shouldIgnore |=
             event is JoinEvent && event is! DisplayNameChangeEvent
-                && room.creator.isIdenticalTo(event.content.subject);
+                && room.creator == event.content.subject;
 
         // Don't show creation events in rooms that are replacements
         shouldIgnore |= event is RoomCreationEvent && room.isReplacement;

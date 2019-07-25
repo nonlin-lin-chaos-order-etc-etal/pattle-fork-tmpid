@@ -22,11 +22,14 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
 import 'package:pattle/src/ui/main/chat/settings/chat_settings_bloc.dart';
 import 'package:pattle/src/ui/main/widgets/chat_name.dart';
+import 'package:pattle/src/ui/main/widgets/user_item.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 
 import 'package:pattle/src/di.dart' as di;
+import 'package:pattle/src/ui/util/future_or_builder.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 import 'package:pattle/src/ui/util/room.dart';
+import 'package:pattle/src/ui/util/user.dart';
 
 
 class ChatSettingsPageState extends State<ChatSettingsPage> {
@@ -34,6 +37,8 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
   final me = di.getLocalUser();
   final ChatSettingsBloc bloc;
   final Room room;
+
+  bool previewMembers;
 
   ChatSettingsPageState(this.room) : bloc = ChatSettingsBloc(room);
 
@@ -45,6 +50,7 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
   @override
   void initState() {
     super.initState();
+    previewMembers = true;
   }
 
   @override
@@ -72,9 +78,15 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
             ),
           ];
         },
-        body: Column(
-          children: <Widget>[
-            _buildDescription(),
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverList(
+              delegate: SliverChildListDelegate.fixed([
+                _buildDescription(),
+                SizedBox(height: 16),
+                _buildMembers()
+              ]),
+            )
           ],
         )
       ),
@@ -82,7 +94,7 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
   }
 
   Widget _buildDescription() {
-    if (room.topic == null) {
+    if (room.isDirect) {
       return Container(height: 0);
     }
 
@@ -105,13 +117,106 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                     ),
                   ),
                   SizedBox(height: 4),
-                  Text(room.topic),
+                  Text(room.topic ?? 'None',
+                    style: TextStyle(
+                      fontStyle: room.topic == null
+                          ? FontStyle.italic : FontStyle.normal
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildMembers() {
+    if (room.isDirect) {
+      return Container(height: 0);
+    }
+
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Material(
+            elevation: 4,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 16, top: 16),
+                  child: Text(
+                    '${bloc.room.members.count} participants',
+                    style: TextStyle(
+                      color: LightColors.red,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 4),
+                FutureOrBuilder<Iterable<User>>(
+                  futureOr: bloc.getMembers(all: !previewMembers),
+                  builder: (
+                      BuildContext context,
+                      AsyncSnapshot<Iterable<User>> snapshot,
+                    ) {
+
+                    if (!snapshot.hasData) {
+                      return Container(height: 0);
+                    }
+
+                    final members = snapshot.data.toList(growable: false);
+
+                    final isWaiting = snapshot.connectionState == ConnectionState.waiting;
+                    bool allShown = members.length == bloc.room.members.count;
+
+                    print(isWaiting);
+
+                    return MediaQuery.removePadding(
+                      context: context,
+                      removeLeft: true,
+                      removeRight: true,
+                      child: ListView.builder(
+                        primary: false,
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        itemCount: (previewMembers && !allShown) || isWaiting
+                            ? members.length + 1
+                            : members.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          print('build: $index');
+                          // Item after all members
+                          if (index == members.length) {
+                            return _buildShowMoreItem(context, members.length, isWaiting);
+                          }
+
+                          return UserItem(
+                            user: members[index],
+                          );
+                        },
+                      ),
+                    );
+                  }
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildShowMoreItem(BuildContext context, int count, bool isWaiting) {
+    return ListTile(
+      leading: Icon(Icons.keyboard_arrow_down, size: 32),
+      title: Text('${bloc.room.members.count - count} more'),
+      subtitle: isWaiting ? LinearProgressIndicator() : null,
+      onTap: () => setState(() {
+        previewMembers = false;
+      }),
     );
   }
 

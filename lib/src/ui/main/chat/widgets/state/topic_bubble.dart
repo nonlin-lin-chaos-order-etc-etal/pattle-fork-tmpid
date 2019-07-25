@@ -56,7 +56,7 @@ class TopicBubble extends StateBubble {
   List<TextSpan> buildContentSpans(BuildContext context) =>
     l(context).changedDescriptionTapToView(
       TextSpan(
-        text: displayNameOf(event.room.creator),
+        text: displayNameOf(event.sender),
         style: defaultEmphasisTextStyle
       )
     );

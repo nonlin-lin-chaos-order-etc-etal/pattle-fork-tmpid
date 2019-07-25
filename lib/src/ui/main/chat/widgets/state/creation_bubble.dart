@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
+import 'package:pattle/src/ui/util/future_or_builder.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
 import 'state_bubble.dart';
@@ -43,6 +44,16 @@ class CreationBubble extends StateBubble {
       nextItem: nextItem,
       isMine: isMine
     );
+
+  @protected
+  Widget buildContent(BuildContext context) {
+    return FutureOrBuilder<User>(
+      futureOr: event.room.creator,
+      builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+        return super.buildContent(context);
+      },
+    );
+  }
 
 
   @protected

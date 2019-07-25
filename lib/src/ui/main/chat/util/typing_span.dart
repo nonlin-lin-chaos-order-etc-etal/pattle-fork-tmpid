@@ -31,7 +31,9 @@ List<TextSpan> typingSpan(BuildContext context, Room room) {
         text: displayNameOf(room.typingUsers.first),
       ),
     );
-  } else if (room.typingUsers.length == 2) {
+  }
+
+  if (room.typingUsers.length == 2) {
     return l(context).areTyping(
       TextSpan(
         text: displayNameOf(room.typingUsers.first),
@@ -40,14 +42,14 @@ List<TextSpan> typingSpan(BuildContext context, Room room) {
         text: displayNameOf(room.typingUsers[1]),
       ),
     );
-  } else {
-    return l(context).andMoreAreTyping(
-      TextSpan(
-        text: displayNameOf(room.typingUsers.first),
-      ),
-      TextSpan(
-        text: displayNameOf(room.typingUsers[1]),
-      ),
-    );
   }
+
+  return l(context).andMoreAreTyping(
+    TextSpan(
+      text: displayNameOf(room.typingUsers.first),
+    ),
+    TextSpan(
+      text: displayNameOf(room.typingUsers[1]),
+    ),
+  );
 }
