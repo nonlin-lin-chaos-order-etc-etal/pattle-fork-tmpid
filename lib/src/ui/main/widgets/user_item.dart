@@ -45,9 +45,7 @@ class UserItem extends StatefulWidget {
 }
 
 class UserItemState extends State<UserItem> {
-
   bool checked;
-
 
   @override
   void initState() {
@@ -99,18 +97,18 @@ class UserItemState extends State<UserItem> {
         ),
       ),
       onTap: widget.checkable
-        ? () {
-          setState(() {
-            checked = !checked;
+          ? () {
+              setState(() {
+                checked = !checked;
 
-            if (checked) {
-              widget.onSelected();
-            } else {
-              widget.onUnselected();
+                if (checked) {
+                  widget.onSelected();
+                } else {
+                  widget.onUnselected();
+                }
+              });
             }
-          });
-        }
-        : null,
+          : null,
     );
   }
 }

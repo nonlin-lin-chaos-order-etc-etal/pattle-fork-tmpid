@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class PlatformInkWell extends PlatformWidgetBase<Widget, InkWell> {
-
   final Widget child;
   final GestureTapCallback onTap;
   final ShapeBorder customBorder;

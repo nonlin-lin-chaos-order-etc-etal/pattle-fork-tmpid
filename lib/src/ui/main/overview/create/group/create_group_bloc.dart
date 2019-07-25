@@ -30,7 +30,6 @@ class CreateGroupBloc {
   PublishSubject<List<User>> _userSubj = PublishSubject<List<User>>();
   Stream<List<User>> get users => _userSubj.stream.distinct();
 
-
   bool _isCreatingRoom = false;
   PublishSubject<bool> _isCreatingRoomSubj = PublishSubject<bool>();
   Stream<bool> get isCreatingRoom => _isCreatingRoomSubj.stream.distinct();
@@ -54,10 +53,8 @@ class CreateGroupBloc {
       }
     }
 
-    _userSubj.add(
-      users.toList(growable: false)
-      ..sort((User a, User b) => displayNameOf(a).compareTo(displayNameOf(b)))
-    );
+    _userSubj.add(users.toList(growable: false)
+      ..sort((User a, User b) => displayNameOf(a).compareTo(displayNameOf(b))));
   }
 
   Future<void> createRoom() async {

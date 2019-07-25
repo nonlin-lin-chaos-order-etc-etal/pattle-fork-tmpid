@@ -26,7 +26,6 @@ import 'bubble.dart';
 import 'message_bubble.dart';
 
 class ImageBubble extends MessageBubble {
-
   @override
   final ImageMessageEvent event;
 
@@ -36,7 +35,7 @@ class ImageBubble extends MessageBubble {
 
   double get height {
     return (event.content.info.height / (event.content.info.width / width))
-           .clamp(minHeight, maxHeight);
+        .clamp(minHeight, maxHeight);
   }
 
   ImageBubble({
@@ -45,24 +44,21 @@ class ImageBubble extends MessageBubble {
     ChatItem nextItem,
     @required bool isMine,
     RoomEvent reply,
-  }) :
-    event = item.event,
-    super(
-      item: item,
-      previousItem: previousItem,
-      nextItem: nextItem,
-      isMine: isMine,
-      reply: reply
-    );
+  })  : event = item.event,
+        super(
+          item: item,
+          previousItem: previousItem,
+          nextItem: nextItem,
+          isMine: isMine,
+          reply: reply,
+        );
 
   void _onTap(BuildContext context) {
     Navigator.pushNamed(context, Routes.image, arguments: event);
   }
-  
+
   Widget buildContent(BuildContext context) =>
-    Text(event.content.body ?? '',
-      style: textStyle(context)
-    );
+      Text(event.content.body ?? '', style: textStyle(context));
 
   @override
   Widget buildTime(BuildContext context, {Color color}) {
@@ -76,7 +72,7 @@ class ImageBubble extends MessageBubble {
         children: <Widget>[
           buildSentState(context),
           SizedBox(width: 4),
-          super.buildTime(context, color: Colors.white)
+          super.buildTime(context, color: Colors.white),
         ],
       );
     } else {
@@ -96,12 +92,9 @@ class ImageBubble extends MessageBubble {
               borderRadius: borderRadius,
               color: Color(0x64000000),
             ),
-            child: Padding(
-              padding: EdgeInsets.all(4),
-              child: content
-            )
+            child: Padding(padding: EdgeInsets.all(4), child: content),
           ),
-        )
+        ),
       );
     } else {
       return Container(width: 0, height: 0);
@@ -117,60 +110,55 @@ class ImageBubble extends MessageBubble {
           padding: Bubble.padding,
           child: Container(
             decoration: BoxDecoration(
-              borderRadius:  borderRadius(),
+              borderRadius: borderRadius(),
               color: Color(0x64000000),
             ),
             child: Padding(
               padding: EdgeInsets.all(6),
-              child: super.buildSender(context,
-                color: Colors.white
-              ),
-            )
+              child: super.buildSender(context, color: Colors.white),
+            ),
           ),
-        )
+        ),
       );
     } else {
       return Container(height: 0, width: 0);
     }
   }
 
-  Widget _build(BuildContext context) =>
-    Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        borderRadius: borderRadius()
-      ),
-      child: Stack(
-        children: <Widget>[
-          Positioned.fill(
-            child: ClipRRect(
-              borderRadius: borderRadius(),
-              child: Hero(
-                tag: event.id,
-                child: Image(
-                  image: MatrixImage(event.content.url),
-                  fit: BoxFit.cover,
-                )
-              )
-            )
-          ),
-          buildTime(context),
-          buildSender(context),
-          Positioned.fill(
-            child: Material(
-              color: Colors.transparent,
-              child: PlatformInkWell(
-                customBorder: border(),
-                onTap: () {
-                  _onTap(context);
-                }
-              )
-            )
-          ),
-        ],
-      )
-    );
+  Widget _build(BuildContext context) => Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(borderRadius: borderRadius()),
+        child: Stack(
+          children: <Widget>[
+            Positioned.fill(
+              child: ClipRRect(
+                borderRadius: borderRadius(),
+                child: Hero(
+                  tag: event.id,
+                  child: Image(
+                    image: MatrixImage(event.content.url),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            buildTime(context),
+            buildSender(context),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: PlatformInkWell(
+                  customBorder: border(),
+                  onTap: () {
+                    _onTap(context);
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 
   @protected
   Widget buildMine(BuildContext context) => _build(context);

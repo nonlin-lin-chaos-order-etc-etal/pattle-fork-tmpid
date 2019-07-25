@@ -29,7 +29,6 @@ import 'package:photo_view/photo_view_gallery.dart';
 import 'package:pattle/src/di.dart' as di;
 
 class ImagePageState extends State<ImagePage> {
-
   final me = di.getLocalUser();
   ImageBloc bloc;
   final ImageMessageEvent message;
@@ -52,7 +51,7 @@ class ImagePageState extends State<ImagePage> {
   @override
   void didChangeDependencies() {
     _date =
-      '${formatAsDate(context, message.time)}, ${formatAsTime(message.time)}';
+        '${formatAsDate(context, message.time)}, ${formatAsTime(message.time)}';
   }
 
   @override
@@ -75,25 +74,29 @@ class ImagePageState extends State<ImagePage> {
                   SizedBox(height: 2),
                   Text(
                     _date,
-                    style: Theme.of(context).textTheme.body1.copyWith(
-                      color: Colors.white,
-                    )
+                    style: Theme.of(context)
+                        .textTheme
+                        .body1
+                        .copyWith(color: Colors.white),
                   ),
                 ],
               ),
               backgroundColor: Color(0x64000000),
             ),
           )
-        ]
-      )
+        ],
+      ),
     );
   }
 
   Widget _buildPhotoViewList() {
     return StreamBuilder<List<ImageMessageEvent>>(
       stream: bloc.events,
-      builder: (BuildContext context, AsyncSnapshot<List<ImageMessageEvent>> snapshot) {
-        switch(snapshot.connectionState) {
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<ImageMessageEvent>> snapshot,
+      ) {
+        switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
             return Center(child: CircularProgressIndicator());
@@ -107,27 +110,27 @@ class ImagePageState extends State<ImagePage> {
                 return PhotoViewGalleryPageOptions(
                   imageProvider: MatrixImage(events[index].content.url),
                   heroTag: message.id,
-                  minScale: PhotoViewComputedScale.contained
+                  minScale: PhotoViewComputedScale.contained,
                 );
               },
               onPageChanged: (index) {
                 setState(() {
                   _messageSender = events[index].sender;
-                  _date =
-                    '${formatAsDate(context, events[index].time)}, ${formatAsTime(events[index].time)}';
+                  _date = '${formatAsDate(context, events[index].time)}, '
+                      '${formatAsTime(events[index].time)}';
                 });
               },
-              pageController: 
-                  PageController(initialPage: events.indexOf(message))
+              pageController: PageController(
+                initialPage: events.indexOf(message),
+              ),
             );
         }
-      }
+      },
     );
   }
 }
 
 class ImagePage extends StatefulWidget {
-
   final ImageMessageEvent message;
 
   ImagePage(this.message);

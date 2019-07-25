@@ -35,7 +35,6 @@ import 'package:transparent_image/transparent_image.dart';
 import 'widgets/subtitle.dart';
 
 class ChatOverviewPageState extends State<ChatOverviewPage> {
-
   void goToCreateGroup() {
     Navigator.of(context).pushNamed(Routes.chatsNew);
   }
@@ -61,26 +60,22 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
           backgroundColor: CupertinoTheme.of(context).primaryColor,
           title: Text(
             l(context).appName,
-            style: TextStyle(
-              color: Colors.white
-            ),
+            style: TextStyle(color: Colors.white),
           ),
           trailing: PlatformIconButton(
             icon: Icon(
               CupertinoIcons.add_circled,
-              color: CupertinoColors.white
+              color: CupertinoColors.white,
             ),
             onPressed: goToCreateGroup,
-          )
+          ),
         ),
       ),
       body: Column(
         children: <Widget>[
           ErrorBanner(),
           Expanded(
-            child: Scrollbar(
-              child: _buildOverviewList()
-            ),
+            child: Scrollbar(child: _buildOverviewList()),
           )
         ],
       ),
@@ -96,10 +91,13 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
   Widget _buildOverviewList() {
     return StreamBuilder<List<ChatOverview>>(
       stream: bloc.chats,
-      builder: (BuildContext context, AsyncSnapshot<List<ChatOverview>> snapshot) {
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<ChatOverview>> snapshot,
+      ) {
         Widget widget;
 
-        switch(snapshot.connectionState) {
+        switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
             widget = Center(child: PlatformCircularProgressIndicator());
@@ -120,13 +118,13 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
               itemCount: chats.length,
               itemBuilder: (context, index) {
                 return _buildChatOverview(chats[index]);
-              }
+              },
             );
             break;
         }
 
         return widget;
-      }
+      },
     );
   }
 
@@ -146,22 +144,19 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
             child: FadeInImage(
               fit: BoxFit.cover,
               placeholder: MemoryImage(kTransparentImage),
-              image: MatrixImage(avatarUrl, width: 64, height: 64)
-            )
+              image: MatrixImage(avatarUrl, width: 64, height: 64),
+            ),
           ),
         ),
       );
     } else {
-
       avatar = CircleAvatar(
         foregroundColor: Colors.white,
         backgroundColor: chat.room.isDirect
-                        ? colorOf(chat.room.directUser)
-                        : LightColors.red[500],
+            ? colorOf(chat.room.directUser)
+            : LightColors.red[500],
         radius: 24,
-        child: Icon(
-          chat.room.isDirect ? Icons.person : Icons.group
-        )
+        child: Icon(chat.room.isDirect ? Icons.person : Icons.group),
       );
     }
 
@@ -178,11 +173,11 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
           Text(
             time,
             style: Theme.of(context).textTheme.subtitle.copyWith(
-              fontWeight: FontWeight.normal,
-              color: Colors.black54
-            )
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black54,
+                ),
           )
-        ]
+        ],
       ),
       dense: false,
       onTap: () {
@@ -190,7 +185,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
       },
       leading: avatar,
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      subtitle: Subtitle.forChat(chat)
+      subtitle: Subtitle.forChat(chat),
     );
   }
 }

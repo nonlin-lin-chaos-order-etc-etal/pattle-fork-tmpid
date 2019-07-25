@@ -25,8 +25,8 @@ import 'package:pattle/src/ui/main/sync_bloc.dart';
 final bloc = ChatOverviewBloc();
 
 class ChatOverviewBloc {
-  
-  PublishSubject<List<ChatOverview>> _chatsSubj = PublishSubject<List<ChatOverview>>();
+  PublishSubject<List<ChatOverview>> _chatsSubj =
+      PublishSubject<List<ChatOverview>>();
   Observable<List<ChatOverview>> get chats => _chatsSubj.stream;
 
   final LocalUser _user = di.getLocalUser();
@@ -35,7 +35,7 @@ class ChatOverviewBloc {
     final chats = List<ChatOverview>();
 
     // Get all rooms and push them as a single list
-    for(Room room in await _user.rooms.get()) {
+    for (Room room in await _user.rooms.get()) {
       // Don't show rooms that have been upgraded
       if (room.isUpgraded) {
         continue;
@@ -44,25 +44,19 @@ class ChatOverviewBloc {
       final ignoredEvents = ignoredEventsOf(room, isOverview: true);
 
       // TODO: Add optional filter argument to up to call
-      final latestEvent = (await room.timeline.get(
-        upTo: 10,
-        allowRemote: false
-      ))
-      .firstWhere(
+      final latestEvent =
+          (await room.timeline.get(upTo: 10, allowRemote: false)).firstWhere(
         (event) => !ignoredEvents.contains(event.runtimeType),
-        orElse: () => null
+        orElse: () => null,
       );
 
-      var latestEventForSorting = (await room.timeline.get(
-        upTo: 10,
-        allowRemote: false
-      ))
-      .firstWhere(
+      var latestEventForSorting =
+          (await room.timeline.get(upTo: 10, allowRemote: false)).firstWhere(
         (event) =>
-          (event is! MemberChangeEvent
-           || event is JoinEvent && event.content.subject.id == _user.id)
-        && event is! RedactionEvent,
-        orElse: () => null
+            (event is! MemberChangeEvent ||
+                event is JoinEvent && event.content.subject.id == _user.id) &&
+            event is! RedactionEvent,
+        orElse: () => null,
       );
 
       // If there is no non-MemberChangeEvent in the last
@@ -76,7 +70,7 @@ class ChatOverviewBloc {
         room: room,
         name: room.name,
         latestEvent: latestEvent,
-        latestEventForSorting: latestEventForSorting
+        latestEventForSorting: latestEventForSorting,
       );
 
       chats.add(chat);
@@ -84,10 +78,14 @@ class ChatOverviewBloc {
 
     chats.sort((a, b) {
       if (a.latestEventForSorting != null && b.latestEventForSorting != null) {
-        return a.latestEventForSorting.time.compareTo(b.latestEventForSorting.time);
-      } else if (a.latestEventForSorting != null && b.latestEventForSorting == null) {
+        return a.latestEventForSorting.time.compareTo(
+          b.latestEventForSorting.time,
+        );
+      } else if (a.latestEventForSorting != null &&
+          b.latestEventForSorting == null) {
         return 1;
-      } else if (a.latestEventForSorting == null && b.latestEventForSorting != null) {
+      } else if (a.latestEventForSorting == null &&
+          b.latestEventForSorting != null) {
         return -1;
       } else {
         return 0;

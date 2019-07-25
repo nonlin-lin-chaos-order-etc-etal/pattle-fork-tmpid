@@ -22,27 +22,24 @@ import 'package:pattle/src/ui/resources/localizations.dart';
 import 'subtitle.dart';
 
 class ImageSubtitle extends Subtitle {
-
   @override
   final ImageMessageEvent event;
 
   ImageSubtitle(this.event) : super(event);
 
   @override
-  Widget build(BuildContext context) =>
-    Row(
-      children: <Widget>[
-        buildSentStateIcon(context),
-        RichText(
-          text: senderSpan(context),
-        ),
-        Icon(Icons.photo_camera,
-          color: Theme.of(context).textTheme.caption.color,
-          size: Subtitle.iconSize,
-        ),
-        Text(' ' + l(context).photo,
-          style: textStyle(context)
-        )
-      ],
-    );
+  Widget build(BuildContext context) => Row(
+        children: <Widget>[
+          buildSentStateIcon(context),
+          RichText(
+            text: senderSpan(context),
+          ),
+          Icon(
+            Icons.photo_camera,
+            color: Theme.of(context).textTheme.caption.color,
+            size: Subtitle.iconSize,
+          ),
+          Text(' ' + l(context).photo, style: textStyle(context)),
+        ],
+      );
 }

@@ -24,8 +24,9 @@ import 'package:pattle/src/ui/util/user.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:url/url.dart';
 
-Url avatarUrlOf(Room room)
-  => room.avatarUrl ?? (room.isDirect ? room.directUser.avatarUrl : room.avatarUrl);
+Url avatarUrlOf(Room room) =>
+    room.avatarUrl ??
+    (room.isDirect ? room.directUser.avatarUrl : room.avatarUrl);
 
 FutureOr<String> nameOf(BuildContext context, Room room) {
   if (room.name != null) {
@@ -81,7 +82,7 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
 List<Type> ignoredEventsOf(Room room, {@required bool isOverview}) {
   List<Type> ignored = [
     RedactionEvent,
-    AvatarChangeEvent
+    AvatarChangeEvent,
   ];
 
   if (isOverview) {

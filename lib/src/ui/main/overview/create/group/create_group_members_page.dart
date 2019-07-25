@@ -30,7 +30,6 @@ import 'package:pattle/src/ui/util/user.dart';
 import 'package:pattle/src/ui/main/overview/create/group/create_group_bloc.dart';
 
 class CreateGroupMembersPageState extends State<CreateGroupMembersPage> {
-
   @override
   void initState() {
     super.initState();
@@ -57,23 +56,19 @@ class CreateGroupMembersPageState extends State<CreateGroupMembersPage> {
           actionsForegroundColor: Colors.white,
           title: Text(
             l(context).appName,
-            style: TextStyle(
-              color: Colors.white
-           ),
+            style: TextStyle(color: Colors.white),
           ),
           trailing: CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: goToNext,
             child: Text(l(context).next),
-          )
+          ),
         ),
       ),
       body: Column(
         children: <Widget>[
           ErrorBanner(),
-          Expanded(
-            child: _buildUserList(context)
-          )
+          Expanded(child: _buildUserList(context))
         ],
       ),
       android: (_) => MaterialScaffoldData(
@@ -81,7 +76,7 @@ class CreateGroupMembersPageState extends State<CreateGroupMembersPage> {
           onPressed: goToNext,
           child: Icon(Icons.arrow_forward),
         ),
-      )
+      ),
     );
   }
 
@@ -93,13 +88,12 @@ class CreateGroupMembersPageState extends State<CreateGroupMembersPage> {
         if (users != null) {
           return ListView.builder(
             itemCount: users.length,
-            itemBuilder: (BuildContext context, int index) =>
-                UserItem(
-                  user: users[index],
-                  checkable: true,
-                  onSelected: () => bloc.usersToAdd.add(users[index]),
-                  onUnselected: () => bloc.usersToAdd.remove(users[index]),
-                ),
+            itemBuilder: (BuildContext context, int index) => UserItem(
+              user: users[index],
+              checkable: true,
+              onSelected: () => bloc.usersToAdd.add(users[index]),
+              onUnselected: () => bloc.usersToAdd.remove(users[index]),
+            ),
           );
         } else {
           return Container();

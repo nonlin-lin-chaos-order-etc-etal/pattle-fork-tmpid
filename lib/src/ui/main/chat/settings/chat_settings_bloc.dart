@@ -25,14 +25,11 @@ import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
 
 class ChatSettingsBloc {
-
-
   final Room room;
 
   ChatSettingsBloc(this.room);
 
   FutureOr<List<User>> getMembers({bool all = false}) {
-
     FutureOr<List<User>> filter(Iterable<User> members) {
       final list = members.toList();
 
@@ -51,7 +48,8 @@ class ChatSettingsBloc {
       }
     }
 
-    final futureOrMembers = room.members.get(upTo: !all ? 6 : room.members.count);
+    final futureOrMembers =
+        room.members.get(upTo: !all ? 6 : room.members.count);
 
     if (futureOrMembers is Future<Iterable<User>>) {
       return futureOrMembers.then(filter);

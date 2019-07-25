@@ -22,7 +22,6 @@ import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
 class Redacted extends StatelessWidget {
-  
   final RedactedEvent event;
 
   final Color color;
@@ -33,7 +32,7 @@ class Redacted extends StatelessWidget {
     @required this.event,
     this.color = Colors.grey,
     this.iconSize,
-    this.textStyle = const TextStyle()
+    this.textStyle = const TextStyle(),
   }) : super();
 
   @override
@@ -43,14 +42,15 @@ class Redacted extends StatelessWidget {
       text = [TextSpan(text: ' ${l(context).youDeletedThisMessage}')];
     } else {
       text = l(context).hasDeletedThisMessage(
-          TextSpan(text: ' ${displayNameOf(event.redaction.sender)}')
+        TextSpan(text: ' ${displayNameOf(event.redaction.sender)}'),
       );
     }
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Icon(Icons.delete,
+        Icon(
+          Icons.delete,
           color: color,
           size: iconSize,
         ),
@@ -58,13 +58,12 @@ class Redacted extends StatelessWidget {
           text: TextSpan(
             style: textStyle.copyWith(
               fontStyle: FontStyle.italic,
-              color: color
+              color: color,
             ),
-            children: text
+            children: text,
           ),
         )
       ],
     );
   }
-  
 }

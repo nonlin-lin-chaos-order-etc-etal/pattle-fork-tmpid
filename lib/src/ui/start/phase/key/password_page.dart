@@ -25,7 +25,6 @@ import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
 
 class PasswordPageState extends State<PasswordPage> {
-
   StreamSubscription subscription;
 
   @override
@@ -39,7 +38,7 @@ class PasswordPageState extends State<PasswordPage> {
         Navigator.pushNamedAndRemoveUntil(
           context,
           Routes.chats,
-          (route) => false
+          (route) => false,
         );
       }
     });
@@ -85,14 +84,14 @@ class PasswordPageState extends State<PasswordPage> {
               stream: bloc.loginStream,
               builder: (
                 BuildContext context,
-                AsyncSnapshot<RequestState> snapshot) {
-
+                AsyncSnapshot<RequestState> snapshot,
+              ) {
                 String errorText;
 
                 if (snapshot.hasError) {
                   if (snapshot.error is ForbiddenException) {
                     errorText = l(context).wrongPasswordError;
-                  } else if(snapshot.error is SocketException) {
+                  } else if (snapshot.error is SocketException) {
                     errorText = l(context).connectionFailed;
                   } else {
                     errorText = l(context).unknownError;
@@ -116,10 +115,10 @@ class PasswordPageState extends State<PasswordPage> {
                       filled: true,
                       labelText: l(context).password,
                       helperText: l(context).loggingInAs(
-                        bloc.username.toString()
+                        bloc.username.toString(),
                       ),
-                      errorText: errorText
-                    )
+                      errorText: errorText,
+                    ),
                   ),
                 );
 
@@ -133,29 +132,31 @@ class PasswordPageState extends State<PasswordPage> {
                         padding: EdgeInsets.only(top: 8),
                         child: Container(
                           height: 32,
-                          child: errorText != null ?
-                          Text(
-                            errorText,
-                            style: TextStyle(
-                              color: Colors.red,
-                            )
-                          ) : Container()
+                          child: errorText != null
+                              ? Text(errorText,
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  ))
+                              : Container(),
                         ),
-                      )
+                      ),
                     ],
-                  ) ;
+                  );
                 } else {
                   return textField;
                 }
-              }
+              },
             ),
             SizedBox(height: 16),
             StreamBuilder<RequestState>(
               stream: bloc.loginStream,
-              builder: (BuildContext context, AsyncSnapshot<RequestState> snapshot) {
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<RequestState> snapshot,
+              ) {
                 final state = snapshot.data;
-                final isTrying =
-                  state == RequestState.active || state == RequestState.stillActive;
+                final isTrying = state == RequestState.active ||
+                    state == RequestState.stillActive;
                 var onPressed;
 
                 Widget child = PlatformText(l(context).login);
@@ -174,20 +175,20 @@ class PasswordPageState extends State<PasswordPage> {
                     height: 18,
                     child: PlatformCircularProgressIndicator(
                       android: (_) => MaterialProgressIndicatorData(
-                        valueColor: AlwaysStoppedAnimation(Colors.grey)
-                      )
-                    )
+                        valueColor: AlwaysStoppedAnimation(Colors.grey),
+                      ),
+                    ),
                   );
                 }
 
                 return PlatformButton(
                   onPressed: onPressed,
-                  child: child
+                  child: child,
                 );
-              }
+              },
             )
           ],
-        )
+        ),
       ),
     );
   }

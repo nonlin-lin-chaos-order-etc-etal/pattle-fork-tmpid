@@ -25,9 +25,7 @@ import 'package:pattle/src/ui/util/user.dart';
 
 import 'state_bubble.dart';
 
-
 class CreationBubble extends StateBubble {
-
   @override
   final RoomCreationEvent event;
 
@@ -35,15 +33,14 @@ class CreationBubble extends StateBubble {
     @required ChatEvent item,
     @required ChatItem previousItem,
     @required ChatItem nextItem,
-    @required bool isMine
-  }) :
-    event = item.event,
-    super(
-      item: item,
-      previousItem: previousItem,
-      nextItem: nextItem,
-      isMine: isMine
-    );
+    @required bool isMine,
+  })  : event = item.event,
+        super(
+          item: item,
+          previousItem: previousItem,
+          nextItem: nextItem,
+          isMine: isMine,
+        );
 
   @protected
   Widget buildContent(BuildContext context) {
@@ -55,14 +52,13 @@ class CreationBubble extends StateBubble {
     );
   }
 
-
   @protected
   @override
   List<TextSpan> buildContentSpans(BuildContext context) =>
-    l(context).createdThisGroup(
-      TextSpan(
-        text: displayNameOf(event.room.creator),
-        style: defaultEmphasisTextStyle
-      )
-    );
+      l(context).createdThisGroup(
+        TextSpan(
+          text: displayNameOf(event.room.creator),
+          style: defaultEmphasisTextStyle,
+        ),
+      );
 }

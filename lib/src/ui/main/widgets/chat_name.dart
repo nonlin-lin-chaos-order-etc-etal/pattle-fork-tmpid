@@ -22,7 +22,6 @@ import 'package:pattle/src/ui/util/future_or_builder.dart';
 import 'package:pattle/src/ui/util/room.dart';
 
 class ChatName extends StatelessWidget {
-
   final Room room;
 
   TextStyle style;
@@ -36,10 +35,9 @@ class ChatName extends StatelessWidget {
     }
   }
 
-  TextStyle _textStyle() =>
-    style.copyWith(
-      fontWeight: FontWeight.w600,
-    );
+  TextStyle _textStyle() => style.copyWith(
+        fontWeight: FontWeight.w600,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +46,11 @@ class ChatName extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.hasData) {
           final name = snapshot.data;
-          return Text(name,
+          return Text(
+            name,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
-            style: _textStyle()
+            style: _textStyle(),
           );
         }
 

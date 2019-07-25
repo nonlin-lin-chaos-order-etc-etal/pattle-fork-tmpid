@@ -31,35 +31,31 @@ import 'bubble.dart';
 import 'message_bubble.dart';
 
 class LoadingBubble extends MessageBubble {
-
   @override
   TextMessageEvent event;
 
   LoadingBubble({
     @required bool isMine,
-  }) :
-    super(
-      item: ChatEvent(
-        TextMessageEvent(
-          TextMessage(
-            body: 'Blabla',
-          ),
-          RoomEventArgs(
-            id: EventId('1234'),
-            sender: User(
-              id: UserId('@wilko:pattle.im'),
-              state: UserState(
-                roomId: RoomId('!343432:pattle.im'),
-                displayName: 'Wilko',
-                since: DateTime.now()
-              )
+  }) : super(
+          item: ChatEvent(
+            TextMessageEvent(
+              TextMessage(
+                body: 'Blabla',
+              ),
+              RoomEventArgs(
+                id: EventId('1234'),
+                sender: User(
+                    id: UserId('@wilko:pattle.im'),
+                    state: UserState(
+                        roomId: RoomId('!343432:pattle.im'),
+                        displayName: 'Wilko',
+                        since: DateTime.now())),
+                time: DateTime.now(),
+              ),
             ),
-            time: DateTime.now(),
-          )
-        )
-      ),
-      isMine: isMine
-  ) {
+          ),
+          isMine: isMine,
+        ) {
     event = item.event;
   }
 
@@ -77,8 +73,7 @@ class LoadingBubble extends MessageBubble {
 
   @override
   Widget buildContent(BuildContext context) => Container(
-    height: 64,
-    width: 256,
-  );
-
+        height: 64,
+        width: 256,
+      );
 }

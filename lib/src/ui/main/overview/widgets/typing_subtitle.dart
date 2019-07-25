@@ -26,7 +26,6 @@ import 'package:pattle/src/ui/util/user.dart';
 import 'subtitle.dart';
 
 class TypingSubtitle extends Subtitle {
-
   final Room room;
 
   TypingSubtitle(this.room) : super(null);
@@ -39,10 +38,10 @@ class TypingSubtitle extends Subtitle {
       text: TextSpan(
         style: textStyle(context).copyWith(
           color: LightColors.red,
-          fontWeight: FontWeight.bold
+          fontWeight: FontWeight.bold,
         ),
-        children: typingSpan(context, room)
-      )
+        children: typingSpan(context, room),
+      ),
     );
   }
 }

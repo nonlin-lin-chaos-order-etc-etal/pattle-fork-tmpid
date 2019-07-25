@@ -28,9 +28,7 @@ import 'redacted_bubble.dart';
 import 'state/member_bubble.dart';
 import 'text_bubble.dart';
 
-
 abstract class Bubble extends Item {
-
   @override
   final ChatEvent item;
 
@@ -46,41 +44,40 @@ abstract class Bubble extends Item {
     @required this.item,
     ChatItem previousItem,
     ChatItem nextItem,
-    @required this.isMine
-  }) :
-    event = item.event,
-    super(
-      item: item,
-      previousItem: previousItem,
-      nextItem: nextItem
-    );
+    @required this.isMine,
+  })  : event = item.event,
+        super(
+          item: item,
+          previousItem: previousItem,
+          nextItem: nextItem,
+        );
 
   factory Bubble.fromItem({
     @required ChatEvent item,
     ChatItem previousItem,
     ChatItem nextItem,
-    @required bool isMine
+    @required bool isMine,
   }) {
     if (item.event is TextMessageEvent) {
       return TextBubble(
         item: item,
         previousItem: previousItem,
         nextItem: nextItem,
-        isMine: isMine
+        isMine: isMine,
       );
     } else if (item.event is ImageMessageEvent) {
       return ImageBubble(
         item: item,
         previousItem: previousItem,
         nextItem: nextItem,
-        isMine: isMine
+        isMine: isMine,
       );
     } else if (item.event is MemberChangeEvent) {
       return MemberBubble(
         item: item,
         previousItem: previousItem,
         nextItem: nextItem,
-        isMine: isMine
+        isMine: isMine,
       );
     } else if (item.event is RedactedEvent) {
       return RedactedBubble(
@@ -118,7 +115,7 @@ abstract class Bubble extends Item {
   factory Bubble.asReply({
     @required RoomEvent reply,
     @required RoomEvent replyTo,
-    @required bool isMine
+    @required bool isMine,
   }) {
     final item = ChatEvent(replyTo);
     if (replyTo is TextMessageEvent) {
@@ -131,7 +128,7 @@ abstract class Bubble extends Item {
       return ImageBubble(
         item: item,
         isMine: isMine,
-        reply: reply
+        reply: reply,
       );
     } else {
       return null;

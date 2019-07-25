@@ -24,7 +24,6 @@ import 'package:pattle/src/ui/util/user.dart';
 import 'subtitle.dart';
 
 class TopicSubtitle extends Subtitle {
-
   @override
   final TopicChangeEvent event;
 
@@ -42,10 +41,10 @@ class TopicSubtitle extends Subtitle {
             text: displayNameOf(event.sender),
             style: TextStyle(
               fontWeight: FontWeight.bold,
-            )
+            ),
           ),
-        )
-      )
+        ),
+      ),
     );
   }
 }

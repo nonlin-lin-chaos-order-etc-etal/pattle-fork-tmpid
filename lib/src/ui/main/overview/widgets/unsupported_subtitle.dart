@@ -21,15 +21,13 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'subtitle.dart';
 
 class UnsupportedSubtitle extends Subtitle {
-
   UnsupportedSubtitle(RoomEvent event) : super(event);
 
   @override
   Widget build(BuildContext context) =>
-    // Temporary
-    Text('Something happened!',
-      style: textStyle(context).copyWith(
-        fontStyle: FontStyle.italic
-      )
-    );
+      // Temporary
+      Text(
+        'Something happened!',
+        style: textStyle(context).copyWith(fontStyle: FontStyle.italic),
+      );
 }

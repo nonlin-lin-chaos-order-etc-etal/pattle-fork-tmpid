@@ -24,9 +24,7 @@ import 'package:pattle/src/ui/util/user.dart';
 
 import 'state_bubble.dart';
 
-
 class UpgradeBubble extends StateBubble {
-
   @override
   final RoomUpgradeEvent event;
 
@@ -34,24 +32,22 @@ class UpgradeBubble extends StateBubble {
     @required ChatEvent item,
     @required ChatItem previousItem,
     @required ChatItem nextItem,
-    @required bool isMine
-  }) :
-    event = item.event,
-    super(
-      item: item,
-      previousItem: previousItem,
-      nextItem: nextItem,
-      isMine: isMine
-    );
-
+    @required bool isMine,
+  })  : event = item.event,
+        super(
+          item: item,
+          previousItem: previousItem,
+          nextItem: nextItem,
+          isMine: isMine,
+        );
 
   @protected
   @override
   List<TextSpan> buildContentSpans(BuildContext context) =>
-    l(context).upgradedThisGroup(
-      TextSpan(
-        text: displayNameOf(event.sender),
-        style: defaultEmphasisTextStyle
-      )
-    );
+      l(context).upgradedThisGroup(
+        TextSpan(
+          text: displayNameOf(event.sender),
+          style: defaultEmphasisTextStyle,
+        ),
+      );
 }

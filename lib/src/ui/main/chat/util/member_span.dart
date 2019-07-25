@@ -20,29 +20,30 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
-List<TextSpan> spanFor(BuildContext context, MemberChangeEvent event,
-                       {TextStyle style = const TextStyle(
-                          fontWeight: FontWeight.bold
-                       )}) {
+List<TextSpan> spanFor(
+  BuildContext context,
+  MemberChangeEvent event, {
+  TextStyle style = const TextStyle(fontWeight: FontWeight.bold),
+}) {
   final sender = TextSpan(
     text: displayNameOf(event.sender),
-    style: style
+    style: style,
   );
   final subject = TextSpan(
     text: displayNameOf(event.content.subject),
-    style: style
+    style: style,
   );
   var text;
 
   if (event is DisplayNameChangeEvent) {
     final oldName = TextSpan(
       text: displayNameOrId(event.content.subject.id, event.oldSubjectName),
-      style: style
+      style: style,
     );
 
     final newName = TextSpan(
       text: displayNameOf(event.content.subject),
-      style: style
+      style: style,
     );
 
     text = l(context).changedTheirNameTo(oldName, newName);

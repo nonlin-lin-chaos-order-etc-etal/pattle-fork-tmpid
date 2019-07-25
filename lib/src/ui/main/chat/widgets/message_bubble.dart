@@ -23,13 +23,10 @@ import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
-
 import 'bubble.dart';
 import 'item.dart';
 
-
 abstract class MessageBubble extends Bubble {
-
   static const _groupTimeLimit = const Duration(minutes: 3);
 
   // Styling
@@ -44,15 +41,14 @@ abstract class MessageBubble extends Bubble {
     ChatItem previousItem,
     ChatItem nextItem,
     @required bool isMine,
-    this.reply
-  }) :
-    isRepliedTo = reply != null,
-    super(
-      item: item,
-      previousItem: previousItem,
-      nextItem: nextItem,
-      isMine: isMine
-    );
+    this.reply,
+  })  : isRepliedTo = reply != null,
+        super(
+          item: item,
+          previousItem: previousItem,
+          nextItem: nextItem,
+          isMine: isMine,
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +67,11 @@ abstract class MessageBubble extends Bubble {
 
     if (color != null) {
       style = style.copyWith(
-          color: color
+        color: color,
       );
     } else if (isMine) {
       style = style.copyWith(
-          color: Colors.white
+        color: Colors.white,
       );
     }
 
@@ -88,7 +84,7 @@ abstract class MessageBubble extends Bubble {
     }
 
     return textStyle(context, color: color).copyWith(
-      fontWeight: FontWeight.bold
+      fontWeight: FontWeight.bold,
     );
   }
 
@@ -96,11 +92,12 @@ abstract class MessageBubble extends Bubble {
   Widget buildTime(BuildContext context, {Color color}) {
     if (isEndOfGroup) {
       final style = textStyle(context, color: color);
-      return Text(formatAsTime(event.time),
+      return Text(
+        formatAsTime(event.time),
         style: style.copyWith(
           // size 12 14+1-3
           fontSize: style.fontSize - 3,
-        )
+        ),
       );
     } else {
       return Container(width: 0, height: 0);
@@ -113,8 +110,9 @@ abstract class MessageBubble extends Bubble {
   @protected
   Widget buildSender(BuildContext context, {Color color}) {
     if ((isStartOfGroup || (isRepliedTo && !isMine)) && !event.room.isDirect) {
-      return Text(displayNameOf(event.sender, context),
-        style: senderTextStyle(context, color: color)
+      return Text(
+        displayNameOf(event.sender, context),
+        style: senderTextStyle(context, color: color),
       );
     } else {
       return Container(height: 0, width: 0);
@@ -130,19 +128,18 @@ abstract class MessageBubble extends Bubble {
     }
 
     if (_isStartOfGroup == null) {
-      if (previousItem is! ChatEvent
-      || (previousItem is ChatEvent
-        && (previousItem as ChatEvent).event is StateEvent)) {
+      if (previousItem is! ChatEvent ||
+          (previousItem is ChatEvent &&
+              (previousItem as ChatEvent).event is StateEvent)) {
         _isStartOfGroup = true;
         return _isStartOfGroup;
       }
 
       final previousEvent = (previousItem as ChatEvent).event;
 
-      final previousHasSameSender
-      = previousEvent != null
-          && displayNameOf(previousEvent.sender) == displayNameOf(event.sender)
-          && previousEvent.sender == event.sender;
+      final previousHasSameSender = previousEvent != null &&
+          displayNameOf(previousEvent.sender) == displayNameOf(event.sender) &&
+          previousEvent.sender == event.sender;
 
       if (!previousHasSameSender) {
         _isStartOfGroup = true;
@@ -150,9 +147,7 @@ abstract class MessageBubble extends Bubble {
       }
 
       // Difference between time is greater than 3 min
-      var limit = event.time
-          .subtract(_groupTimeLimit)
-          .millisecondsSinceEpoch;
+      final limit = event.time.subtract(_groupTimeLimit).millisecondsSinceEpoch;
 
       if (previousEvent.time.millisecondsSinceEpoch <= limit) {
         _isStartOfGroup = true;
@@ -175,19 +170,18 @@ abstract class MessageBubble extends Bubble {
     }
 
     if (_isEndOfGroup == null) {
-      if (nextItem is! ChatEvent
-      || (nextItem is ChatEvent
-        && (nextItem as ChatEvent).event is StateEvent)) {
+      if (nextItem is! ChatEvent ||
+          (nextItem is ChatEvent &&
+              (nextItem as ChatEvent).event is StateEvent)) {
         _isEndOfGroup = true;
         return _isEndOfGroup;
       }
 
       final nextEvent = (nextItem as ChatEvent).event;
 
-      final nextHasSameSender
-        = nextEvent != null
-          && displayNameOf(nextEvent.sender) == displayNameOf(event.sender)
-          && nextEvent.sender == event.sender;
+      final nextHasSameSender = nextEvent != null &&
+          displayNameOf(nextEvent.sender) == displayNameOf(event.sender) &&
+          nextEvent.sender == event.sender;
 
       if (!nextHasSameSender) {
         _isEndOfGroup = true;
@@ -195,9 +189,7 @@ abstract class MessageBubble extends Bubble {
       }
 
       // Difference between time is greater than 3 min
-      var limit = event.time
-          .add(_groupTimeLimit)
-          .millisecondsSinceEpoch;
+      final limit = event.time.add(_groupTimeLimit).millisecondsSinceEpoch;
 
       if (nextEvent.time.millisecondsSinceEpoch >= limit) {
         _isEndOfGroup = true;
@@ -245,7 +237,7 @@ abstract class MessageBubble extends Bubble {
       }
     } else {
       if (isStartOfGroup) {
-        radius =  BorderRadius.only(
+        radius = BorderRadius.only(
           topRight: Bubble.radiusForBorder,
           bottomLeft: Bubble.radiusForBorder,
           bottomRight: Bubble.radiusForBorder,
@@ -258,17 +250,15 @@ abstract class MessageBubble extends Bubble {
 
   @protected
   ShapeBorder border() => RoundedRectangleBorder(
-    borderRadius: borderRadius(),
-  );
+        borderRadius: borderRadius(),
+      );
 
   @protected
-  Widget buildSentState(BuildContext context) =>
-    Icon(event.sentState != SentState.sent
-          ? Icons.access_time
-          : Icons.check,
-      color: Colors.white,
-      size: 14
-    );
+  Widget buildSentState(BuildContext context) => Icon(
+        event.sentState != SentState.sent ? Icons.access_time : Icons.check,
+        color: Colors.white,
+        size: 14,
+      );
 
   @protected
   Widget buildBottomIfEnd(BuildContext context) {
@@ -291,70 +281,70 @@ abstract class MessageBubble extends Bubble {
 
   Color mineColor() => LightColors.red[450];
 
-  Widget _buildMine(BuildContext context) =>
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Flexible(
-              child: Padding(
-                padding: !isRepliedTo ?
-                  EdgeInsets.only(
-                    left: _oppositeMargin,
-                    right: Item.sideMargin,
-                    bottom: marginBottom(),
-                    top: marginTop(),
-                  ) : EdgeInsets.only(),
-                child: Material(
-                  color: mineColor(),
-                  elevation: 1,
-                  shape: border(),
-                  child: buildMine(context)
-                )
-              )
-            ),
-          ]
-        ),
-      ]
-    );
+  Widget _buildMine(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Flexible(
+                child: Padding(
+                  padding: !isRepliedTo
+                      ? EdgeInsets.only(
+                          left: _oppositeMargin,
+                          right: Item.sideMargin,
+                          bottom: marginBottom(),
+                          top: marginTop(),
+                        )
+                      : EdgeInsets.only(),
+                  child: Material(
+                    color: mineColor(),
+                    elevation: 1,
+                    shape: border(),
+                    child: buildMine(context),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
 
   @protected
   Widget buildMine(BuildContext context);
 
   Color theirsColor() => Colors.white;
 
-  Widget _buildTheirs(BuildContext context) =>
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Padding(
-                padding: !isRepliedTo ?
-                  EdgeInsets.only(
-                    left: Item.sideMargin,
-                    right: _oppositeMargin,
-                    bottom: marginBottom(),
-                    top: marginTop()
-                  ) : EdgeInsets.only(),
-                child: Material(
-                  color: theirsColor(),
-                  elevation: 1,
-                  shape: border(),
-                  child: buildTheirs(context),
-                )
-              )
-            ),
-          ]
-        ),
-      ],
-    );
+  Widget _buildTheirs(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Flexible(
+                child: Padding(
+                  padding: !isRepliedTo
+                      ? EdgeInsets.only(
+                          left: Item.sideMargin,
+                          right: _oppositeMargin,
+                          bottom: marginBottom(),
+                          top: marginTop(),
+                        )
+                      : EdgeInsets.only(),
+                  child: Material(
+                    color: theirsColor(),
+                    elevation: 1,
+                    shape: border(),
+                    child: buildTheirs(context),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
 
   @protected
   Widget buildTheirs(BuildContext context);

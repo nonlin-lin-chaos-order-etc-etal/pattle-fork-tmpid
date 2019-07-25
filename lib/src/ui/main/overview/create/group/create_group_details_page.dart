@@ -28,7 +28,6 @@ import 'package:pattle/src/ui/util/user.dart';
 import 'package:pattle/src/ui/main/overview/create/group/create_group_bloc.dart';
 
 class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
-
   @override
   void initState() {
     super.initState();
@@ -46,9 +45,10 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
     await bloc.createRoom();
     Navigator.of(context).pushNamedAndRemoveUntil(
       Routes.chats,
-      (route) => route.settings.name == Routes.chats
-              && route.settings.arguments == null,
-      arguments: bloc.createdRoom
+      (route) =>
+          route.settings.name == Routes.chats &&
+          route.settings.arguments == null,
+      arguments: bloc.createdRoom,
     );
   }
 
@@ -62,15 +62,13 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
           actionsForegroundColor: Colors.white,
           title: Text(
             l(context).appName,
-            style: TextStyle(
-                color: Colors.white
-            ),
+            style: TextStyle(color: Colors.white),
           ),
           trailing: CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: createGroup,
             child: Text(l(context).confirm),
-          )
+          ),
         ),
       ),
       body: Column(
@@ -89,22 +87,17 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
                     maxLines: 1,
                     android: (_) => MaterialTextFieldData(
                       decoration: InputDecoration(
-                        labelText: l(context).groupName,
-                        filled: true
-                      ),
+                          labelText: l(context).groupName, filled: true),
                     ),
                     ios: (_) => CupertinoTextFieldData(
-                      placeholder: l(context).groupName
-                    ),
+                        placeholder: l(context).groupName),
                   ),
-                )
+                ),
               )
             ],
           ),
           Text(l(context).participants),
-          Expanded(
-            child: _buildUserList(context)
-          )
+          Expanded(child: _buildUserList(context))
         ],
       ),
       android: (_) => MaterialScaffoldData(
@@ -122,7 +115,7 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
                     android: (_) => MaterialProgressIndicatorData(
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
-                  )
+                  ),
                 );
               } else {
                 return Icon(Icons.check);
@@ -138,36 +131,32 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
     final children = List<Widget>();
 
     for (final user in bloc.usersToAdd) {
-      children.add(Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Flexible(
-            child: Padding(
-              padding: EdgeInsets.all(8),
-              child: AspectRatio(
-                aspectRatio: 1/1,
-                child: UserAvatar(
-                  user: user,
-                  radius: 32
+      children.add(
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Flexible(
+              child: Padding(
+                padding: EdgeInsets.all(8),
+                child: AspectRatio(
+                  aspectRatio: 1 / 1,
+                  child: UserAvatar(user: user, radius: 32),
                 ),
-              )
+              ),
             ),
-          ),
-          Text(
-            displayNameOf(user, context),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ));
+            Text(
+              displayNameOf(user, context),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
     }
 
-    return GridView.count(
-      crossAxisCount: 4,
-      children: children
-    );
+    return GridView.count(crossAxisCount: 4, children: children);
   }
 }
 

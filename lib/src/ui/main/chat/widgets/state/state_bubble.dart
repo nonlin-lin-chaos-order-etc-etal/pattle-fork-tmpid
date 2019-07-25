@@ -25,9 +25,7 @@ import 'package:pattle/src/ui/util/date_format.dart';
 import '../bubble.dart';
 import '../item.dart';
 
-
 abstract class StateBubble extends Bubble {
-
   static const horizontalMargin = 64;
   static const borderRadius = const BorderRadius.all(Bubble.radiusForBorder);
 
@@ -35,22 +33,20 @@ abstract class StateBubble extends Bubble {
     @required ChatEvent item,
     @required ChatItem previousItem,
     @required ChatItem nextItem,
-    @required bool isMine
+    @required bool isMine,
   }) : super(
-    item: item,
-    previousItem: previousItem,
-    nextItem: nextItem,
-    isMine: isMine
-  );
+            item: item,
+            previousItem: previousItem,
+            nextItem: nextItem,
+            isMine: isMine);
 
-  final void Function(BuildContext) onTap = (context) { };
+  final void Function(BuildContext) onTap = (context) {};
 
-  TextStyle defaultTextStyle(BuildContext context)
-    => Theme.of(context).textTheme.body1;
+  TextStyle defaultTextStyle(BuildContext context) =>
+      Theme.of(context).textTheme.body1;
 
-  TextStyle get defaultEmphasisTextStyle => TextStyle(
-    fontWeight: FontWeight.w600
-  );
+  TextStyle get defaultEmphasisTextStyle =>
+      TextStyle(fontWeight: FontWeight.w600);
 
   @protected
   List<TextSpan> buildContentSpans(BuildContext context);
@@ -58,19 +54,20 @@ abstract class StateBubble extends Bubble {
   @protected
   Widget buildContent(BuildContext context) {
     return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-        style: defaultTextStyle(context),
-        children: buildContentSpans(context)
-      )
-    );
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          style: defaultTextStyle(context),
+          children: buildContentSpans(context),
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     // size 12 14-2
     var timeTextStyle = Theme.of(context).textTheme.body1;
-    timeTextStyle = timeTextStyle.copyWith(fontSize: timeTextStyle.fontSize - 2);
+    timeTextStyle = timeTextStyle.copyWith(
+      fontSize: timeTextStyle.fontSize - 2,
+    );
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -81,7 +78,7 @@ abstract class StateBubble extends Bubble {
                 left: Item.sideMargin,
                 right: Item.sideMargin,
                 bottom: marginBottom(),
-                top: marginTop()
+                top: marginTop(),
               ),
               child: Material(
                 elevation: 1,
@@ -89,7 +86,7 @@ abstract class StateBubble extends Bubble {
                 borderRadius: borderRadius,
                 child: PlatformInkWell(
                   customBorder: RoundedRectangleBorder(
-                    borderRadius: borderRadius
+                    borderRadius: borderRadius,
                   ),
                   onTap: () => onTap(context),
                   child: Padding(
@@ -99,17 +96,18 @@ abstract class StateBubble extends Bubble {
                       children: <Widget>[
                         buildContent(context),
                         SizedBox(height: 4),
-                        Text(formatAsTime(event.time),
+                        Text(
+                          formatAsTime(event.time),
                           style: timeTextStyle,
-                        )
+                        ),
                       ],
-                    )
+                    ),
                   ),
-                )
+                ),
               ),
-            )
-          )
-        )
+            ),
+          ),
+        ),
       ],
     );
   }

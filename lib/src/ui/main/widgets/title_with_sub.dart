@@ -18,7 +18,6 @@
 import 'package:flutter/cupertino.dart';
 
 class TitleWithSub extends StatelessWidget {
-
   final Widget title;
   final Widget subtitle;
 
@@ -29,15 +28,13 @@ class TitleWithSub extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context)
-    => Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        title,
-        SizedBox(height: 2),
-        subtitle
-      ],
-    );
-
+  Widget build(BuildContext context) => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          title,
+          SizedBox(height: 2),
+          subtitle,
+        ],
+      );
 }

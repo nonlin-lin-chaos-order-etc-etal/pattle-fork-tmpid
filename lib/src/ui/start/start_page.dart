@@ -21,12 +21,11 @@ import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 
 class StartPage extends StatelessWidget {
-
   // TODO: PR: Make BorderRadius.circular const
   static const buttonBorderRadius = BorderRadius.all(Radius.circular(96));
 
   static const buttonShape = RoundedRectangleBorder(
-    borderRadius: buttonBorderRadius
+    borderRadius: buttonBorderRadius,
   );
 
   static const buttonPadding = EdgeInsets.all(16);
@@ -48,68 +47,63 @@ class StartPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text(l(context).appName,
+              Text(
+                l(context).appName,
                 style: TextStyle(fontSize: 96),
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   PlatformWidget(
-                    android: (_) =>
-                      RaisedButton(
-                        onPressed: null,
-                        child: Text(loginWithPhone),
-                        shape: buttonShape,
-                        padding: buttonPadding,
-                      ),
-                    ios: (_) =>
-                      CupertinoButton.filled(
-                        onPressed: null,
-                        child: Text(loginWithPhone),
-                        borderRadius: buttonBorderRadius,
-                        padding: buttonPadding,
-                      )
+                    android: (_) => RaisedButton(
+                      onPressed: null,
+                      child: Text(loginWithPhone),
+                      shape: buttonShape,
+                      padding: buttonPadding,
+                    ),
+                    ios: (_) => CupertinoButton.filled(
+                      onPressed: null,
+                      child: Text(loginWithPhone),
+                      borderRadius: buttonBorderRadius,
+                      padding: buttonPadding,
+                    ),
                   ),
                   SizedBox(height: 16),
                   PlatformWidget(
-                    android: (_) =>
-                      OutlineButton(
-                        onPressed: null,
-                        child: Text(loginWithEmail),
-                        shape: buttonShape,
-                        padding: buttonPadding,
-                      ),
-                    ios: (_) =>
-                      CupertinoButton(
-                        onPressed: null,
-                        child: Text(loginWithEmail),
-                        borderRadius: buttonBorderRadius,
-                        padding: buttonPadding,
-                      )
+                    android: (_) => OutlineButton(
+                      onPressed: null,
+                      child: Text(loginWithEmail),
+                      shape: buttonShape,
+                      padding: buttonPadding,
+                    ),
+                    ios: (_) => CupertinoButton(
+                      onPressed: null,
+                      child: Text(loginWithEmail),
+                      borderRadius: buttonBorderRadius,
+                      padding: buttonPadding,
+                    ),
                   ),
                   SizedBox(height: 16),
                   PlatformWidget(
-                    android: (_) =>
-                      FlatButton(
-                        onPressed: () => _loginWithUsername(context),
-                        child: Text(loginWithUsername),
-                        shape: buttonShape,
-                        padding: buttonPadding,
-                      ),
-                    ios: (_) =>
-                      CupertinoButton(
-                        onPressed: () => _loginWithUsername(context),
-                        child: Text(loginWithUsername),
-                        borderRadius: buttonBorderRadius,
-                        padding: buttonPadding,
-                      )
-                  )
+                    android: (_) => FlatButton(
+                      onPressed: () => _loginWithUsername(context),
+                      child: Text(loginWithUsername),
+                      shape: buttonShape,
+                      padding: buttonPadding,
+                    ),
+                    ios: (_) => CupertinoButton(
+                      onPressed: () => _loginWithUsername(context),
+                      child: Text(loginWithUsername),
+                      borderRadius: buttonBorderRadius,
+                      padding: buttonPadding,
+                    ),
+                  ),
                 ],
-              )
+              ),
             ],
-          )
+          ),
         ),
-      )
+      ),
     );
   }
 }

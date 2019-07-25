@@ -24,10 +24,8 @@ import 'package:respect_24_hour/respect_24_hour.dart';
 final bloc = InitialBloc();
 
 class InitialBloc {
-
   final _loggedInSubj = BehaviorSubject<bool>();
-  Observable<bool> get loggedIn
-  => _loggedInSubj.stream;
+  Observable<bool> get loggedIn => _loggedInSubj.stream;
 
   // General app initialization
   void init() async {

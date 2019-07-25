@@ -21,7 +21,6 @@ import 'package:pattle/src/ui/util/matrix_image.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
 class UserAvatar extends StatelessWidget {
-
   final User user;
   final double radius;
 
@@ -36,7 +35,7 @@ class UserAvatar extends StatelessWidget {
         backgroundImage: MatrixImage(
           user.avatarUrl,
           width: 64,
-          height: 64
+          height: 64,
         ),
       );
     } else {

@@ -45,29 +45,26 @@ class Strings {
   final description = 'Description';
   final noDescriptionSet = 'No description has been set';
 
-  final cantSendMessages
-    = 'You can\'t send messages to this group because you\'re no longer a participant.';
+  final cantSendMessages =
+      'You can\'t send messages to this group because you\'re no longer a participant.';
 
-  final connectionLost =
-    'Connection has been lost.\n'
-    'Make sure your phone has an active internet connection.';
+  final connectionLost = 'Connection has been lost.\n'
+      'Make sure your phone has an active internet connection.';
 
-  final connectionFailed =
-    'Connection failed. '
-    'Check your internet connection';
+  final connectionFailed = 'Connection failed. '
+      'Check your internet connection';
 
-  final connectionFailedServerOverloaded =
-      'Connection failed. '
+  final connectionFailedServerOverloaded = 'Connection failed. '
       'The server is probably overloaded.';
 
   final anErrorHasOccurred = 'An error has occurred:';
-  final thisErrorHasBeenReported
-    = 'This error has been reported. Please restart Pattle.';
+  final thisErrorHasBeenReported =
+      'This error has been reported. Please restart Pattle.';
 
   final youDeletedThisMessage = 'You deleted this message';
 
-  List<TextSpan> hasDeletedThisMessage(TextSpan name)
-    => [name, TextSpan(text: ' deleted this message')];
+  List<TextSpan> hasDeletedThisMessage(TextSpan name) =>
+      [name, TextSpan(text: ' deleted this message')];
 
   // StartPage //
   final loginWithPhone = 'Login with phone number';
@@ -76,9 +73,12 @@ class Strings {
 
   // StartPage: UsernamePage //
   final enterUsername = 'Enter username';
-  final ifYouDontHaveAnAccount = "If you don't have an account, we'll create one";
-  final usernameInvalidError = "Invalid username. May only contain letters, numbers, -, ., =, _ and /";
-  final userIdInvalidError = "Invalid user ID. Must be in the format of '@name:server.tld'";
+  final ifYouDontHaveAnAccount =
+      "If you don't have an account, we'll create one";
+  final usernameInvalidError =
+      "Invalid username. May only contain letters, numbers, -, ., =, _ and /";
+  final userIdInvalidError =
+      "Invalid user ID. Must be in the format of '@name:server.tld'";
   final hostnameInvalidError = 'Invalid hostname';
   final unknownError = 'An unknown error occured';
 
@@ -89,65 +89,57 @@ class Strings {
   String loggingInAs(String name) => 'Logging in as $name';
 
   // Room creation event
-  List<TextSpan> createdThisGroup(TextSpan name)
-    => [name, TextSpan(text: ' created this group')];
+  List<TextSpan> createdThisGroup(TextSpan name) =>
+      [name, TextSpan(text: ' created this group')];
 
   // Room upgrade event
-  List<TextSpan> upgradedThisGroup(TextSpan name)
-  => [name, TextSpan(text: ' upgraded this group')];
+  List<TextSpan> upgradedThisGroup(TextSpan name) =>
+      [name, TextSpan(text: ' upgraded this group')];
 
   // Topic change event
-  List<TextSpan> changedDescriptionTapToView(TextSpan name)
-  => [name, TextSpan(text: ' changed the description of this group. Tap to view')];
+  List<TextSpan> changedDescriptionTapToView(TextSpan name) => [
+        name,
+        TextSpan(text: ' changed the description of this group. Tap to view')
+      ];
 
-  List<TextSpan> changedDescription(TextSpan name)
-  => [name, TextSpan(text: ' changed the description of this group')];
+  List<TextSpan> changedDescription(TextSpan name) =>
+      [name, TextSpan(text: ' changed the description of this group')];
 
   // Member change events
-  List<TextSpan> changedTheirNameTo(TextSpan oldName, TextSpan newName)
-    => [oldName, TextSpan(text: ' changed their name to '), newName];
+  List<TextSpan> changedTheirNameTo(TextSpan oldName, TextSpan newName) =>
+      [oldName, TextSpan(text: ' changed their name to '), newName];
 
-  List<TextSpan> joined(TextSpan name)
-    => [name, TextSpan(text: ' joined')];
+  List<TextSpan> joined(TextSpan name) => [name, TextSpan(text: ' joined')];
 
-  List<TextSpan> left(TextSpan name)
-    => [name, TextSpan(text: ' left')];
+  List<TextSpan> left(TextSpan name) => [name, TextSpan(text: ' left')];
 
-  List<TextSpan> wasBannedBy(TextSpan banee, TextSpan banner)
-    => [
-      banee,
-      TextSpan(text: ' was banned by '),
-      banner
-    ];
+  List<TextSpan> wasBannedBy(TextSpan banee, TextSpan banner) =>
+      [banee, TextSpan(text: ' was banned by '), banner];
 
-  List<TextSpan> wasInvitedBy(TextSpan invitee, TextSpan inviter)
-    => [
-      invitee,
-      TextSpan(text: ' was invited by '),
-      inviter
-    ];
+  List<TextSpan> wasInvitedBy(TextSpan invitee, TextSpan inviter) =>
+      [invitee, TextSpan(text: ' was invited by '), inviter];
 
   // Typing events
-  List<TextSpan> get typing=> [TextSpan(text: 'typing...')];
+  List<TextSpan> get typing => [TextSpan(text: 'typing...')];
 
   List<TextSpan> isTyping(TextSpan name) => [
-    name,
-    TextSpan(text: ' is typing...'),
-  ];
+        name,
+        TextSpan(text: ' is typing...'),
+      ];
 
   List<TextSpan> areTyping(TextSpan first, TextSpan second) => [
-    first,
-    TextSpan(text: ' and '),
-    second,
-    TextSpan(text: ' are typing...')
-  ];
+        first,
+        TextSpan(text: ' and '),
+        second,
+        TextSpan(text: ' are typing...')
+      ];
 
   List<TextSpan> andMoreAreTyping(TextSpan first, TextSpan second) => [
-    first,
-    TextSpan(text: ' and '),
-    second,
-    TextSpan(text: ' and more typing...')
-  ];
+        first,
+        TextSpan(text: ' and '),
+        second,
+        TextSpan(text: ' and more typing...')
+      ];
 
   String xMore(int count) => '$count more';
 
@@ -156,9 +148,12 @@ class Strings {
 
 class AppLocalizations {
   AppLocalizations(this.locale) {
-    switch(locale.languageCode) {
-      case 'en': _strings = const Strings(); break;
-      default: _strings = const Strings();
+    switch (locale.languageCode) {
+      case 'en':
+        _strings = const Strings();
+        break;
+      default:
+        _strings = const Strings();
     }
   }
 

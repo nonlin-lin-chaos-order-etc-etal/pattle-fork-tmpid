@@ -26,9 +26,7 @@ import 'package:pattle/src/ui/util/user.dart';
 import '../bubble.dart';
 import 'state_bubble.dart';
 
-
 class MemberBubble extends StateBubble {
-
   @override
   final MemberChangeEvent event;
 
@@ -36,21 +34,17 @@ class MemberBubble extends StateBubble {
     @required ChatEvent item,
     @required ChatItem previousItem,
     @required ChatItem nextItem,
-    @required bool isMine
-  }) :
-    event = item.event,
-    super(
-      item: item,
-      previousItem: previousItem,
-      nextItem: nextItem,
-      isMine: isMine
-    );
+    @required bool isMine,
+  })  : event = item.event,
+        super(
+          item: item,
+          previousItem: previousItem,
+          nextItem: nextItem,
+          isMine: isMine,
+        );
 
   @override
   @protected
-  List<TextSpan> buildContentSpans(BuildContext context) => spanFor(
-    context,
-    event,
-    style: defaultEmphasisTextStyle
-  );
+  List<TextSpan> buildContentSpans(BuildContext context) =>
+      spanFor(context, event, style: defaultEmphasisTextStyle);
 }

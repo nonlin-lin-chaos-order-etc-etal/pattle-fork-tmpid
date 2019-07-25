@@ -25,8 +25,7 @@ final inj = Injector();
 Homeserver getHomeserver() => inj.getDependency<Homeserver>();
 
 void registerHomeserver(Homeserver homeserver) {
-  inj.registerSingleton<Homeserver>((_)
-    => homeserver, override: true);
+  inj.registerSingleton<Homeserver>((_) => homeserver, override: true);
 }
 
 Future<void> registerHomeserverWith(Url url) async {
@@ -44,10 +43,8 @@ Store getStore() => inj.getDependency<Store>();
 void registerStore() {
   final store = SqfliteStore(path: 'pattle.sqlite');
 
-  inj.registerSingleton<Store>((_)
-    => store, override: true);
+  inj.registerSingleton<Store>((_) => store, override: true);
 }
-
 
 LocalUser getLocalUser() => inj.getDependency<LocalUser>();
 
@@ -57,13 +54,16 @@ void registerLocalUser(LocalUser user) {
 }
 
 const use24HourDependencyName = 'use24HourFormat';
-bool getUse24HourFormat() => inj.getDependency<bool>(
-  dependencyName: use24HourDependencyName
-) ?? false;
+bool getUse24HourFormat() =>
+    inj.getDependency<bool>(
+      dependencyName: use24HourDependencyName,
+    ) ??
+    false;
 
 void registerUse24HourFormat(bool use24HourFormat) {
-  inj.registerSingleton((_) => use24HourFormat,
+  inj.registerSingleton(
+    (_) => use24HourFormat,
     override: true,
-    dependencyName: use24HourDependencyName
+    dependencyName: use24HourDependencyName,
   );
 }

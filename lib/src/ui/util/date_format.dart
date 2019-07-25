@@ -25,28 +25,20 @@ int _weekOf(DateTime date) {
   return ((dayOfYear - date.weekday + 10) / 7).floor();
 }
 
-bool _isToday(DateTime now, DateTime date)
-  => date.year == now.year
-  && date.month == now.month
-  && date.day == now.day;
+bool _isToday(DateTime now, DateTime date) =>
+    date.year == now.year && date.month == now.month && date.day == now.day;
 
-bool _isYesterday(DateTime now, DateTime date)
-  => date.year == now.year
-  && date.month == now.month
-  && date.day == now.day - 1;
+bool _isYesterday(DateTime now, DateTime date) =>
+    date.year == now.year && date.month == now.month && date.day == now.day - 1;
 
 bool _isThisWeek(DateTime now, DateTime date) {
-
   var thisWeek = _weekOf(now);
   var week = _weekOf(date);
 
-  return date.year == now.year
-      && date.month == now.month
-      && week == thisWeek;
+  return date.year == now.year && date.month == now.month && week == thisWeek;
 }
 
-bool _isThisYear(DateTime now, DateTime date)
-  => date.year == now.year;
+bool _isThisYear(DateTime now, DateTime date) => date.year == now.year;
 
 String formatAsTime(DateTime time) {
   if (di.getUse24HourFormat()) {
@@ -73,7 +65,6 @@ String formatAsDate(BuildContext context, DateTime date) {
 }
 
 String formatAsListItem(BuildContext context, DateTime date) {
-
   if (date == null) {
     // TODO: Handle better
     return 'unknown';

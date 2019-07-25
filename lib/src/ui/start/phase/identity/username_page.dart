@@ -48,7 +48,6 @@ class UsernamePageState extends State<UsernamePage> {
         String server = split[1];
         bloc.setHomeserverUrl(server, allowMistake: true);
       }
-
     });
 
     subscription = bloc.isUsernameAvailable.listen((state) {
@@ -87,9 +86,7 @@ class UsernamePageState extends State<UsernamePage> {
             onPressed: toAdvance,
           )
         ],
-        ios: (_) => CupertinoNavigationBarData(
-          transitionBetweenRoutes: true
-        ),
+        ios: (_) => CupertinoNavigationBarData(transitionBetweenRoutes: true),
       );
     }
 
@@ -101,9 +98,11 @@ class UsernamePageState extends State<UsernamePage> {
           margin: EdgeInsets.only(top: 32, right: 16),
           child: FlatButton(
             onPressed: toAdvance,
-            child: Text(l(context).advanced.toUpperCase())
-          )
-        )
+            child: Text(
+              l(context).advanced.toUpperCase(),
+            ),
+          ),
+        ),
       );
     }
 
@@ -129,17 +128,21 @@ class UsernamePageState extends State<UsernamePage> {
                     StreamBuilder<RequestState>(
                       initialData: RequestState.none,
                       stream: bloc.isUsernameAvailable,
-                      builder: (BuildContext context, AsyncSnapshot<RequestState> snapshot) {
+                      builder: (
+                        BuildContext context,
+                        AsyncSnapshot<RequestState> snapshot,
+                      ) {
                         String errorText;
 
                         if (snapshot.hasError) {
                           if (snapshot.error is InvalidUsernameException) {
                             errorText = l(context).usernameInvalidError;
-                          } else if(snapshot.error is InvalidHostnameException) {
+                          } else if (snapshot.error
+                              is InvalidHostnameException) {
                             errorText = l(context).hostnameInvalidError;
-                          } else if(snapshot.error is InvalidUserIdException) {
+                          } else if (snapshot.error is InvalidUserIdException) {
                             errorText = l(context).userIdInvalidError;
-                          } else if(snapshot.error is SocketException) {
+                          } else if (snapshot.error is SocketException) {
                             errorText = l(context).connectionFailed;
                           } else {
                             errorText = l(context).unknownError;
@@ -154,21 +157,20 @@ class UsernamePageState extends State<UsernamePage> {
                           autocorrect: false,
                           onSubmitted: (_) => _next(context),
                           android: (_) => MaterialTextFieldData(
-                            decoration: InputDecoration(
-                              filled: true,
-                              prefixText: '@',
-                              helperText: l(context).ifYouDontHaveAnAccount,
-                              labelText: l(context).username,
-                              errorText: errorText
-                            )
-                          ),
+                              decoration: InputDecoration(
+                            filled: true,
+                            prefixText: '@',
+                            helperText: l(context).ifYouDontHaveAnAccount,
+                            labelText: l(context).username,
+                            errorText: errorText,
+                          )),
                           ios: (_) => CupertinoTextFieldData(
                             prefix: Padding(
                               padding: EdgeInsets.only(left: 8),
                               child: Text('@'),
                             ),
                             prefixMode: OverlayVisibilityMode.always,
-                          )
+                          ),
                         );
 
                         if (isMaterial) {
@@ -181,30 +183,31 @@ class UsernamePageState extends State<UsernamePage> {
                                 padding: EdgeInsets.only(top: 8),
                                 child: Container(
                                   height: 32,
-                                  child: errorText != null ?
-                                  Text(
-                                    errorText,
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                    )
-                                  ) : Container()
+                                  child: errorText != null
+                                      ? Text(errorText,
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                          ))
+                                      : Container(),
                                 ),
                               )
                             ],
-                          ) ;
+                          );
                         } else {
                           return textField;
                         }
-                      }
+                      },
                     ),
                     SizedBox(height: 16),
                     StreamBuilder<RequestState>(
                       stream: bloc.isUsernameAvailable,
-                      builder: (BuildContext context, AsyncSnapshot<RequestState> snapshot) {
+                      builder: (
+                        BuildContext context,
+                        AsyncSnapshot<RequestState> snapshot,
+                      ) {
                         final state = snapshot.data;
-                        final enabled =
-                           state != RequestState.active
-                        && state != RequestState.stillActive;
+                        final enabled = state != RequestState.active &&
+                            state != RequestState.stillActive;
                         var onPressed;
                         Widget child = PlatformText(l(context).next);
 
@@ -222,24 +225,24 @@ class UsernamePageState extends State<UsernamePage> {
                             height: 18,
                             child: PlatformCircularProgressIndicator(
                               android: (_) => MaterialProgressIndicatorData(
-                                valueColor: AlwaysStoppedAnimation(Colors.grey)
+                                valueColor: AlwaysStoppedAnimation(Colors.grey),
                               ),
-                            )
+                            ),
                           );
                         }
 
                         return PlatformButton(
                           onPressed: onPressed,
-                          child: child
+                          child: child,
                         );
-                      }
+                      },
                     ),
                   ],
-                )
-              )
+                ),
+              ),
             )
           ],
-        )
+        ),
       ),
     );
   }

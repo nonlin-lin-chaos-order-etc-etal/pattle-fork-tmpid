@@ -35,55 +35,53 @@ import 'ui/main/overview/create/group/create_group_details_page.dart';
 
 final routes = {
   Routes.root: (Object params) => platformPageRoute(
-    settings: RouteSettings(name: Routes.root),
-    builder: (context) => InitialPage()
-  ),
+        settings: RouteSettings(name: Routes.root),
+        builder: (context) => InitialPage(),
+      ),
   Routes.chats: (Object arguments) => platformPageRoute(
-    settings: RouteSettings(name: Routes.chats),
-    builder: (context) {
-      if (arguments is Room) {
-        return ChatPage(arguments);
-      } else {
-        return ChatOverviewPage();
-      }
-    }
-  ),
+        settings: RouteSettings(name: Routes.chats),
+        builder: (context) {
+          if (arguments is Room) {
+            return ChatPage(arguments);
+          } else {
+            return ChatOverviewPage();
+          }
+        },
+      ),
   Routes.chatsSettings: (Object arguments) => platformPageRoute(
-    settings: RouteSettings(name: Routes.chatsSettings),
-    builder: (context) => ChatSettingsPage(arguments)
-  ),
+        settings: RouteSettings(name: Routes.chatsSettings),
+        builder: (context) => ChatSettingsPage(arguments),
+      ),
   Routes.chatsNew: (Object arguments) => platformPageRoute(
-    settings: RouteSettings(name: Routes.chatsNew),
-    builder: (context) => CreateGroupMembersPage()
-  ),
+        settings: RouteSettings(name: Routes.chatsNew),
+        builder: (context) => CreateGroupMembersPage(),
+      ),
   Routes.chatsNewDetails: (Object arguments) => platformPageRoute(
-    settings: RouteSettings(name: Routes.chatsNewDetails),
-    builder: (context) => CreateGroupDetailsPage()
-  ),
+        settings: RouteSettings(name: Routes.chatsNewDetails),
+        builder: (context) => CreateGroupDetailsPage(),
+      ),
   Routes.image: (Object arguments) => platformPageRoute(
-    settings: RouteSettings(name: Routes.image),
-    builder: (context) => ImagePage(arguments)
-  ),
+      settings: RouteSettings(name: Routes.image),
+      builder: (context) => ImagePage(arguments)),
   Routes.start: (Object params) => platformPageRoute(
-    settings: RouteSettings(name: Routes.start),
-    builder: (context) => StartPage()
-  ),
+        settings: RouteSettings(name: Routes.start),
+        builder: (context) => StartPage(),
+      ),
   Routes.startAdvanced: (Object params) => platformPageRoute(
-    settings: RouteSettings(name: Routes.startAdvanced),
-    builder: (context) => AdvancedPage()
-  ),
+        settings: RouteSettings(name: Routes.startAdvanced),
+        builder: (context) => AdvancedPage(),
+      ),
   Routes.startUsername: (Object params) => platformPageRoute(
-    settings: RouteSettings(name: Routes.startUsername),
-    builder: (context) => UsernamePage()
-  ),
+        settings: RouteSettings(name: Routes.startUsername),
+        builder: (context) => UsernamePage(),
+      ),
   Routes.startPassword: (Object params) => platformPageRoute(
-    settings: RouteSettings(name: Routes.startPassword),
-    builder: (context) => PasswordPage()
-  ),
+        settings: RouteSettings(name: Routes.startPassword),
+        builder: (context) => PasswordPage(),
+      ),
 };
 
 class Routes {
-
   Routes._();
 
   static const root = '/';
@@ -99,7 +97,6 @@ class Routes {
   static const chatsNew = '/chats/new';
   static const chatsNewDetails = '/chats/new/details';
 }
-
 
 class App extends StatelessWidget {
   // This widget is the root of your application.
@@ -123,9 +120,7 @@ class App extends StatelessWidget {
         theme: lightTheme,
       ),
       ios: (_) => CupertinoAppData(
-        theme: MaterialBasedCupertinoThemeData(
-          materialTheme: lightTheme
-        )
+        theme: MaterialBasedCupertinoThemeData(materialTheme: lightTheme),
       ),
     );
   }

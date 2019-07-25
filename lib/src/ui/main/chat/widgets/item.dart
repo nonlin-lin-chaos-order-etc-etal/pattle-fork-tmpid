@@ -26,9 +26,7 @@ import 'image_bubble.dart';
 import 'state/member_bubble.dart';
 import 'text_bubble.dart';
 
-
 abstract class Item extends StatelessWidget {
-
   final ChatItem item;
 
   final ChatItem previousItem;

@@ -22,26 +22,30 @@ import 'package:flutter/widgets.dart';
 /// Builds immediately if the `FutureOr` is the `T`,
 /// other wise build a `FutureBuilder`.
 class FutureOrBuilder<T> extends StatelessWidget {
-
   final FutureOr<T> futureOr;
   final AsyncWidgetBuilder<T> builder;
 
   const FutureOrBuilder({
     Key key,
     @required this.futureOr,
-    @required this.builder
+    @required this.builder,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (futureOr is T) {
-      return builder(context, AsyncSnapshot.withData(ConnectionState.done, futureOr));
+      return builder(
+        context,
+        AsyncSnapshot.withData(
+          ConnectionState.done,
+          futureOr,
+        ),
+      );
     } else {
       return FutureBuilder<T>(
         future: futureOr,
-        builder: builder
+        builder: builder,
       );
     }
   }
-
 }

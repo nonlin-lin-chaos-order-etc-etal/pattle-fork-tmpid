@@ -21,7 +21,6 @@ import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/initial/initial_bloc.dart';
 
 class InitialPageState extends State<InitialPage> {
-
   StreamSubscription<bool> subscription;
 
   @override
@@ -59,7 +58,6 @@ class InitialPageState extends State<InitialPage> {
 }
 
 class InitialPage extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => InitialPageState();
 }

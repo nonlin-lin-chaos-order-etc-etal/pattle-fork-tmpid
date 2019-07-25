@@ -22,17 +22,15 @@ import 'package:pattle/src/ui/main/widgets/redacted.dart';
 import 'subtitle.dart';
 
 class RedactedSubtitle extends Subtitle {
-
   @override
   final RedactedEvent event;
 
   RedactedSubtitle(this.event) : super(event);
 
   @override
-  Widget build(BuildContext context) =>
-    Redacted(
-      event: event,
-      iconSize: 20,
-      color: Theme.of(context).textTheme.caption.color
-    );
+  Widget build(BuildContext context) => Redacted(
+        event: event,
+        iconSize: 20,
+        color: Theme.of(context).textTheme.caption.color,
+      );
 }

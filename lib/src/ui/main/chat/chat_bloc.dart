@@ -25,7 +25,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
 
 class ChatBloc {
-
   final Room room;
 
   StreamSubscription syncSub;
@@ -61,7 +60,7 @@ class ChatBloc {
       // Remember: 'previous' is actually next in time
       RoomEvent previousEvent;
       RoomEvent event;
-      for(event in events) {
+      for (event in events) {
         var shouldIgnore = false;
         // In direct chats, don't show the invite event between this user
         // and the direct user.
@@ -70,23 +69,22 @@ class ChatBloc {
         // and the direct user.
         if (room.isDirect) {
           if (event is InviteEvent) {
-            final iInvitedYou = event.sender == me
-                && event.content.subject == room.directUser;
+            final iInvitedYou =
+                event.sender == me && event.content.subject == room.directUser;
 
-            final youInvitedMe = event.sender == room.directUser
-                && event.content.subject == me;
+            final youInvitedMe =
+                event.sender == room.directUser && event.content.subject == me;
 
             shouldIgnore = iInvitedYou || youInvitedMe;
           } else if (event is JoinEvent) {
             final subject = event.content.subject;
-            shouldIgnore = subject == me
-                || subject == room.directUser;
+            shouldIgnore = subject == me || subject == room.directUser;
           }
         }
 
-        shouldIgnore |=
-            event is JoinEvent && event is! DisplayNameChangeEvent
-                && room.creator == event.content.subject;
+        shouldIgnore |= event is JoinEvent &&
+            event is! DisplayNameChangeEvent &&
+            room.creator == event.content.subject;
 
         // Don't show creation events in rooms that are replacements
         shouldIgnore |= event is RoomCreationEvent && room.isReplacement;
@@ -96,8 +94,9 @@ class ChatBloc {
         }
 
         // Insert DateHeader if there's a day difference
-        if (previousEvent != null && event != null
-            && previousEvent.time.day != event.time.day) {
+        if (previousEvent != null &&
+            event != null &&
+            previousEvent.time.day != event.time.day) {
           chatItems.add(DateItem(previousEvent.time));
         }
 
@@ -138,7 +137,6 @@ class ChatBloc {
     }
   }
 
-
   bool _notifying = false;
   bool _typing = false;
   final _stopwatch = Stopwatch();
@@ -178,7 +176,6 @@ class ChatBloc {
       }
     });
   }
-
 
   void cleanUp() {
     syncSub.cancel();

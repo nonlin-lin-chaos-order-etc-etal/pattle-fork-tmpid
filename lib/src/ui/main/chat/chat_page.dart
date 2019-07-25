@@ -40,7 +40,6 @@ import 'package:pattle/src/ui/util/room.dart';
 import 'widgets/bubble.dart';
 
 class ChatPageState extends State<ChatPage> {
-
   final me = di.getLocalUser();
   final ChatBloc bloc;
   final Room room;
@@ -77,12 +76,11 @@ class ChatPageState extends State<ChatPage> {
       }
     });
 
-    bloc.shouldRefresh.listen((shouldRefresh) => setState(() { }));
+    bloc.shouldRefresh.listen((shouldRefresh) => setState(() {}));
   }
 
   @override
   Widget build(BuildContext context) {
-
     Widget avatar = Container();
     final avatarUrl = avatarUrlOf(room);
     if (avatarUrl != null) {
@@ -91,14 +89,14 @@ class ChatPageState extends State<ChatPage> {
         backgroundImage: MatrixImage(
           avatarUrl,
           width: 64,
-          height: 64
+          height: 64,
         ),
       );
 
       avatar = PlatformWidget(
         android: (_) => Hero(
           tag: room.id,
-          child: circleAvatar
+          child: circleAvatar,
         ),
         ios: (_) => circleAvatar,
       );
@@ -113,16 +111,17 @@ class ChatPageState extends State<ChatPage> {
     };
 
     // TODO: typingUsers should not contain nulls
-    final title = room.isSomeoneElseTyping && !room.typingUsers.any((u) => u == null)
-        ? TitleWithSub(
-            title: ChatName(room: room),
-            subtitle: RichText(
-              text: TextSpan(
-                children: typingSpan(context, room)
-              ),
-            ),
-          )
-        : ChatName(room: room);
+    final title =
+        room.isSomeoneElseTyping && !room.typingUsers.any((u) => u == null)
+            ? TitleWithSub(
+                title: ChatName(room: room),
+                subtitle: RichText(
+                  text: TextSpan(
+                    children: typingSpan(context, room),
+                  ),
+                ),
+              )
+            : ChatName(room: room);
 
     return PlatformScaffold(
       backgroundColor: LightColors.red[50],
@@ -146,9 +145,9 @@ class ChatPageState extends State<ChatPage> {
                 ),
                 Flexible(
                   child: title,
-                )
+                ),
               ],
-            )
+            ),
           ),
         ),
         ios: (context) => CupertinoNavigationBarData(
@@ -159,19 +158,17 @@ class ChatPageState extends State<ChatPage> {
           trailing: Padding(
             padding: EdgeInsets.all(4),
             child: AspectRatio(
-              aspectRatio: 1/1,
+              aspectRatio: 1 / 1,
               child: avatar,
             ),
           ),
           title: settingsGestureDetector(
             child: ChatName(
               room: room,
-              style: TextStyle(
-                color: Colors.white
-              )
-            )
-          )
-        )
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
       ),
       body: Column(
         children: <Widget>[
@@ -180,7 +177,7 @@ class ChatPageState extends State<ChatPage> {
             child: _buildBody(),
           )
         ],
-      )
+      ),
     );
   }
 
@@ -188,7 +185,7 @@ class ChatPageState extends State<ChatPage> {
     return Column(
       children: <Widget>[
         Expanded(
-          child: _buildEventsList()
+          child: _buildEventsList(),
         ),
         _buildInput(),
       ],
@@ -198,85 +195,82 @@ class ChatPageState extends State<ChatPage> {
   Widget _buildInput() {
     const elevation = 8.0;
     final sendButton = PlatformIconButton(
-      androidIcon: Icon(Icons.send),
-      iosIcon: Icon(CupertinoIcons.forward),
-      onPressed: () {
-        bloc.sendMessage(textController.value.text);
-        textController.clear();
-        setState(() {
-
+        androidIcon: Icon(Icons.send),
+        iosIcon: Icon(CupertinoIcons.forward),
+        onPressed: () {
+          bloc.sendMessage(textController.value.text);
+          textController.clear();
+          setState(() {});
         });
-      }
-    );
 
     if (bloc.room is JoinedRoom) {
       return Material(
-          elevation: elevation,
-          color: LightColors.red[50],
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: PlatformWidget(
-              android: (_) => Material(
-                elevation: elevation,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8)
-                ),
-                color: Colors.white,
-                child: TextField(
-                  controller: textController,
-                  textInputAction: TextInputAction.newline,
-                  autocorrect: true,
-                  textCapitalization: TextCapitalization.sentences,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(8))
+        elevation: elevation,
+        color: LightColors.red[50],
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: PlatformWidget(
+            android: (_) => Material(
+              elevation: elevation,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+              color: Colors.white,
+              child: TextField(
+                controller: textController,
+                textInputAction: TextInputAction.newline,
+                autocorrect: true,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(8),
                     ),
-                    filled: true,
-                    hintText: l(context).typeAMessage,
-                    suffixIcon: sendButton
                   ),
+                  filled: true,
+                  hintText: l(context).typeAMessage,
+                  suffixIcon: sendButton,
                 ),
               ),
-              ios: (_) => Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Expanded(
-                    child: CupertinoTextField(
-                      autocorrect: true,
-                      textCapitalization: TextCapitalization.sentences,
-                      controller: textController,
-                      placeholder: l(context).typeAMessage,
-                      suffix: sendButton,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                        border: Border.all(
-                          color: LightColors.red[100],
-                          style: BorderStyle.solid,
-                          width: 0.0
-                        ),
-                        color: Colors.white,
+            ),
+            ios: (_) => Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Expanded(
+                  child: CupertinoTextField(
+                    autocorrect: true,
+                    textCapitalization: TextCapitalization.sentences,
+                    controller: textController,
+                    placeholder: l(context).typeAMessage,
+                    suffix: sendButton,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                      border: Border.all(
+                        color: LightColors.red[100],
+                        style: BorderStyle.solid,
+                        width: 0.0,
                       ),
+                      color: Colors.white,
                     ),
                   ),
-                ],
-              ),
-            )
-          )
-        );
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
     } else {
       return Material(
         elevation: elevation,
         color: Colors.white,
         child: Padding(
           padding: EdgeInsets.all(16),
-          child: Text(l(context).cantSendMessages,
+          child: Text(
+            l(context).cantSendMessages,
             textAlign: TextAlign.center,
           ),
-        )
+        ),
       );
     }
-
   }
 
   Widget _buildEventsList() {
@@ -287,28 +281,33 @@ class ChatPageState extends State<ChatPage> {
       itemBuilder: (BuildContext context, int index) {
         return FutureOrBuilder<List<ChatItem>>(
           futureOr: bloc.getPage(index),
-          builder: (BuildContext context, AsyncSnapshot<List<ChatItem>> snapshot) {
+          builder: (
+            BuildContext context,
+            AsyncSnapshot<List<ChatItem>> snapshot,
+          ) {
             Widget widget;
 
-            switch(snapshot.connectionState) {
+            switch (snapshot.connectionState) {
               case ConnectionState.none:
               case ConnectionState.waiting:
                 widget = ListView(
-                    reverse: true,
-                    primary: false,
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    children: List.generate(20, (i) => LoadingBubble(
+                  reverse: true,
+                  primary: false,
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  children: List.generate(
+                    20,
+                    (i) => LoadingBubble(
                       isMine: i % 2 == 0,
-                    ))
+                    ),
+                  ),
                 );
                 break;
               case ConnectionState.active:
               case ConnectionState.done:
-
                 if (!snapshot.hasData) {
                   return SizedBox(
-                    height: MediaQuery.of(context).size.height * 2
+                    height: MediaQuery.of(context).size.height * 2,
                   );
                 }
 
@@ -333,12 +332,15 @@ class ChatPageState extends State<ChatPage> {
                       nextItem = chatEvents[i - 1];
                     }
 
-                    widgets.add(Bubble.fromItem(
-                      item: item,
-                      previousItem: previousItem,
-                      nextItem: nextItem,
-                      isMine: isMine,
-                    ) ?? Container());
+                    widgets.add(
+                      Bubble.fromItem(
+                            item: item,
+                            previousItem: previousItem,
+                            nextItem: nextItem,
+                            isMine: isMine,
+                          ) ??
+                          Container(),
+                    );
                   } else if (item is DateItem) {
                     widgets.add(DateHeader(item));
                   }
@@ -364,7 +366,6 @@ class ChatPageState extends State<ChatPage> {
 }
 
 class ChatPage extends StatefulWidget {
-
   final Room room;
 
   ChatPage(this.room);

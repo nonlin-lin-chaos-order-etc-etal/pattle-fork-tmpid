@@ -28,8 +28,8 @@ import 'redacted_subtitle.dart';
 import 'text_subtitle.dart';
 import 'topic_subtitle.dart';
 import 'unsupported_subtitle.dart';
-abstract class Subtitle extends StatelessWidget {
 
+abstract class Subtitle extends StatelessWidget {
   static const iconSize = 20.0;
 
   final RoomEvent event;
@@ -39,18 +39,17 @@ abstract class Subtitle extends StatelessWidget {
   final bool isMine;
 
   Subtitle(this.event)
-    : isMine = event?.sender == di.getLocalUser(),
-      senderName =
-      event != null
-        && event.sender != di.getLocalUser()
-        && !event.room.isDirect
-      ? '${displayNameOf(event.sender)}: '
-      : '';
+      : isMine = event?.sender == di.getLocalUser(),
+        senderName = event != null &&
+                event.sender != di.getLocalUser() &&
+                !event.room.isDirect
+            ? '${displayNameOf(event.sender)}: '
+            : '';
 
   factory Subtitle.forChat(ChatOverview chat) {
-
     // TODO: typingUsers should not contain nulls
-    if (chat.room.isSomeoneElseTyping && !chat.room.typingUsers.any((u) => u == null)) {
+    if (chat.room.isSomeoneElseTyping &&
+        !chat.room.typingUsers.any((u) => u == null)) {
       return TypingSubtitle(chat.room);
     } else {
       final event = chat.latestEvent;
@@ -74,25 +73,23 @@ abstract class Subtitle extends StatelessWidget {
     }
   }
 
-  TextStyle textStyle(BuildContext context) =>
-    Theme.of(context).textTheme.body1.copyWith(
-      color: Theme.of(context).textTheme.caption.color
-    );
+  TextStyle textStyle(BuildContext context) => Theme.of(context)
+      .textTheme
+      .body1
+      .copyWith(color: Theme.of(context).textTheme.caption.color);
 
-  TextSpan senderSpan(BuildContext context, {String sender}) =>
-    TextSpan(
-      text: sender ?? senderName,
-      style: Theme.of(context).textTheme.body1.copyWith(
-        fontWeight: FontWeight.bold,
-        color: Theme.of(context).textTheme.caption.color
-      ),
-    );
+  TextSpan senderSpan(BuildContext context, {String sender}) => TextSpan(
+        text: sender ?? senderName,
+        style: Theme.of(context).textTheme.body1.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).textTheme.caption.color,
+            ),
+      );
 
   Widget buildSentStateIcon(BuildContext context) {
     if (isMine) {
-      return Icon(event.sentState != SentState.sent
-        ? Icons.access_time
-        : Icons.check,
+      return Icon(
+        event.sentState != SentState.sent ? Icons.access_time : Icons.check,
         size: Subtitle.iconSize,
         color: Colors.grey,
       );

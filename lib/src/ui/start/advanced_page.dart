@@ -21,7 +21,6 @@ import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
 
 class AdvancedPage extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => AdvancedPageState();
 }
@@ -43,12 +42,16 @@ class AdvancedPageState extends State<AdvancedPage> {
         title: PlatformWidget(
           android: (_) => Text(
             l(context).advanced,
-            style: TextStyle(color: Theme.of(context).primaryColor)
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+            ),
           ),
           ios: (_) => Text(l(context).advanced),
         ),
         android: (_) => MaterialAppBarData(
-          iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+          iconTheme: IconThemeData(
+            color: Theme.of(context).primaryColor,
+          ),
           elevation: 0,
           backgroundColor: const Color(0x00000000),
         ),
@@ -62,44 +65,38 @@ class AdvancedPageState extends State<AdvancedPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 PlatformWidget(
-                  android: (_) => Icon(
-                    Icons.home,
-                    color: Theme.of(context).hintColor,
-                    size: 32
-                  ),
-                  ios: (_) => Icon(
-                    CupertinoIcons.home,
-                    color: Theme.of(context).hintColor,
-                    size: 32
-                  ),
+                  android: (_) => Icon(Icons.home,
+                      color: Theme.of(context).hintColor, size: 32),
+                  ios: (_) => Icon(CupertinoIcons.home,
+                      color: Theme.of(context).hintColor, size: 32),
                 ),
                 SizedBox(width: 16),
                 Flexible(
-                    child: StreamBuilder<bool>(
-                      stream: bloc.homeserverChanged,
-                      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  child: StreamBuilder<bool>(
+                    stream: bloc.homeserverChanged,
+                    builder:
+                        (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                      var errorText;
 
-                        var errorText;
-
-                        if (snapshot.hasError) {
-                          errorText = l(context).hostnameInvalidError;
-                        } else {
-                          errorText = null;
-                        }
-
-                        return PlatformTextField(
-                          controller: homeserverTextController,
-                          android: (_) => MaterialTextFieldData(
-                            decoration: InputDecoration(
-                              filled: true,
-                              labelText: l(context).homeserver,
-                              hintText: bloc.userIdDomain.toString(),
-                              errorText: errorText
-                            ),
-                          ),
-                        );
+                      if (snapshot.hasError) {
+                        errorText = l(context).hostnameInvalidError;
+                      } else {
+                        errorText = null;
                       }
-                    )
+
+                      return PlatformTextField(
+                        controller: homeserverTextController,
+                        android: (_) => MaterialTextFieldData(
+                          decoration: InputDecoration(
+                            filled: true,
+                            labelText: l(context).homeserver,
+                            hintText: bloc.userIdDomain.toString(),
+                            errorText: errorText,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 )
               ],
             ),
@@ -111,12 +108,12 @@ class AdvancedPageState extends State<AdvancedPage> {
                   android: (_) => Icon(
                     Icons.person,
                     color: Theme.of(context).hintColor,
-                    size: 32
+                    size: 32,
                   ),
                   ios: (_) => Icon(
                     CupertinoIcons.person,
                     color: Theme.of(context).hintColor,
-                    size: 32
+                    size: 32,
                   ),
                 ),
                 SizedBox(width: 16),
@@ -125,7 +122,7 @@ class AdvancedPageState extends State<AdvancedPage> {
                     android: (context) => MaterialTextFieldData(
                       decoration: InputDecoration(
                         filled: true,
-                        labelText: l(context).identityServer
+                        labelText: l(context).identityServer,
                       ),
                     ),
                   ),
@@ -134,15 +131,15 @@ class AdvancedPageState extends State<AdvancedPage> {
             ),
             SizedBox(height: 32),
             PlatformButton(
-                onPressed: () {
-                  bloc.setHomeserverUrl(homeserverTextController.text);
-                  Navigator.pop(context);
-                },
-                child: PlatformText(l(context).confirm)
+              onPressed: () {
+                bloc.setHomeserverUrl(homeserverTextController.text);
+                Navigator.pop(context);
+              },
+              child: PlatformText(l(context).confirm),
             )
           ],
-        )
-      )
+        ),
+      ),
     );
   }
 }

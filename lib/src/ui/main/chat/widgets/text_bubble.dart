@@ -31,7 +31,6 @@ import 'bubble.dart';
 import 'message_bubble.dart';
 
 class TextBubble extends MessageBubble {
-
   static const _replyMargin = 8.0;
   static const _replyLeftPadding = 12.0;
 
@@ -46,25 +45,24 @@ class TextBubble extends MessageBubble {
     ChatItem nextItem,
     @required bool isMine,
     RoomEvent reply,
-  }) :
-    event = item.event,
-    super(
-      item: item,
-      previousItem: previousItem,
-      nextItem: nextItem,
-      isMine: isMine,
-      reply: reply
-  );
+  })  : event = item.event,
+        super(
+          item: item,
+          previousItem: previousItem,
+          nextItem: nextItem,
+          isMine: isMine,
+          reply: reply,
+        );
 
   TextStyle _linkStyle(BuildContext context) {
     if (isMine) {
       return textStyle(context).copyWith(
-        decoration: TextDecoration.underline
+        decoration: TextDecoration.underline,
       );
     } else {
       return textStyle(context).copyWith(
         color: Theme.of(context).primaryColor,
-        decoration: TextDecoration.underline
+        decoration: TextDecoration.underline,
       );
     }
   }
@@ -77,20 +75,22 @@ class TextBubble extends MessageBubble {
         builder: (BuildContext context, AsyncSnapshot<RoomEvent> snapshot) {
           final repliedTo = snapshot.data;
           if (repliedTo != null && repliedTo is TextMessageEvent) {
-            return !isRepliedTo ? Padding(
-              padding: EdgeInsets.only(
-                top: !isMine ? 4 : 0,
-                bottom: _replyMargin,
-              ),
-              // Only build the replied-to message if this itself
-              // is not a replied-to message (to prevent very long
-              // reply chains)
-              child: Bubble.asReply(
-                reply: event,
-                replyTo: repliedTo,
-                isMine: repliedTo.sender == me
-              ),
-            ) : Container();
+            return !isRepliedTo
+                ? Padding(
+                    padding: EdgeInsets.only(
+                      top: !isMine ? 4 : 0,
+                      bottom: _replyMargin,
+                    ),
+                    // Only build the replied-to message if this itself
+                    // is not a replied-to message (to prevent very long
+                    // reply chains)
+                    child: Bubble.asReply(
+                      reply: event,
+                      replyTo: repliedTo,
+                      isMine: repliedTo.sender == me,
+                    ),
+                  )
+                : Container();
           } else {
             return Container(height: 0, width: 0);
           }
@@ -124,9 +124,11 @@ class TextBubble extends MessageBubble {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(displayNameOf(event.sender, context) + ' ',
-            style: senderTextStyle(context,
-              color: isMine ? Colors.white : null
+          Text(
+            displayNameOf(event.sender, context) + ' ',
+            style: senderTextStyle(
+              context,
+              color: isMine ? Colors.white : null,
             ),
           ),
           Flexible(
@@ -142,17 +144,13 @@ class TextBubble extends MessageBubble {
     final needsBorder = isRepliedTo && reply.sender == me;
 
     return PlatformInkWell(
-      onTap: () { },
+      onTap: () {},
       customBorder: border(),
       child: CustomPaint(
-        painter: needsBorder
-          ? ReplyBorderPainter(
-            color: Colors.white
-          )
-          : null,
+        painter: needsBorder ? ReplyBorderPainter(color: Colors.white) : null,
         child: Padding(
           padding: Bubble.padding.copyWith(
-              left: needsBorder ? _replyLeftPadding : null
+            left: needsBorder ? _replyLeftPadding : null,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -160,11 +158,11 @@ class TextBubble extends MessageBubble {
               _buildRepliedTo(context),
               buildContent(context),
               SizedBox(height: 4),
-              buildBottomIfEnd(context)
+              buildBottomIfEnd(context),
             ],
           ),
         ),
-      )
+      ),
     );
   }
 
@@ -174,20 +172,21 @@ class TextBubble extends MessageBubble {
 
     // Don't show sender above emotes
     final sender = event is! EmoteMessageEvent
-                 ? buildSender(context) : Container(width: 0);
+        ? buildSender(context)
+        : Container(width: 0);
 
     return PlatformInkWell(
       onTap: () {},
       customBorder: border(),
       child: CustomPaint(
         painter: needsBorder
-          ? ReplyBorderPainter(
-            color: colorOf(event.sender),
-          )
-          : null,
+            ? ReplyBorderPainter(
+                color: colorOf(event.sender),
+              )
+            : null,
         child: Padding(
           padding: Bubble.padding.copyWith(
-            left: needsBorder ? _replyLeftPadding : null
+            left: needsBorder ? _replyLeftPadding : null,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,17 +196,16 @@ class TextBubble extends MessageBubble {
               SizedBox(height: sender is! Container ? 4 : 0),
               buildContent(context),
               SizedBox(height: 4),
-              buildTime(context)
+              buildTime(context),
             ],
           ),
         ),
-      )
+      ),
     );
   }
 }
 
 class ReplyBorderPainter extends CustomPainter {
-
   static const width = 4.0;
 
   final Color color;
@@ -217,20 +215,14 @@ class ReplyBorderPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.drawRRect(
-      RRect.fromRectAndCorners(
-        Rect.fromPoints(
-          Offset(0, 0),
-          Offset(width, size.height)
-        ),
-        topLeft: Bubble.radiusForBorder,
-        bottomLeft: Bubble.radiusForBorder
-      ),
-      Paint()..color = color
-    );
+        RRect.fromRectAndCorners(
+            Rect.fromPoints(Offset(0, 0), Offset(width, size.height)),
+            topLeft: Bubble.radiusForBorder,
+            bottomLeft: Bubble.radiusForBorder),
+        Paint()..color = color);
   }
 
   @override
-  bool shouldRepaint(ReplyBorderPainter oldDelegate)
-    => color != oldDelegate.color;
-
+  bool shouldRepaint(ReplyBorderPainter oldDelegate) =>
+      color != oldDelegate.color;
 }

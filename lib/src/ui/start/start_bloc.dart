@@ -30,7 +30,6 @@ typedef Request = void Function(Function addError);
 typedef Check = bool Function(Function addError);
 
 class StartBloc {
-
   StartBloc() {
     setHomeserverUrl("https://matrix.org");
   }
@@ -75,15 +74,15 @@ class StartBloc {
   }
 
   final _isUsernameAvailableSubj = BehaviorSubject<RequestState>();
-  Observable<RequestState> get isUsernameAvailable
-    => _isUsernameAvailableSubj.stream;
+  Observable<RequestState> get isUsernameAvailable =>
+      _isUsernameAvailableSubj.stream;
 
   static bool _defaultValidate(Function addError) => true;
   Future<void> _do({
     @required BehaviorSubject<RequestState> subject,
     Function validate = _defaultValidate,
-    @required Request request}) async {
-
+    @required Request request,
+  }) async {
     subject.add(RequestState.active);
 
     // If after three seconds it's still active, change state to
@@ -106,7 +105,6 @@ class StartBloc {
 
     request(addError);
   }
-
 
   Future<void> checkUsernameAvailability(String username) async {
     var user;
@@ -169,13 +167,10 @@ class StartBloc {
       },
       request: (addError) {
         homeserver.isUsernameAvailable(user).then((available) {
-          _isUsernameAvailableSubj.add(RequestSuccessState(
-            data: available
-          ));
+          _isUsernameAvailableSubj.add(RequestSuccessState(data: available));
 
           _username = user;
-        })
-        .catchError((error) => _isUsernameAvailableSubj.addError(error));
+        }).catchError((error) => _isUsernameAvailableSubj.addError(error));
       },
     );
   }
@@ -187,20 +182,15 @@ class StartBloc {
     _do(
       subject: _loginSubj,
       request: (addError) {
-        homeserver.login(
-          _username,
-          password,
-          store: di.getStore()
-        )
-        .then((user) {
+        homeserver
+            .login(_username, password, store: di.getStore())
+            .then((user) {
           di.registerLocalUser(user);
           _loginSubj.add(RequestState.success);
-        })
-        .catchError((error) => _loginSubj.addError(error));
-      }
+        }).catchError((error) => _loginSubj.addError(error));
+      },
     );
   }
-
 }
 
 class RequestState {
@@ -232,6 +222,6 @@ class RequestSuccessState<T> extends RequestState {
   const RequestSuccessState({this.data}) : super(3);
 }
 
-class InvalidUserIdException implements Exception { }
+class InvalidUserIdException implements Exception {}
 
-class InvalidHostnameException implements Exception { }
+class InvalidHostnameException implements Exception {}

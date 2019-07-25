@@ -23,7 +23,6 @@ import 'package:pattle/src/ui/util/user.dart';
 import 'subtitle.dart';
 
 class MemberSubtitle extends Subtitle {
-
   @override
   final MemberChangeEvent event;
 
@@ -36,8 +35,8 @@ class MemberSubtitle extends Subtitle {
       overflow: TextOverflow.ellipsis,
       text: TextSpan(
         style: textStyle(context),
-        children: spanFor(context, event)
-      )
+        children: spanFor(context, event),
+      ),
     );
   }
 }

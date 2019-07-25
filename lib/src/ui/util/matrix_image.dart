@@ -25,7 +25,6 @@ import 'package:url/url.dart';
 import 'matrix_cache_manager.dart';
 
 class MatrixImage extends ImageProvider<MatrixImage> {
-
   /// Matrix URL pointing to the image.
   final Url url;
 
@@ -36,10 +35,13 @@ class MatrixImage extends ImageProvider<MatrixImage> {
   const MatrixImage(this.url, {this.scale = 1.0, this.width, this.height});
 
   Future<Codec> _load(MatrixImage key) async {
-    final file = await cacheManager.getSingleFile(key.url.toString(), headers: {
-      'width': key.width.toString(),
-      'height': key.height.toString()
-    });
+    final file = await cacheManager.getSingleFile(
+      key.url.toString(),
+      headers: {
+        'width': key.width.toString(),
+        'height': key.height.toString(),
+      },
+    );
 
     if (file == null) {
       return null;
@@ -54,7 +56,7 @@ class MatrixImage extends ImageProvider<MatrixImage> {
   ImageStreamCompleter load(MatrixImage key) {
     return MultiFrameImageStreamCompleter(
       codec: _load(key),
-      scale: key.scale
+      scale: key.scale,
     );
   }
 
@@ -65,15 +67,12 @@ class MatrixImage extends ImageProvider<MatrixImage> {
 
   @override
   bool operator ==(dynamic other) {
-    if (other.runtimeType != runtimeType)
-      return false;
+    if (other.runtimeType != runtimeType) return false;
 
     final MatrixImage typedOther = other;
-    return url == typedOther.url
-      && scale == typedOther.scale;
+    return url == typedOther.url && scale == typedOther.scale;
   }
 
   @override
   int get hashCode => hashValues(url, scale);
-
 }

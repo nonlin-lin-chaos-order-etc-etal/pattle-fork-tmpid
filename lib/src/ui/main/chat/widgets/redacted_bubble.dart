@@ -27,9 +27,7 @@ import 'package:pattle/src/ui/main/widgets/redacted.dart';
 import 'bubble.dart';
 import 'message_bubble.dart';
 
-
 class RedactedBubble extends MessageBubble {
-
   @override
   final RedactedEvent event;
 
@@ -39,28 +37,26 @@ class RedactedBubble extends MessageBubble {
     @required ChatEvent item,
     ChatItem previousItem,
     ChatItem nextItem,
-    @required bool isMine
-  }) :
-    event = item.event,
-    super(
-      item: item,
-      previousItem: previousItem,
-      nextItem: nextItem,
-      isMine: isMine
-  );
+    @required bool isMine,
+  })  : event = item.event,
+        super(
+          item: item,
+          previousItem: previousItem,
+          nextItem: nextItem,
+          isMine: isMine,
+        );
 
   @protected
-  Widget buildContent(BuildContext context) =>
-    Redacted(
-      event: event,
-      color: isMine ? Colors.grey[300] : Colors.grey[700],
-      textStyle: textStyle(context),
-    );
+  Widget buildContent(BuildContext context) => Redacted(
+        event: event,
+        color: isMine ? Colors.grey[300] : Colors.grey[700],
+        textStyle: textStyle(context),
+      );
 
   @override
   Widget buildMine(BuildContext context) {
     return PlatformInkWell(
-      onTap: () { },
+      onTap: () {},
       customBorder: border(),
       child: Padding(
         padding: Bubble.padding,
@@ -69,7 +65,7 @@ class RedactedBubble extends MessageBubble {
           children: <Widget>[
             buildContent(context),
             SizedBox(height: 4),
-            buildBottomIfEnd(context)
+            buildBottomIfEnd(context),
           ],
         ),
       ),
@@ -90,10 +86,10 @@ class RedactedBubble extends MessageBubble {
             SizedBox(height: 4),
             buildContent(context),
             SizedBox(height: 4),
-            buildTime(context)
+            buildTime(context),
           ],
         ),
-        ),
-      );
+      ),
+    );
   }
 }

@@ -22,7 +22,6 @@ import 'package:meta/meta.dart';
 
 /// Chat overview used in the 'chats' page.
 class ChatOverview {
-
   final Room room;
 
   final String name;
@@ -30,8 +29,10 @@ class ChatOverview {
   final RoomEvent latestEvent;
   final RoomEvent latestEventForSorting;
 
-  ChatOverview({@required this.room,
-                @required this.name,
-                @required this.latestEvent,
-                @required this.latestEventForSorting});
+  ChatOverview({
+    @required this.room,
+    @required this.name,
+    @required this.latestEvent,
+    @required this.latestEventForSorting,
+  });
 }

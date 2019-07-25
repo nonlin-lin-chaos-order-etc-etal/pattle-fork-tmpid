@@ -22,7 +22,6 @@ import 'package:pattle/src/ui/util/user.dart';
 import 'subtitle.dart';
 
 class TextSubtitle extends Subtitle {
-
   @override
   final TextMessageEvent event;
 
@@ -30,9 +29,11 @@ class TextSubtitle extends Subtitle {
 
   @override
   Widget build(BuildContext context) {
-    final sender = senderSpan(context,
+    final sender = senderSpan(
+      context,
       sender: event is EmoteMessageEvent
-              ? displayNameOf(event.sender, context) + ' ' : null
+          ? displayNameOf(event.sender, context) + ' '
+          : null,
     );
     if (event.content.inReplyToId == null) {
       return Row(
@@ -46,11 +47,9 @@ class TextSubtitle extends Subtitle {
                 style: textStyle(context),
                 children: [
                   sender,
-                  TextSpan(
-                    text: event.content.body ?? 'null'
-                  )
-                ]
-              )
+                  TextSpan(text: event.content.body ?? 'null')
+                ],
+              ),
             ),
           )
         ],
@@ -69,12 +68,12 @@ class TextSubtitle extends Subtitle {
           RichText(
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
-            text: sender
+            text: sender,
           ),
           Icon(
             Icons.reply,
             color: Theme.of(context).textTheme.caption.color,
-            size: Subtitle.iconSize
+            size: Subtitle.iconSize,
           ),
           Expanded(
             child: RichText(
@@ -82,8 +81,8 @@ class TextSubtitle extends Subtitle {
               maxLines: 1,
               text: TextSpan(
                 style: textStyle(context),
-                text: ' ' + text ?? 'null'
-              )
+                text: ' ' + text ?? 'null',
+              ),
             ),
           )
         ],

@@ -22,7 +22,6 @@ import 'package:pattle/src/ui/util/date_format.dart';
 import 'item.dart';
 
 class DateHeader extends Item {
-
   static const betweenMargin = 8.0;
 
   @override
@@ -36,18 +35,19 @@ class DateHeader extends Item {
       child: Padding(
         padding: EdgeInsets.only(
           top: marginTop(),
-          bottom: betweenMargin
+          bottom: betweenMargin,
         ),
-        child: Text(formatAsDate(context, item.date).toUpperCase(),
+        child: Text(
+          formatAsDate(context, item.date).toUpperCase(),
           style: Theme.of(context).textTheme.display1.copyWith(
-              fontSize: 16
-          ),
+                fontSize: 16,
+              ),
         ),
-      )
+      ),
     );
   }
 
   @override
-  double marginTop()
-    => previousItem == null ? betweenMargin * 2 : betweenMargin;
+  double marginTop() =>
+      previousItem == null ? betweenMargin * 2 : betweenMargin;
 }

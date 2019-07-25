@@ -25,9 +25,7 @@ import 'package:pattle/src/ui/util/user.dart';
 
 import 'state_bubble.dart';
 
-
 class TopicBubble extends StateBubble {
-
   @override
   final TopicChangeEvent event;
 
@@ -35,29 +33,30 @@ class TopicBubble extends StateBubble {
     @required ChatEvent item,
     @required ChatItem previousItem,
     @required ChatItem nextItem,
-    @required bool isMine
-  }) :
-    event = item.event,
-    super(
-      item: item,
-      previousItem: previousItem,
-      nextItem: nextItem,
-      isMine: isMine
-    );
+    @required bool isMine,
+  })  : event = item.event,
+        super(
+          item: item,
+          previousItem: previousItem,
+          nextItem: nextItem,
+          isMine: isMine,
+        );
 
   @override
   get onTap => (context) {
-    return Navigator.of(context)
-        .pushNamed(Routes.chatsSettings, arguments: event.room);
-  };
+        return Navigator.of(context).pushNamed(
+          Routes.chatsSettings,
+          arguments: event.room,
+        );
+      };
 
   @protected
   @override
   List<TextSpan> buildContentSpans(BuildContext context) =>
-    l(context).changedDescriptionTapToView(
-      TextSpan(
-        text: displayNameOf(event.sender),
-        style: defaultEmphasisTextStyle
-      )
-    );
+      l(context).changedDescriptionTapToView(
+        TextSpan(
+          text: displayNameOf(event.sender),
+          style: defaultEmphasisTextStyle,
+        ),
+      );
 }

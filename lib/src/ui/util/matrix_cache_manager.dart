@@ -26,7 +26,6 @@ import 'package:url/url.dart';
 final cacheManager = MatrixCacheManager();
 
 class MatrixCacheManager extends BaseCacheManager {
-
   static const key = 'matrix';
 
   static final homeserver = di.getHomeserver();
@@ -40,22 +39,23 @@ class MatrixCacheManager extends BaseCacheManager {
   }
 
   static Future<FileFetcherResponse> _fetch(
-    String url, {Map<String, String> headers}) async {
-
+    String url, {
+    Map<String, String> headers,
+  }) async {
     final parsedUrl = Url.parse(url);
     int width, height;
 
     try {
       width = int.parse(headers['width']);
       height = int.parse(headers['height']);
-    } on FormatException { }
+    } on FormatException {}
 
     Stream<List<int>> stream;
     if (width != null && height != null) {
       stream = await homeserver.downloadThumbnail(
         parsedUrl,
         width: width,
-        height: height
+        height: height,
       );
     } else {
       stream = await homeserver.download(parsedUrl);

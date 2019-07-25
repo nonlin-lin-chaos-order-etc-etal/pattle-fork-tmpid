@@ -19,18 +19,15 @@ import 'package:flutter/material.dart';
 
 final ThemeData lightTheme = new ThemeData(
   primarySwatch: LightColors.red,
-
   brightness: Brightness.light,
   primaryColorBrightness: Brightness.dark,
   accentColorBrightness: Brightness.dark,
-
   cursorColor: LightColors.red,
-
   buttonTheme: ButtonThemeData(
     buttonColor: LightColors.red[500],
-    textTheme: ButtonTextTheme.primary
+    textTheme: ButtonTextTheme.primary,
   ),
-  textTheme: Typography.blackMountainView
+  textTheme: Typography.blackMountainView,
 );
 
 class LightColors {
@@ -41,7 +38,7 @@ class LightColors {
   static const MaterialColor red = const MaterialColor(
     _redPrimary,
     const <int, Color>{
-      50:  const Color(0xFFf5E8E7),
+      50: const Color(0xFFf5E8E7),
       100: const Color(0xFFE6C6C4),
       200: const Color(0xFFD5A09C),
       300: const Color(0xFFC47A74),
@@ -62,6 +59,6 @@ class LightColors {
     const Color(0xFF8F3F71),
     const Color(0xFF427B58),
     const Color(0xFF3C3836),
-    const Color(0xFFAF3A03)
+    const Color(0xFFAF3A03),
   ];
 }

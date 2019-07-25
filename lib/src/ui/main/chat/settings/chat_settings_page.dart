@@ -32,9 +32,7 @@ import 'package:pattle/src/ui/util/matrix_image.dart';
 import 'package:pattle/src/ui/util/room.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
-
 class ChatSettingsPageState extends State<ChatSettingsPage> {
-
   final me = di.getLocalUser();
   final ChatSettingsBloc bloc;
   final Room room;
@@ -66,16 +64,22 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                title: ChatName(room: room, style: TextStyle(
-                  shadows: [Shadow(
-                    offset: Offset(0.25, 0.25),
-                    blurRadius: 1,
-                  )],
-                ),),
+                title: ChatName(
+                  room: room,
+                  style: TextStyle(
+                    shadows: [
+                      Shadow(
+                        offset: Offset(0.25, 0.25),
+                        blurRadius: 1,
+                      )
+                    ],
+                  ),
+                ),
                 background: Image(
                   image: MatrixImage(avatarUrlOf(room)),
                   fit: BoxFit.cover,
-                )),
+                ),
+              ),
             ),
           ];
         },
@@ -85,11 +89,11 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
               delegate: SliverChildListDelegate.fixed([
                 _buildDescription(),
                 SizedBox(height: 16),
-                _buildMembers()
+                _buildMembers(),
               ]),
             )
           ],
-        )
+        ),
       ),
     );
   }
@@ -118,10 +122,12 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                     ),
                   ),
                   SizedBox(height: 4),
-                  Text(room.topic ?? l(context).noDescriptionSet,
+                  Text(
+                    room.topic ?? l(context).noDescriptionSet,
                     style: TextStyle(
                       fontStyle: room.topic == null
-                          ? FontStyle.italic : FontStyle.normal
+                          ? FontStyle.italic
+                          : FontStyle.normal,
                     ),
                   ),
                 ],
@@ -161,18 +167,18 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                 FutureOrBuilder<Iterable<User>>(
                   futureOr: bloc.getMembers(all: !previewMembers),
                   builder: (
-                      BuildContext context,
-                      AsyncSnapshot<Iterable<User>> snapshot,
-                    ) {
-
+                    BuildContext context,
+                    AsyncSnapshot<Iterable<User>> snapshot,
+                  ) {
                     if (!snapshot.hasData) {
                       return Container(height: 0);
                     }
 
                     final members = snapshot.data.toList(growable: false);
 
-                    final isWaiting = snapshot.connectionState == ConnectionState.waiting;
-                    bool allShown = members.length == bloc.room.members.count;
+                    final isWaiting =
+                        snapshot.connectionState == ConnectionState.waiting;
+                    final allShown = members.length == bloc.room.members.count;
 
                     return MediaQuery.removePadding(
                       context: context,
@@ -188,7 +194,11 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                         itemBuilder: (BuildContext context, int index) {
                           // Item after all members
                           if (index == members.length) {
-                            return _buildShowMoreItem(context, members.length, isWaiting);
+                            return _buildShowMoreItem(
+                              context,
+                              members.length,
+                              isWaiting,
+                            );
                           }
 
                           return UserItem(
@@ -197,7 +207,7 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                         },
                       ),
                     );
-                  }
+                  },
                 ),
               ],
             ),
@@ -217,11 +227,9 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
       }),
     );
   }
-
 }
 
 class ChatSettingsPage extends StatefulWidget {
-
   final Room room;
 
   ChatSettingsPage(this.room);

@@ -32,7 +32,6 @@ SentryClient _sentry;
 Future<void> _reportError(dynamic error, dynamic stackTrace) async {
   print('Caught error: $error');
   if (_isInDebugMode) {
-
     if (error is Response) {
       print('statusCode: ${error.statusCode}');
       print('headers: ${error.headers}');
@@ -44,7 +43,6 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
     if (stackTrace != null) {
       print(stackTrace);
     }
-
   } else {
     if (error is Response) {
       var body;
@@ -61,9 +59,9 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
           extra: {
             'status_code': error.statusCode,
             'headers': error.headers,
-            'body': body
-          }
-        )
+            'body': body,
+          },
+        ),
       );
     } else if (error is matrix.MatrixException) {
       _sentry.capture(
@@ -72,8 +70,8 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
           stackTrace: stackTrace,
           extra: {
             'body': error.body,
-          }
-        )
+          },
+        ),
       );
     } else {
       _sentry.captureException(
@@ -103,9 +101,7 @@ Future<Event> get _environment async {
   if (Platform.isAndroid) {
     final info = await deviceInfo.androidInfo;
 
-    user = User(
-      id: info.androidId
-    );
+    user = User(id: info.androidId);
 
     os = Os(
       name: 'Android',
@@ -117,15 +113,12 @@ Future<Event> get _environment async {
       model: info.model,
       manufacturer: info.manufacturer,
       brand: info.brand,
-      simulator: !info.isPhysicalDevice
+      simulator: !info.isPhysicalDevice,
     );
-
-  } else if (Platform.isIOS){
+  } else if (Platform.isIOS) {
     final info = await deviceInfo.iosInfo;
 
-    user = User(
-      id: info.identifierForVendor
-    );
+    user = User(id: info.identifierForVendor);
 
     os = Os(
       name: 'iOS',
@@ -135,7 +128,7 @@ Future<Event> get _environment async {
     device = Device(
       family: info.model,
       model: info.utsname.machine,
-      simulator: !info.isPhysicalDevice
+      simulator: !info.isPhysicalDevice,
     );
   }
 
@@ -151,8 +144,8 @@ Future<Event> get _environment async {
       app: App(
         build: packageInfo.buildNumber,
         buildType: DotEnv().env['BUILD_TYPE'],
-      )
-    )
+      ),
+    ),
   );
 }
 
@@ -161,7 +154,7 @@ Future<void> init() async {
 
   _sentry = SentryClient(
     dsn: DotEnv().env['SENTRY_DSN'],
-    environmentAttributes: await _environment
+    environmentAttributes: await _environment,
   );
 
   FlutterError.onError = (FlutterErrorDetails details) {
@@ -175,9 +168,12 @@ Future<void> init() async {
 }
 
 void wrap(Function run) {
-  runZoned<Future<void>>(() async {
-    run();
-  }, onError: (error, stackTrace) {
-    _reportError(error, stackTrace);
-  });
+  runZoned<Future<void>>(
+    () async {
+      run();
+    },
+    onError: (error, stackTrace) {
+      _reportError(error, stackTrace);
+    },
+  );
 }
