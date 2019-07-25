@@ -23,6 +23,7 @@ import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
 import 'package:pattle/src/ui/main/chat/settings/chat_settings_bloc.dart';
 import 'package:pattle/src/ui/main/widgets/chat_name.dart';
 import 'package:pattle/src/ui/main/widgets/user_item.dart';
+import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 
 import 'package:pattle/src/di.dart' as di;
@@ -109,7 +110,7 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Description',
+                    l(context).description,
                     style: TextStyle(
                       color: LightColors.red,
                       fontSize: 16,
@@ -117,7 +118,7 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                     ),
                   ),
                   SizedBox(height: 4),
-                  Text(room.topic ?? 'None',
+                  Text(room.topic ?? l(context).none,
                     style: TextStyle(
                       fontStyle: room.topic == null
                           ? FontStyle.italic : FontStyle.normal
@@ -148,7 +149,7 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                 Padding(
                   padding: EdgeInsets.only(left: 16, top: 16),
                   child: Text(
-                    '${bloc.room.members.count} participants',
+                    l(context).xParticipants(bloc.room.members.count),
                     style: TextStyle(
                       color: LightColors.red,
                       fontSize: 16,
@@ -212,7 +213,7 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
   Widget _buildShowMoreItem(BuildContext context, int count, bool isWaiting) {
     return ListTile(
       leading: Icon(Icons.keyboard_arrow_down, size: 32),
-      title: Text('${bloc.room.members.count - count} more'),
+      title: Text(l(context).xMore(bloc.room.members.count - count)),
       subtitle: isWaiting ? LinearProgressIndicator() : null,
       onTap: () => setState(() {
         previewMembers = false;

@@ -21,7 +21,6 @@ import 'package:flutter/material.dart';
 Strings l(BuildContext context) => AppLocalizations.of(context).strings;
 
 class Strings {
-
   const Strings();
 
   // Common //
@@ -43,6 +42,8 @@ class Strings {
   final newGroup = 'New group';
   final groupName = 'Group name';
   final participants = 'Participants';
+  final description = 'Description';
+  final none = 'None';
 
   final cantSendMessages
     = 'You can\'t send messages to this group because you\'re no longer a participant.';
@@ -147,6 +148,10 @@ class Strings {
     second,
     TextSpan(text: ' and more typing...')
   ];
+
+  String xMore(int count) => '$count more';
+
+  String xParticipants(int count) => '$count participants';
 }
 
 class AppLocalizations {
