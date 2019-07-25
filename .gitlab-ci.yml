@@ -23,11 +23,11 @@ format:
 
 analyze:
   stage: check
-  image: google/dart:latest
+  image: cirrusci/flutter:latest
   tags:
     - docker
   script:
-    - pub get
+    - flutter pub get
     - dartanalyzer . --fatal-infos --fatal-warnings
 
 build:
