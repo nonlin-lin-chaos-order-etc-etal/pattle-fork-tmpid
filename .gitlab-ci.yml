@@ -16,6 +16,8 @@ stages:
 format:
   stage: check
   image: google/dart:latest
+  only:
+    - merge_requests
   tags:
     - docker
   script:
@@ -24,6 +26,8 @@ format:
 analyze:
   stage: check
   image: cirrusci/flutter:latest
+  only:
+    - merge_requests
   tags:
     - docker
   script:
@@ -88,3 +92,13 @@ sentry:
     - sentry-cli releases new -p pattle $VERSION
     - sentry-cli releases set-commits --auto $VERSION
     - sentry-cli releases deploys $VERSION new --env "production"
+
+pages:
+  image: alpine:latest
+  stage: release
+  tags:
+    - docker
+  script:
+    - 'mkdir public'
+    - 'echo ${CI_COMMIT_REF_NAME:1} > public/version'
+    - 'echo $((123 + $CI_PIPELINE_IID)) > public/version-code'
