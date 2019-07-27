@@ -16,7 +16,6 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/overview/models/chat_overview.dart';
 import 'package:pattle/src/ui/main/overview/chat_overview_bloc.dart';
@@ -51,23 +50,9 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
+    return Scaffold(
+      appBar: AppBar(
         title: Text(l(context).appName),
-        ios: (_) => CupertinoNavigationBarData(
-          backgroundColor: CupertinoTheme.of(context).primaryColor,
-          title: Text(
-            l(context).appName,
-            style: TextStyle(color: Colors.white),
-          ),
-          trailing: PlatformIconButton(
-            icon: Icon(
-              CupertinoIcons.add_circled,
-              color: CupertinoColors.white,
-            ),
-            onPressed: goToCreateGroup,
-          ),
-        ),
       ),
       body: Column(
         children: <Widget>[
@@ -77,11 +62,9 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
           )
         ],
       ),
-      android: (_) => MaterialScaffoldData(
-        floatingActionButton: FloatingActionButton(
-          onPressed: goToCreateGroup,
-          child: Icon(Icons.chat),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: goToCreateGroup,
+        child: Icon(Icons.chat),
       ),
     );
   }
@@ -98,14 +81,14 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
-            widget = Center(child: PlatformCircularProgressIndicator());
+            widget = Center(child: CircularProgressIndicator());
             break;
           case ConnectionState.active:
           case ConnectionState.done:
             final chats = snapshot.data;
 
             if (chats == null || chats.isEmpty) {
-              return Center(child: PlatformCircularProgressIndicator());
+              return Center(child: CircularProgressIndicator());
             }
 
             widget = ListView.separated(

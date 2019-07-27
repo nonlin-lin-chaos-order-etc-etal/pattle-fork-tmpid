@@ -16,7 +16,6 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 
@@ -40,7 +39,7 @@ class StartPage extends StatelessWidget {
     final loginWithEmail = l(context).loginWithEmail.toUpperCase();
     final loginWithUsername = l(context).loginWithUsername.toUpperCase();
 
-    return PlatformScaffold(
+    return Scaffold(
       body: Container(
         margin: const EdgeInsets.only(top: 16),
         child: Center(
@@ -54,49 +53,25 @@ class StartPage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  PlatformWidget(
-                    android: (_) => RaisedButton(
-                      onPressed: null,
-                      child: Text(loginWithPhone),
-                      shape: buttonShape,
-                      padding: buttonPadding,
-                    ),
-                    ios: (_) => CupertinoButton.filled(
-                      onPressed: null,
-                      child: Text(loginWithPhone),
-                      borderRadius: buttonBorderRadius,
-                      padding: buttonPadding,
-                    ),
+                  RaisedButton(
+                    onPressed: null,
+                    child: Text(loginWithPhone),
+                    shape: buttonShape,
+                    padding: buttonPadding,
                   ),
                   SizedBox(height: 16),
-                  PlatformWidget(
-                    android: (_) => OutlineButton(
-                      onPressed: null,
-                      child: Text(loginWithEmail),
-                      shape: buttonShape,
-                      padding: buttonPadding,
-                    ),
-                    ios: (_) => CupertinoButton(
-                      onPressed: null,
-                      child: Text(loginWithEmail),
-                      borderRadius: buttonBorderRadius,
-                      padding: buttonPadding,
-                    ),
+                  OutlineButton(
+                    onPressed: null,
+                    child: Text(loginWithEmail),
+                    shape: buttonShape,
+                    padding: buttonPadding,
                   ),
                   SizedBox(height: 16),
-                  PlatformWidget(
-                    android: (_) => FlatButton(
-                      onPressed: () => _loginWithUsername(context),
-                      child: Text(loginWithUsername),
-                      shape: buttonShape,
-                      padding: buttonPadding,
-                    ),
-                    ios: (_) => CupertinoButton(
-                      onPressed: () => _loginWithUsername(context),
-                      child: Text(loginWithUsername),
-                      borderRadius: buttonBorderRadius,
-                      padding: buttonPadding,
-                    ),
+                  FlatButton(
+                    onPressed: () => _loginWithUsername(context),
+                    child: Text(loginWithUsername),
+                    shape: buttonShape,
+                    padding: buttonPadding,
                   ),
                 ],
               ),

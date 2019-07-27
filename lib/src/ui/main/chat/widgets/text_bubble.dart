@@ -18,7 +18,6 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
-import 'package:pattle/src/ui/main/widgets/platform_ink_well.dart';
 import 'package:pattle/src/ui/util/future_or_builder.dart';
 import 'package:pattle/src/ui/util/user.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -147,7 +146,7 @@ class TextBubbleState extends MessageBubbleState<TextBubble> {
   Widget buildMine(BuildContext context) {
     final needsBorder = widget.isRepliedTo && widget.reply.sender == widget.me;
 
-    return PlatformInkWell(
+    return InkWell(
       onTap: () {},
       customBorder: border(),
       child: CustomPaint(
@@ -179,7 +178,7 @@ class TextBubbleState extends MessageBubbleState<TextBubble> {
         ? buildSender(context)
         : Container(width: 0);
 
-    return PlatformInkWell(
+    return InkWell(
       onTap: () {},
       customBorder: border(),
       child: CustomPaint(

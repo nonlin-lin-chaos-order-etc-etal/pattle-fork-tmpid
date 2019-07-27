@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/di.dart' as di;
-import 'package:pattle/src/ui/main/widgets/platform_ink_well.dart';
 import 'package:pattle/src/ui/main/widgets/redacted.dart';
 
 import 'bubble.dart';
@@ -58,7 +57,7 @@ class RedactedBubbleState extends MessageBubbleState<RedactedBubble> {
 
   @override
   Widget buildMine(BuildContext context) {
-    return PlatformInkWell(
+    return InkWell(
       onTap: () {},
       customBorder: border(),
       child: Padding(
@@ -77,7 +76,7 @@ class RedactedBubbleState extends MessageBubbleState<RedactedBubble> {
 
   @override
   Widget buildTheirs(BuildContext context) {
-    return PlatformInkWell(
+    return InkWell(
       onTap: () {},
       customBorder: border(),
       child: Padding(

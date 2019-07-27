@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
-import 'package:pattle/src/ui/main/widgets/platform_ink_well.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 
 import 'bubble.dart';
@@ -153,7 +152,7 @@ class ImageBubbleState extends MessageBubbleState<ImageBubble> {
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
-                child: PlatformInkWell(
+                child: InkWell(
                   customBorder: border(),
                   onTap: () {
                     _onTap(context);

@@ -16,7 +16,6 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
@@ -44,22 +43,9 @@ class CreateGroupMembersPageState extends State<CreateGroupMembersPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
+    return Scaffold(
+      appBar: AppBar(
         title: Text(l(context).newGroup),
-        ios: (_) => CupertinoNavigationBarData(
-          backgroundColor: CupertinoTheme.of(context).primaryColor,
-          actionsForegroundColor: Colors.white,
-          title: Text(
-            l(context).appName,
-            style: TextStyle(color: Colors.white),
-          ),
-          trailing: CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: goToNext,
-            child: Text(l(context).next),
-          ),
-        ),
       ),
       body: Column(
         children: <Widget>[
@@ -67,11 +53,9 @@ class CreateGroupMembersPageState extends State<CreateGroupMembersPage> {
           Expanded(child: _buildUserList(context))
         ],
       ),
-      android: (_) => MaterialScaffoldData(
-        floatingActionButton: FloatingActionButton(
-          onPressed: goToNext,
-          child: Icon(Icons.arrow_forward),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: goToNext,
+        child: Icon(Icons.arrow_forward),
       ),
     );
   }

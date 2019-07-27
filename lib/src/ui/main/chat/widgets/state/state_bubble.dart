@@ -18,7 +18,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
-import 'package:pattle/src/ui/main/widgets/platform_ink_well.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 
@@ -88,7 +87,7 @@ abstract class StateBubbleState<T extends StateBubble> extends ItemState<T> {
                 elevation: 1,
                 color: LightColors.red[100],
                 borderRadius: StateBubble.borderRadius,
-                child: PlatformInkWell(
+                child: InkWell(
                   customBorder: RoundedRectangleBorder(
                     borderRadius: StateBubble.borderRadius,
                   ),

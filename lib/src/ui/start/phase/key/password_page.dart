@@ -18,7 +18,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
@@ -58,17 +57,7 @@ class PasswordPageState extends State<PasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    var appBar;
-    // Only show add bar on iOS where a back button is needed
-    if (isCupertino) {
-      appBar = PlatformAppBar(
-        automaticallyImplyLeading: true,
-        title: Text(l(context).password),
-      );
-    }
-
-    return PlatformScaffold(
-      appBar: appBar,
+    return Scaffold(
       body: Container(
         margin: EdgeInsets.all(16),
         child: Column(
@@ -100,7 +89,7 @@ class PasswordPageState extends State<PasswordPage> {
                   errorText = null;
                 }
 
-                final textField = PlatformTextField(
+                return TextField(
                   autofocus: true,
                   onChanged: (value) {
                     password = value;
@@ -109,42 +98,16 @@ class PasswordPageState extends State<PasswordPage> {
                     _next();
                   },
                   obscureText: true,
-                  android: (_) => MaterialTextFieldData(
-                    enableInteractiveSelection: true,
-                    decoration: InputDecoration(
-                      filled: true,
-                      labelText: l(context).password,
-                      helperText: l(context).loggingInAs(
-                        bloc.username.toString(),
-                      ),
-                      errorText: errorText,
+                  enableInteractiveSelection: true,
+                  decoration: InputDecoration(
+                    filled: true,
+                    labelText: l(context).password,
+                    helperText: l(context).loggingInAs(
+                      bloc.username.toString(),
                     ),
+                    errorText: errorText,
                   ),
                 );
-
-                if (isMaterial) {
-                  return textField;
-                } else if (isCupertino) {
-                  return Column(
-                    children: <Widget>[
-                      textField,
-                      Padding(
-                        padding: EdgeInsets.only(top: 8),
-                        child: Container(
-                          height: 32,
-                          child: errorText != null
-                              ? Text(errorText,
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ))
-                              : Container(),
-                        ),
-                      ),
-                    ],
-                  );
-                } else {
-                  return textField;
-                }
               },
             ),
             SizedBox(height: 16),
@@ -159,7 +122,7 @@ class PasswordPageState extends State<PasswordPage> {
                     state == RequestState.stillActive;
                 var onPressed;
 
-                Widget child = PlatformText(l(context).login);
+                Widget child = Text(l(context).login.toUpperCase());
 
                 if (!isTrying) {
                   onPressed = () {
@@ -173,15 +136,13 @@ class PasswordPageState extends State<PasswordPage> {
                   child = SizedBox(
                     width: 18,
                     height: 18,
-                    child: PlatformCircularProgressIndicator(
-                      android: (_) => MaterialProgressIndicatorData(
-                        valueColor: AlwaysStoppedAnimation(Colors.grey),
-                      ),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.grey),
                     ),
                   );
                 }
 
-                return PlatformButton(
+                return RaisedButton(
                   onPressed: onPressed,
                   child: child,
                 );

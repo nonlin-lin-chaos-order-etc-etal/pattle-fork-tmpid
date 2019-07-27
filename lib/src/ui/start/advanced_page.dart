@@ -16,7 +16,6 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
 
@@ -36,25 +35,19 @@ class AdvancedPageState extends State<AdvancedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      iosContentPadding: true,
-      appBar: PlatformAppBar(
-        title: PlatformWidget(
-          android: (_) => Text(
-            l(context).advanced,
-            style: TextStyle(
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-          ios: (_) => Text(l(context).advanced),
-        ),
-        android: (_) => MaterialAppBarData(
-          iconTheme: IconThemeData(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          l(context).advanced,
+          style: TextStyle(
             color: Theme.of(context).primaryColor,
           ),
-          elevation: 0,
-          backgroundColor: const Color(0x00000000),
         ),
+        iconTheme: IconThemeData(
+          color: Theme.of(context).primaryColor,
+        ),
+        elevation: 0,
+        backgroundColor: const Color(0x00000000),
       ),
       body: Container(
         margin: EdgeInsets.all(16),
@@ -64,11 +57,10 @@ class AdvancedPageState extends State<AdvancedPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                PlatformWidget(
-                  android: (_) => Icon(Icons.home,
-                      color: Theme.of(context).hintColor, size: 32),
-                  ios: (_) => Icon(CupertinoIcons.home,
-                      color: Theme.of(context).hintColor, size: 32),
+                Icon(
+                  Icons.home,
+                  color: Theme.of(context).hintColor,
+                  size: 32,
                 ),
                 SizedBox(width: 16),
                 Flexible(
@@ -84,15 +76,13 @@ class AdvancedPageState extends State<AdvancedPage> {
                         errorText = null;
                       }
 
-                      return PlatformTextField(
+                      return TextField(
                         controller: homeserverTextController,
-                        android: (_) => MaterialTextFieldData(
-                          decoration: InputDecoration(
-                            filled: true,
-                            labelText: l(context).homeserver,
-                            hintText: bloc.userIdDomain.toString(),
-                            errorText: errorText,
-                          ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          labelText: l(context).homeserver,
+                          hintText: bloc.userIdDomain.toString(),
+                          errorText: errorText,
                         ),
                       );
                     },
@@ -104,38 +94,29 @@ class AdvancedPageState extends State<AdvancedPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                PlatformWidget(
-                  android: (_) => Icon(
-                    Icons.person,
-                    color: Theme.of(context).hintColor,
-                    size: 32,
-                  ),
-                  ios: (_) => Icon(
-                    CupertinoIcons.person,
-                    color: Theme.of(context).hintColor,
-                    size: 32,
-                  ),
+                Icon(
+                  Icons.person,
+                  color: Theme.of(context).hintColor,
+                  size: 32,
                 ),
                 SizedBox(width: 16),
                 Flexible(
-                  child: PlatformTextField(
-                    android: (context) => MaterialTextFieldData(
-                      decoration: InputDecoration(
-                        filled: true,
-                        labelText: l(context).identityServer,
-                      ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: l(context).identityServer,
                     ),
                   ),
                 )
               ],
             ),
             SizedBox(height: 32),
-            PlatformButton(
+            RaisedButton(
               onPressed: () {
                 bloc.setHomeserverUrl(homeserverTextController.text);
                 Navigator.pop(context);
               },
-              child: PlatformText(l(context).confirm),
+              child: Text(l(context).confirm.toUpperCase()),
             )
           ],
         ),

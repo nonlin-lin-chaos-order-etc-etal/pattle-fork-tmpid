@@ -16,7 +16,6 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/widgets/error.dart';
 import 'package:pattle/src/ui/main/widgets/user_avatar.dart';
@@ -52,22 +51,9 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
+    return Scaffold(
+      appBar: AppBar(
         title: Text(l(context).newGroup),
-        ios: (_) => CupertinoNavigationBarData(
-          backgroundColor: CupertinoTheme.of(context).primaryColor,
-          actionsForegroundColor: Colors.white,
-          title: Text(
-            l(context).appName,
-            style: TextStyle(color: Colors.white),
-          ),
-          trailing: CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: createGroup,
-            child: Text(l(context).confirm),
-          ),
-        ),
       ),
       body: Column(
         children: <Widget>[
@@ -78,17 +64,15 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.all(16),
-                  child: PlatformTextField(
+                  child: TextField(
                     onChanged: (text) {
                       bloc.groupName = text;
                     },
                     maxLines: 1,
-                    android: (_) => MaterialTextFieldData(
-                      decoration: InputDecoration(
-                          labelText: l(context).groupName, filled: true),
+                    decoration: InputDecoration(
+                      labelText: l(context).groupName,
+                      filled: true,
                     ),
-                    ios: (_) => CupertinoTextFieldData(
-                        placeholder: l(context).groupName),
                   ),
                 ),
               )
@@ -98,28 +82,24 @@ class CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
           Expanded(child: _buildUserList(context))
         ],
       ),
-      android: (_) => MaterialScaffoldData(
-        floatingActionButton: FloatingActionButton(
-          onPressed: createGroup,
-          child: StreamBuilder<bool>(
-            stream: bloc.isCreatingRoom,
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              final isCreatingRoom = snapshot.data ?? false;
-              if (isCreatingRoom) {
-                return SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: PlatformCircularProgressIndicator(
-                    android: (_) => MaterialProgressIndicatorData(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  ),
-                );
-              } else {
-                return Icon(Icons.check);
-              }
-            },
-          ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: createGroup,
+        child: StreamBuilder<bool>(
+          stream: bloc.isCreatingRoom,
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            final isCreatingRoom = snapshot.data ?? false;
+            if (isCreatingRoom) {
+              return SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              );
+            } else {
+              return Icon(Icons.check);
+            }
+          },
         ),
       ),
     );

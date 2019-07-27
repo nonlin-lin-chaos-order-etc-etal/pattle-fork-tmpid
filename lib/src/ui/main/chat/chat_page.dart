@@ -16,7 +16,6 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
@@ -82,21 +81,16 @@ class ChatPageState extends State<ChatPage> {
     Widget avatar = Container();
     final avatarUrl = avatarUrlOf(room);
     if (avatarUrl != null) {
-      final circleAvatar = CircleAvatar(
-        backgroundColor: Colors.white,
-        backgroundImage: MatrixImage(
-          avatarUrl,
-          width: 64,
-          height: 64,
+      avatar = Hero(
+        tag: room.id,
+        child: CircleAvatar(
+          backgroundColor: Colors.white,
+          backgroundImage: MatrixImage(
+            avatarUrl,
+            width: 64,
+            height: 64,
+          ),
         ),
-      );
-
-      avatar = PlatformWidget(
-        android: (_) => Hero(
-          tag: room.id,
-          child: circleAvatar,
-        ),
-        ios: (_) => circleAvatar,
       );
     }
 
@@ -109,7 +103,7 @@ class ChatPageState extends State<ChatPage> {
     };
 
     // TODO: typingUsers should not contain nulls
-    final title =
+    Widget title =
         room.isSomeoneElseTyping && !room.typingUsers.any((u) => u == null)
             ? TitleWithSub(
                 title: ChatName(room: room),
@@ -121,50 +115,19 @@ class ChatPageState extends State<ChatPage> {
               )
             : ChatName(room: room);
 
-    return PlatformScaffold(
+    return Scaffold(
       backgroundColor: LightColors.red[50],
-      appBar: PlatformAppBar(
-        automaticallyImplyLeading: false,
-        android: (context) => MaterialAppBarData(
-          titleSpacing: 0,
-          title: settingsGestureDetector(
-            child: Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  padding: EdgeInsets.all(0),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                avatar,
-                SizedBox(
-                  width: 16,
-                ),
-                Flexible(
-                  child: title,
-                ),
-              ],
-            ),
-          ),
-        ),
-        ios: (context) => CupertinoNavigationBarData(
-          automaticallyImplyLeading: true,
-          backgroundColor: CupertinoTheme.of(context).primaryColor,
-          actionsForegroundColor: Colors.white,
-          padding: EdgeInsetsDirectional.only(start: 0),
-          trailing: Padding(
-            padding: EdgeInsets.all(4),
-            child: AspectRatio(
-              aspectRatio: 1 / 1,
-              child: avatar,
-            ),
-          ),
-          title: settingsGestureDetector(
-            child: ChatName(
-              room: room,
-              style: TextStyle(color: Colors.white),
-            ),
+      appBar: AppBar(
+        titleSpacing: 0,
+        title: settingsGestureDetector(
+          child: Row(
+            children: <Widget>[
+              avatar,
+              SizedBox(width: 16),
+              Expanded(
+                child: title,
+              ),
+            ],
           ),
         ),
       ),
@@ -192,14 +155,6 @@ class ChatPageState extends State<ChatPage> {
 
   Widget _buildInput() {
     const elevation = 8.0;
-    final sendButton = PlatformIconButton(
-        androidIcon: Icon(Icons.send),
-        iosIcon: Icon(CupertinoIcons.forward),
-        onPressed: () {
-          bloc.sendMessage(textController.value.text);
-          textController.clear();
-          setState(() {});
-        });
 
     if (bloc.room is JoinedRoom) {
       return Material(
@@ -207,51 +162,33 @@ class ChatPageState extends State<ChatPage> {
         color: LightColors.red[50],
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: PlatformWidget(
-            android: (_) => Material(
-              elevation: elevation,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-              color: Colors.white,
-              child: TextField(
-                controller: textController,
-                textInputAction: TextInputAction.newline,
-                autocorrect: true,
-                textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
-                  border: UnderlineInputBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(8),
-                    ),
+          child: Material(
+            elevation: elevation,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+            color: Colors.white,
+            child: TextField(
+              controller: textController,
+              textInputAction: TextInputAction.newline,
+              autocorrect: true,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                border: UnderlineInputBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(8),
                   ),
-                  filled: true,
-                  hintText: l(context).typeAMessage,
-                  suffixIcon: sendButton,
+                ),
+                filled: true,
+                hintText: l(context).typeAMessage,
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: () {
+                    bloc.sendMessage(textController.value.text);
+                    textController.clear();
+                    setState(() {});
+                  },
                 ),
               ),
-            ),
-            ios: (_) => Row(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Expanded(
-                  child: CupertinoTextField(
-                    autocorrect: true,
-                    textCapitalization: TextCapitalization.sentences,
-                    controller: textController,
-                    placeholder: l(context).typeAMessage,
-                    suffix: sendButton,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(4)),
-                      border: Border.all(
-                        color: LightColors.red[100],
-                        style: BorderStyle.solid,
-                        width: 0.0,
-                      ),
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
             ),
           ),
         ),
