@@ -19,6 +19,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:pattle/src/di.dart' as di;
+import 'package:pedantic/pedantic.dart';
 
 final syncBloc = SyncBloc();
 
@@ -32,7 +33,7 @@ class SyncBloc {
   Future<void> start() async {
     if (!started) {
       await _user.sendAllUnsent();
-      await _syncSubj.addStream(_user.sync());
+      unawaited(_syncSubj.addStream(_user.sync()));
 
       started = true;
     }
