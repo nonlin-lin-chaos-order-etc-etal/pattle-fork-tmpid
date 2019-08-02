@@ -20,10 +20,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
+import 'package:pattle/src/app_bloc.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
+import 'package:pattle/src/ui/util/future_or_builder.dart';
 
 class PasswordPageState extends State<PasswordPage> {
+  final StartBloc bloc = StartBloc();
+
   StreamSubscription subscription;
 
   @override
@@ -34,6 +38,7 @@ class PasswordPageState extends State<PasswordPage> {
 
     subscription = bloc.loginStream.listen((state) {
       if (state == RequestState.success) {
+        bloc.dispose();
         Navigator.pushNamedAndRemoveUntil(
           context,
           Routes.chats,
@@ -111,6 +116,32 @@ class PasswordPageState extends State<PasswordPage> {
               },
             ),
             SizedBox(height: 16),
+            Row(
+              children: <Widget>[
+                FutureOrBuilder<bool>(
+                  futureOr: AppBloc().getMayReportCrashes(lookInStorage: false),
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<bool> snapshot,
+                  ) {
+                    final mayReportCrashes = snapshot.data;
+                    return Checkbox(
+                      value: mayReportCrashes,
+                      onChanged: (value) {
+                        setState(() {
+                          AppBloc().setMayReportCrashes(value);
+                        });
+                      },
+                    );
+                  },
+                ),
+                Flexible(
+                  child: Text(
+                    'Allow Pattle to send crash reports to help development',
+                  ),
+                ),
+              ],
+            ),
             StreamBuilder<RequestState>(
               stream: bloc.loginStream,
               builder: (
@@ -147,7 +178,7 @@ class PasswordPageState extends State<PasswordPage> {
                   child: child,
                 );
               },
-            )
+            ),
           ],
         ),
       ),

@@ -18,16 +18,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:pattle/src/app.dart';
-import 'package:pattle/src/ui/initial/initial_bloc.dart';
+
+import '../../app_bloc.dart';
 
 class InitialPageState extends State<InitialPage> {
+  final AppBloc bloc = AppBloc();
   StreamSubscription<bool> subscription;
 
   @override
   void initState() {
     super.initState();
-
-    bloc.init();
 
     subscription = bloc.loggedIn.listen((loggedIn) {
       var route;

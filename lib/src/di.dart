@@ -41,7 +41,7 @@ Future<void> registerHomeserverWith(Url url) async {
 
 Store getStore() => inj.getDependency<Store>();
 void registerStore() {
-  final store = SqfliteStore(path: 'pattle.sqlite');
+  final store = SqfliteStore(path: 'matrix.sqlite');
 
   inj.registerSingleton<Store>((_) => store, override: true);
 }

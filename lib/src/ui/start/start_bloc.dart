@@ -25,16 +25,26 @@ import 'package:url/url.dart';
 import 'dart:io';
 import 'package:pedantic/pedantic.dart';
 
-final bloc = StartBloc();
+import '../../app_bloc.dart';
+import '../bloc.dart';
 
 typedef Request = void Function(Function addError);
 typedef Check = bool Function(Function addError);
 
-class StartBloc {
-  StartBloc() {
+class StartBloc extends Bloc {
+  static StartBloc _instance;
+
+  StartBloc._() {
     setHomeserverUrl("https://matrix.org");
   }
 
+  factory StartBloc({bool replace = false}) {
+    if (_instance == null || replace) {
+      _instance = StartBloc._();
+    }
+
+    return _instance;
+  }
   final _homeserverChangedSubj = BehaviorSubject<bool>();
   Observable<bool> get homeserverChanged => _homeserverChangedSubj.stream;
 
@@ -187,10 +197,18 @@ class StartBloc {
             .login(_username, password, store: di.getStore())
             .then((user) {
           di.registerLocalUser(user);
+          AppBloc().notifyLogin();
           _loginSubj.add(RequestState.success);
         }).catchError((error) => _loginSubj.addError(error));
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _homeserverChangedSubj.close();
+    _loginSubj.close();
+    _isUsernameAvailableSubj.close();
   }
 }
 

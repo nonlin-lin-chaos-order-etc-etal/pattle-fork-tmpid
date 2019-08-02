@@ -25,6 +25,8 @@ class AdvancedPage extends StatefulWidget {
 }
 
 class AdvancedPageState extends State<AdvancedPage> {
+  final StartBloc bloc = StartBloc();
+
   final homeserverTextController = TextEditingController();
 
   @override

@@ -1,4 +1,4 @@
-// Copyright (C) 2019  Wilko Manger
+// Copyright (C) 2019  wilko
 //
 // This file is part of Pattle.
 //
@@ -15,11 +15,6 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:async';
-
-import 'package:flutter/widgets.dart';
-
-import 'src/app.dart';
-import 'src/app_bloc.dart';
-
-Future<void> main() async => (await AppBloc.create()).wrap(() => runApp(App()));
+abstract class Bloc {
+  void dispose() {}
+}

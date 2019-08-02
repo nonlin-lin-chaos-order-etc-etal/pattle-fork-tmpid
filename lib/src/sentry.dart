@@ -27,153 +27,150 @@ import 'package:package_info/package_info.dart';
 import 'package:device_info/device_info.dart';
 import 'dart:io' show Platform;
 
-SentryClient _sentry;
+class Sentry {
+  SentryClient _client;
 
-Future<void> _reportError(dynamic error, dynamic stackTrace) async {
-  print('Caught error: $error');
-  if (_isInDebugMode) {
-    if (error is Response) {
-      print('statusCode: ${error.statusCode}');
-      print('headers: ${error.headers}');
-      print('body: ${error.body}');
-    } else if (error is matrix.MatrixException) {
-      print('body: ${error.body}');
-    }
+  Sentry();
 
-    if (stackTrace != null) {
-      print(stackTrace);
-    }
-  } else {
-    if (error is Response) {
-      var body;
-      try {
-        body = json.decode(error.body);
-      } on FormatException {
-        body = error.body?.toString();
+  static Future<Sentry> create() async {
+    final sentry = Sentry();
+
+    final client = SentryClient(
+      dsn: DotEnv().env['SENTRY_DSN'],
+      environmentAttributes: await sentry._environment,
+    );
+
+    FlutterError.onError = (FlutterErrorDetails details) {
+      if (sentry._isInDebugMode) {
+        FlutterError.dumpErrorToConsole(details);
+      } else {
+        // Report to zone
+        Zone.current.handleUncaughtError(details.exception, details.stack);
+      }
+    };
+
+    sentry._client = client;
+
+    return sentry;
+  }
+
+  Future<void> reportError(dynamic error, dynamic stackTrace) async {
+    print('Caught error: $error');
+    if (_isInDebugMode) {
+      if (error is Response) {
+        print('statusCode: ${error.statusCode}');
+        print('headers: ${error.headers}');
+        print('body: ${error.body}');
+      } else if (error is matrix.MatrixException) {
+        print('body: ${error.body}');
       }
 
-      await _sentry.capture(
-        event: Event(
-          exception: error,
-          stackTrace: stackTrace,
-          extra: {
-            'status_code': error.statusCode,
-            'headers': error.headers,
-            'body': body,
-          },
-        ),
-      );
-    } else if (error is matrix.MatrixException) {
-      await _sentry.capture(
-        event: Event(
-          exception: error,
-          stackTrace: stackTrace,
-          extra: {
-            'body': error.body,
-          },
-        ),
-      );
+      if (stackTrace != null) {
+        print(stackTrace);
+      }
     } else {
-      await _sentry.captureException(
-        exception: error,
-        stackTrace: stackTrace,
-      );
+      if (error is Response) {
+        var body;
+        try {
+          body = json.decode(error.body);
+        } on FormatException {
+          body = error.body?.toString();
+        }
+
+        await _client.capture(
+          event: Event(
+            exception: error,
+            stackTrace: stackTrace,
+            extra: {
+              'status_code': error.statusCode,
+              'headers': error.headers,
+              'body': body,
+            },
+          ),
+        );
+      } else if (error is matrix.MatrixException) {
+        await _client.capture(
+          event: Event(
+            exception: error,
+            stackTrace: stackTrace,
+            extra: {
+              'body': error.body,
+            },
+          ),
+        );
+      } else {
+        await _client.captureException(
+          exception: error,
+          stackTrace: stackTrace,
+        );
+      }
     }
   }
-}
 
-bool get _isInDebugMode {
-  bool inDebugMode = false;
+  bool get _isInDebugMode {
+    bool inDebugMode = false;
 
-  // Set to true if running debug mode (where asserts are evaluated)
-  assert(inDebugMode = true);
+    // Set to true if running debug mode (where asserts are evaluated)
+    assert(inDebugMode = true);
 
-  return inDebugMode;
-}
-
-Future<Event> get _environment async {
-  final deviceInfo = DeviceInfoPlugin();
-
-  User user;
-  Os os;
-  Device device;
-
-  if (Platform.isAndroid) {
-    final info = await deviceInfo.androidInfo;
-
-    user = User(id: info.androidId);
-
-    os = Os(
-      name: 'Android',
-      version: info.version.release,
-      build: info.version.sdkInt.toString(),
-    );
-
-    device = Device(
-      model: info.model,
-      manufacturer: info.manufacturer,
-      brand: info.brand,
-      simulator: !info.isPhysicalDevice,
-    );
-  } else if (Platform.isIOS) {
-    final info = await deviceInfo.iosInfo;
-
-    user = User(id: info.identifierForVendor);
-
-    os = Os(
-      name: 'iOS',
-      version: info.systemVersion,
-    );
-
-    device = Device(
-      family: info.model,
-      model: info.utsname.machine,
-      simulator: !info.isPhysicalDevice,
-    );
+    return inDebugMode;
   }
 
-  final packageInfo = await PackageInfo.fromPlatform();
+  Future<Event> get _environment async {
+    final deviceInfo = DeviceInfoPlugin();
 
-  return Event(
-    release: packageInfo.version,
-    userContext: user,
-    environment: 'production',
-    contexts: Contexts(
-      device: device,
-      os: os,
-      app: App(
-        build: packageInfo.buildNumber,
-        buildType: DotEnv().env['BUILD_TYPE'],
+    User user;
+    Os os;
+    Device device;
+
+    if (Platform.isAndroid) {
+      final info = await deviceInfo.androidInfo;
+
+      user = User(id: info.androidId);
+
+      os = Os(
+        name: 'Android',
+        version: info.version.release,
+        build: info.version.sdkInt.toString(),
+      );
+
+      device = Device(
+        model: info.model,
+        manufacturer: info.manufacturer,
+        brand: info.brand,
+        simulator: !info.isPhysicalDevice,
+      );
+    } else if (Platform.isIOS) {
+      final info = await deviceInfo.iosInfo;
+
+      user = User(id: info.identifierForVendor);
+
+      os = Os(
+        name: 'iOS',
+        version: info.systemVersion,
+      );
+
+      device = Device(
+        family: info.model,
+        model: info.utsname.machine,
+        simulator: !info.isPhysicalDevice,
+      );
+    }
+
+    final packageInfo = await PackageInfo.fromPlatform();
+
+    return Event(
+      release: packageInfo.version,
+      userContext: user,
+      environment: 'production',
+      contexts: Contexts(
+        device: device,
+        os: os,
+        app: App(
+          build: packageInfo.buildNumber,
+          buildType: DotEnv().env['BUILD_TYPE'],
+        ),
       ),
-    ),
-  );
-}
-
-Future<void> init() async {
-  await DotEnv().load();
-
-  _sentry = SentryClient(
-    dsn: DotEnv().env['SENTRY_DSN'],
-    environmentAttributes: await _environment,
-  );
-
-  FlutterError.onError = (FlutterErrorDetails details) {
-    if (_isInDebugMode) {
-      FlutterError.dumpErrorToConsole(details);
-    } else {
-      // Report to zone
-      Zone.current.handleUncaughtError(details.exception, details.stack);
-    }
-  };
-}
-
-void wrap(Function run) {
-  runZoned<Future<void>>(
-    () async {
-      run();
-    },
-    onError: (error, stackTrace) {
-      _reportError(error, stackTrace);
-    },
-  );
+    );
+  }
 }

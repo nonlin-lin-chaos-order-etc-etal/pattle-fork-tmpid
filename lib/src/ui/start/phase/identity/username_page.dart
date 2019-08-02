@@ -31,6 +31,8 @@ class UsernamePage extends StatefulWidget {
 }
 
 class UsernamePageState extends State<UsernamePage> {
+  final StartBloc bloc = StartBloc();
+
   final usernameController = TextEditingController();
 
   StreamSubscription subscription;
@@ -59,7 +61,6 @@ class UsernamePageState extends State<UsernamePage> {
   @override
   void dispose() {
     super.dispose();
-
     subscription.cancel();
   }
 
