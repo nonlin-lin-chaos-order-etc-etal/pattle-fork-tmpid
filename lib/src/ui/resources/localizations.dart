@@ -30,6 +30,7 @@ class Strings {
   final password = 'Password';
   final confirm = 'Confirm';
   final login = 'Login';
+  final register = 'Register';
   final next = 'Next';
   final homeserver = 'Homeserver';
   final identityServer = 'Identity server';
@@ -81,6 +82,10 @@ class Strings {
       "Invalid user ID. Must be in the format of '@name:server.tld'";
   final hostnameInvalidError = 'Invalid hostname';
   final unknownError = 'An unknown error occured';
+
+  final failedUsernameCheckAvailableError =
+      'Failed to check if the username is available';
+  final wouldYouLikeLoginOrRegister = 'Would you like to login or register?';
 
   // StartPage: PasswordPage //
   final enterPassword = 'Enter password';

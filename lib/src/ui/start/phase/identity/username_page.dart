@@ -24,6 +24,7 @@ import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
 import 'package:pattle/src/ui/util/lower_case_text_formatter.dart';
+import 'package:chopper/chopper.dart';
 
 class UsernamePage extends StatefulWidget {
   @override
@@ -55,7 +56,14 @@ class UsernamePageState extends State<UsernamePage> {
       if (state == RequestState.success) {
         Navigator.pushNamed(context, Routes.startPassword);
       }
-    });
+    })
+      ..onError((error) {
+        // Show a dialog with a choice between login and register if this
+        // homeserver does not support checking for a username.
+        if (error is Response<dynamic> && error.statusCode == 405) {
+          _showCantCheckUsernameDialog(context);
+        }
+      });
   }
 
   @override
@@ -112,14 +120,14 @@ class UsernamePageState extends State<UsernamePage> {
                         String errorText;
 
                         if (snapshot.hasError) {
-                          if (snapshot.error is InvalidUsernameException) {
+                          final error = snapshot.error;
+                          if (error is InvalidUsernameException) {
                             errorText = l(context).usernameInvalidError;
-                          } else if (snapshot.error
-                              is InvalidHostnameException) {
+                          } else if (error is InvalidHostnameException) {
                             errorText = l(context).hostnameInvalidError;
-                          } else if (snapshot.error is InvalidUserIdException) {
+                          } else if (error is InvalidUserIdException) {
                             errorText = l(context).userIdInvalidError;
-                          } else if (snapshot.error is SocketException) {
+                          } else if (error is SocketException) {
                             errorText = l(context).connectionFailed;
                           } else {
                             errorText = l(context).unknownError;
@@ -187,6 +195,34 @@ class UsernamePageState extends State<UsernamePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _showCantCheckUsernameDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(l(context).failedUsernameCheckAvailableError),
+          content: SingleChildScrollView(
+            child: Text(l(context).wouldYouLikeLoginOrRegister),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(l(context).register.toUpperCase()),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(l(context).login.toUpperCase()),
+              onPressed: () {
+                Navigator.popAndPushNamed(context, Routes.startPassword);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

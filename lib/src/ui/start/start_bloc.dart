@@ -118,8 +118,6 @@ class StartBloc extends Bloc {
   }
 
   Future<void> checkUsernameAvailability(String username) async {
-    var user;
-
     await _do(
       subject: _isUsernameAvailableSubj,
       validate: (addError) {
@@ -154,7 +152,7 @@ class StartBloc extends Bloc {
               return false;
             }
 
-            user = UserId(username).username;
+            _username = UserId(username).username;
           } on FormatException {
             addError(InvalidHostnameException());
             return false;
@@ -171,16 +169,14 @@ class StartBloc extends Bloc {
             return false;
           }
 
-          user = Username(username);
+          _username = Username(username);
 
           return true;
         }
       },
       request: (addError) {
-        homeserver.isUsernameAvailable(user).then((available) {
+        homeserver.isUsernameAvailable(_username).then((available) {
           _isUsernameAvailableSubj.add(RequestSuccessState(data: available));
-
-          _username = user;
         }).catchError((error) => _isUsernameAvailableSubj.addError(error));
       },
     );
