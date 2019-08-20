@@ -56,18 +56,6 @@ build:
       - pattle.apk
     expire_in: 1 week
 
-fdroid:
-  stage: deploy
-  <<: *only_tag
-  tags:
-    - fdroid
-  dependencies:
-    - build
-  script:
-    - find /mnt/fdroid -type f -name "*.apk" -mtime +5 -delete
-    - mv pattle.apk "/mnt/fdroid/repo/pattle-${CI_COMMIT_REF_NAME:1}.apk"
-    - docker run --rm -v /mnt/fdroid:/repo registry.gitlab.com/fdroid/docker-executable-fdroidserver:latest update
-
 release:
   stage: release
   image: registry.git.pattle.im/pattle/util/release-manager:latest
