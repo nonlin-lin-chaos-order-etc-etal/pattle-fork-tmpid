@@ -77,7 +77,20 @@ class ChatOverviewBloc {
     }
 
     chats.sort((a, b) {
-      if (a.latestEventForSorting != null && b.latestEventForSorting != null) {
+      if (a.room.highlightedUnreadNotificationCount > 0 &&
+          b.room.highlightedUnreadNotificationCount <= 0) {
+        return 1;
+      } else if (a.room.highlightedUnreadNotificationCount <= 0 &&
+          b.room.highlightedUnreadNotificationCount > 0) {
+        return -1;
+      } else if (a.room.totalUnreadNotificationCount > 0 &&
+          b.room.totalUnreadNotificationCount <= 0) {
+        return 1;
+      } else if (a.room.totalUnreadNotificationCount <= 0 &&
+          b.room.totalUnreadNotificationCount > 0) {
+        return -1;
+      } else if (a.latestEventForSorting != null &&
+          b.latestEventForSorting != null) {
         return a.latestEventForSorting.time.compareTo(
           b.latestEventForSorting.time,
         );
