@@ -177,6 +177,15 @@ class ChatBloc {
     });
   }
 
+  Future<void> markAllAsRead() async {
+    final latestEvent = (await room.timeline.get(upTo: 1)).first;
+
+    final r = room as JoinedRoom;
+
+    print('markRead');
+    await r.markRead(until: latestEvent.id);
+  }
+
   void cleanUp() {
     syncSub.cancel();
   }

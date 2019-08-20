@@ -65,6 +65,8 @@ class ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
 
+    bloc.markAllAsRead();
+
     bloc.hasReachedEnd.listen((hasReachedEnd) {
       if (hasReachedEnd) {
         setState(() {
