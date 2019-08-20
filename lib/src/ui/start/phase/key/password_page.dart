@@ -30,11 +30,15 @@ class PasswordPageState extends State<PasswordPage> {
 
   StreamSubscription subscription;
 
+  bool showPassword;
+
   @override
   void initState() {
     super.initState();
 
     password = null;
+
+    showPassword = false;
 
     subscription = bloc.loginStream.listen((state) {
       if (state == RequestState.success) {
@@ -102,7 +106,7 @@ class PasswordPageState extends State<PasswordPage> {
                   onEditingComplete: () {
                     _next();
                   },
-                  obscureText: true,
+                  obscureText: !showPassword,
                   enableInteractiveSelection: true,
                   decoration: InputDecoration(
                     filled: true,
@@ -111,6 +115,14 @@ class PasswordPageState extends State<PasswordPage> {
                       bloc.username.toString(),
                     ),
                     errorText: errorText,
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.remove_red_eye),
+                      onPressed: () {
+                        setState(() {
+                          showPassword = !showPassword;
+                        });
+                      },
+                    ),
                   ),
                 );
               },
