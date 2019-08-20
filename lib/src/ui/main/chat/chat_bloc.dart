@@ -182,7 +182,6 @@ class ChatBloc {
 
     final r = room as JoinedRoom;
 
-    print('markRead');
     await r.markRead(until: latestEvent.id);
   }
 
