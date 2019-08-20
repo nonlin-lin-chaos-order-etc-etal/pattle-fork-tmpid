@@ -20,6 +20,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:pattle/src/ui/main/overview/models/chat_overview.dart';
 import 'package:pattle/src/ui/main/overview/widgets/typing_subtitle.dart';
+import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
 import 'image_subtitle.dart';
@@ -38,8 +39,11 @@ abstract class Subtitle extends StatelessWidget {
 
   final bool isMine;
 
+  final Room room;
+
   Subtitle(this.event)
       : isMine = event?.sender == di.getLocalUser(),
+        room = event?.room,
         senderName = event != null &&
                 event.sender != di.getLocalUser() &&
                 !event.room.isDirect
@@ -96,5 +100,36 @@ abstract class Subtitle extends StatelessWidget {
     } else {
       return Container(height: 0, width: 0);
     }
+  }
+
+  Widget buildNotificationCount(BuildContext context) {
+    if (room.totalUnreadNotificationCount <= 0) {
+      return Container();
+    }
+
+    return SizedBox(
+      height: 21,
+      width: 21,
+      child: ClipOval(
+        child: Container(
+          color: room.highlightedUnreadNotificationCount > 0
+              ? LightColors.red
+              : Colors.grey,
+          child: Padding(
+            padding: EdgeInsets.all(2),
+            child: Center(
+              child: Text(
+                room.totalUnreadNotificationCount.toString(),
+                style: textStyle(context).copyWith(
+                  fontSize: 13,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -39,7 +39,10 @@ class ImageSubtitle extends Subtitle {
             color: Theme.of(context).textTheme.caption.color,
             size: Subtitle.iconSize,
           ),
-          Text(' ' + l(context).photo, style: textStyle(context)),
+          Expanded(
+            child: Text(' ' + l(context).photo, style: textStyle(context)),
+          ),
+          buildNotificationCount(context)
         ],
       );
 }

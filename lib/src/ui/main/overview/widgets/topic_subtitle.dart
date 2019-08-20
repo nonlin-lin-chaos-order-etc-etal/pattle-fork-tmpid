@@ -30,20 +30,27 @@ class TopicSubtitle extends Subtitle {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      text: TextSpan(
-        style: textStyle(context),
-        children: l(context).changedDescription(
-          TextSpan(
-            text: displayNameOf(event.sender),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: RichText(
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              style: textStyle(context),
+              children: l(context).changedDescription(
+                TextSpan(
+                  text: displayNameOf(event.sender),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
           ),
         ),
-      ),
+        buildNotificationCount(context)
+      ],
     );
   }
 }

@@ -28,9 +28,16 @@ class RedactedSubtitle extends Subtitle {
   RedactedSubtitle(this.event) : super(event);
 
   @override
-  Widget build(BuildContext context) => Redacted(
-        event: event,
-        iconSize: 20,
-        color: Theme.of(context).textTheme.caption.color,
+  Widget build(BuildContext context) => Row(
+        children: <Widget>[
+          Expanded(
+            child: Redacted(
+              event: event,
+              iconSize: 20,
+              color: Theme.of(context).textTheme.caption.color,
+            ),
+          ),
+          buildNotificationCount(context)
+        ],
       );
 }

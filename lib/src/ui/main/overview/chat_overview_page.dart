@@ -157,7 +157,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
                   fontWeight: FontWeight.normal,
                   color: Colors.black54,
                 ),
-          )
+          ),
         ],
       ),
       dense: false,

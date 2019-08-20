@@ -23,22 +23,30 @@ import 'package:pattle/src/ui/resources/theme.dart';
 import 'subtitle.dart';
 
 class TypingSubtitle extends Subtitle {
+  @override
   final Room room;
 
   TypingSubtitle(this.room) : super(null);
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      text: TextSpan(
-        style: textStyle(context).copyWith(
-          color: LightColors.red,
-          fontWeight: FontWeight.bold,
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: RichText(
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              style: textStyle(context).copyWith(
+                color: LightColors.red,
+                fontWeight: FontWeight.bold,
+              ),
+              children: typingSpan(context, room),
+            ),
+          ),
         ),
-        children: typingSpan(context, room),
-      ),
+        buildNotificationCount(context),
+      ],
     );
   }
 }

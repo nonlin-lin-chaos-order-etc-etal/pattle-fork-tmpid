@@ -51,7 +51,8 @@ class TextSubtitle extends Subtitle {
                 ],
               ),
             ),
-          )
+          ),
+          buildNotificationCount(context)
         ],
       );
     } else {
@@ -84,7 +85,8 @@ class TextSubtitle extends Subtitle {
                 text: ' ' + text ?? 'null',
               ),
             ),
-          )
+          ),
+          buildNotificationCount(context)
         ],
       );
     }
