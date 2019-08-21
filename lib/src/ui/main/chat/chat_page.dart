@@ -14,6 +14,8 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -49,6 +51,8 @@ class ChatPageState extends State<ChatPage> {
 
   int maxPageCount;
 
+  Timer readTimer;
+
   ChatPageState(this.room) : bloc = ChatBloc(room) {
     textController.addListener(() {
       bloc.notifyInputChanged(textController.text);
@@ -58,6 +62,7 @@ class ChatPageState extends State<ChatPage> {
   @override
   void dispose() {
     super.dispose();
+    readTimer.cancel();
     bloc.cleanUp();
     textController.dispose();
   }
@@ -66,7 +71,11 @@ class ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
 
-    bloc.markAllAsRead();
+    if (readTimer != null) {
+      readTimer.cancel();
+    }
+
+    readTimer = Timer(const Duration(seconds: 2), bloc.markAllAsRead);
 
     bloc.hasReachedEnd.listen((hasReachedEnd) {
       if (hasReachedEnd) {
