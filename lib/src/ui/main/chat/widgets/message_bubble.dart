@@ -30,7 +30,7 @@ abstract class MessageBubble extends Bubble {
   static const groupTimeLimit = Duration(minutes: 3);
 
   // Styling
-  static const betweenGroupMargin = 4.0;
+  static const betweenGroupMargin = 2.0;
   static const oppositeMargin = 64.0;
 
   final RoomEvent reply;

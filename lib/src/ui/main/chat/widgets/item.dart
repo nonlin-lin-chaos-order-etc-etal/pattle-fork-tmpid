@@ -25,7 +25,7 @@ abstract class Item extends StatefulWidget {
   final ChatItem nextItem;
 
   // Styling;
-  static const betweenMargin = 16.0;
+  static const betweenMargin = 8.0;
   static const sideMargin = 16.0;
 
   Item({
