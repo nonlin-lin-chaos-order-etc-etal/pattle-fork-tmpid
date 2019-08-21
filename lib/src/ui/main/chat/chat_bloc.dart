@@ -55,6 +55,8 @@ class ChatBloc {
   PublishSubject<bool> _shouldRefreshSubj = PublishSubject<bool>();
   Stream<bool> get shouldRefresh => _shouldRefreshSubj.stream;
 
+  final Map<int, List<ChatItem>> pages = Map();
+
   FutureOr<List<ChatItem>> getPage(int page) {
     _currentPage = page;
     final chatItems = List<ChatItem>();
@@ -121,11 +123,21 @@ class ChatBloc {
     final futureOrEvents = room.timeline.paginate(page: page);
 
     if (futureOrEvents is Iterable<RoomEvent>) {
-      return toChatItems(futureOrEvents);
+      final items = toChatItems(futureOrEvents);
+
+      pages[page] = items;
+
+      return items;
     } else {
       final future = futureOrEvents as Future<Iterable<RoomEvent>>;
 
-      return future.then((events) => toChatItems(events));
+      return future.then((events) {
+        final items = toChatItems(events);
+
+        pages[page] = items;
+
+        return items;
+      });
     }
   }
 

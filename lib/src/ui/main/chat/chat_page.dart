@@ -233,9 +233,9 @@ class ChatPageState extends State<ChatPage> {
       controller: scrollController,
       reverse: true,
       itemCount: maxPageCount,
-      itemBuilder: (BuildContext context, int index) {
+      itemBuilder: (BuildContext context, int page) {
         return FutureOrBuilder<List<ChatItem>>(
-          futureOr: bloc.getPage(index),
+          futureOr: bloc.getPage(page),
           builder: (
             BuildContext context,
             AsyncSnapshot<List<ChatItem>> snapshot,
@@ -280,11 +280,13 @@ class ChatPageState extends State<ChatPage> {
                     // ListView.builder, the 'previous' event is actually the next
                     // one in the list.
                     if (i != chatEvents.length - 1) {
-                      previousItem = chatEvents[i + 1];
+                      previousItem =
+                          chatEvents[i + 1] ?? bloc.pages[page - 1].last;
                     }
 
                     if (i != 0) {
-                      nextItem = chatEvents[i - 1];
+                      nextItem =
+                          chatEvents[i - 1] ?? bloc.pages[page + 1].first;
                     }
 
                     widgets.add(

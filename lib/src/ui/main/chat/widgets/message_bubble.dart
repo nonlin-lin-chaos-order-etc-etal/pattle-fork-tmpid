@@ -56,6 +56,11 @@ abstract class MessageBubbleState<T extends MessageBubble>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    // Reset start and end group properties
+    _isStartOfGroup = null;
+    _isEndOfGroup = null;
+
     if (widget.isMine) {
       return _buildMine(context);
     } else {
