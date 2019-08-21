@@ -16,6 +16,7 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
@@ -182,6 +183,14 @@ class ChatPageState extends State<ChatPage> {
                 ),
                 filled: true,
                 hintText: l(context).typeAMessage,
+                prefixIcon: IconButton(
+                  icon: Icon(Icons.attach_file),
+                  onPressed: () async {
+                    await bloc.sendImage(
+                      await ImagePicker.pickImage(source: ImageSource.gallery),
+                    );
+                  },
+                ),
                 suffixIcon: IconButton(
                   icon: Icon(Icons.send),
                   onPressed: () {

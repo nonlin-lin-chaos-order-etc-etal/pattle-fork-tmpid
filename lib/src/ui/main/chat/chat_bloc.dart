@@ -16,8 +16,11 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:async';
+import 'dart:io';
 
+import 'package:image/image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:mime/mime.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/main/sync_bloc.dart';
 import 'package:pattle/src/ui/util/room.dart';
@@ -183,6 +186,34 @@ class ChatBloc {
     final r = room as JoinedRoom;
 
     await r.markRead(until: latestEvent.id);
+  }
+
+  Future<void> sendImage(File file) async {
+    final fileName = file.path.split('/').last;
+
+    final matrixUrl = await me.upload(
+      byteStream: file.openRead(),
+      length: await file.length(),
+      fileName: fileName,
+      contentType: lookupMimeType(fileName),
+    );
+
+    final image = decodeImage(file.readAsBytesSync());
+
+    final r = room as JoinedRoom;
+
+    final message = ImageMessage(
+      url: matrixUrl,
+      body: fileName,
+      info: ImageInfo(
+        width: image.width,
+        height: image.height,
+      ),
+    );
+
+    await for (var _ in r.send(message)) {
+      _shouldRefreshSubj.add(true);
+    }
   }
 
   void cleanUp() {
