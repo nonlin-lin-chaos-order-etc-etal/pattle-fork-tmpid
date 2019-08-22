@@ -190,7 +190,11 @@ class StartBloc extends Bloc {
       subject: _loginSubj,
       request: (addError) {
         homeserver
-            .login(_username, password, store: di.getStore())
+            .login(_username, password,
+                store: di.getStore(),
+                device: Device(
+                  name: 'Pattle ${Platform.isAndroid ? 'Android' : 'iOS'}',
+                ))
             .then((user) {
           di.registerLocalUser(user);
           AppBloc().notifyLogin();
