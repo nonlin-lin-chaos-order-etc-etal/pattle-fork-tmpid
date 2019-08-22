@@ -46,7 +46,7 @@ build:
     - 'echo "BUILD_TYPE=independent" >> .env'
     - echo "$STORE" | base64 -d > android/app/pattle.keystore
     - flutter build apk --flavor standard
-    - mv build/app/outputs/apk/release/app-release.apk pattle.apk
+    - mv build/app/outputs/apk/standard/release/app-standard-release.apk pattle.apk
   after_script:
     - rm android/app/pattle.keystore
     - rm .env
