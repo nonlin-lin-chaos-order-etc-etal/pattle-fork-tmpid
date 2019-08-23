@@ -23,12 +23,8 @@
 
 ### Android
 
-  Pattle is available on F-droid! To get it via F-droid, add the following repo:
-
-  https://fdroid.pattle.im/?fingerprint=E91F63CA6AE04F8E7EA53E52242EAF8779559209B8A342F152F9E7265E3EA729
-
-  When Pattle is more stable it'll be available on Google Play and in the
-  official F-droid repostiory.
+  Pattle is available on [F-droid](https://f-droid.org/en/packages/im.pattle.app/)
+  and [Google Play](https://play.google.com/store/apps/details?id=im.pattle.app)!
 
 ### iOS
 
