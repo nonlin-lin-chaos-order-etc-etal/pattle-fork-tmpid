@@ -70,6 +70,12 @@ android {
             signingConfig null
         }
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${project.archivesBaseName}-${variant.productFlavors.name.join()}-${variant.buildType.name}.apk"
+        }
+    }
 }
 
 flutter {
