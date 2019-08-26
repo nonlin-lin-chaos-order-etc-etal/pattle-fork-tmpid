@@ -54,13 +54,13 @@ class LoadingBubble extends MessageBubble {
 
 class LoadingBubbleState extends MessageBubbleState<LoadingBubble> {
   @override
-  Color mineColor() => Colors.grey[350];
+  Color mineColor(BuildContext context) => Colors.grey[350];
 
   @protected
   Widget buildMine(BuildContext context) => buildContent(context);
 
   @override
-  Color theirsColor() => Colors.grey[350];
+  Color theirsColor(BuildContext context) => Colors.grey[350];
 
   @protected
   Widget buildTheirs(BuildContext context) => buildContent(context);

@@ -60,6 +60,10 @@ class AppBloc {
 
     if (localUser != null) {
       di.registerLocalUser(localUser);
+    } else {
+      // Delete db if user could not be retrieved from store
+      await di.getStore().delete();
+      di.registerStore();
     }
 
     final loggedIn = localUser != null;

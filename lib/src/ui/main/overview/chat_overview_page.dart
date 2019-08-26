@@ -53,6 +53,12 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l(context).appName),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () => Navigator.pushNamed(context, Routes.settings),
+          )
+        ],
       ),
       body: Column(
         children: <Widget>[
@@ -155,7 +161,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
             time,
             style: Theme.of(context).textTheme.subtitle.copyWith(
                   fontWeight: FontWeight.normal,
-                  color: Colors.black54,
+                  color: Theme.of(context).textTheme.caption.color,
                 ),
           ),
         ],

@@ -20,6 +20,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:pattle/src/ui/main/widgets/redacted.dart';
+import 'package:pattle/src/ui/util/color.dart';
 
 import 'bubble.dart';
 import 'message_bubble.dart';
@@ -51,7 +52,11 @@ class RedactedBubbleState extends MessageBubbleState<RedactedBubble> {
   @protected
   Widget buildContent(BuildContext context) => Redacted(
         event: widget.event,
-        color: widget.isMine ? Colors.grey[300] : Colors.grey[700],
+        color: themed(
+          context,
+          light: widget.isMine ? Colors.grey[300] : Colors.grey[700],
+          dark: widget.isMine ? Colors.white30 : Colors.white70,
+        ),
         textStyle: textStyle(context),
       );
 

@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
@@ -23,6 +24,7 @@ import 'package:pattle/src/ui/main/chat/chat_page.dart';
 import 'package:pattle/src/ui/main/chat/image/image_page.dart';
 import 'package:pattle/src/ui/main/chat/settings/chat_settings_page.dart';
 import 'package:pattle/src/ui/main/overview/chat_overview_page.dart';
+import 'package:pattle/src/ui/main/settings/appearance_page.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/start/advanced_page.dart';
@@ -31,11 +33,20 @@ import 'package:pattle/src/ui/start/phase/key/password_page.dart';
 import 'package:pattle/src/ui/start/start_page.dart';
 import 'package:pattle/src/ui/main/overview/create/group/create_group_members_page.dart';
 import 'ui/main/overview/create/group/create_group_details_page.dart';
+import 'ui/main/settings/settings_page.dart';
 
 final routes = {
   Routes.root: (Object params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.root),
         builder: (context) => InitialPage(),
+      ),
+  Routes.settings: (Object params) => MaterialPageRoute(
+        settings: RouteSettings(name: Routes.settings),
+        builder: (context) => SettingsPage(),
+      ),
+  Routes.settingsAppearance: (Object params) => MaterialPageRoute(
+        settings: RouteSettings(name: Routes.settingsAppearance),
+        builder: (context) => AppearancePage(),
       ),
   Routes.chats: (Object arguments) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.chats),
@@ -79,6 +90,8 @@ class Routes {
   Routes._();
 
   static const root = '/';
+  static const settings = '/settings';
+  static const settingsAppearance = '/settings/appearance';
   static const chats = '/chats';
   static const chatsSettings = '/chats/settings';
   static const image = '/image';
@@ -96,21 +109,27 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      onGenerateTitle: (BuildContext context) => l(context).appName,
-      localizationsDelegates: [
-        const AppLocalizationsDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('en', 'US'),
-      ],
-      initialRoute: Routes.root,
-      onGenerateRoute: (settings) {
-        return routes[settings.name](settings.arguments);
+    return DynamicTheme(
+      defaultBrightness: Brightness.light,
+      data: (brightness) => theme(brightness),
+      themedWidgetBuilder: (context, theme) {
+        return MaterialApp(
+          onGenerateTitle: (BuildContext context) => l(context).appName,
+          localizationsDelegates: [
+            const AppLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en', 'US'),
+          ],
+          initialRoute: Routes.root,
+          onGenerateRoute: (settings) {
+            return routes[settings.name](settings.arguments);
+          },
+          theme: theme,
+        );
       },
-      theme: lightTheme,
     );
   }
 }

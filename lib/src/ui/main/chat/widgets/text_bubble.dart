@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
+import 'package:pattle/src/ui/util/color.dart';
 import 'package:pattle/src/ui/util/future_or_builder.dart';
 import 'package:pattle/src/ui/util/user.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -63,7 +64,11 @@ class TextBubbleState extends MessageBubbleState<TextBubble> {
       );
     } else {
       return textStyle(context).copyWith(
-        color: Theme.of(context).primaryColor,
+        color: themed(
+          context,
+          light: Theme.of(context).primaryColor,
+          dark: Colors.white,
+        ),
         decoration: TextDecoration.underline,
       );
     }

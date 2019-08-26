@@ -24,7 +24,7 @@ class UserAvatar extends StatelessWidget {
   final User user;
   final double radius;
 
-  UserAvatar({this.user, this.radius});
+  UserAvatar({@required this.user, this.radius});
 
   @override
   Widget build(BuildContext context) {

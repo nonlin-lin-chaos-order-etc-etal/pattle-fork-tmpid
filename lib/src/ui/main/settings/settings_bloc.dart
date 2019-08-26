@@ -1,4 +1,4 @@
-// Copyright (C) 2019  wilko
+// Copyright (C) 2019  Wilko Manger
 //
 // This file is part of Pattle.
 //
@@ -15,30 +15,18 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pattle/src/di.dart' as di;
 
-class Storage {
-  final SharedPreferences prefs;
+import '../../bloc.dart';
 
-  Storage(this.prefs);
+class SettingsBloc extends Bloc {
+  final me = di.getLocalUser();
 
-  static Future<Storage> open() async {
-    return Storage(await SharedPreferences.getInstance());
-  }
+  static SettingsBloc _instance = SettingsBloc._();
 
-  dynamic operator [](String key) async => prefs.get(key);
+  SettingsBloc._();
 
-  void operator []=(String key, dynamic value) {
-    if (value is String) {
-      prefs.setString(key, value);
-    } else if (value is bool) {
-      prefs.setBool(key, value);
-    } else if (value is int) {
-      prefs.setInt(key, value);
-    } else if (value is double) {
-      prefs.setDouble(key, value);
-    } else {
-      throw TypeError();
-    }
-  }
+  factory SettingsBloc() => _instance;
+
+  void useDarkTheme() {}
 }

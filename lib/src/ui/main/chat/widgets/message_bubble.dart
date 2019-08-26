@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
+import 'package:pattle/src/ui/util/color.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
@@ -297,7 +298,11 @@ abstract class MessageBubbleState<T extends MessageBubble>
     return bottom;
   }
 
-  Color mineColor() => LightColors.red[450];
+  Color mineColor(BuildContext context) => themed(
+        context,
+        light: LightColors.red[450],
+        dark: LightColors.red[700],
+      );
 
   Widget _buildMine(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -317,7 +322,7 @@ abstract class MessageBubbleState<T extends MessageBubble>
                         )
                       : EdgeInsets.only(),
                   child: Material(
-                    color: mineColor(),
+                    color: mineColor(context),
                     elevation: 1,
                     shape: border(),
                     child: buildMine(context),
@@ -332,7 +337,11 @@ abstract class MessageBubbleState<T extends MessageBubble>
   @protected
   Widget buildMine(BuildContext context);
 
-  Color theirsColor() => Colors.white;
+  Color theirsColor(BuildContext context) => themed(
+        context,
+        light: Colors.white,
+        dark: Colors.grey[800],
+      );
 
   Widget _buildTheirs(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -352,7 +361,7 @@ abstract class MessageBubbleState<T extends MessageBubble>
                         )
                       : EdgeInsets.only(),
                   child: Material(
-                    color: theirsColor(),
+                    color: theirsColor(context),
                     elevation: 1,
                     shape: border(),
                     child: buildTheirs(context),

@@ -16,19 +16,42 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:pattle/src/ui/util/color.dart';
 
-final ThemeData lightTheme = ThemeData(
-  primarySwatch: LightColors.red,
-  brightness: Brightness.light,
-  primaryColorBrightness: Brightness.dark,
-  accentColorBrightness: Brightness.dark,
-  cursorColor: LightColors.red,
-  buttonTheme: ButtonThemeData(
-    buttonColor: LightColors.red[500],
-    textTheme: ButtonTextTheme.primary,
-  ),
-  textTheme: Typography.blackMountainView,
-);
+ThemeData theme(Brightness brightness) {
+  return ThemeData(
+    primarySwatch: LightColors.red,
+    primaryColorDark: LightColors.red[700],
+    accentColor: LightColors.red,
+    brightness: brightness,
+    primaryColorBrightness: Brightness.dark,
+    accentColorBrightness: Brightness.dark,
+    cursorColor: LightColors.red,
+    buttonTheme: ButtonThemeData(
+      buttonColor: LightColors.red[500],
+      textTheme: ButtonTextTheme.primary,
+    ),
+    appBarTheme: AppBarTheme(
+      color: LightColors.red,
+    ),
+  );
+}
+
+Color chatBackgroundColor(BuildContext context) {
+  return themed(
+    context,
+    light: LightColors.red[50],
+    dark: Colors.grey[900],
+  );
+}
+
+Color redOnBackground(BuildContext context) {
+  return themed(
+    context,
+    light: LightColors.red[500],
+    dark: LightColors.red[100],
+  );
+}
 
 class LightColors {
   LightColors._();
@@ -49,6 +72,7 @@ class LightColors {
       700: Color(0xFF99322C),
       800: Color(0xFF902A24),
       900: Color(0xFF7F1C17),
+      1000: Color(0xFF771914),
     },
   );
 

@@ -31,6 +31,7 @@ import 'package:pattle/src/ui/main/widgets/error.dart';
 import 'package:pattle/src/ui/main/widgets/title_with_sub.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
+import 'package:pattle/src/ui/util/color.dart';
 import 'package:pattle/src/ui/util/future_or_builder.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 
@@ -128,7 +129,7 @@ class ChatPageState extends State<ChatPage> {
             : ChatName(room: room);
 
     return Scaffold(
-      backgroundColor: LightColors.red[50],
+      backgroundColor: chatBackgroundColor(context),
       appBar: AppBar(
         titleSpacing: 0,
         title: settingsGestureDetector(
@@ -171,14 +172,20 @@ class ChatPageState extends State<ChatPage> {
     if (bloc.room is JoinedRoom) {
       return Material(
         elevation: elevation,
-        color: LightColors.red[50],
+        color: chatBackgroundColor(context),
+        // On dark theme, draw a divider line because the shadow is gone
+        shape: Theme.of(context).brightness == Brightness.dark
+            ? Border(top: BorderSide(color: Colors.grey[800]))
+            : null,
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Material(
             elevation: elevation,
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-            color: Colors.white,
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+            color: themed(context, light: Colors.white, dark: Colors.grey[800]),
             child: TextField(
               controller: textController,
               textInputAction: TextInputAction.newline,

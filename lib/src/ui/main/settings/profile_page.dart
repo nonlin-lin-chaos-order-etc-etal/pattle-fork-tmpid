@@ -14,39 +14,48 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
-
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/ui/main/chat/util/typing_span.dart';
+import 'package:pattle/src/ui/main/settings/settings_bloc.dart';
+import 'package:pattle/src/ui/main/widgets/user_avatar.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 
-import 'subtitle.dart';
+class ProfilePageState extends State<ProfilePage> {
+  final bloc = SettingsBloc();
 
-class TypingSubtitle extends Subtitle {
+  Brightness brightness;
+
   @override
-  final Room room;
+  void initState() {
+    super.initState();
+  }
 
-  TypingSubtitle(this.room) : super(null);
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: RichText(
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            text: TextSpan(
-              style: textStyle(context).copyWith(
-                color: redOnBackground(context),
-                fontWeight: FontWeight.bold,
-              ),
-              children: typingSpan(context, room),
-            ),
-          ),
-        ),
-        buildNotificationCount(context),
-      ],
+    brightness = Theme.of(context).brightness;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile'),
+      ),
+      body: Column(
+        children: <Widget>[
+          UserAvatar(
+            user: bloc.me,
+            radius: 48,
+          )
+        ],
+      ),
     );
   }
+}
+
+class ProfilePage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => ProfilePageState();
 }
