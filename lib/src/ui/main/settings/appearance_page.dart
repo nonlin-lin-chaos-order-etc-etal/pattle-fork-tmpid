@@ -46,26 +46,15 @@ class AppearancePageState extends State<AppearancePage> {
       ),
       body: ListView(
         children: <Widget>[
-          Padding(
-              padding: EdgeInsets.only(left: 16, top: 16, bottom: 8),
-              child: Row(
-                children: <Widget>[
-                  Icon(
-                    brightness == Brightness.light
-                        ? Icons.brightness_high
-                        : Icons.brightness_3,
-                    color: redOnBackground(context),
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    'Brightness',
-                    style: TextStyle(
-                      color: redOnBackground(context),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              )),
+          ListTile(
+            leading: Icon(
+              brightness == Brightness.light
+                  ? Icons.brightness_high
+                  : Icons.brightness_3,
+              color: redOnBackground(context),
+            ),
+            title: Header('Brightness'),
+          ),
           RadioListTile(
             groupValue: brightness,
             value: Brightness.light,
