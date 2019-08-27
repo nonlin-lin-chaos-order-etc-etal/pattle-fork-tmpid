@@ -161,7 +161,14 @@ class ChatPageState extends State<ChatPage> {
         Expanded(
           child: _buildEventsList(),
         ),
-        _buildInput(),
+        ConstrainedBox(
+          constraints: BoxConstraints.loose(
+            Size.fromHeight(
+              MediaQuery.of(context).size.height / 3,
+            ),
+          ),
+          child: _buildInput(),
+        ),
       ],
     );
   }
@@ -188,6 +195,8 @@ class ChatPageState extends State<ChatPage> {
             color: themed(context, light: Colors.white, dark: Colors.grey[800]),
             child: TextField(
               controller: textController,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
               textInputAction: TextInputAction.newline,
               autocorrect: true,
               textCapitalization: TextCapitalization.sentences,
