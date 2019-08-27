@@ -25,6 +25,7 @@ import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 
 import 'package:pattle/src/di.dart' as di;
+import 'package:pattle/src/ui/util/color.dart';
 import 'package:pattle/src/ui/util/future_or_builder.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
 import 'package:pattle/src/ui/util/room.dart';
@@ -52,7 +53,11 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: LightColors.red[50],
+      backgroundColor: themed(
+        context,
+        light: LightColors.red[50],
+        dark: Theme.of(context).backgroundColor,
+      ),
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
@@ -113,7 +118,7 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                   Text(
                     l(context).description,
                     style: TextStyle(
-                      color: LightColors.red,
+                      color: redOnBackground(context),
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -154,7 +159,7 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                   child: Text(
                     l(context).xParticipants(bloc.room.members.count),
                     style: TextStyle(
-                      color: LightColors.red,
+                      color: redOnBackground(context),
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
