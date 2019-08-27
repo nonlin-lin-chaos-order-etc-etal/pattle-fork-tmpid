@@ -54,7 +54,10 @@ class ChatOverviewBloc {
           (await room.timeline.get(upTo: 10, allowRemote: false)).firstWhere(
         (event) =>
             (event is! MemberChangeEvent ||
-                event is JoinEvent && event.content.subject.id == _user.id) &&
+                (event is JoinEvent &&
+                    event is! DisplayNameChangeEvent &&
+                    event is! AvatarChangeEvent &&
+                    event.content.subject.id == _user.id)) &&
             event is! RedactionEvent,
         orElse: () => null,
       );
