@@ -19,6 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:pattle/src/ui/main/settings/settings_bloc.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 
+import 'package:pattle/src/ui/main/settings/widgets/header.dart';
+
 class AppearancePageState extends State<AppearancePage> {
   final bloc = SettingsBloc();
 

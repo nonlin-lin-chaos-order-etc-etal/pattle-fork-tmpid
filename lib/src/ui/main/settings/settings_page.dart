@@ -47,15 +47,20 @@ class SettingsPageState extends State<SettingsPage> {
         children: <Widget>[
           Material(
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, Routes.settingsProfile);
+              },
               child: Padding(
                 padding: EdgeInsets.all(16),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    UserAvatar(
-                      user: bloc.me,
-                      radius: 36,
+                    Hero(
+                      tag: bloc.me.id,
+                      child: UserAvatar(
+                        user: bloc.me,
+                        radius: 36,
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 16),

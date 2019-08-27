@@ -28,5 +28,7 @@ class SettingsBloc extends Bloc {
 
   factory SettingsBloc() => _instance;
 
-  void useDarkTheme() {}
+  Future<void> setDisplayName(String name) async {
+    await me.setName(name);
+  }
 }

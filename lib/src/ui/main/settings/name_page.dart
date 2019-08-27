@@ -1,0 +1,122 @@
+// Copyright (C) 2019  Wilko Manger
+//
+// This file is part of Pattle.
+//
+// Pattle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Pattle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:pattle/src/ui/main/settings/settings_bloc.dart';
+import 'package:pattle/src/ui/resources/theme.dart';
+import 'package:pattle/src/ui/util/user.dart';
+
+class NamePageState extends State<NamePage> {
+  final bloc = SettingsBloc();
+
+  final textController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    final name = displayNameOf(bloc.me);
+
+    textController.value = TextEditingValue(
+      text: name,
+      selection: TextSelection(baseOffset: 0, extentOffset: name.length),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> setName() async {
+    await bloc.setDisplayName(textController.text);
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Name',
+          style: TextStyle(
+            color: redOnBackground(context),
+          ),
+        ),
+        brightness: Theme.of(context).brightness,
+        iconTheme: IconThemeData(
+          color: redOnBackground(context),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.check),
+            onPressed: setName,
+          )
+        ],
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
+      body: Column(
+        children: <Widget>[
+          TextField(
+            autofocus: true,
+            controller: textController,
+            autocorrect: false,
+            cursorColor: Colors.white,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+            textCapitalization: TextCapitalization.words,
+            decoration: InputDecoration(
+              filled: true,
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.zero,
+              ),
+              fillColor: LightColors.red,
+              focusColor: Colors.white,
+            ),
+            onSubmitted: (_) => setName(),
+          ),
+          Row(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Icon(
+                  Icons.info_outline,
+                  size: 28,
+                  color: Theme.of(context).textTheme.caption.color,
+                ),
+              ),
+              Text(
+                'This is how you will display to others',
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.caption.color,
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class NamePage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => NamePageState();
+}

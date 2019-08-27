@@ -33,6 +33,8 @@ import 'package:pattle/src/ui/start/phase/key/password_page.dart';
 import 'package:pattle/src/ui/start/start_page.dart';
 import 'package:pattle/src/ui/main/overview/create/group/create_group_members_page.dart';
 import 'ui/main/overview/create/group/create_group_details_page.dart';
+import 'ui/main/settings/name_page.dart';
+import 'ui/main/settings/profile_page.dart';
 import 'ui/main/settings/settings_page.dart';
 
 final routes = {
@@ -43,6 +45,14 @@ final routes = {
   Routes.settings: (Object params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.settings),
         builder: (context) => SettingsPage(),
+      ),
+  Routes.settingsProfile: (Object params) => MaterialPageRoute(
+        settings: RouteSettings(name: Routes.settingsProfile),
+        builder: (context) => ProfilePage(),
+      ),
+  Routes.settingsProfileName: (Object params) => MaterialPageRoute(
+        settings: RouteSettings(name: Routes.settingsProfileName),
+        builder: (context) => NamePage(),
       ),
   Routes.settingsAppearance: (Object params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.settingsAppearance),
@@ -91,6 +101,8 @@ class Routes {
 
   static const root = '/';
   static const settings = '/settings';
+  static const settingsProfile = '/settings/profile';
+  static const settingsProfileName = '/settings/profile/name';
   static const settingsAppearance = '/settings/appearance';
   static const chats = '/chats';
   static const chatsSettings = '/chats/settings';
