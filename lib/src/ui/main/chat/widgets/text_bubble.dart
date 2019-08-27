@@ -117,6 +117,7 @@ class TextBubbleState extends MessageBubbleState<TextBubble> {
       defaultTextStyle: textStyle(context),
       fillWidth: false,
       linkStyle: _linkStyle(context),
+      renderNewlines: true,
       onLinkTap: (url) async {
         if (await canLaunch(url)) {
           await launch(url);
