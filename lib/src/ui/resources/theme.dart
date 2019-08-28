@@ -27,6 +27,10 @@ ThemeData theme(Brightness brightness) {
     primaryColorBrightness: Brightness.dark,
     accentColorBrightness: Brightness.dark,
     cursorColor: LightColors.red,
+    toggleableActiveColor:
+        brightness == Brightness.dark ? LightColors.red[400] : null,
+    textSelectionHandleColor:
+        brightness == Brightness.dark ? LightColors.red[400] : null,
     buttonTheme: ButtonThemeData(
       buttonColor: LightColors.red[500],
       textTheme: ButtonTextTheme.primary,
