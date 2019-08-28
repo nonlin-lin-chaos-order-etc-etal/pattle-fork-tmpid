@@ -27,6 +27,7 @@ import 'package:pedantic/pedantic.dart';
 
 import '../../app_bloc.dart';
 import '../bloc.dart';
+import '../request_state.dart';
 
 typedef Request = void Function(Function addError);
 typedef Check = bool Function(Function addError);
@@ -213,35 +214,6 @@ class StartBloc extends Bloc {
     _loginSubj.close();
     _isUsernameAvailableSubj.close();
   }
-}
-
-class RequestState {
-  final int _value;
-
-  const RequestState(int value) : _value = value;
-
-  static const none = RequestState(0);
-  static const active = RequestState(1);
-  static const stillActive = RequestState(2);
-  static const success = RequestSuccessState();
-
-  @override
-  bool operator ==(other) {
-    if (other is RequestState) {
-      return other._value == this._value;
-    } else {
-      return false;
-    }
-  }
-
-  @override
-  int get hashCode => _value.hashCode;
-}
-
-class RequestSuccessState<T> extends RequestState {
-  final T data;
-
-  const RequestSuccessState({this.data}) : super(3);
 }
 
 class InvalidUserIdException implements Exception {}

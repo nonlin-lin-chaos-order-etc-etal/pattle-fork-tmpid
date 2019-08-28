@@ -15,30 +15,31 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:pattle/src/di.dart' as di;
-import 'package:rxdart/rxdart.dart';
+class RequestState {
+  final int _value;
 
-import '../../bloc.dart';
-import '../../request_state.dart';
+  const RequestState(int value) : _value = value;
 
-class SettingsBloc extends Bloc {
-  final me = di.getLocalUser();
+  static const none = RequestState(0);
+  static const active = RequestState(1);
+  static const stillActive = RequestState(2);
+  static const success = RequestSuccessState();
 
-  static SettingsBloc _instance = SettingsBloc._();
-
-  SettingsBloc._();
-
-  factory SettingsBloc() => _instance;
-
-  PublishSubject<RequestState> _displayNameSubj =
-      PublishSubject<RequestState>();
-  Stream<RequestState> get displayNameStream => _displayNameSubj.stream;
-
-  Future<void> setDisplayName(String name) async {
-    _displayNameSubj.add(RequestState.active);
-
-    await me.setName(name).catchError(_displayNameSubj.addError);
-
-    _displayNameSubj.add(RequestState.success);
+  @override
+  bool operator ==(other) {
+    if (other is RequestState) {
+      return other._value == this._value;
+    } else {
+      return false;
+    }
   }
+
+  @override
+  int get hashCode => _value.hashCode;
+}
+
+class RequestSuccessState<T> extends RequestState {
+  final T data;
+
+  const RequestSuccessState({this.data}) : super(3);
 }

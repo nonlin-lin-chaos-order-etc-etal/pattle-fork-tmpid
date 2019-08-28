@@ -26,6 +26,8 @@ import 'package:pattle/src/ui/start/start_bloc.dart';
 import 'package:pattle/src/ui/util/lower_case_text_formatter.dart';
 import 'package:chopper/chopper.dart';
 
+import '../../../request_state.dart';
+
 class UsernamePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => UsernamePageState();

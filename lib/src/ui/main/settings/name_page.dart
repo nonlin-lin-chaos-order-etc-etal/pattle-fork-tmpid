@@ -21,6 +21,8 @@ import 'package:pattle/src/ui/main/settings/settings_bloc.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
+import '../../request_state.dart';
+
 class NamePageState extends State<NamePage> {
   final bloc = SettingsBloc();
 
@@ -91,6 +93,23 @@ class NamePageState extends State<NamePage> {
               focusColor: Colors.white,
             ),
             onSubmitted: (_) => setName(),
+          ),
+          StreamBuilder<RequestState>(
+            stream: bloc.displayNameStream,
+            builder: (
+              BuildContext context,
+              AsyncSnapshot<RequestState> snapshot,
+            ) {
+              print(snapshot.connectionState);
+              if (snapshot.data == RequestState.active) {
+                return LinearProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(LightColors.red[300]),
+                  backgroundColor: LightColors.red[100],
+                );
+              } else {
+                return Container(height: 6);
+              }
+            },
           ),
           Row(
             children: <Widget>[

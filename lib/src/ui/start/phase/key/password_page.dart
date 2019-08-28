@@ -25,6 +25,8 @@ import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
 import 'package:pattle/src/ui/util/future_or_builder.dart';
 
+import '../../../request_state.dart';
+
 class PasswordPageState extends State<PasswordPage> {
   final StartBloc bloc = StartBloc();
 
