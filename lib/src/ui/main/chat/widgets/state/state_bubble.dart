@@ -89,7 +89,7 @@ abstract class StateBubbleState<T extends StateBubble> extends ItemState<T> {
                 color: themed(
                   context,
                   light: LightColors.red[100],
-                  dark: LightColors.red[700],
+                  dark: LightColors.red[900],
                 ),
                 borderRadius: StateBubble.borderRadius,
                 child: InkWell(
