@@ -86,7 +86,10 @@ class ChatPageState extends State<ChatPage> {
       }
     });
 
-    bloc.shouldRefresh.listen((shouldRefresh) => setState(() {}));
+    bloc.shouldRefresh.listen((shouldRefresh) {
+      setState(() {});
+      bloc.markAllAsRead();
+    });
   }
 
   @override
