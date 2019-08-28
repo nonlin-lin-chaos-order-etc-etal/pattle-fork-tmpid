@@ -116,6 +116,7 @@ class AdvancedPageState extends State<AdvancedPage> {
             RaisedButton(
               onPressed: () {
                 bloc.setHomeserverUrl(homeserverTextController.text);
+                bloc.homeserverSetViaAdvanced = true;
                 Navigator.pop(context);
               },
               child: Text(l(context).confirm.toUpperCase()),

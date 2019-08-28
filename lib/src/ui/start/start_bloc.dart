@@ -48,6 +48,7 @@ class StartBloc extends Bloc {
   final _homeserverChangedSubj = BehaviorSubject<bool>();
   Observable<bool> get homeserverChanged => _homeserverChangedSubj.stream;
 
+  bool homeserverSetViaAdvanced = false;
   Homeserver get homeserver => di.getHomeserver();
 
   Url _userIdDomain;
@@ -138,8 +139,10 @@ class StartBloc extends Bloc {
           String server = split[1];
 
           try {
-            final serverUrl = Url.parse("https://$server");
-            _setHomeserver(serverUrl);
+            if (!homeserverSetViaAdvanced) {
+              final serverUrl = Url.parse("https://$server");
+              _setHomeserver(serverUrl);
+            }
 
             // Add an '@' if the username does not have one, to allow
             // for this input: 'pit:pattle.im'
