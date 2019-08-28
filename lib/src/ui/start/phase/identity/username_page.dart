@@ -38,19 +38,12 @@ class UsernamePageState extends State<UsernamePage> {
 
   StreamSubscription subscription;
 
-  @override
-  void initState() {
-    super.initState();
-
-    usernameController.addListener(() {
-      final text = usernameController.text;
-
-      final split = text.split(':');
-      if (split.length == 2) {
-        String server = split[1];
-        bloc.setHomeserverUrl(server, allowMistake: true);
-      }
-    });
+  void onUsernameChanged(String username) {
+    final split = username.split(':');
+    if (split.length == 2) {
+      String server = split[1];
+      bloc.setHomeserverUrl(server, allowMistake: true);
+    }
 
     subscription = bloc.isUsernameAvailable.listen((state) {
       if (state == RequestState.success) {
@@ -64,6 +57,11 @@ class UsernamePageState extends State<UsernamePage> {
           _showCantCheckUsernameDialog(context);
         }
       });
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -141,6 +139,7 @@ class UsernamePageState extends State<UsernamePage> {
                           textCapitalization: TextCapitalization.none,
                           autocorrect: false,
                           onSubmitted: (_) => _next(context),
+                          onChanged: onUsernameChanged,
                           decoration: InputDecoration(
                             filled: true,
                             prefixText: '@',
