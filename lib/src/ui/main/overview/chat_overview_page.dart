@@ -140,7 +140,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
       avatar = CircleAvatar(
         foregroundColor: Colors.white,
         backgroundColor: chat.room.isDirect
-            ? colorOf(chat.room.directUser)
+            ? colorOf(context, chat.room.directUser)
             : LightColors.red[500],
         radius: 24,
         child: Icon(chat.room.isDirect ? Icons.person : Icons.group),

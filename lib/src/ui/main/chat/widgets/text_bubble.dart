@@ -190,7 +190,7 @@ class TextBubbleState extends MessageBubbleState<TextBubble> {
       child: CustomPaint(
         painter: needsBorder
             ? ReplyBorderPainter(
-                color: colorOf(widget.event.sender),
+                color: colorOf(context, widget.event.sender),
               )
             : null,
         child: Padding(

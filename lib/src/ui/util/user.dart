@@ -47,5 +47,5 @@ String displayNameOf(User user, [BuildContext context]) =>
 String displayNameOrId(UserId id, String name) =>
     _limited(name) ?? id.toString().split(':')[0];
 
-Color colorOf(User user) =>
-    LightColors.userColors[user.id.hashCode % LightColors.userColors.length];
+Color colorOf(BuildContext context, User user) =>
+    userColor(context, user.id.hashCode % LightColors.userColors.length);

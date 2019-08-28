@@ -90,7 +90,7 @@ abstract class MessageBubbleState<T extends MessageBubble>
 
   TextStyle senderTextStyle(BuildContext context, {Color color}) {
     if (color == null) {
-      color = colorOf(widget.event.sender);
+      color = colorOf(context, widget.event.sender);
     }
 
     return textStyle(context, color: color).copyWith(

@@ -53,6 +53,12 @@ Color redOnBackground(BuildContext context) {
   );
 }
 
+Color userColor(BuildContext context, int index) => themed(
+      context,
+      light: LightColors.userColors[index],
+      dark: DarkColors.userColors[index],
+    );
+
 class LightColors {
   LightColors._();
 
@@ -82,7 +88,19 @@ class LightColors {
     Color(0xFF076678),
     Color(0xFF8F3F71),
     Color(0xFF427B58),
-    Color(0xFF3C3836),
     Color(0xFFAF3A03),
+  ];
+}
+
+class DarkColors {
+  DarkColors._();
+
+  static const userColors = [
+    Color(0xFFE7DF35),
+    Color(0xFFECB258),
+    Color(0xFF25D1F2),
+    Color(0xFFC780AC),
+    Color(0xFF81BB98),
+    Color(0xFFFB783C),
   ];
 }
