@@ -12,7 +12,7 @@ dependencies:
 
   injector: ^1.0.8
 
-  matrix_sdk: ^0.24.2
+  matrix_sdk: ^0.24.3
   matrix_sdk_sqflite: ^0.18.0
 
   sqflite: ^1.1.6
