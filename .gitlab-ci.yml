@@ -36,7 +36,7 @@ analyze:
 
 build:
   stage: build
-  image: cirrusci/flutter:latest
+  image: cirrusci/flutter:beta
   <<: *only_tag
   tags:
     - docker
