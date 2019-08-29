@@ -17,6 +17,7 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:pattle/src/ui/main/settings/settings_bloc.dart';
+import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 
 import 'package:pattle/src/ui/main/settings/widgets/header.dart';
@@ -42,7 +43,7 @@ class AppearancePageState extends State<AppearancePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Appearance'),
+        title: Text(l(context).appearance),
       ),
       body: ListView(
         children: <Widget>[
@@ -53,7 +54,7 @@ class AppearancePageState extends State<AppearancePage> {
                   : Icons.brightness_3,
               color: redOnBackground(context),
             ),
-            title: Header('Brightness'),
+            title: Header(l(context).brightness),
           ),
           RadioListTile(
             groupValue: brightness,
@@ -61,7 +62,7 @@ class AppearancePageState extends State<AppearancePage> {
             onChanged: (brightness) {
               DynamicTheme.of(context).setBrightness(brightness);
             },
-            title: Text('Light'),
+            title: Text(l(context).light),
           ),
           RadioListTile(
             groupValue: brightness,
@@ -69,7 +70,7 @@ class AppearancePageState extends State<AppearancePage> {
             onChanged: (brightness) {
               DynamicTheme.of(context).setBrightness(brightness);
             },
-            title: Text('Dark'),
+            title: Text(l(context).dark),
           ),
           Divider(height: 1)
         ],

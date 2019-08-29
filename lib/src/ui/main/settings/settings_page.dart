@@ -17,6 +17,7 @@
 import 'package:flutter/material.dart';
 import 'package:pattle/src/ui/main/settings/settings_bloc.dart';
 import 'package:pattle/src/ui/main/widgets/user_avatar.dart';
+import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
@@ -41,7 +42,7 @@ class SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text(l(context).settings),
       ),
       body: ListView(
         children: <Widget>[
@@ -86,13 +87,13 @@ class SettingsPageState extends State<SettingsPage> {
           Divider(height: 1),
           ListTile(
             leading: Icon(Icons.vpn_key, color: LightColors.red),
-            title: Text('Account'),
-            subtitle: Text('Privacy, security, change password'),
+            title: Text(l(context).account),
+            subtitle: Text(l(context).accountDescription),
           ),
           ListTile(
             leading: Icon(Icons.landscape, color: LightColors.red),
-            title: Text('Appearance'),
-            subtitle: Text('Theme, font size'),
+            title: Text(l(context).appearance),
+            subtitle: Text(l(context).appearanceDescription),
             onTap: () =>
                 Navigator.of(context).pushNamed(Routes.settingsAppearance),
           )

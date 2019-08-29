@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:pattle/src/ui/main/settings/settings_bloc.dart';
 import 'package:pattle/src/ui/main/widgets/user_avatar.dart';
+import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
@@ -44,7 +45,7 @@ class ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text(l(context).profile),
       ),
       body: Center(
         child: Column(
@@ -80,7 +81,7 @@ class ProfilePageState extends State<ProfilePage> {
                       Icons.person,
                       color: redOnBackground(context),
                     ),
-                    title: Text('Name'),
+                    title: Text(l(context).name),
                     subtitle: Text(displayNameOf(bloc.me)),
                     trailing: Icon(Icons.edit),
                     onTap: () => Navigator.pushNamed(
@@ -93,7 +94,7 @@ class ProfilePageState extends State<ProfilePage> {
                       Icons.alternate_email,
                       color: redOnBackground(context),
                     ),
-                    title: Text('Username'),
+                    title: Text(l(context).username),
                     subtitle: Text(bloc.me.id.toString()),
                   )
                 ],

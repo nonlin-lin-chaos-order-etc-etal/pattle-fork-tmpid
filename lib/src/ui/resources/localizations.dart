@@ -25,6 +25,7 @@ class Strings {
 
   // Common //
   final appName = 'Pattle';
+  final name = 'Name';
   final advanced = 'Advanced';
   final username = 'Username';
   final password = 'Password';
@@ -43,6 +44,9 @@ class Strings {
   final newGroup = 'New group';
   final groupName = 'Group name';
   final participants = 'Participants';
+  final profile = 'Profile';
+  final settings = 'Settings';
+
   final description = 'Description';
   final noDescriptionSet = 'No description has been set';
 
@@ -92,6 +96,19 @@ class Strings {
   final wrongPasswordError = 'Wrong password. Please try again';
 
   String loggingInAs(String name) => 'Logging in as $name';
+
+  // SettingsPage //
+  final account = 'Account';
+  final accountDescription = 'Privacy, security, change password';
+
+  final appearance = 'Appearance';
+  final appearanceDescription = 'Theme, font size';
+  final brightness = 'Brightness';
+  final light = 'Light';
+  final dark = 'Dark';
+
+  final editNameDescription = 'This is not your username.'
+      ' This is the name that will be visible to others.';
 
   // Room creation event
   List<TextSpan> createdThisGroup(TextSpan name) =>

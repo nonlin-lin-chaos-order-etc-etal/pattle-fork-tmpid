@@ -18,6 +18,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pattle/src/ui/main/settings/settings_bloc.dart';
+import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/user.dart';
 
@@ -55,7 +56,7 @@ class NamePageState extends State<NamePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Name',
+          l(context).name,
           style: TextStyle(
             color: redOnBackground(context),
           ),
@@ -111,24 +112,29 @@ class NamePageState extends State<NamePage> {
               }
             },
           ),
-          Row(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(16),
-                child: Icon(
-                  Icons.info_outline,
-                  size: 28,
-                  color: Theme.of(context).textTheme.caption.color,
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(right: 16),
+                  child: Icon(
+                    Icons.info_outline,
+                    size: 28,
+                    color: Theme.of(context).textTheme.caption.color,
+                  ),
                 ),
-              ),
-              Text(
-                'This is how you will display to others',
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.caption.color,
-                ),
-              )
-            ],
-          )
+                Expanded(
+                  child: Text(
+                    l(context).editNameDescription,
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.caption.color,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );
