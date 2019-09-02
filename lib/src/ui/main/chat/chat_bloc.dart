@@ -105,7 +105,7 @@ class ChatBloc {
           chatItems.add(DateItem(previousEvent.time));
         }
 
-        chatItems.add(ChatEvent(event));
+        chatItems.add(ChatEvent(room, event));
         previousEvent = event;
       }
 

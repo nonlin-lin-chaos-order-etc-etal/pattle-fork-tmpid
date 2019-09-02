@@ -77,7 +77,7 @@ class TextBubbleState extends MessageBubbleState<TextBubble> {
   Widget _buildRepliedTo(BuildContext context) {
     if (widget.event.content.inReplyToId != null) {
       final repliedTo =
-          widget.event.room.timeline[widget.event.content.inReplyToId];
+          widget.item.room.timeline[widget.event.content.inReplyToId];
       return FutureOrBuilder<RoomEvent>(
         futureOr: repliedTo,
         builder: (BuildContext context, AsyncSnapshot<RoomEvent> snapshot) {
@@ -93,6 +93,7 @@ class TextBubbleState extends MessageBubbleState<TextBubble> {
                     // is not a replied-to message (to prevent very long
                     // reply chains)
                     child: Bubble.asReply(
+                      room: widget.item.room,
                       reply: widget.event,
                       replyTo: repliedTo,
                       isMine: repliedTo.sender == widget.me,

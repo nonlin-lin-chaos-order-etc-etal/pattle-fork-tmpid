@@ -50,7 +50,7 @@ class CreationBubbleState extends StateBubbleState<CreationBubble> {
   @protected
   Widget buildContent(BuildContext context) {
     return FutureOrBuilder<User>(
-      futureOr: widget.event.room.creator,
+      futureOr: widget.item.room.creator,
       builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
         return super.buildContent(context);
       },
@@ -62,7 +62,7 @@ class CreationBubbleState extends StateBubbleState<CreationBubble> {
   List<TextSpan> buildContentSpans(BuildContext context) =>
       l(context).createdThisGroup(
         TextSpan(
-          text: displayNameOf(widget.event.room.creator),
+          text: displayNameOf(widget.item.room.creator),
           style: defaultEmphasisTextStyle,
         ),
       );

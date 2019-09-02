@@ -33,22 +33,20 @@ import 'unsupported_subtitle.dart';
 abstract class Subtitle extends StatelessWidget {
   static const iconSize = 20.0;
 
+  final Room room;
   final RoomEvent event;
+
   @protected
   final String senderName;
 
   final bool isMine;
 
-  final Room room;
-
-  Subtitle(this.event)
+  Subtitle(this.room, this.event)
       : isMine = event?.sender == di.getLocalUser(),
-        room = event?.room,
-        senderName = event != null &&
-                event.sender != di.getLocalUser() &&
-                !event.room.isDirect
-            ? '${displayNameOf(event.sender)}: '
-            : '';
+        senderName =
+            event != null && event.sender != di.getLocalUser() && !room.isDirect
+                ? '${displayNameOf(event.sender)}: '
+                : '';
 
   factory Subtitle.forChat(ChatOverview chat) {
     // TODO: typingUsers should not contain nulls
@@ -58,22 +56,22 @@ abstract class Subtitle extends StatelessWidget {
     } else {
       final event = chat.latestEvent;
       if (event == null) {
-        return UnsupportedSubtitle(event);
+        return UnsupportedSubtitle(chat.room, event);
       }
 
       if (event is TextMessageEvent) {
-        return TextSubtitle(event);
+        return TextSubtitle(chat.room, event);
       } else if (event is ImageMessageEvent) {
-        return ImageSubtitle(event);
+        return ImageSubtitle(chat.room, event);
       } else if (event is MemberChangeEvent) {
-        return MemberSubtitle(event);
+        return MemberSubtitle(chat.room, event);
       } else if (event is RedactedEvent) {
-        return RedactedSubtitle(event);
+        return RedactedSubtitle(chat.room, event);
       } else if (event is TopicChangeEvent) {
-        return TopicSubtitle(event);
+        return TopicSubtitle(chat.room, event);
       }
 
-      return UnsupportedSubtitle(event);
+      return UnsupportedSubtitle(chat.room, event);
     }
   }
 

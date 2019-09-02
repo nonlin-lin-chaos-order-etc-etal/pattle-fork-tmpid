@@ -26,7 +26,7 @@ class TypingSubtitle extends Subtitle {
   @override
   final Room room;
 
-  TypingSubtitle(this.room) : super(null);
+  TypingSubtitle(this.room) : super(room, null);
 
   @override
   Widget build(BuildContext context) {

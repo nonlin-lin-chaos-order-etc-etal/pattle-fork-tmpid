@@ -113,11 +113,12 @@ abstract class Bubble extends Item {
   }
 
   factory Bubble.asReply({
+    @required Room room,
     @required RoomEvent reply,
     @required RoomEvent replyTo,
     @required bool isMine,
   }) {
-    final item = ChatEvent(replyTo);
+    final item = ChatEvent(room, replyTo);
     if (replyTo is TextMessageEvent) {
       return TextBubble(
         item: item,

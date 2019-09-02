@@ -21,7 +21,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'subtitle.dart';
 
 class UnsupportedSubtitle extends Subtitle {
-  UnsupportedSubtitle(RoomEvent event) : super(event);
+  UnsupportedSubtitle(Room room, RoomEvent event) : super(room, event);
 
   @override
   Widget build(BuildContext context) =>

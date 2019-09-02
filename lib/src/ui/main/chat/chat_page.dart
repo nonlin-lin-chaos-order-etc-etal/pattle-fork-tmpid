@@ -272,6 +272,7 @@ class ChatPageState extends State<ChatPage> {
                   children: List.generate(
                     20,
                     (i) => LoadingBubble(
+                      room: room,
                       isMine: i % 2 == 0,
                     ),
                   ),

@@ -58,7 +58,11 @@ class ImageBubble extends MessageBubble {
 
 class ImageBubbleState extends MessageBubbleState<ImageBubble> {
   void _onTap(BuildContext context) {
-    Navigator.pushNamed(context, Routes.image, arguments: widget.event);
+    Navigator.pushNamed(
+      context,
+      Routes.image,
+      arguments: widget.item.as<ImageMessageEvent>(),
+    );
   }
 
   Widget buildContent(BuildContext context) =>

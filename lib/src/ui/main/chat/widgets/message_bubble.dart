@@ -120,7 +120,7 @@ abstract class MessageBubbleState<T extends MessageBubble>
   @protected
   Widget buildSender(BuildContext context, {Color color}) {
     if ((isStartOfGroup || (widget.isRepliedTo && !widget.isMine)) &&
-        !widget.event.room.isDirect) {
+        !widget.item.room.isDirect) {
       return Text(
         displayNameOf(widget.event.sender, context),
         style: senderTextStyle(context, color: color),

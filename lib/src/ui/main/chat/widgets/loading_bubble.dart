@@ -42,9 +42,10 @@ class LoadingBubble extends MessageBubble {
   final TextMessageEvent event = _mockEvent;
 
   LoadingBubble({
+    @required Room room,
     @required bool isMine,
   }) : super(
-          item: ChatEvent(_mockEvent),
+          item: ChatEvent(room, _mockEvent),
           isMine: isMine,
         );
 

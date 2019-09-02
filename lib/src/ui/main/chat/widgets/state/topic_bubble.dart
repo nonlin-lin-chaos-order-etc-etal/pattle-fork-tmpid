@@ -46,7 +46,7 @@ class TopicBubble extends StateBubble {
   get onTap => (context) {
         return Navigator.of(context).pushNamed(
           Routes.chatsSettings,
-          arguments: event.room,
+          arguments: item.room,
         );
       };
 

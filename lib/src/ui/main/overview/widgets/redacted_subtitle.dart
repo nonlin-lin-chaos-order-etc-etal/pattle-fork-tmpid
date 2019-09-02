@@ -25,7 +25,7 @@ class RedactedSubtitle extends Subtitle {
   @override
   final RedactedEvent event;
 
-  RedactedSubtitle(this.event) : super(event);
+  RedactedSubtitle(Room room, this.event) : super(room, event);
 
   @override
   Widget build(BuildContext context) => Row(

@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/chat/image/image_bloc.dart';
+import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
 import 'package:pattle/src/ui/util/user.dart';
 import 'package:pattle/src/ui/util/matrix_image.dart';
@@ -34,9 +35,10 @@ class ImagePageState extends State<ImagePage> {
   var _messageSender;
   var _date;
 
-  ImagePageState(this.message) {
+  ImagePageState(ChatEvent<ImageMessageEvent> chatEvent)
+      : message = chatEvent.event {
     bloc = ImageBloc(message);
-    bloc.room = message.room;
+    bloc.room = chatEvent.room;
   }
 
   @override
@@ -135,10 +137,10 @@ class ImagePageState extends State<ImagePage> {
 }
 
 class ImagePage extends StatefulWidget {
-  final ImageMessageEvent message;
+  final ChatEvent<ImageMessageEvent> chatEvent;
 
-  ImagePage(this.message);
+  ImagePage(this.chatEvent);
 
   @override
-  State<StatefulWidget> createState() => ImagePageState(message);
+  State<StatefulWidget> createState() => ImagePageState(chatEvent);
 }

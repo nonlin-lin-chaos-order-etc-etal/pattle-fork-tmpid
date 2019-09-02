@@ -25,7 +25,7 @@ class MemberSubtitle extends Subtitle {
   @override
   final MemberChangeEvent event;
 
-  MemberSubtitle(this.event) : super(event);
+  MemberSubtitle(Room room, this.event) : super(room, event);
 
   @override
   Widget build(BuildContext context) {

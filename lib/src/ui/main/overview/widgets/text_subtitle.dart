@@ -25,7 +25,7 @@ class TextSubtitle extends Subtitle {
   @override
   final TextMessageEvent event;
 
-  TextSubtitle(this.event) : super(event);
+  TextSubtitle(Room room, this.event) : super(room, event);
 
   @override
   Widget build(BuildContext context) {

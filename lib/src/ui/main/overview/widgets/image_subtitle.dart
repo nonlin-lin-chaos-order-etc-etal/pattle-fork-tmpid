@@ -25,7 +25,7 @@ class ImageSubtitle extends Subtitle {
   @override
   final ImageMessageEvent event;
 
-  ImageSubtitle(this.event) : super(event);
+  ImageSubtitle(Room room, this.event) : super(room, event);
 
   @override
   Widget build(BuildContext context) => Row(

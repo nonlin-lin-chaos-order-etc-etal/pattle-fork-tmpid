@@ -26,7 +26,7 @@ class TopicSubtitle extends Subtitle {
   @override
   final TopicChangeEvent event;
 
-  TopicSubtitle(this.event) : super(event);
+  TopicSubtitle(Room room, this.event) : super(room, event);
 
   @override
   Widget build(BuildContext context) {
