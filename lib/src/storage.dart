@@ -26,7 +26,7 @@ class Storage {
     return Storage(await SharedPreferences.getInstance());
   }
 
-  dynamic operator [](String key) async => prefs.get(key);
+  dynamic operator [](String key) => prefs.get(key);
 
   void operator []=(String key, dynamic value) {
     if (value is String) {

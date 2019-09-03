@@ -76,7 +76,7 @@ class AppBloc {
   }
 
   Future<void> notifyLogin() async {
-    if (await getMayReportCrashes() && sentry == null) {
+    if (getMayReportCrashes() && sentry == null) {
       sentry = await Sentry.create();
     }
 
@@ -91,16 +91,14 @@ class AppBloc {
   String get build => DotEnv().env['BUILD_TYPE'];
 
   bool _mayReportCrashes;
-  FutureOr<bool> getMayReportCrashes({bool lookInStorage = true}) {
+  bool getMayReportCrashes({bool lookInStorage = true}) {
     if (_mayReportCrashes == null && !lookInStorage) {
       setMayReportCrashes(build != 'fdroid');
       return _mayReportCrashes;
     } else if (_mayReportCrashes != null) {
       return _mayReportCrashes;
     } else {
-      return storage[_mayReportCrashesStorageKey]
-          .then((v) => v as bool)
-          .then((v) => _mayReportCrashes = v);
+      return storage[_mayReportCrashesStorageKey] as bool;
     }
   }
 
