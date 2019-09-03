@@ -18,13 +18,9 @@
 import 'package:flutter/material.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/overview/models/chat_overview.dart';
+import 'package:pattle/src/ui/main/overview/widgets/chat_avatar.dart';
 import 'package:pattle/src/ui/main/widgets/chat_name.dart';
-import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/date_format.dart';
-import 'package:pattle/src/ui/util/matrix_image.dart';
-import 'package:pattle/src/ui/util/room.dart';
-import 'package:pattle/src/ui/util/user.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 import 'subtitle.dart';
 
@@ -85,35 +81,6 @@ class ChatOverviewListState extends State<ChatOverviewList> {
   Widget _buildChatOverview(ChatOverview chat) {
     final time = formatAsListItem(context, chat.latestEvent?.time);
 
-    // Avatar
-    final avatarUrl = avatarUrlOf(chat.room);
-    var avatar;
-    if (avatarUrl != null) {
-      avatar = Hero(
-        tag: chat.room.id,
-        child: Container(
-          width: 48,
-          height: 48,
-          child: ClipOval(
-            child: FadeInImage(
-              fit: BoxFit.cover,
-              placeholder: MemoryImage(kTransparentImage),
-              image: MatrixImage(avatarUrl, width: 64, height: 64),
-            ),
-          ),
-        ),
-      );
-    } else {
-      avatar = CircleAvatar(
-        foregroundColor: Colors.white,
-        backgroundColor: chat.room.isDirect
-            ? colorOf(context, chat.room.directUser)
-            : LightColors.red[500],
-        radius: 24,
-        child: Icon(chat.room.isDirect ? Icons.person : Icons.group),
-      );
-    }
-
     return ListTile(
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -137,7 +104,7 @@ class ChatOverviewListState extends State<ChatOverviewList> {
       onTap: () {
         Navigator.pushNamed(context, Routes.chats, arguments: chat.room);
       },
-      leading: avatar,
+      leading: ChatAvatar(room: chat.room),
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       subtitle: Subtitle.forChat(chat),
     );
