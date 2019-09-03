@@ -21,6 +21,7 @@ import 'package:meta/meta.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/sentry.dart';
+import 'package:pattle/src/ui/main/sync_bloc.dart';
 import 'package:respect_24_hour/respect_24_hour.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
@@ -69,8 +70,8 @@ class AppBloc {
     final loggedIn = localUser != null;
     _loggedInSubj.add(loggedIn);
 
-    if (loggedIn && await getMayReportCrashes()) {
-      sentry = await Sentry.create();
+    if (loggedIn) {
+      await notifyLogin();
     }
   }
 
@@ -78,6 +79,8 @@ class AppBloc {
     if (await getMayReportCrashes() && sentry == null) {
       sentry = await Sentry.create();
     }
+
+    await syncBloc.start();
   }
 
   void wrap(Function run) => runZoned<Future<void>>(

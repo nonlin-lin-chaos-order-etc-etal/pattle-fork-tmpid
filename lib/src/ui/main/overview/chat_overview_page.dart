@@ -40,7 +40,7 @@ class ChatOverviewPageState extends State<ChatOverviewPage> {
   void initState() {
     super.initState();
 
-    bloc.startSync();
+    bloc.loadAndListen();
   }
 
   @override

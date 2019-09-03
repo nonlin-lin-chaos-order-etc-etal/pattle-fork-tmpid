@@ -110,11 +110,8 @@ class ChatOverviewBloc {
     _chatsSubj.add(List.of(chats.reversed));
   }
 
-  Future<void> startSync() async {
-    // Load from store before sync
+  Future<void> loadAndListen() async {
     await loadChats();
-
-    await syncBloc.start();
 
     syncBloc.stream.listen((state) async => await loadChats());
   }
