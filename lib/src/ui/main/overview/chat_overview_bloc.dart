@@ -25,9 +25,26 @@ import 'package:pattle/src/ui/main/sync_bloc.dart';
 final bloc = ChatOverviewBloc();
 
 class ChatOverviewBloc {
-  PublishSubject<List<ChatOverview>> _chatsSubj =
-      PublishSubject<List<ChatOverview>>();
-  Observable<List<ChatOverview>> get chats => _chatsSubj.stream;
+  final _chatsSubj = PublishSubject<List<ChatOverview>>();
+  Observable<List<ChatOverview>> get personalChats =>
+      _chatsSubj.stream.flatMapIterable(
+        (list) => Stream.value([
+          list
+              .where((chat) =>
+                  chat.room.aliases == null || chat.room.aliases.isEmpty)
+              .toList()
+        ]),
+      );
+
+  Observable<List<ChatOverview>> get publicChats =>
+      _chatsSubj.stream.flatMapIterable(
+        (list) => Stream.value([
+          list
+              .where((chat) =>
+                  chat.room.aliases != null && chat.room.aliases.isNotEmpty)
+              .toList(),
+        ]),
+      );
 
   final LocalUser _user = di.getLocalUser();
 

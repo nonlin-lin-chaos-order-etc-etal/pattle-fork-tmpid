@@ -46,6 +46,9 @@ class Strings {
   final participants = 'Participants';
   final profile = 'Profile';
   final settings = 'Settings';
+  final personal = 'Personal';
+  final public = 'Public';
+  final calls = 'Calls';
 
   final description = 'Description';
   final noDescriptionSet = 'No description has been set';
