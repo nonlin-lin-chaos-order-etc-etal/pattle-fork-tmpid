@@ -41,6 +41,7 @@ build:
   tags:
     - docker
   script:
+    - flutter upgrade
     - 'echo "version: ${CI_COMMIT_REF_NAME:1}+$((123 + $CI_PIPELINE_IID))" >> pubspec.yaml'
     - 'echo "SENTRY_DSN=$SENTRY_DSN" > .env'
     - 'echo "BUILD_TYPE=independent" >> .env'
