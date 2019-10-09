@@ -70,7 +70,7 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.3"
   csslib:
     dependency: transitive
     description:
@@ -91,7 +91,7 @@ packages:
       name: device_info
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0+2"
+    version: "0.4.0+3"
   dynamic_theme:
     dependency: "direct main"
     description:
@@ -117,7 +117,7 @@ packages:
       name: flutter_dotenv
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.3"
   flutter_html:
     dependency: "direct main"
     description:
@@ -133,7 +133,7 @@ packages:
       name: flutter_launcher_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.2+1"
+    version: "0.7.3"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -262,14 +262,14 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.2"
+    version: "1.6.4"
   path_provider:
     dependency: transitive
     description:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "1.3.0"
   pedantic:
     dependency: transitive
     description:
@@ -291,13 +291,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.2"
+  platform:
+    dependency: transitive
+    description:
+      name: platform
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.1"
   quiver:
     dependency: transitive
     description:
       name: quiver
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.3"
+    version: "2.0.5"
   respect_24_hour:
     dependency: "direct main"
     description:
@@ -311,13 +318,13 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.22.2"
+    version: "0.22.3"
   sentry:
     dependency: "direct main"
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "754c294bca20047724bcca3512366fe5158e4fea"
+      resolved-ref: a0df7b60da60809993f11471bd39f9d72a461e97
       url: "https://git.pattle.im/forks/sentry.git"
     source: git
     version: "2.2.0"
@@ -346,7 +353,7 @@ packages:
       name: sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.6+4"
+    version: "1.1.7+1"
   stack_trace:
     dependency: transitive
     description:
@@ -367,7 +374,7 @@ packages:
       name: string_scanner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.5"
   synchronized:
     dependency: transitive
     description:
@@ -416,7 +423,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.1.2"
+    version: "5.1.4"
   usage:
     dependency: transitive
     description:
@@ -465,7 +472,7 @@ packages:
       name: yaml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.16"
+    version: "2.2.0"
 sdks:
-  dart: ">=2.4.0 <3.0.0"
-  flutter: ">=1.5.9-pre.94 <2.0.0"
+  dart: ">=2.5.0 <3.0.0"
+  flutter: ">=1.9.1 <2.0.0"

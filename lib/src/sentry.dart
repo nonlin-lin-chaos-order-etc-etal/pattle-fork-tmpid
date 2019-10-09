@@ -120,7 +120,7 @@ class Sentry {
     final deviceInfo = DeviceInfoPlugin();
 
     User user;
-    Os os;
+    OperatingSystem os;
     Device device;
 
     if (Platform.isAndroid) {
@@ -128,7 +128,7 @@ class Sentry {
 
       user = User(id: info.androidId);
 
-      os = Os(
+      os = OperatingSystem(
         name: 'Android',
         version: info.version.release,
         build: info.version.sdkInt.toString(),
@@ -145,7 +145,7 @@ class Sentry {
 
       user = User(id: info.identifierForVendor);
 
-      os = Os(
+      os = OperatingSystem(
         name: 'iOS',
         version: info.systemVersion,
       );
@@ -165,7 +165,7 @@ class Sentry {
       environment: 'production',
       contexts: Contexts(
         device: device,
-        os: os,
+        operatingSystem: os,
         app: App(
           build: packageInfo.buildNumber,
           buildType: DotEnv().env['BUILD_TYPE'],
