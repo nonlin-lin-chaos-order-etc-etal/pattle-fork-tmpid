@@ -63,8 +63,8 @@ class ChatPageState extends State<ChatPage> {
   @override
   void dispose() {
     super.dispose();
+    bloc.dispose();
     readTimer.cancel();
-    bloc.cleanUp();
     textController.dispose();
   }
 

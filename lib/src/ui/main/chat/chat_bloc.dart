@@ -21,13 +21,14 @@ import 'dart:io';
 import 'package:image/image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:mime/mime.dart';
+import 'package:pattle/src/ui/bloc.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 import 'package:pattle/src/ui/main/sync_bloc.dart';
 import 'package:pattle/src/ui/util/room.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
 
-class ChatBloc {
+class ChatBloc extends Bloc {
   final Room room;
 
   StreamSubscription syncSub;
@@ -228,7 +229,8 @@ class ChatBloc {
     }
   }
 
-  void cleanUp() {
+  @override
+  void dispose() {
     syncSub.cancel();
   }
 }
