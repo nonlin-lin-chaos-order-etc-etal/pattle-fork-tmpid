@@ -37,4 +37,8 @@ class SyncBloc {
       unawaited(_syncSubj.addStream(_user.sync));
     }
   }
+
+  Future<void> stop() async {
+    _user.stopSync();
+  }
 }
