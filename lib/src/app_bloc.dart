@@ -17,14 +17,21 @@
 
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/sentry.dart';
 import 'package:pattle/src/ui/main/sync_bloc.dart';
+import 'package:pattle/src/ui/util/matrix_cache_manager.dart';
+import 'package:pattle/src/ui/util/room.dart';
+import 'package:pattle/src/ui/util/user.dart';
 import 'package:respect_24_hour/respect_24_hour.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
+import 'package:url/url.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'storage.dart';
 
@@ -35,7 +42,13 @@ class AppBloc {
 
   static AppBloc _instance;
 
-  AppBloc._({@required this.storage});
+  FirebaseMessaging _firebase;
+
+  AppBloc._(
+      {@required this.storage,
+      @required FirebaseMessaging firebase,
+      @required FlutterLocalNotificationsPlugin notifications})
+      : _firebase = firebase;
 
   factory AppBloc() => _instance;
 
@@ -45,11 +58,94 @@ class AppBloc {
     final use24Hour = await Respect24Hour.get24HourFormat;
     di.registerUse24HourFormat(use24Hour);
 
+    final notifications = FlutterLocalNotificationsPlugin();
+
+    await notifications.initialize(
+      InitializationSettings(
+        AndroidInitializationSettings('ic_launcher_foreground'),
+        IOSInitializationSettings(),
+      ),
+    );
+
+    final channelId = 'pattle';
+    final channelTitle = 'Pattle';
+    final channelDescription = 'Receive message from Pattle';
+
     _instance = AppBloc._(
       storage: await Storage.open(),
+      firebase: FirebaseMessaging()
+        ..configure(
+          onMessage: (Map<String, dynamic> message) async {
+            final roomId = RoomId(message['data']['room_id']);
+            final eventId = EventId(message['data']['event_id']);
+
+            final user = di.getLocalUser();
+            final room = await user.rooms[roomId];
+            final event = await room.timeline[eventId];
+
+            final senderName = displayNameOf(event.sender);
+
+            final senderPerson = Person(
+              bot: false,
+              name: senderName,
+              icon: await cacheManager.getPathOf(
+                event.sender.avatarUrl.toString(),
+              ),
+              iconSource: IconSource.FilePath,
+            );
+
+            if (event is TextMessageEvent) {
+              final body = event.content.body;
+
+              await notifications.show(
+                eventId.hashCode,
+                nameOf(room),
+                body,
+                NotificationDetails(
+                  AndroidNotificationDetails(
+                    channelId,
+                    channelTitle,
+                    channelDescription,
+                    importance: Importance.Max,
+                    priority: Priority.Max,
+                    style: AndroidNotificationStyle.Messaging,
+                    styleInformation: MessagingStyleInformation(
+                      senderPerson,
+                      conversationTitle: nameOf(room),
+                      groupConversation: false,
+                      messages: [
+                        Message(
+                          body,
+                          event.time,
+                          senderPerson,
+                        ),
+                      ],
+                    ),
+                  ),
+                  IOSNotificationDetails(),
+                ),
+              );
+            }
+          },
+        ),
+      notifications: notifications,
     );
 
     return _instance;
+  }
+
+  Future<void> setPusher() async {
+    final user = di.getLocalUser();
+
+    await user.pushers.set(
+      HttpPusher(
+        appId: 'im.pattle.app',
+        appName: 'Pattle',
+        deviceName: user.currentDevice.name,
+        key: await _firebase.getToken(),
+        url: Url.parse(DotEnv().env['PUSH_URL']),
+      ),
+    );
   }
 
   final _loggedInSubj = BehaviorSubject<bool>();

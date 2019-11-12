@@ -193,6 +193,7 @@ class StartBloc extends Bloc {
                 ))
             .then((user) {
           di.registerLocalUser(user);
+          AppBloc().setPusher();
           AppBloc().notifyLogin();
           _loginSubj.add(RequestState.success);
         }).catchError((error) => _loginSubj.addError(error));
