@@ -19,13 +19,15 @@ dependencies:
 
   rxdart: ^0.22.0
 
+  async: ^2.3.0
+
   # TODO: Use official package when PR is merged
   sentry:
     git: https://git.pattle.im/forks/sentry.git
 
   flutter_cache_manager: ^1.1.0
 
-  device_info: ^0.4.0+2
+  device_info: ^0.4.1+1
   package_info: ^0.4.0+5
 
   # TODO (maybe): Use official package when PR is merged
@@ -57,6 +59,11 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+
+  firebase_core: ^0.4.0+9
+  firebase_messaging: ^5.1.8
+
+  flutter_local_notifications: ^0.8.4
 
 dev_dependencies:
   flutter_launcher_icons: ^0.7.2+1
