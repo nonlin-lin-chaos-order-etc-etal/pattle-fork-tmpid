@@ -86,9 +86,8 @@ class StartBloc extends Bloc {
     }
   }
 
-  final _isUsernameAvailableSubj = BehaviorSubject<RequestState>();
-  Observable<RequestState> get isUsernameAvailable =>
-      _isUsernameAvailableSubj.stream;
+  final _isUsernameValidSubj = BehaviorSubject<bool>();
+  Observable<bool> get isUsernameValid => _isUsernameValidSubj.stream;
 
   static bool _defaultValidate(Function addError) => true;
   Future<void> _do({
@@ -119,71 +118,64 @@ class StartBloc extends Bloc {
     request(addError);
   }
 
-  Future<void> checkUsernameAvailability(String username) async {
-    await _do(
-      subject: _isUsernameAvailableSubj,
-      validate: (addError) {
-        if (username == null) {
-          return false;
+  Future<void> checkUsernameValidity(String username) async {
+    if (username == null) {
+      _isUsernameValidSubj.addError(InvalidUsernameException());
+      return;
+    }
+
+    // Check if there is a ':' in the username,
+    // if so, treat it as a full Matrix ID (with or without '@').
+    // Otherwise use the local part (with or without '@').
+    // So, accept all of these formats:
+    // @joe:matrix.org
+    // joe:matrix.org
+    // joe
+    // @joe
+    if (username.contains(':')) {
+      final split = username.split(':');
+      String server = split[1];
+
+      try {
+        if (!homeserverSetViaAdvanced) {
+          final serverUrl = Url.parse("https://$server");
+          await _setHomeserver(serverUrl);
         }
 
-        // Check if there is a ':' in the username,
-        // if so, treat it as a full Matrix ID (with or without '@').
-        // Otherwise use the local part (with or without '@').
-        // So, accept all of these formats:
-        // @joe:matrix.org
-        // joe:matrix.org
-        // joe
-        // @joe
-        if (username.contains(':')) {
-          final split = username.split(':');
-          String server = split[1];
-
-          try {
-            if (!homeserverSetViaAdvanced) {
-              final serverUrl = Url.parse("https://$server");
-              _setHomeserver(serverUrl);
-            }
-
-            // Add an '@' if the username does not have one, to allow
-            // for this input: 'pit:pattle.im'
-            if (!username.startsWith('@')) {
-              username = "@$username";
-            }
-
-            if (!UserId.isValidFullyQualified(username)) {
-              addError(InvalidUserIdException());
-              return false;
-            }
-
-            _username = UserId(username).username;
-          } on FormatException {
-            addError(InvalidHostnameException());
-            return false;
-          }
-
-          return true;
-        } else {
-          if (username.startsWith('@')) {
-            username = username.substring(1).toLowerCase();
-          }
-
-          if (!Username.isValid(username)) {
-            addError(InvalidUsernameException());
-            return false;
-          }
-
-          _username = Username(username);
-
-          return true;
+        // Add an '@' if the username does not have one, to allow
+        // for this input: 'pit:pattle.im'
+        if (!username.startsWith('@')) {
+          username = "@$username";
         }
-      },
-      request: (addError) {
-        homeserver.isUsernameAvailable(_username).then((available) {
-          _isUsernameAvailableSubj.add(RequestSuccessState(data: available));
-        }).catchError((error) => _isUsernameAvailableSubj.addError(error));
-      },
-    );
+
+        if (!UserId.isValidFullyQualified(username)) {
+          _isUsernameValidSubj.addError(InvalidUserIdException());
+          return;
+        }
+
+        _username = UserId(username).username;
+      } on FormatException {
+        _isUsernameValidSubj.addError(InvalidHostnameException());
+        return;
+      }
+
+      _isUsernameValidSubj.add(true);
+      return;
+    } else {
+      if (username.startsWith('@')) {
+        username = username.substring(1).toLowerCase();
+      }
+
+      if (!Username.isValid(username)) {
+        _isUsernameValidSubj.addError(InvalidUsernameException());
+        return;
+      }
+
+      _username = Username(username);
+
+      _isUsernameValidSubj.add(true);
+      return;
+    }
   }
 
   final _loginSubj = BehaviorSubject<RequestState>();
@@ -212,7 +204,7 @@ class StartBloc extends Bloc {
   void dispose() {
     _homeserverChangedSubj.close();
     _loginSubj.close();
-    _isUsernameAvailableSubj.close();
+    _isUsernameValidSubj.close();
   }
 }
 

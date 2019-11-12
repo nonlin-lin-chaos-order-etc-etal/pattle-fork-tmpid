@@ -14,7 +14,6 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -24,9 +23,6 @@ import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
 import 'package:pattle/src/ui/util/lower_case_text_formatter.dart';
-import 'package:chopper/chopper.dart';
-
-import '../../../request_state.dart';
 
 class UsernamePage extends StatefulWidget {
   @override
@@ -38,8 +34,6 @@ class UsernamePageState extends State<UsernamePage> {
 
   final usernameController = TextEditingController();
 
-  StreamSubscription subscription;
-
   void onUsernameChanged(String username) {
     final split = username.split(':');
     if (split.length == 2) {
@@ -47,18 +41,7 @@ class UsernamePageState extends State<UsernamePage> {
       bloc.setHomeserverUrl(server, allowMistake: true);
     }
 
-    subscription = bloc.isUsernameAvailable.listen((state) {
-      if (state == RequestState.success) {
-        Navigator.pushNamed(context, Routes.startPassword);
-      }
-    })
-      ..onError((error) {
-        // Show a dialog with a choice between login and register if this
-        // homeserver does not support checking for a username.
-        if (error is Response<dynamic> && error.statusCode == 405) {
-          _showCantCheckUsernameDialog(context);
-        }
-      });
+    bloc.checkUsernameValidity(username);
   }
 
   @override
@@ -69,11 +52,10 @@ class UsernamePageState extends State<UsernamePage> {
   @override
   void dispose() {
     super.dispose();
-    subscription.cancel();
   }
 
   void _next(BuildContext context) {
-    bloc.checkUsernameAvailability(usernameController.text);
+    Navigator.pushNamed(context, Routes.startPassword);
   }
 
   @override
@@ -110,12 +92,11 @@ class UsernamePageState extends State<UsernamePage> {
                       style: TextStyle(fontSize: 24),
                     ),
                     SizedBox(height: 16),
-                    StreamBuilder<RequestState>(
-                      initialData: RequestState.none,
-                      stream: bloc.isUsernameAvailable,
+                    StreamBuilder<bool>(
+                      stream: bloc.isUsernameValid,
                       builder: (
                         BuildContext context,
-                        AsyncSnapshot<RequestState> snapshot,
+                        AsyncSnapshot<bool> snapshot,
                       ) {
                         String errorText;
 
@@ -153,39 +134,19 @@ class UsernamePageState extends State<UsernamePage> {
                       },
                     ),
                     SizedBox(height: 16),
-                    StreamBuilder<RequestState>(
-                      stream: bloc.isUsernameAvailable,
+                    StreamBuilder<bool>(
+                      stream: bloc.isUsernameValid,
                       builder: (
                         BuildContext context,
-                        AsyncSnapshot<RequestState> snapshot,
+                        AsyncSnapshot<bool> snapshot,
                       ) {
-                        final state = snapshot.data;
-                        final enabled = state != RequestState.active &&
-                            state != RequestState.stillActive;
-                        var onPressed;
-                        Widget child = Text(l(context).next.toUpperCase());
-
-                        if (enabled) {
-                          onPressed = () {
-                            _next(context);
-                          };
-                        } else {
-                          onPressed = null;
-                        }
-
-                        if (state == RequestState.stillActive) {
-                          child = SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation(Colors.grey),
-                            ),
-                          );
-                        }
-
                         return RaisedButton(
-                          onPressed: onPressed,
-                          child: child,
+                          // Only enable the button if the username is valid
+                          onPressed:
+                              (snapshot.data ?? false) && !snapshot.hasError
+                                  ? () => _next(context)
+                                  : null,
+                          child: Text(l(context).next.toUpperCase()),
                         );
                       },
                     ),
@@ -196,34 +157,6 @@ class UsernamePageState extends State<UsernamePage> {
           ],
         ),
       ),
-    );
-  }
-
-  Future<void> _showCantCheckUsernameDialog(BuildContext context) async {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(l(context).failedUsernameCheckAvailableError),
-          content: SingleChildScrollView(
-            child: Text(l(context).wouldYouLikeLoginOrRegister),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(l(context).register.toUpperCase()),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text(l(context).login.toUpperCase()),
-              onPressed: () {
-                Navigator.popAndPushNamed(context, Routes.startPassword);
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }
