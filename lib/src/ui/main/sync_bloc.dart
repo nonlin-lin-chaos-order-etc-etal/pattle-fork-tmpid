@@ -24,18 +24,17 @@ import 'package:pedantic/pedantic.dart';
 final syncBloc = SyncBloc();
 
 class SyncBloc {
-  var started = false;
   LocalUser _user = di.getLocalUser();
 
   ReplaySubject<SyncState> _syncSubj = ReplaySubject<SyncState>(maxSize: 1);
   Observable<SyncState> get stream => _syncSubj.stream;
 
   Future<void> start() async {
-    if (!started) {
+    if (!_user.isSyncing) {
       await _user.sendAllUnsent();
-      unawaited(_syncSubj.addStream(_user.sync()));
 
-      started = true;
+      unawaited(_user.startSync());
+      unawaited(_syncSubj.addStream(_user.sync));
     }
   }
 }
