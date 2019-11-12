@@ -38,7 +38,7 @@ class ChatName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureOrBuilder<String>(
-      futureOr: nameOf(context, room),
+      futureOr: nameOf(room, context),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.hasData) {
           final name = snapshot.data;

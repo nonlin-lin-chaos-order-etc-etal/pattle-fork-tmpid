@@ -28,7 +28,7 @@ Url avatarUrlOf(Room room) =>
     room.avatarUrl ??
     (room.isDirect ? room.directUser.avatarUrl : room.avatarUrl);
 
-FutureOr<String> nameOf(BuildContext context, Room room) {
+FutureOr<String> nameOf(Room room, [BuildContext context]) {
   if (room.name != null) {
     return room.name;
   }
@@ -40,7 +40,7 @@ FutureOr<String> nameOf(BuildContext context, Room room) {
   String calculateName(Iterable<User> members) {
     var name = '';
     if (members != null) {
-      if (members.length == 1) {
+      if (members.length == 1 && context != null) {
         return l(context).you;
         // TODO: Check for aliases (public chats)
       } else {
