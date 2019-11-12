@@ -32,6 +32,12 @@ class MatrixCacheManager extends BaseCacheManager {
 
   MatrixCacheManager() : super(key, fileFetcher: _fetch);
 
+  Future<String> getPathOf(String url) async {
+    final info = await getFileFromCache(url);
+
+    return info?.file?.path;
+  }
+
   @override
   Future<String> getFilePath() async {
     var directory = await getTemporaryDirectory();
