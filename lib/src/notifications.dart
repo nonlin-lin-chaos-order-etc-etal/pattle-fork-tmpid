@@ -74,13 +74,17 @@ Future<void> _showNotification(Map<String, dynamic> message) async {
     iconSource: IconSource.FilePath,
   );
 
-  if (event is TextMessageEvent) {
-    final body = event.content.body;
+  if (event is MessageEvent) {
+    final message = await fromEvent(event, senderPerson);
+
+    if (message == null) {
+      return;
+    }
 
     await _notifications.show(
       eventId.hashCode,
       nameOf(room),
-      body,
+      message.text,
       NotificationDetails(
         AndroidNotificationDetails(
           channelId,
@@ -93,19 +97,43 @@ Future<void> _showNotification(Map<String, dynamic> message) async {
             senderPerson,
             conversationTitle: !room.isDirect ? await nameOf(room) : null,
             groupConversation: room.isDirect,
-            messages: [
-              Message(
-                body,
-                event.time,
-                senderPerson,
-              ),
-            ],
+            messages: [message],
           ),
         ),
         IOSNotificationDetails(),
       ),
     );
   }
+}
+
+Message fromEvent(RoomEvent event, Person person) {
+  if (event is EmoteMessageEvent) {
+    return Message(
+      '${displayNameOf(event.sender)} ${event.content.body}',
+      event.time,
+      person,
+    );
+  }
+
+  if (event is TextMessageEvent) {
+    return Message(
+      event.content.body,
+      event.time,
+      person,
+    );
+  }
+
+  if (event is ImageMessageEvent) {
+    // TODO: Show image
+    return Message(
+      // TODO: Change
+      '📷',
+      event.time,
+      person,
+    );
+  }
+
+  return null;
 }
 
 Future<dynamic> backgroundHandle(Map<String, dynamic> message) async {
