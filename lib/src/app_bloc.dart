@@ -18,20 +18,16 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:matrix_image/matrix_image.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/sentry.dart';
 import 'package:pattle/src/ui/main/sync_bloc.dart';
-import 'package:pattle/src/ui/util/room.dart';
-import 'package:pattle/src/ui/util/user.dart';
 import 'package:respect_24_hour/respect_24_hour.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:url/url.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'notifications.dart' as notifs;
 
 import 'storage.dart';
 
@@ -42,13 +38,7 @@ class AppBloc {
 
   static AppBloc _instance;
 
-  FirebaseMessaging _firebase;
-
-  AppBloc._(
-      {@required this.storage,
-      @required FirebaseMessaging firebase,
-      @required FlutterLocalNotificationsPlugin notifications})
-      : _firebase = firebase;
+  AppBloc._({@required this.storage});
 
   factory AppBloc() => _instance;
 
@@ -58,78 +48,9 @@ class AppBloc {
     final use24Hour = await Respect24Hour.get24HourFormat;
     di.registerUse24HourFormat(use24Hour);
 
-    final notifications = FlutterLocalNotificationsPlugin();
+    await notifs.initialize();
 
-    await notifications.initialize(
-      InitializationSettings(
-        AndroidInitializationSettings('ic_launcher_foreground'),
-        IOSInitializationSettings(),
-      ),
-    );
-
-    final channelId = 'pattle';
-    final channelTitle = 'Pattle';
-    final channelDescription = 'Receive message from Pattle';
-
-    _instance = AppBloc._(
-      storage: await Storage.open(),
-      firebase: FirebaseMessaging()
-        ..configure(
-          onMessage: (Map<String, dynamic> message) async {
-            final roomId = RoomId(message['data']['room_id']);
-            final eventId = EventId(message['data']['event_id']);
-
-            final user = di.getLocalUser();
-            final room = await user.rooms[roomId];
-            final event = await room.timeline[eventId];
-
-            final senderName = displayNameOf(event.sender);
-
-            final senderPerson = Person(
-              bot: false,
-              name: senderName,
-              icon: await MatrixCacheManager(di.getHomeserver()).getPathOf(
-                event.sender.avatarUrl.toString(),
-              ),
-              iconSource: IconSource.FilePath,
-            );
-
-            if (event is TextMessageEvent) {
-              final body = event.content.body;
-
-              await notifications.show(
-                eventId.hashCode,
-                nameOf(room),
-                body,
-                NotificationDetails(
-                  AndroidNotificationDetails(
-                    channelId,
-                    channelTitle,
-                    channelDescription,
-                    importance: Importance.Max,
-                    priority: Priority.Max,
-                    style: AndroidNotificationStyle.Messaging,
-                    styleInformation: MessagingStyleInformation(
-                      senderPerson,
-                      conversationTitle: nameOf(room),
-                      groupConversation: false,
-                      messages: [
-                        Message(
-                          body,
-                          event.time,
-                          senderPerson,
-                        ),
-                      ],
-                    ),
-                  ),
-                  IOSNotificationDetails(),
-                ),
-              );
-            }
-          },
-        ),
-      notifications: notifications,
-    );
+    _instance = AppBloc._(storage: await Storage.open());
 
     return _instance;
   }
@@ -142,7 +63,7 @@ class AppBloc {
         appId: 'im.pattle.app',
         appName: 'Pattle',
         deviceName: user.currentDevice.name,
-        key: await _firebase.getToken(),
+        key: await notifs.getFirebaseToken(),
         url: Url.parse(DotEnv().env['PUSH_URL']),
       ),
     );
