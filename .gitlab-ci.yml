@@ -34,32 +34,32 @@ analyze:
     - flutter pub get
     - dartanalyzer . --fatal-infos --fatal-warnings
 
-build:
-  stage: build
-  image: cirrusci/flutter:beta
-  <<: *only_tag
-  except:
-    - merge_requests
-  tags:
-    - docker
-  script:
-    - cd /home/cirrus/sdks/flutter && git remote add origin https://github.com/flutter/flutter
-    - flutter channel beta
-    - flutter upgrade
-    - 'echo "version: ${CI_COMMIT_REF_NAME:1}+$((123 + $CI_PIPELINE_IID))" >> pubspec.yaml'
-    - 'echo "SENTRY_DSN=$SENTRY_DSN" > .env'
-    - 'echo "BUILD_TYPE=independent" >> .env'
-    - echo "$STORE" | base64 -d > android/app/pattle.keystore
-    - flutter build apk --flavor standard
-    - mv build/app/outputs/apk/standard/release/app-standard-release.apk pattle.apk
-  after_script:
-    - rm android/app/pattle.keystore
-    - rm .env
-  artifacts:
-    name: pattle-$CI_COMMIT_REF_NAME
-    paths:
-      - pattle.apk
-    expire_in: 1 week
+#build:
+#  stage: build
+#  image: cirrusci/flutter:beta
+#  <<: *only_tag
+#  except:
+#    - merge_requests
+#  tags:
+#    - docker
+#  script:
+#    - cd /home/cirrus/sdks/flutter && git remote add origin https://github.com/flutter/flutter
+#    - flutter channel beta
+#    - flutter upgrade
+#    - 'echo "version: ${CI_COMMIT_REF_NAME:1}+$((123 + $CI_PIPELINE_IID))" >> pubspec.yaml'
+#    - 'echo "SENTRY_DSN=$SENTRY_DSN" > .env'
+#    - 'echo "BUILD_TYPE=independent" >> .env'
+#    - echo "$STORE" | base64 -d > android/app/pattle.keystore
+#    - flutter build apk --flavor standard
+#    - mv build/app/outputs/apk/standard/release/app-standard-release.apk pattle.apk
+#  after_script:
+#    - rm android/app/pattle.keystore
+#    - rm .env
+#  artifacts:
+#    name: pattle-$CI_COMMIT_REF_NAME
+#    paths:
+#      - pattle.apk
+#    expire_in: 1 week
 
 build_debug:
   stage: build
