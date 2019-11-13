@@ -18,7 +18,9 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:future_or_builder/future_or_builder.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:matrix_image/matrix_image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/chat/chat_bloc.dart';
@@ -32,8 +34,6 @@ import 'package:pattle/src/ui/main/widgets/title_with_sub.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/color.dart';
-import 'package:pattle/src/ui/util/future_or_builder.dart';
-import 'package:pattle/src/ui/util/matrix_image.dart';
 
 import 'package:pattle/src/di.dart' as di;
 import 'package:pattle/src/ui/util/room.dart';
@@ -105,6 +105,7 @@ class ChatPageState extends State<ChatPage> {
             avatarUrl,
             width: 64,
             height: 64,
+            homeserver: di.getHomeserver(),
           ),
         ),
       );

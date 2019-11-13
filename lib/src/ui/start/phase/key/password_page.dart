@@ -18,12 +18,12 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:future_or_builder/future_or_builder.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/app_bloc.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
-import 'package:pattle/src/ui/util/future_or_builder.dart';
 
 import '../../../request_state.dart';
 

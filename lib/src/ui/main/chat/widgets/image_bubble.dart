@@ -16,10 +16,12 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:matrix_image/matrix_image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
-import 'package:pattle/src/ui/util/matrix_image.dart';
+
+import 'package:pattle/src/di.dart' as di;
 
 import 'bubble.dart';
 import 'message_bubble.dart';
@@ -145,7 +147,10 @@ class ImageBubbleState extends MessageBubbleState<ImageBubble> {
                 child: Hero(
                   tag: widget.event.id,
                   child: Image(
-                    image: MatrixImage(widget.event.content.url),
+                    image: MatrixImage(
+                      widget.event.content.url,
+                      homeserver: di.getHomeserver(),
+                    ),
                     fit: BoxFit.cover,
                   ),
                 ),

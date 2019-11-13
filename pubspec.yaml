@@ -15,6 +15,9 @@ dependencies:
   matrix_sdk: ^0.27.0
   matrix_sdk_sqflite: ^0.20.0
 
+  matrix_image: ^1.0.5
+  future_or_builder: ^1.0.3
+
   sqflite: ^1.1.6
 
   rxdart: ^0.22.0
@@ -24,8 +27,6 @@ dependencies:
   # TODO: Use official package when PR is merged
   sentry:
     git: https://git.pattle.im/forks/sentry.git
-
-  flutter_cache_manager: ^1.1.0
 
   device_info: ^0.4.1+1
   package_info: ^0.4.0+5

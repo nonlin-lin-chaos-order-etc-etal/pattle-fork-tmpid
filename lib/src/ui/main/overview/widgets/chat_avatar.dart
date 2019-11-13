@@ -16,13 +16,14 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:matrix_image/matrix_image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:mdi/mdi.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
-import 'package:pattle/src/ui/util/matrix_image.dart';
 import 'package:pattle/src/ui/util/room.dart';
 import 'package:pattle/src/ui/util/user.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:pattle/src/di.dart' as di;
 
 class ChatAvatar extends StatelessWidget {
   final Room room;
@@ -42,7 +43,12 @@ class ChatAvatar extends StatelessWidget {
             child: FadeInImage(
               fit: BoxFit.cover,
               placeholder: MemoryImage(kTransparentImage),
-              image: MatrixImage(avatarUrl, width: 64, height: 64),
+              image: MatrixImage(
+                avatarUrl,
+                width: 64,
+                height: 64,
+                homeserver: di.getHomeserver(),
+              ),
             ),
           ),
         ),

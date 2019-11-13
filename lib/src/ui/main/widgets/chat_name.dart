@@ -16,9 +16,9 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:future_or_builder/future_or_builder.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
-import 'package:pattle/src/ui/util/future_or_builder.dart';
 import 'package:pattle/src/ui/util/room.dart';
 
 class ChatName extends StatelessWidget {

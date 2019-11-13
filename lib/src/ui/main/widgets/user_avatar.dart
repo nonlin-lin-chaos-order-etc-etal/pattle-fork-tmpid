@@ -16,9 +16,10 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:matrix_image/matrix_image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/ui/util/matrix_image.dart';
 import 'package:pattle/src/ui/util/user.dart';
+import 'package:pattle/src/di.dart' as di;
 
 class UserAvatar extends StatelessWidget {
   final User user;
@@ -36,6 +37,7 @@ class UserAvatar extends StatelessWidget {
           user.avatarUrl,
           width: 64,
           height: 64,
+          homeserver: di.getHomeserver(),
         ),
       );
     } else {

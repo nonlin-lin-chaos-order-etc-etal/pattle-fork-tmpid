@@ -19,12 +19,12 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:matrix_image/matrix_image.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/sentry.dart';
 import 'package:pattle/src/ui/main/sync_bloc.dart';
-import 'package:pattle/src/ui/util/matrix_cache_manager.dart';
 import 'package:pattle/src/ui/util/room.dart';
 import 'package:pattle/src/ui/util/user.dart';
 import 'package:respect_24_hour/respect_24_hour.dart';
@@ -88,7 +88,7 @@ class AppBloc {
             final senderPerson = Person(
               bot: false,
               name: senderName,
-              icon: await cacheManager.getPathOf(
+              icon: await MatrixCacheManager(di.getHomeserver()).getPathOf(
                 event.sender.avatarUrl.toString(),
               ),
               iconSource: IconSource.FilePath,
