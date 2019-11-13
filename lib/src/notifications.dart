@@ -92,6 +92,8 @@ Future<void> _showNotification(Map<String, dynamic> message) async {
           channelDescription,
           importance: Importance.Max,
           priority: Priority.Max,
+          enableVibration: true,
+          playSound: true,
           style: AndroidNotificationStyle.Messaging,
           styleInformation: MessagingStyleInformation(
             senderPerson,
