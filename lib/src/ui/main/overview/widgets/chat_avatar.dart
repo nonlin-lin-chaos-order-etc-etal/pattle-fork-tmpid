@@ -15,15 +15,16 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:matrix_image/matrix_image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:mdi/mdi.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
 import 'package:pattle/src/ui/util/room.dart';
 import 'package:pattle/src/ui/util/user.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:pattle/src/di.dart' as di;
+
+import '../../../util/url.dart';
 
 class ChatAvatar extends StatelessWidget {
   final Room room;
@@ -43,11 +44,8 @@ class ChatAvatar extends StatelessWidget {
             child: FadeInImage(
               fit: BoxFit.cover,
               placeholder: MemoryImage(kTransparentImage),
-              image: MatrixImage(
-                avatarUrl,
-                width: 64,
-                height: 64,
-                homeserver: di.getHomeserver(),
+              image: CachedNetworkImageProvider(
+                avatarUrl.toThumbnailString(context),
               ),
             ),
           ),

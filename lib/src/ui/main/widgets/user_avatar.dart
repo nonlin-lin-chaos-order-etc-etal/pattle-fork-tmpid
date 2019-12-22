@@ -15,11 +15,12 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:matrix_image/matrix_image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/util/user.dart';
-import 'package:pattle/src/di.dart' as di;
+
+import '../../util/url.dart';
 
 class UserAvatar extends StatelessWidget {
   final User user;
@@ -33,11 +34,8 @@ class UserAvatar extends StatelessWidget {
       return CircleAvatar(
         radius: radius,
         backgroundColor: Colors.transparent,
-        backgroundImage: MatrixImage(
-          user.avatarUrl,
-          width: 64,
-          height: 64,
-          homeserver: di.getHomeserver(),
+        backgroundImage: CachedNetworkImageProvider(
+          user.avatarUrl.toThumbnailString(context),
         ),
       );
     } else {

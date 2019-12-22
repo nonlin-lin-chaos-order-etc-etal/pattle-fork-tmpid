@@ -2,7 +2,7 @@ name: pattle
 description: An easy to use Matrix app.
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -12,10 +12,12 @@ dependencies:
 
   injector: ^1.0.8
 
-  matrix_sdk: ^0.27.0
+  matrix_sdk: ^0.29.0
   matrix_sdk_sqflite: ^0.20.0
 
-  matrix_image: ^1.0.5
+  cached_network_image: ^2.0.0-rc.1
+  flutter_cache_manager: ^1.1.3
+
   future_or_builder: ^1.0.3
 
   sqflite: ^1.1.6
@@ -65,6 +67,12 @@ dependencies:
   firebase_messaging: ^5.1.8
 
   flutter_local_notifications: ^0.8.4
+
+dependency_overrides:
+  matrix_sdk:
+    git:
+      url: https://git.pattle.im/pattle/library/matrix-dart-sdk.git
+      ref: 2270417472417ee16861ca1ce8984852d52e552e
 
 dev_dependencies:
   flutter_launcher_icons: ^0.7.2+1

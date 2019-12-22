@@ -14,17 +14,19 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:future_or_builder/future_or_builder.dart';
-import 'package:matrix_image/matrix_image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/chat/settings/chat_settings_bloc.dart';
 import 'package:pattle/src/ui/main/widgets/chat_name.dart';
 import 'package:pattle/src/ui/main/widgets/user_item.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/resources/theme.dart';
+
+import '../../../util/url.dart';
 
 import 'package:pattle/src/di.dart' as di;
 import 'package:pattle/src/ui/util/color.dart';
@@ -77,12 +79,8 @@ class ChatSettingsPageState extends State<ChatSettingsPage> {
                     ],
                   ),
                 ),
-                background: Image(
-                  image: MatrixImage(
-                    avatarUrlOf(room),
-                    homeserver: di.getHomeserver(),
-                  ),
-                  fit: BoxFit.cover,
+                background: CachedNetworkImage(
+                  imageUrl: avatarUrlOf(room).toThumbnailString(context),
                 ),
               ),
             ),

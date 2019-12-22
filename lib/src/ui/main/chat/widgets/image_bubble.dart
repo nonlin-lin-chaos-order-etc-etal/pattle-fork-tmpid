@@ -15,13 +15,13 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:matrix_image/matrix_image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
 
-import 'package:pattle/src/di.dart' as di;
+import '../../../util/url.dart';
 
 import 'bubble.dart';
 import 'message_bubble.dart';
@@ -146,11 +146,9 @@ class ImageBubbleState extends MessageBubbleState<ImageBubble> {
                 borderRadius: borderRadius(),
                 child: Hero(
                   tag: widget.event.id,
-                  child: Image(
-                    image: MatrixImage(
-                      widget.event.content.url,
-                      homeserver: di.getHomeserver(),
-                    ),
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        widget.event.content.url.toThumbnailString(context),
                     fit: BoxFit.cover,
                   ),
                 ),

@@ -18,13 +18,15 @@
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:matrix_image/matrix_image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
 import 'package:pattle/src/di.dart' as di;
 import 'package:pattle/src/ui/util/room.dart';
 import 'package:pattle/src/ui/util/user.dart';
+
+import 'ui/util/url.dart';
 
 FirebaseMessaging _firebase;
 
@@ -65,12 +67,14 @@ Future<void> _showNotification(Map<String, dynamic> message) async {
 
   final senderName = displayNameOf(event.sender);
 
+  final icon = await DefaultCacheManager().getSingleFile(
+    event.sender.avatarUrl.toThumbnailStringWith(user.homeserver),
+  );
+
   final senderPerson = Person(
     bot: false,
     name: senderName,
-    icon: await MatrixCacheManager(di.getHomeserver()).getPathOf(
-      event.sender.avatarUrl.toString(),
-    ),
+    icon: icon.path,
     iconSource: IconSource.FilePath,
   );
 

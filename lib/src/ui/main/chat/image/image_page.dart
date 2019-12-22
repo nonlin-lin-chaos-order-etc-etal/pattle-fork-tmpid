@@ -15,8 +15,8 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:matrix_image/matrix_image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/ui/main/chat/image/image_bloc.dart';
 import 'package:pattle/src/ui/main/models/chat_item.dart';
@@ -25,6 +25,7 @@ import 'package:pattle/src/ui/util/user.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
+import '../../../util/url.dart';
 import 'package:pattle/src/di.dart' as di;
 
 class ImagePageState extends State<ImagePage> {
@@ -111,9 +112,8 @@ class ImagePageState extends State<ImagePage> {
               reverse: true,
               builder: (context, index) {
                 return PhotoViewGalleryPageOptions(
-                  imageProvider: MatrixImage(
-                    events[index].content.url,
-                    homeserver: di.getHomeserver(),
+                  imageProvider: CachedNetworkImageProvider(
+                    events[index].content.url.toThumbnailString(context),
                   ),
                   heroTag: message.id,
                   minScale: PhotoViewComputedScale.contained,
