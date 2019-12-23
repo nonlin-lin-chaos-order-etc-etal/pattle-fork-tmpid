@@ -23,10 +23,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
 import 'package:pattle/src/di.dart' as di;
-import 'package:pattle/src/ui/util/room.dart';
-import 'package:pattle/src/ui/util/user.dart';
-
-import 'ui/util/url.dart';
+import 'util/room.dart';
+import 'util/user.dart';
+import 'util/url.dart';
 
 FirebaseMessaging _firebase;
 

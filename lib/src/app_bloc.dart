@@ -22,13 +22,13 @@ import 'package:meta/meta.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/sentry.dart';
-import 'package:pattle/src/ui/main/sync_bloc.dart';
 import 'package:respect_24_hour/respect_24_hour.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:url/url.dart';
 import 'notifications.dart' as notifs;
 
+import 'sync_bloc.dart';
 import 'storage.dart';
 
 class AppBloc {

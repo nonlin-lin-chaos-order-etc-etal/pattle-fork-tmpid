@@ -19,23 +19,24 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/ui/initial/initial_page.dart';
-import 'package:pattle/src/ui/main/chat/chat_page.dart';
-import 'package:pattle/src/ui/main/chat/image/image_page.dart';
-import 'package:pattle/src/ui/main/chat/settings/chat_settings_page.dart';
-import 'package:pattle/src/ui/main/overview/chat_overview_page.dart';
-import 'package:pattle/src/ui/main/settings/appearance_page.dart';
-import 'package:pattle/src/ui/resources/localizations.dart';
-import 'package:pattle/src/ui/resources/theme.dart';
-import 'package:pattle/src/ui/start/advanced_page.dart';
-import 'package:pattle/src/ui/start/phase/identity/username_page.dart';
-import 'package:pattle/src/ui/start/phase/key/password_page.dart';
-import 'package:pattle/src/ui/start/start_page.dart';
-import 'package:pattle/src/ui/main/overview/create/group/create_group_members_page.dart';
-import 'ui/main/overview/create/group/create_group_details_page.dart';
-import 'ui/main/settings/name_page.dart';
-import 'ui/main/settings/profile_page.dart';
-import 'ui/main/settings/settings_page.dart';
+
+import 'resources/localizations.dart';
+import 'resources/theme.dart';
+import 'section/initial/initial_page.dart';
+import 'section/main/chat/chat_page.dart';
+import 'section/main/chat/image/image_page.dart';
+import 'section/main/chat/settings/chat_settings_page.dart';
+import 'section/main/overview/chat_overview_page.dart';
+import 'section/main/overview/create/group/create_group_details_page.dart';
+import 'section/main/overview/create/group/create_group_members_page.dart';
+import 'section/main/settings/appearance_page.dart';
+import 'section/main/settings/name_page.dart';
+import 'section/main/settings/profile_page.dart';
+import 'section/main/settings/settings_page.dart';
+import 'section/start/advanced_page.dart';
+import 'section/start/phase/identity/username_page.dart';
+import 'section/start/phase/key/password_page.dart';
+import 'section/start/start_page.dart';
 
 final routes = {
   Routes.root: (Object params) => MaterialPageRoute(
