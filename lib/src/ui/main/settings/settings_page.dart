@@ -69,7 +69,7 @@ class SettingsPageState extends State<SettingsPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            displayNameOf(bloc.me),
+                            bloc.me.displayName,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,

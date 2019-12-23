@@ -32,7 +32,7 @@ class TextSubtitle extends Subtitle {
     final sender = senderSpan(
       context,
       sender: event is EmoteMessageEvent
-          ? displayNameOf(event.sender, context) + ' '
+          ? event.sender.getDisplayName(context) + ' '
           : null,
     );
     if (event.content.inReplyToId == null) {

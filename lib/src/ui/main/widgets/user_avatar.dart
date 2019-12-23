@@ -40,7 +40,7 @@ class UserAvatar extends StatelessWidget {
       );
     } else {
       return CircleAvatar(
-        backgroundColor: colorOf(context, user),
+        backgroundColor: user.getColor(context),
         radius: radius,
         child: Icon(
           Icons.person,

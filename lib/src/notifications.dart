@@ -65,7 +65,7 @@ Future<void> _showNotification(Map<String, dynamic> message) async {
   final room = await user.rooms[roomId];
   final event = await room.timeline[eventId];
 
-  final senderName = displayNameOf(event.sender);
+  final senderName = event.sender.displayName;
 
   final icon = await DefaultCacheManager().getSingleFile(
     event.sender.avatarUrl.toThumbnailStringWith(user.homeserver),
@@ -115,7 +115,7 @@ Future<void> _showNotification(Map<String, dynamic> message) async {
 Message fromEvent(RoomEvent event, Person person) {
   if (event is EmoteMessageEvent) {
     return Message(
-      '${displayNameOf(event.sender)} ${event.content.body}',
+      '${event.sender.displayName} ${event.content.body}',
       event.time,
       person,
     );

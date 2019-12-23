@@ -51,7 +51,7 @@ class UpgradeBubbleState extends StateBubbleState<UpgradeBubble> {
   List<TextSpan> buildContentSpans(BuildContext context) =>
       l(context).upgradedThisGroup(
         TextSpan(
-          text: displayNameOf(widget.event.sender),
+          text: widget.event.sender.displayName,
           style: defaultEmphasisTextStyle,
         ),
       );

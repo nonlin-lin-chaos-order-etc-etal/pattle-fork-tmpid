@@ -52,7 +52,7 @@ class CreateGroupBloc {
     }
 
     _userSubj.add(users.toList(growable: false)
-      ..sort((User a, User b) => displayNameOf(a).compareTo(displayNameOf(b))));
+      ..sort((User a, User b) => a.displayName.compareTo(b.displayName)));
   }
 
   Future<void> createRoom() async {

@@ -42,7 +42,7 @@ class Redacted extends StatelessWidget {
       text = [TextSpan(text: ' ${l(context).youDeletedThisMessage}')];
     } else {
       text = l(context).hasDeletedThisMessage(
-        TextSpan(text: ' ${displayNameOf(event.redaction.sender)}'),
+        TextSpan(text: ' ${event.redaction.sender.displayName}'),
       );
     }
 

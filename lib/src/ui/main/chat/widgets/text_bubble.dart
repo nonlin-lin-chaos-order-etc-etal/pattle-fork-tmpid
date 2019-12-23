@@ -135,7 +135,7 @@ class TextBubbleState extends MessageBubbleState<TextBubble> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            displayNameOf(widget.event.sender, context) + ' ',
+            widget.event.sender.getDisplayName(context) + ' ',
             style: senderTextStyle(
               context,
               color: widget.isMine ? Colors.white : null,
@@ -191,7 +191,7 @@ class TextBubbleState extends MessageBubbleState<TextBubble> {
       child: CustomPaint(
         painter: needsBorder
             ? ReplyBorderPainter(
-                color: colorOf(context, widget.event.sender),
+                color: widget.event.sender.getColor(context),
               )
             : null,
         child: Padding(

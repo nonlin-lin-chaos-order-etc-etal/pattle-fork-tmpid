@@ -45,7 +45,7 @@ abstract class Subtitle extends StatelessWidget {
       : isMine = event?.sender == di.getLocalUser(),
         senderName =
             event != null && event.sender != di.getLocalUser() && !room.isDirect
-                ? '${displayNameOf(event.sender)}: '
+                ? '${event.sender.displayName}: '
                 : '';
 
   factory Subtitle.forChat(ChatOverview chat) {

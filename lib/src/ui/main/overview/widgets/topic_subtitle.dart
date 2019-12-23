@@ -40,7 +40,7 @@ class TopicSubtitle extends Subtitle {
               style: textStyle(context),
               children: l(context).changedDescription(
                 TextSpan(
-                  text: displayNameOf(event.sender),
+                  text: event.sender.displayName,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),

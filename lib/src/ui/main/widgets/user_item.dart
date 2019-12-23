@@ -91,7 +91,7 @@ class UserItemState extends State<UserItem> {
     return ListTile(
       leading: avatar,
       title: Text(
-        displayNameOf(widget.user, context),
+        widget.user.getDisplayName(context),
         style: TextStyle(
           fontWeight: FontWeight.w600,
         ),

@@ -34,7 +34,7 @@ FutureOr<String> nameOf(Room room, [BuildContext context]) {
   }
 
   if (room.isDirect) {
-    return displayNameOf(room.directUser, context);
+    return room.directUser.getDisplayName(context);
   }
 
   String calculateName(Iterable<User> members) {
@@ -55,7 +55,7 @@ FutureOr<String> nameOf(Room room, [BuildContext context]) {
             break;
           }
 
-          name += displayNameOf(member, context);
+          name += member.getDisplayName(context);
 
           if (i != nonMeMembers.length - 1) {
             name += ', ';

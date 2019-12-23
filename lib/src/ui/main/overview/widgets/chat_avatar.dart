@@ -55,7 +55,7 @@ class ChatAvatar extends StatelessWidget {
       return CircleAvatar(
         foregroundColor: Colors.white,
         backgroundColor: room.isDirect
-            ? colorOf(context, room.directUser)
+            ? room.directUser.getColor(context)
             : LightColors.red[500],
         radius: 24,
         child: _icon(),

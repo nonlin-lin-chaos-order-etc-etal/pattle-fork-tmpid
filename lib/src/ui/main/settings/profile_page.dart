@@ -82,7 +82,7 @@ class ProfilePageState extends State<ProfilePage> {
                       color: redOnBackground(context),
                     ),
                     title: Text(l(context).name),
-                    subtitle: Text(displayNameOf(bloc.me)),
+                    subtitle: Text(bloc.me.displayName),
                     trailing: Icon(Icons.edit),
                     onTap: () => Navigator.pushNamed(
                       context,

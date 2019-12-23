@@ -90,7 +90,7 @@ abstract class MessageBubbleState<T extends MessageBubble>
 
   TextStyle senderTextStyle(BuildContext context, {Color color}) {
     if (color == null) {
-      color = colorOf(context, widget.event.sender);
+      color = widget.event.sender.getColor(context);
     }
 
     return textStyle(context, color: color).copyWith(
@@ -122,7 +122,7 @@ abstract class MessageBubbleState<T extends MessageBubble>
     if ((isStartOfGroup || (widget.isRepliedTo && !widget.isMine)) &&
         !widget.item.room.isDirect) {
       return Text(
-        displayNameOf(widget.event.sender, context),
+        widget.event.sender.displayName,
         style: senderTextStyle(context, color: color),
       );
     } else {
@@ -149,8 +149,7 @@ abstract class MessageBubbleState<T extends MessageBubble>
       final previousEvent = (widget.previousItem as ChatEvent).event;
 
       final previousHasSameSender = previousEvent != null &&
-          displayNameOf(previousEvent.sender) ==
-              displayNameOf(widget.event.sender) &&
+          previousEvent.sender.displayName == widget.event.sender.displayName &&
           previousEvent.sender == widget.event.sender;
 
       if (!previousHasSameSender) {
@@ -194,8 +193,7 @@ abstract class MessageBubbleState<T extends MessageBubble>
       final nextEvent = (widget.nextItem as ChatEvent).event;
 
       final nextHasSameSender = nextEvent != null &&
-          displayNameOf(nextEvent.sender) ==
-              displayNameOf(widget.event.sender) &&
+          nextEvent.sender.displayName == widget.event.sender.displayName &&
           nextEvent.sender == widget.event.sender;
 
       if (!nextHasSameSender) {

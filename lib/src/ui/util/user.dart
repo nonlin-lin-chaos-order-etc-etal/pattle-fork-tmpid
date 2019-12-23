@@ -32,20 +32,26 @@ String _limited(String name) {
   }
 }
 
-/// Get the proper display name for [user].
-///
-/// If [context] is provided, the local user will be 'You' instead
-/// of their actual display name.
-///
-/// This is however not always desired, mostly only when showing the
-/// display name to the end user.
-String displayNameOf(User user, [BuildContext context]) =>
-    context != null && user == di.getLocalUser()
-        ? l(context).you
-        : _limited(user?.name) ?? user.id.toString().split(':')[0];
+extension UserExtensions on User {
+  String get _displayId => id.toString().split(':')[0];
 
-String displayNameOrId(UserId id, String name) =>
-    _limited(name) ?? id.toString().split(':')[0];
+  String get displayName => getDisplayName();
 
-Color colorOf(BuildContext context, User user) =>
-    userColor(context, user.id.hashCode % LightColors.userColors.length);
+  /// Get the proper display name for [user].
+  ///
+  /// If [context] is provided, the local user will be 'You' instead
+  /// of their actual display name.
+  ///
+  /// This is however not always desired, mostly only when showing the
+  /// display name to the end user.
+  String getDisplayName([BuildContext context]) =>
+      context != null && this == di.getLocalUser()
+          ? l(context).you
+          : _limited(name) ?? _displayId;
+
+  String nameOrDisplayId({@required String name}) =>
+      _limited(name) ?? _displayId;
+
+  Color getColor(BuildContext context) =>
+      userColor(context, id.hashCode % LightColors.userColors.length);
+}

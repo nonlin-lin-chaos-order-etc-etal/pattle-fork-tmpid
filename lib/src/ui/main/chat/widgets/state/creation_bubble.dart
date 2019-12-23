@@ -62,7 +62,7 @@ class CreationBubbleState extends StateBubbleState<CreationBubble> {
   List<TextSpan> buildContentSpans(BuildContext context) =>
       l(context).createdThisGroup(
         TextSpan(
-          text: displayNameOf(widget.item.room.creator),
+          text: widget.item.room.creator.displayName,
           style: defaultEmphasisTextStyle,
         ),
       );

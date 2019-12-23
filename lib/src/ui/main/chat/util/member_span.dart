@@ -26,23 +26,23 @@ List<TextSpan> spanFor(
   TextStyle style = const TextStyle(fontWeight: FontWeight.bold),
 }) {
   final sender = TextSpan(
-    text: displayNameOf(event.sender),
+    text: event.sender.displayName,
     style: style,
   );
   final subject = TextSpan(
-    text: displayNameOf(event.content.subject),
+    text: event.content.subject.displayName,
     style: style,
   );
   var text;
 
   if (event is DisplayNameChangeEvent) {
     final oldName = TextSpan(
-      text: displayNameOrId(event.content.subject.id, event.oldSubjectName),
+      text: event.content.subject.nameOrDisplayId(name: event.oldSubjectName),
       style: style,
     );
 
     final newName = TextSpan(
-      text: displayNameOf(event.content.subject),
+      text: event.content.subject.displayName,
       style: style,
     );
 

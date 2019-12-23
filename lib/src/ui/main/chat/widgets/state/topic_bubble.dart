@@ -60,7 +60,7 @@ class TopicBubbleState extends StateBubbleState<TopicBubble> {
   List<TextSpan> buildContentSpans(BuildContext context) =>
       l(context).changedDescriptionTapToView(
         TextSpan(
-          text: displayNameOf(widget.event.sender),
+          text: widget.event.sender.displayName,
           style: defaultEmphasisTextStyle,
         ),
       );

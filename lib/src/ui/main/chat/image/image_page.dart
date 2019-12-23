@@ -33,7 +33,7 @@ class ImagePageState extends State<ImagePage> {
   ImageBloc bloc;
   final ImageMessageEvent message;
 
-  var _messageSender;
+  User _messageSender;
   var _date;
 
   ImagePageState(ChatEvent<ImageMessageEvent> chatEvent)
@@ -72,7 +72,7 @@ class ImagePageState extends State<ImagePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(displayNameOf(_messageSender)),
+                  Text(_messageSender.displayName),
                   SizedBox(height: 2),
                   Text(
                     _date,

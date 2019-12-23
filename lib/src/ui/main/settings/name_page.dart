@@ -33,7 +33,7 @@ class NamePageState extends State<NamePage> {
   void initState() {
     super.initState();
 
-    final name = displayNameOf(bloc.me);
+    final name = bloc.me.displayName;
 
     textController.value = TextEditingValue(
       text: name,
