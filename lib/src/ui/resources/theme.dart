@@ -18,27 +18,49 @@
 import 'package:flutter/material.dart';
 import 'package:pattle/src/ui/util/color.dart';
 
-ThemeData theme(Brightness brightness) {
-  return ThemeData(
-    primarySwatch: LightColors.red,
-    primaryColorDark: LightColors.red[700],
-    accentColor: LightColors.red,
-    brightness: brightness,
-    primaryColorBrightness: Brightness.dark,
-    accentColorBrightness: Brightness.dark,
-    cursorColor: LightColors.red,
-    toggleableActiveColor:
-        brightness == Brightness.dark ? LightColors.red[400] : null,
-    textSelectionHandleColor:
-        brightness == Brightness.dark ? LightColors.red[400] : null,
-    buttonTheme: ButtonThemeData(
-      buttonColor: LightColors.red[500],
-      textTheme: ButtonTextTheme.primary,
-    ),
-    appBarTheme: AppBarTheme(
-      color: LightColors.red,
-    ),
-  );
+final _theme = ThemeData(
+  primarySwatch: LightColors.red,
+  primaryColorDark: LightColors.red[700],
+  accentColor: LightColors.red,
+  primaryColorBrightness: Brightness.dark,
+  accentColorBrightness: Brightness.dark,
+  cursorColor: LightColors.red,
+  buttonTheme: ButtonThemeData(
+    buttonColor: LightColors.red[500],
+    textTheme: ButtonTextTheme.primary,
+  ),
+  appBarTheme: AppBarTheme(
+    color: LightColors.red,
+  ),
+);
+
+final lightTheme = _theme.copyWith(
+  brightness: Brightness.light,
+);
+
+final darkTheme = _theme.copyWith(
+  brightness: Brightness.dark,
+  toggleableActiveColor: LightColors.red[400],
+  textSelectionHandleColor: LightColors.red[400],
+);
+
+extension Themes on ThemeData {
+  Widget withTransparentAppBar({@required Widget child}) => Builder(
+        builder: (context) {
+          return Theme(
+            data: copyWith(
+              appBarTheme: AppBarTheme(
+                color: Colors.transparent,
+                iconTheme: IconThemeData(
+                  color: Theme.of(context).primaryColor,
+                ),
+                elevation: 0,
+              ),
+            ),
+            child: child,
+          );
+        },
+      );
 }
 
 Color chatBackgroundColor(BuildContext context) {

@@ -14,10 +14,11 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 import 'package:pattle/src/ui/start/start_bloc.dart';
+
+import '../resources/theme.dart';
 
 class AdvancedPage extends StatefulWidget {
   @override
@@ -37,91 +38,88 @@ class AdvancedPageState extends State<AdvancedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          l(context).advanced,
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
+    return Theme.of(context).withTransparentAppBar(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            l(context).advanced,
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+            ),
           ),
         ),
-        iconTheme: IconThemeData(
-          color: Theme.of(context).primaryColor,
-        ),
-        elevation: 0,
-        backgroundColor: const Color(0x00000000),
-      ),
-      body: Container(
-        margin: EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  Icons.home,
-                  color: Theme.of(context).hintColor,
-                  size: 32,
-                ),
-                SizedBox(width: 16),
-                Flexible(
-                  child: StreamBuilder<bool>(
-                    stream: bloc.homeserverChanged,
-                    builder:
-                        (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                      var errorText;
-
-                      if (snapshot.hasError) {
-                        errorText = l(context).hostnameInvalidError;
-                      } else {
-                        errorText = null;
-                      }
-
-                      return TextField(
-                        controller: homeserverTextController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          labelText: l(context).homeserver,
-                          hintText: bloc.userIdDomain.toString(),
-                          errorText: errorText,
-                        ),
-                      );
-                    },
+        body: Container(
+          margin: EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.home,
+                    color: Theme.of(context).hintColor,
+                    size: 32,
                   ),
-                )
-              ],
-            ),
-            SizedBox(height: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  Icons.person,
-                  color: Theme.of(context).hintColor,
-                  size: 32,
-                ),
-                SizedBox(width: 16),
-                Flexible(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      filled: true,
-                      labelText: l(context).identityServer,
+                  SizedBox(width: 16),
+                  Flexible(
+                    child: StreamBuilder<bool>(
+                      stream: bloc.homeserverChanged,
+                      builder:
+                          (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                        var errorText;
+
+                        if (snapshot.hasError) {
+                          errorText = l(context).hostnameInvalidError;
+                        } else {
+                          errorText = null;
+                        }
+
+                        return TextField(
+                          controller: homeserverTextController,
+                          decoration: InputDecoration(
+                            filled: true,
+                            labelText: l(context).homeserver,
+                            hintText: bloc.userIdDomain.toString(),
+                            errorText: errorText,
+                          ),
+                        );
+                      },
                     ),
+                  )
+                ],
+              ),
+              SizedBox(height: 32),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.person,
+                    color: Theme.of(context).hintColor,
+                    size: 32,
                   ),
-                )
-              ],
-            ),
-            SizedBox(height: 32),
-            RaisedButton(
-              onPressed: () {
-                bloc.setHomeserverUrl(homeserverTextController.text);
-                bloc.homeserverSetViaAdvanced = true;
-                Navigator.pop(context);
-              },
-              child: Text(l(context).confirm.toUpperCase()),
-            )
-          ],
+                  SizedBox(width: 16),
+                  Flexible(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        filled: true,
+                        labelText: l(context).identityServer,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 32),
+              RaisedButton(
+                onPressed: () {
+                  bloc.setHomeserverUrl(homeserverTextController.text);
+                  bloc.homeserverSetViaAdvanced = true;
+                  Navigator.pop(context);
+                },
+                child: Text(l(context).confirm.toUpperCase()),
+              )
+            ],
+          ),
         ),
       ),
     );

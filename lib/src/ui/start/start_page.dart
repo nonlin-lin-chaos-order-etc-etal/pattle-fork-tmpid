@@ -20,15 +20,6 @@ import 'package:pattle/src/app.dart';
 import 'package:pattle/src/ui/resources/localizations.dart';
 
 class StartPage extends StatelessWidget {
-  // TODO: PR: Make BorderRadius.circular const
-  static const buttonBorderRadius = BorderRadius.all(Radius.circular(96));
-
-  static const buttonShape = RoundedRectangleBorder(
-    borderRadius: buttonBorderRadius,
-  );
-
-  static const buttonPadding = EdgeInsets.all(16);
-
   void _loginWithUsername(BuildContext context) {
     Navigator.pushNamed(context, Routes.startUsername);
   }
@@ -50,31 +41,33 @@ class StartPage extends StatelessWidget {
                 l(context).appName,
                 style: TextStyle(fontSize: 96),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  RaisedButton(
-                    onPressed: null,
-                    child: Text(loginWithPhone),
-                    shape: buttonShape,
-                    padding: buttonPadding,
+              ButtonTheme.fromButtonThemeData(
+                data: ButtonTheme.of(context).copyWith(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(96),
                   ),
-                  SizedBox(height: 16),
-                  OutlineButton(
-                    onPressed: null,
-                    child: Text(loginWithEmail),
-                    shape: buttonShape,
-                    padding: buttonPadding,
-                  ),
-                  SizedBox(height: 16),
-                  FlatButton(
-                    onPressed: () => _loginWithUsername(context),
-                    child: Text(loginWithUsername),
-                    shape: buttonShape,
-                    padding: buttonPadding,
-                  ),
-                ],
-              ),
+                  padding: EdgeInsets.all(16),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    RaisedButton(
+                      onPressed: null,
+                      child: Text(loginWithPhone),
+                    ),
+                    SizedBox(height: 16),
+                    OutlineButton(
+                      onPressed: null,
+                      child: Text(loginWithEmail),
+                    ),
+                    SizedBox(height: 16),
+                    FlatButton(
+                      onPressed: () => _loginWithUsername(context),
+                      child: Text(loginWithUsername),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),

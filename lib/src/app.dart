@@ -123,7 +123,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return DynamicTheme(
       defaultBrightness: Brightness.light,
-      data: (brightness) => theme(brightness),
+      data: (brightness) =>
+          brightness == Brightness.dark ? darkTheme : lightTheme,
       themedWidgetBuilder: (context, theme) {
         return MaterialApp(
           onGenerateTitle: (BuildContext context) => l(context).appName,

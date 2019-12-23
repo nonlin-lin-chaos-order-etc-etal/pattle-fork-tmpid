@@ -89,7 +89,7 @@ class UsernamePageState extends State<UsernamePage> {
                   children: <Widget>[
                     Text(
                       l(context).enterUsername,
-                      style: TextStyle(fontSize: 24),
+                      style: Theme.of(context).textTheme.headline,
                     ),
                     SizedBox(height: 16),
                     StreamBuilder<bool>(

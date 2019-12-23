@@ -76,7 +76,7 @@ class PasswordPageState extends State<PasswordPage> {
           children: <Widget>[
             Text(
               l(context).enterPassword,
-              style: TextStyle(fontSize: 24),
+              style: Theme.of(context).textTheme.headline,
             ),
             SizedBox(height: 16),
             StreamBuilder<RequestState>(
