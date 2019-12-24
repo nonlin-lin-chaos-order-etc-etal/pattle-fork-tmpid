@@ -21,11 +21,10 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/di.dart' as di;
-import 'package:url/url.dart';
 
 import '../util/user.dart';
 
-Url avatarUrlOf(Room room) =>
+Uri avatarUrlOf(Room room) =>
     room.avatarUrl ??
     (room.isDirect ? room.directUser.avatarUrl : room.avatarUrl);
 

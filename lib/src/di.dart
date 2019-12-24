@@ -18,7 +18,6 @@
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:matrix_sdk_sqflite/matrix_sdk_sqflite.dart';
 import 'package:injector/injector.dart';
-import 'package:url/url.dart';
 
 final inj = Injector();
 
@@ -28,7 +27,7 @@ void registerHomeserver(Homeserver homeserver) {
   inj.registerSingleton<Homeserver>((_) => homeserver, override: true);
 }
 
-Future<void> registerHomeserverWith(Url url) async {
+Future<void> registerHomeserverWith(Uri url) async {
   Homeserver hs;
   try {
     hs = await Homeserver.fromWellKnown(url);

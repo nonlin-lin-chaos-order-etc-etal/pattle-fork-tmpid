@@ -25,7 +25,6 @@ import 'package:pattle/src/sentry.dart';
 import 'package:respect_24_hour/respect_24_hour.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pattle/src/di.dart' as di;
-import 'package:url/url.dart';
 import 'notifications.dart' as notifs;
 
 import 'sync_bloc.dart';
@@ -64,7 +63,7 @@ class AppBloc {
         appName: 'Pattle',
         deviceName: user.currentDevice.name,
         key: await notifs.getFirebaseToken(),
-        url: Url.parse(DotEnv().env['PUSH_URL']),
+        url: Uri.parse(DotEnv().env['PUSH_URL']),
       ),
     );
   }

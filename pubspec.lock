@@ -260,18 +260,20 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "2270417472417ee16861ca1ce8984852d52e552e"
-      resolved-ref: "2270417472417ee16861ca1ce8984852d52e552e"
+      ref: ef9a4a9f411c91dbe57927720d7ae00a35a3697b
+      resolved-ref: ef9a4a9f411c91dbe57927720d7ae00a35a3697b
       url: "https://git.pattle.im/pattle/library/matrix-dart-sdk.git"
     source: git
     version: "0.0.0"
   matrix_sdk_sqflite:
     dependency: "direct main"
     description:
-      name: matrix_sdk_sqflite
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.20.0"
+      path: "."
+      ref: aaf9314a2ef78ee4adce31c19b0ef5b50416a88e
+      resolved-ref: aaf9314a2ef78ee4adce31c19b0ef5b50416a88e
+      url: "https://git.pattle.im/pattle/library/matrix-dart-sdk-sqflite.git"
+    source: git
+    version: "0.0.0"
   mdi:
     dependency: "direct main"
     description:
@@ -454,13 +456,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.6"
-  url:
-    dependency: transitive
-    description:
-      name: url
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   url_launcher:
     dependency: "direct main"
     description:
@@ -496,13 +491,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.4"
-  validators:
-    dependency: transitive
-    description:
-      name: validators
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0+1"
   vector_math:
     dependency: transitive
     description:

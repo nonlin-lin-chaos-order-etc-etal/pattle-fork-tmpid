@@ -21,7 +21,6 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
 import 'package:pattle/src/di.dart' as di;
 import 'package:rxdart/rxdart.dart';
-import 'package:url/url.dart';
 import 'dart:io';
 import 'package:pedantic/pedantic.dart';
 
@@ -52,8 +51,8 @@ class StartBloc extends Bloc {
   bool homeserverSetViaAdvanced = false;
   Homeserver get homeserver => di.getHomeserver();
 
-  Url _userIdDomain;
-  Url get userIdDomain => _userIdDomain;
+  Uri _userIdDomain;
+  Uri get userIdDomain => _userIdDomain;
 
   Username _username;
   Username get username => _username;
@@ -61,7 +60,7 @@ class StartBloc extends Bloc {
   /// Duration after which a progress indicator should be shown.
   static const loadingTime = Duration(seconds: 3);
 
-  Future<void> _setHomeserver(Url url) async {
+  Future<void> _setHomeserver(Uri url) async {
     await di.registerHomeserverWith(url);
     _homeserverChangedSubj.add(true);
   }
@@ -71,7 +70,7 @@ class StartBloc extends Bloc {
       if (!url.startsWith('https://')) {
         url = 'https://$url';
       }
-      final parsedUrl = Url.parse(url);
+      final parsedUrl = Uri.parse(url);
 
       await _setHomeserver(parsedUrl);
       _userIdDomain = parsedUrl;
@@ -138,7 +137,7 @@ class StartBloc extends Bloc {
 
       try {
         if (!homeserverSetViaAdvanced) {
-          final serverUrl = Url.parse("https://$server");
+          final serverUrl = Uri.parse("https://$server");
           await _setHomeserver(serverUrl);
         }
 

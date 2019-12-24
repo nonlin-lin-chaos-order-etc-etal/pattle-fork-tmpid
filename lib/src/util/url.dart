@@ -17,11 +17,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:url/url.dart';
 
 import 'package:pattle/src/di.dart' as di;
 
-extension UrlResolver on Url {
+extension UrlResolver on Uri {
   String toThumbnailString(BuildContext context) =>
       this.toThumbnailStringWith(di.getHomeserver());
 
