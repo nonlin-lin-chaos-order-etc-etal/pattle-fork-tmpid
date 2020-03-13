@@ -15,14 +15,17 @@ dependencies:
   matrix_sdk: ^0.29.0
   matrix_sdk_sqflite: ^0.20.0
 
+  bloc: ^3.0.0
+  flutter_bloc: ^3.2.0
+  provider: ^4.0.1
+  equatable: ^1.0.1
+
   cached_network_image: ^2.0.0-rc.1
   flutter_cache_manager: ^1.1.3
 
   future_or_builder: ^1.0.3
 
   sqflite: ^1.1.6
-
-  rxdart: ^0.22.0
 
   async: ^2.3.0
 
@@ -72,7 +75,7 @@ dependency_overrides:
   matrix_sdk:
     git:
       url: https://git.pattle.im/pattle/library/matrix-dart-sdk.git
-      ref: ef9a4a9f411c91dbe57927720d7ae00a35a3697b
+      ref: a5b0bff21144e437cf231325d72c00e6d539b175
   matrix_sdk_sqflite:
     git:
       url: https://git.pattle.im/pattle/library/matrix-dart-sdk-sqflite.git

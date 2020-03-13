@@ -20,8 +20,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/localizations.dart';
-import 'package:pattle/src/di.dart' as di;
 
+import '../matrix.dart';
 import '../util/user.dart';
 
 Uri avatarUrlOf(Room room) =>
@@ -45,7 +45,7 @@ FutureOr<String> nameOf(Room room, [BuildContext context]) {
         // TODO: Check for aliases (public chats)
       } else {
         final nonMeMembers = members
-            .where((user) => user != di.getLocalUser())
+            .where((user) => context != null && user != Matrix.of(context).user)
             .toList(growable: false);
 
         var i = 0;

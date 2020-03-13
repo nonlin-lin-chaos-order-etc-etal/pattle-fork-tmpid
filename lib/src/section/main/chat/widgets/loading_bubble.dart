@@ -23,18 +23,20 @@ import 'message_bubble.dart';
 
 class LoadingBubble extends MessageBubble {
   static final _mockEvent = TextMessageEvent(
-    TextMessage(
-      body: 'Blabla',
-    ),
     RoomEventArgs(
       id: EventId('1234'),
       sender: User(
-          id: UserId('@wilko:pattle.im'),
-          state: UserState(
-              roomId: RoomId('!343432:pattle.im'),
-              displayName: 'Wilko',
-              since: DateTime.now())),
+        id: UserId('@wilko:pattle.im'),
+        state: UserState(
+          roomId: RoomId('!343432:pattle.im'),
+          displayName: 'Wilko',
+          since: DateTime.now(),
+        ),
+      ),
       time: DateTime.now(),
+    ),
+    content: TextMessage(
+      body: 'Blabla',
     ),
   );
 
@@ -45,7 +47,7 @@ class LoadingBubble extends MessageBubble {
     @required Room room,
     @required bool isMine,
   }) : super(
-          item: ChatEvent(room, _mockEvent),
+          item: ChatMessage(room, _mockEvent),
           isMine: isMine,
         );
 

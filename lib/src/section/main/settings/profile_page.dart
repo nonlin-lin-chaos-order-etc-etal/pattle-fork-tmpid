@@ -16,32 +16,34 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/widgets/user_avatar.dart';
+import '../../../matrix.dart';
 import '../../../util/user.dart';
 
 import '../../../app.dart';
-import 'settings_bloc.dart';
+import 'bloc.dart';
 
-class ProfilePageState extends State<ProfilePage> {
-  final bloc = SettingsBloc();
+class ProfilePage extends StatefulWidget {
+  ProfilePage._();
 
-  Brightness brightness;
-
-  @override
-  void initState() {
-    super.initState();
+  static Widget withGivenBloc(SettingsBloc settingsBloc) {
+    return BlocProvider<SettingsBloc>.value(
+      value: settingsBloc,
+      child: ProfilePage._(),
+    );
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
+  State<StatefulWidget> createState() => _ProfilePageState();
+}
 
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    brightness = Theme.of(context).brightness;
+    final me = Matrix.of(context).user;
 
     return Scaffold(
       appBar: AppBar(
@@ -56,9 +58,9 @@ class ProfilePageState extends State<ProfilePage> {
                 overflow: Overflow.visible,
                 children: <Widget>[
                   Hero(
-                    tag: bloc.me.id,
+                    tag: me.id,
                     child: UserAvatar(
-                      user: bloc.me,
+                      user: me,
                       radius: 96,
                     ),
                   ),
@@ -82,11 +84,12 @@ class ProfilePageState extends State<ProfilePage> {
                       color: redOnBackground(context),
                     ),
                     title: Text(l(context).name),
-                    subtitle: Text(bloc.me.displayName),
+                    subtitle: Text(me.displayName),
                     trailing: Icon(Icons.edit),
                     onTap: () => Navigator.pushNamed(
                       context,
                       Routes.settingsProfileName,
+                      arguments: BlocProvider.of<SettingsBloc>(context),
                     ),
                   ),
                   ListTile(
@@ -95,7 +98,7 @@ class ProfilePageState extends State<ProfilePage> {
                       color: redOnBackground(context),
                     ),
                     title: Text(l(context).username),
-                    subtitle: Text(bloc.me.id.toString()),
+                    subtitle: Text(me.id.toString()),
                   )
                 ],
               ),
@@ -105,9 +108,4 @@ class ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-}
-
-class ProfilePage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => ProfilePageState();
 }

@@ -30,7 +30,7 @@ class UpgradeBubble extends StateBubble {
   final RoomUpgradeEvent event;
 
   UpgradeBubble({
-    @required ChatEvent item,
+    @required ChatMessage item,
     @required ChatItem previousItem,
     @required ChatItem nextItem,
     @required bool isMine,

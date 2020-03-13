@@ -17,7 +17,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pattle/src/di.dart' as di;
 import 'package:pattle/src/resources/localizations.dart';
 
 int _weekOf(DateTime date) {
@@ -41,11 +40,8 @@ bool _isThisWeek(DateTime now, DateTime date) {
 bool _isThisYear(DateTime now, DateTime date) => date.year == now.year;
 
 String formatAsTime(DateTime time) {
-  if (di.getUse24HourFormat()) {
-    return DateFormat.Hm().format(time);
-  } else {
-    return DateFormat.jm().format(time);
-  }
+  // TODO: Get 24 hour format
+  return DateFormat.Hm().format(time);
 }
 
 String formatAsDate(BuildContext context, DateTime date) {

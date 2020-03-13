@@ -20,7 +20,7 @@ import 'package:pattle/src/resources/localizations.dart';
 
 class StartPage extends StatelessWidget {
   void _loginWithUsername(BuildContext context) {
-    Navigator.pushNamed(context, Routes.startUsername);
+    Navigator.pushNamed(context, Routes.loginUsername);
   }
 
   @override

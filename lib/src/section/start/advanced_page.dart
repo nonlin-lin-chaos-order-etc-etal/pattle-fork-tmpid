@@ -15,25 +15,29 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pattle/src/resources/localizations.dart';
 
+import 'homeserver/bloc.dart';
 import '../../resources/theme.dart';
-import 'start_bloc.dart';
 
 class AdvancedPage extends StatefulWidget {
+  final HomeserverBloc bloc;
+
+  const AdvancedPage({Key key, @required this.bloc}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => AdvancedPageState();
 }
 
 class AdvancedPageState extends State<AdvancedPage> {
-  final StartBloc bloc = StartBloc();
-
   final homeserverTextController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    homeserverTextController.text = bloc.userIdDomain.toString();
+    homeserverTextController.text =
+        widget.bloc.state.homeserver?.url?.toString();
   }
 
   @override
@@ -63,13 +67,12 @@ class AdvancedPageState extends State<AdvancedPage> {
                   ),
                   SizedBox(width: 16),
                   Flexible(
-                    child: StreamBuilder<bool>(
-                      stream: bloc.homeserverChanged,
-                      builder:
-                          (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                    child: BlocBuilder<HomeserverBloc, HomeserverState>(
+                      bloc: widget.bloc,
+                      builder: (BuildContext context, HomeserverState state) {
                         var errorText;
 
-                        if (snapshot.hasError) {
+                        if (state is HomeserverIsInvalid) {
                           errorText = l(context).hostnameInvalidError;
                         } else {
                           errorText = null;
@@ -80,7 +83,8 @@ class AdvancedPageState extends State<AdvancedPage> {
                           decoration: InputDecoration(
                             filled: true,
                             labelText: l(context).homeserver,
-                            hintText: bloc.userIdDomain.toString(),
+                            hintText:
+                                widget.bloc.state.homeserver?.url?.toString(),
                             errorText: errorText,
                           ),
                         );
@@ -112,8 +116,12 @@ class AdvancedPageState extends State<AdvancedPage> {
               SizedBox(height: 32),
               RaisedButton(
                 onPressed: () {
-                  bloc.setHomeserverUrl(homeserverTextController.text);
-                  bloc.homeserverSetViaAdvanced = true;
+                  widget.bloc.add(
+                    ChangeHomeserver(
+                      homeserverTextController.text,
+                      viaAdvanced: true,
+                    ),
+                  );
                   Navigator.pop(context);
                 },
                 child: Text(l(context).confirm.toUpperCase()),

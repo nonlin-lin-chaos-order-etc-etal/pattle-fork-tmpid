@@ -39,13 +39,94 @@ final lightTheme = _theme.copyWith(
   brightness: Brightness.light,
 );
 
-final darkTheme = _theme.copyWith(
-  brightness: Brightness.dark,
-  toggleableActiveColor: LightColors.red[400],
-  textSelectionHandleColor: LightColors.red[400],
-);
+final darkTheme = ThemeData.dark().merge(_theme).copyWith(
+      //brightness: Brightness.dark,
+      toggleableActiveColor: LightColors.red[400],
+      textSelectionHandleColor: LightColors.red[400],
+    );
 
 extension Themes on ThemeData {
+  ThemeData merge(ThemeData other) {
+    return this.copyWith(
+      brightness: other.brightness ?? this.brightness,
+      primaryColor: other.primaryColor ?? this.primaryColor,
+      primaryColorBrightness:
+          other.primaryColorBrightness ?? this.primaryColorBrightness,
+      primaryColorLight: other.primaryColorLight ?? this.primaryColorLight,
+      primaryColorDark: other.primaryColorDark ?? this.primaryColorDark,
+      accentColor: other.accentColor ?? this.accentColor,
+      accentColorBrightness:
+          other.accentColorBrightness ?? this.accentColorBrightness,
+      canvasColor: other.canvasColor ?? this.canvasColor,
+      scaffoldBackgroundColor:
+          other.scaffoldBackgroundColor ?? this.scaffoldBackgroundColor,
+      bottomAppBarColor: other.bottomAppBarColor ?? this.bottomAppBarColor,
+      cardColor: other.cardColor ?? this.cardColor,
+      dividerColor: other.dividerColor ?? this.dividerColor,
+      focusColor: other.focusColor ?? this.focusColor,
+      hoverColor: other.hoverColor ?? this.hoverColor,
+      highlightColor: other.highlightColor ?? this.highlightColor,
+      splashColor: other.splashColor ?? this.splashColor,
+      splashFactory: other.splashFactory ?? this.splashFactory,
+      selectedRowColor: other.selectedRowColor ?? this.selectedRowColor,
+      unselectedWidgetColor:
+          other.unselectedWidgetColor ?? this.unselectedWidgetColor,
+      disabledColor: other.disabledColor ?? this.disabledColor,
+      buttonColor: other.buttonColor ?? this.buttonColor,
+      buttonTheme: other.buttonTheme ?? this.buttonTheme,
+      toggleButtonsTheme: other.toggleButtonsTheme ?? this.toggleButtonsTheme,
+      secondaryHeaderColor:
+          other.secondaryHeaderColor ?? this.secondaryHeaderColor,
+      textSelectionColor: other.textSelectionColor ?? this.textSelectionColor,
+      cursorColor: other.cursorColor ?? this.cursorColor,
+      textSelectionHandleColor:
+          other.textSelectionHandleColor ?? this.textSelectionHandleColor,
+      backgroundColor: other.backgroundColor ?? this.backgroundColor,
+      dialogBackgroundColor:
+          other.dialogBackgroundColor ?? this.dialogBackgroundColor,
+      indicatorColor: other.indicatorColor ?? this.indicatorColor,
+      hintColor: other.hintColor ?? this.hintColor,
+      errorColor: other.errorColor ?? this.errorColor,
+      toggleableActiveColor:
+          other.toggleableActiveColor ?? this.toggleableActiveColor,
+      textTheme: other.textTheme ?? this.textTheme,
+      primaryTextTheme: other.primaryTextTheme ?? this.primaryTextTheme,
+      accentTextTheme: other.accentTextTheme ?? this.accentTextTheme,
+      inputDecorationTheme:
+          other.inputDecorationTheme ?? this.inputDecorationTheme,
+      iconTheme: other.iconTheme ?? this.iconTheme,
+      primaryIconTheme: other.primaryIconTheme ?? this.primaryIconTheme,
+      accentIconTheme: other.accentIconTheme ?? this.accentIconTheme,
+      sliderTheme: other.sliderTheme ?? this.sliderTheme,
+      tabBarTheme: other.tabBarTheme ?? this.tabBarTheme,
+      tooltipTheme: other.tooltipTheme ?? this.tooltipTheme,
+      cardTheme: other.cardTheme ?? this.cardTheme,
+      chipTheme: other.chipTheme ?? this.chipTheme,
+      platform: other.platform ?? this.platform,
+      materialTapTargetSize:
+          other.materialTapTargetSize ?? this.materialTapTargetSize,
+      applyElevationOverlayColor:
+          other.applyElevationOverlayColor ?? this.applyElevationOverlayColor,
+      pageTransitionsTheme:
+          other.pageTransitionsTheme ?? this.pageTransitionsTheme,
+      appBarTheme: other.appBarTheme ?? this.appBarTheme,
+      bottomAppBarTheme: other.bottomAppBarTheme ?? this.bottomAppBarTheme,
+      colorScheme: other.colorScheme ?? this.colorScheme,
+      dialogTheme: other.dialogTheme ?? this.dialogTheme,
+      floatingActionButtonTheme:
+          other.floatingActionButtonTheme ?? this.floatingActionButtonTheme,
+      typography: other.typography ?? this.typography,
+      cupertinoOverrideTheme:
+          other.cupertinoOverrideTheme ?? this.cupertinoOverrideTheme,
+      snackBarTheme: other.snackBarTheme ?? this.snackBarTheme,
+      bottomSheetTheme: other.bottomSheetTheme ?? this.bottomSheetTheme,
+      popupMenuTheme: other.popupMenuTheme ?? this.popupMenuTheme,
+      bannerTheme: other.bannerTheme ?? this.bannerTheme,
+      dividerTheme: other.dividerTheme ?? this.dividerTheme,
+      buttonBarTheme: other.buttonBarTheme ?? this.buttonBarTheme,
+    );
+  }
+
   Widget withTransparentAppBar({@required Widget child}) => Builder(
         builder: (context) {
           return Theme(

@@ -17,83 +17,86 @@
 
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/redirect.dart';
+import 'package:provider/provider.dart';
 
+import 'auth/bloc.dart';
+import 'matrix.dart';
+import 'notifications/bloc.dart';
 import 'resources/localizations.dart';
 import 'resources/theme.dart';
-import 'section/initial/initial_page.dart';
-import 'section/main/chat/chat_page.dart';
-import 'section/main/chat/image/image_page.dart';
-import 'section/main/chat/settings/chat_settings_page.dart';
-import 'section/main/overview/chat_overview_page.dart';
-import 'section/main/overview/create/group/create_group_details_page.dart';
-import 'section/main/overview/create/group/create_group_members_page.dart';
+import 'section/main/chat/page.dart';
+import 'section/main/chat/image/page.dart';
+import 'section/main/chat/settings/page.dart';
+import 'section/main/chats/page.dart';
+import 'section/main/chats/create/group/details_page.dart';
+import 'section/main/chats/create/group/members_page.dart';
 import 'section/main/settings/appearance_page.dart';
 import 'section/main/settings/name_page.dart';
 import 'section/main/settings/profile_page.dart';
-import 'section/main/settings/settings_page.dart';
+import 'section/main/settings/page.dart';
 import 'section/start/advanced_page.dart';
-import 'section/start/phase/identity/username_page.dart';
-import 'section/start/phase/key/password_page.dart';
 import 'section/start/start_page.dart';
+import 'section/start/login/username/page.dart';
+import 'sentry/bloc.dart';
 
 final routes = {
   Routes.root: (Object params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.root),
-        builder: (context) => InitialPage(),
+        builder: (context) => Redirect(),
       ),
   Routes.settings: (Object params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.settings),
-        builder: (context) => SettingsPage(),
+        builder: (context) => SettingsPage.withBloc(),
       ),
   Routes.settingsProfile: (Object params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.settingsProfile),
-        builder: (context) => ProfilePage(),
+        builder: (context) => ProfilePage.withGivenBloc(params),
       ),
   Routes.settingsProfileName: (Object params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.settingsProfileName),
-        builder: (context) => NamePage(),
+        builder: (context) => NamePage.withGivenBloc(params),
       ),
   Routes.settingsAppearance: (Object params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.settingsAppearance),
-        builder: (context) => AppearancePage(),
+        builder: (context) => AppearancePage.withGivenBloc(params),
       ),
   Routes.chats: (Object arguments) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.chats),
-        builder: (context) =>
-            arguments is Room ? ChatPage(arguments) : ChatOverviewPage(),
+        builder: (context) => arguments is Room
+            ? ChatPage.withBloc(arguments)
+            : ChatsPage.withBloc(),
       ),
   Routes.chatsSettings: (Object arguments) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.chatsSettings),
-        builder: (context) => ChatSettingsPage(arguments),
+        builder: (context) => ChatSettingsPage.withBloc(arguments),
       ),
   Routes.chatsNew: (Object arguments) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.chatsNew),
-        builder: (context) => CreateGroupMembersPage(),
+        builder: (context) => CreateGroupMembersPage.withBloc(),
       ),
   Routes.chatsNewDetails: (Object arguments) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.chatsNewDetails),
-        builder: (context) => CreateGroupDetailsPage(),
+        builder: (context) => CreateGroupDetailsPage.withGivenBloc(arguments),
       ),
   Routes.image: (Object arguments) => MaterialPageRoute(
       settings: RouteSettings(name: Routes.image),
-      builder: (context) => ImagePage(arguments)),
-  Routes.start: (Object params) => MaterialPageRoute(
-        settings: RouteSettings(name: Routes.start),
+      builder: (context) => ImagePage.withBloc(arguments)),
+  Routes.login: (Object params) => MaterialPageRoute(
+        settings: RouteSettings(name: Routes.login),
         builder: (context) => StartPage(),
       ),
-  Routes.startAdvanced: (Object params) => MaterialPageRoute(
-        settings: RouteSettings(name: Routes.startAdvanced),
-        builder: (context) => AdvancedPage(),
+  Routes.loginAdvanced: (Object params) => MaterialPageRoute(
+        settings: RouteSettings(name: Routes.loginAdvanced),
+        builder: (context) => AdvancedPage(bloc: params),
       ),
-  Routes.startUsername: (Object params) => MaterialPageRoute(
-        settings: RouteSettings(name: Routes.startUsername),
-        builder: (context) => UsernamePage(),
-      ),
-  Routes.startPassword: (Object params) => MaterialPageRoute(
-        settings: RouteSettings(name: Routes.startPassword),
-        builder: (context) => PasswordPage(),
+  Routes.loginUsername: (Object params) => MaterialPageRoute(
+        settings: RouteSettings(name: Routes.loginUsername),
+        builder: (context) => UsernameLoginPage.withBloc(),
       ),
 };
 
@@ -109,17 +112,23 @@ class Routes {
   static const chatsSettings = '/chats/settings';
   static const image = '/image';
 
-  static const start = '/start';
-  static const startAdvanced = '/start/advanced';
-  static const startUsername = '/start/username';
-  static const startPassword = '/start/password';
+  static const login = '/login';
+  static const loginAdvanced = '/login/advanced';
+  static const loginUsername = '/login/username';
 
   static const chatsNew = '/chats/new';
   static const chatsNewDetails = '/chats/new/details';
 }
 
 class App extends StatelessWidget {
-  // This widget is the root of your application.
+  static Future<void> main() async => _sentryBloc.wrap(() => runApp(App()));
+
+  static String get buildType => DotEnv().env['BUILD_TYPE'];
+
+  static final _sentryBloc = SentryBloc();
+
+  final _authBloc = AuthBloc();
+
   @override
   Widget build(BuildContext context) {
     return DynamicTheme(
@@ -127,21 +136,45 @@ class App extends StatelessWidget {
       data: (brightness) =>
           brightness == Brightness.dark ? darkTheme : lightTheme,
       themedWidgetBuilder: (context, theme) {
-        return MaterialApp(
-          onGenerateTitle: (BuildContext context) => l(context).appName,
-          localizationsDelegates: [
-            const AppLocalizationsDelegate(),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<AuthBloc>.value(
+              value: _authBloc,
+            ),
+            BlocProvider<SentryBloc>.value(
+              value: _sentryBloc,
+            ),
           ],
-          supportedLocales: [
-            const Locale('en', 'US'),
-          ],
-          initialRoute: Routes.root,
-          onGenerateRoute: (settings) {
-            return routes[settings.name](settings.arguments);
-          },
-          theme: theme,
+          child: Provider<Matrix>(
+            create: (_) => Matrix(_authBloc),
+            child: Builder(
+              builder: (BuildContext c) {
+                return BlocProvider<NotificationsBloc>(
+                  create: (context) => NotificationsBloc(
+                    matrix: Matrix.of(c),
+                    authBloc: _authBloc,
+                  ),
+                  child: MaterialApp(
+                    onGenerateTitle: (BuildContext context) =>
+                        l(context).appName,
+                    localizationsDelegates: [
+                      const AppLocalizationsDelegate(),
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                    ],
+                    supportedLocales: [
+                      const Locale('en', 'US'),
+                    ],
+                    initialRoute: Routes.root,
+                    onGenerateRoute: (settings) {
+                      return routes[settings.name](settings.arguments);
+                    },
+                    theme: theme,
+                  ),
+                );
+              },
+            ),
+          ),
         );
       },
     );

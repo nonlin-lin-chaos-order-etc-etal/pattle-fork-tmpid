@@ -20,9 +20,9 @@ import 'package:future_or_builder/future_or_builder.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/section/main/models/chat_item.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:pattle/src/di.dart' as di;
 import 'package:flutter_html/flutter_html.dart';
 
+import '../../../../matrix.dart';
 import '../../../../util/color.dart';
 import '../../../../util/user.dart';
 
@@ -36,10 +36,8 @@ class TextBubble extends MessageBubble {
   @override
   final TextMessageEvent event;
 
-  final User me = di.getLocalUser();
-
   TextBubble({
-    @required ChatEvent item,
+    @required ChatMessage item,
     ChatItem previousItem,
     ChatItem nextItem,
     @required bool isMine,
@@ -76,6 +74,8 @@ class TextBubbleState extends MessageBubbleState<TextBubble> {
   }
 
   Widget _buildRepliedTo(BuildContext context) {
+    final me = Matrix.of(context).user;
+
     if (widget.event.content.inReplyToId != null) {
       final repliedTo =
           widget.item.room.timeline[widget.event.content.inReplyToId];
@@ -97,7 +97,7 @@ class TextBubbleState extends MessageBubbleState<TextBubble> {
                       room: widget.item.room,
                       reply: widget.event,
                       replyTo: repliedTo,
-                      isMine: repliedTo.sender == widget.me,
+                      isMine: repliedTo.sender == me,
                     ),
                   )
                 : Container();
@@ -152,7 +152,9 @@ class TextBubbleState extends MessageBubbleState<TextBubble> {
 
   @protected
   Widget buildMine(BuildContext context) {
-    final needsBorder = widget.isRepliedTo && widget.reply.sender == widget.me;
+    final me = Matrix.of(context).user;
+
+    final needsBorder = widget.isRepliedTo && widget.reply.sender == me;
 
     return InkWell(
       onTap: () {},
@@ -179,7 +181,9 @@ class TextBubbleState extends MessageBubbleState<TextBubble> {
 
   @protected
   Widget buildTheirs(BuildContext context) {
-    final needsBorder = widget.isRepliedTo && widget.reply.sender != widget.me;
+    final me = Matrix.of(context).user;
+
+    final needsBorder = widget.isRepliedTo && widget.reply.sender != me;
 
     // Don't show sender above emotes
     final sender = widget.event is! EmoteMessageEvent

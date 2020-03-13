@@ -30,7 +30,7 @@ import 'text_bubble.dart';
 
 abstract class Bubble extends Item {
   @override
-  final ChatEvent item;
+  final ChatMessage item;
 
   final RoomEvent event;
 
@@ -53,7 +53,7 @@ abstract class Bubble extends Item {
         );
 
   factory Bubble.fromItem({
-    @required ChatEvent item,
+    @required ChatMessage item,
     ChatItem previousItem,
     ChatItem nextItem,
     @required bool isMine,
@@ -118,7 +118,7 @@ abstract class Bubble extends Item {
     @required RoomEvent replyTo,
     @required bool isMine,
   }) {
-    final item = ChatEvent(room, replyTo);
+    final item = ChatMessage(room, replyTo);
     if (replyTo is TextMessageEvent) {
       return TextBubble(
         item: item,

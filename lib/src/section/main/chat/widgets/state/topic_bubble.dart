@@ -31,7 +31,7 @@ class TopicBubble extends StateBubble {
   final TopicChangeEvent event;
 
   TopicBubble({
-    @required ChatEvent item,
+    @required ChatMessage item,
     @required ChatItem previousItem,
     @required ChatItem nextItem,
     @required bool isMine,

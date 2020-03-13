@@ -31,7 +31,7 @@ class CreationBubble extends StateBubble {
   final RoomCreationEvent event;
 
   CreationBubble({
-    @required ChatEvent item,
+    @required ChatMessage item,
     @required ChatItem previousItem,
     @required ChatItem nextItem,
     @required bool isMine,

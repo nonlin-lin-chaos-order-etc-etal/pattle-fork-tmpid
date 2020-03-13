@@ -17,7 +17,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/di.dart' as di;
 import 'package:pattle/src/section/main/models/chat_item.dart';
 import 'package:pattle/src/section/main/widgets/redacted.dart';
 
@@ -30,10 +29,8 @@ class RedactedBubble extends MessageBubble {
   @override
   final RedactedEvent event;
 
-  final LocalUser me = di.getLocalUser();
-
   RedactedBubble({
-    @required ChatEvent item,
+    @required ChatMessage item,
     ChatItem previousItem,
     ChatItem nextItem,
     @required bool isMine,

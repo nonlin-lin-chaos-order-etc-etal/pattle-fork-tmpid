@@ -25,16 +25,16 @@ class DateItem implements ChatItem {
   DateItem(this.date);
 }
 
-class ChatEvent<T extends RoomEvent> implements ChatItem {
+class ChatMessage<T extends RoomEvent> implements ChatItem {
   final Room room;
   final T event;
 
-  ChatEvent(this.room, this.event);
+  ChatMessage(this.room, this.event);
 
-  ChatEvent<E> as<E extends RoomEvent>() {
+  ChatMessage<E> as<E extends RoomEvent>() {
     final e = event;
     if (e is E) {
-      return ChatEvent<E>(room, e);
+      return ChatMessage<E>(room, e);
     } else {
       return null;
     }

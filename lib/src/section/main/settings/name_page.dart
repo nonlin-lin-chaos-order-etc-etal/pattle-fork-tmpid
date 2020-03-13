@@ -17,25 +17,23 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
+import 'package:pattle/src/section/main/settings/bloc.dart';
 
-import '../../../util/user.dart';
-import '../../../request_state.dart';
-import 'settings_bloc.dart';
+import '../../../matrix.dart';
 
-class NamePageState extends State<NamePage> {
-  final bloc = SettingsBloc();
-
-  final textController = TextEditingController();
+class _NamePageState extends State<NamePage> {
+  final _textController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-    final name = bloc.me.displayName;
+    final name = Matrix.of(context).user.name;
 
-    textController.value = TextEditingValue(
+    _textController.value = TextEditingValue(
       text: name,
       selection: TextSelection(baseOffset: 0, extentOffset: name.length),
     );
@@ -47,101 +45,113 @@ class NamePageState extends State<NamePage> {
   }
 
   Future<void> setName() async {
-    await bloc.setDisplayName(textController.text);
-    Navigator.pop(context);
+    BlocProvider.of<SettingsBloc>(context).add(
+      UpdateDisplayName(_textController.text),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          l(context).name,
-          style: TextStyle(
+    return BlocListener<SettingsBloc, SettingsState>(
+      listener: (prevState, currentState) {
+        if (currentState is DisplayNameUpdated) {
+          Navigator.pop(context);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            l(context).name,
+            style: TextStyle(
+              color: redOnBackground(context),
+            ),
+          ),
+          brightness: Theme.of(context).brightness,
+          iconTheme: IconThemeData(
             color: redOnBackground(context),
           ),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.check),
+              onPressed: setName,
+            )
+          ],
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         ),
-        brightness: Theme.of(context).brightness,
-        iconTheme: IconThemeData(
-          color: redOnBackground(context),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.check),
-            onPressed: setName,
-          )
-        ],
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      ),
-      body: Column(
-        children: <Widget>[
-          TextField(
-            autofocus: true,
-            controller: textController,
-            autocorrect: false,
-            cursorColor: Colors.white,
-            style: TextStyle(
-              color: Colors.white,
-            ),
-            textCapitalization: TextCapitalization.words,
-            decoration: InputDecoration(
-              filled: true,
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.zero,
+        body: Column(
+          children: <Widget>[
+            TextField(
+              autofocus: true,
+              controller: _textController,
+              autocorrect: false,
+              cursorColor: Colors.white,
+              style: TextStyle(
+                color: Colors.white,
               ),
-              fillColor: LightColors.red,
-              focusColor: Colors.white,
-            ),
-            onSubmitted: (_) => setName(),
-          ),
-          StreamBuilder<RequestState>(
-            stream: bloc.displayNameStream,
-            builder: (
-              BuildContext context,
-              AsyncSnapshot<RequestState> snapshot,
-            ) {
-              print(snapshot.connectionState);
-              if (snapshot.data == RequestState.active) {
-                return LinearProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(LightColors.red[300]),
-                  backgroundColor: LightColors.red[100],
-                );
-              } else {
-                return Container(height: 6);
-              }
-            },
-          ),
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(right: 16),
-                  child: Icon(
-                    Icons.info_outline,
-                    size: 28,
-                    color: Theme.of(context).textTheme.caption.color,
-                  ),
+              textCapitalization: TextCapitalization.words,
+              decoration: InputDecoration(
+                filled: true,
+                border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.zero,
                 ),
-                Expanded(
-                  child: Text(
-                    l(context).editNameDescription,
-                    style: TextStyle(
+                fillColor: LightColors.red,
+                focusColor: Colors.white,
+              ),
+              onSubmitted: (_) => setName(),
+            ),
+            BlocBuilder<SettingsBloc, SettingsState>(
+              builder: (context, state) {
+                if (state is UpdatingDisplayName) {
+                  return LinearProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(LightColors.red[300]),
+                    backgroundColor: LightColors.red[100],
+                  );
+                } else {
+                  return Container(height: 6);
+                }
+              },
+            ),
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(right: 16),
+                    child: Icon(
+                      Icons.info_outline,
+                      size: 28,
                       color: Theme.of(context).textTheme.caption.color,
                     ),
                   ),
-                )
-              ],
+                  Expanded(
+                    child: Text(
+                      l(context).editNameDescription,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.caption.color,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
 class NamePage extends StatefulWidget {
+  NamePage._();
+
+  static Widget withGivenBloc(SettingsBloc settingsBloc) {
+    return BlocProvider<SettingsBloc>.value(
+      value: settingsBloc,
+      child: NamePage._(),
+    );
+  }
+
   @override
-  State<StatefulWidget> createState() => NamePageState();
+  State<StatefulWidget> createState() => _NamePageState();
 }

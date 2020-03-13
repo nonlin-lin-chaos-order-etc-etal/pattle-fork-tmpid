@@ -22,23 +22,15 @@ class Storage {
 
   Storage(this.prefs);
 
-  static Future<Storage> open() async {
+  static Future<Storage> load() async {
     return Storage(await SharedPreferences.getInstance());
   }
 
-  dynamic operator [](String key) => prefs.get(key);
+  static const String _mayReportCrashesStorageKey = 'may_report_crashes';
 
-  void operator []=(String key, dynamic value) {
-    if (value is String) {
-      prefs.setString(key, value);
-    } else if (value is bool) {
-      prefs.setBool(key, value);
-    } else if (value is int) {
-      prefs.setInt(key, value);
-    } else if (value is double) {
-      prefs.setDouble(key, value);
-    } else {
-      throw TypeError();
-    }
-  }
+  bool get mayReportCrashes =>
+      prefs.getBool(_mayReportCrashesStorageKey) ?? false;
+
+  set mayReportCrashes(bool value) =>
+      prefs.setBool(_mayReportCrashesStorageKey, value);
 }

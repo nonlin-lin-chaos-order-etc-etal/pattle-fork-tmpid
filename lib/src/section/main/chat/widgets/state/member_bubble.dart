@@ -29,7 +29,7 @@ class MemberBubble extends StateBubble {
   final MemberChangeEvent event;
 
   MemberBubble({
-    @required ChatEvent item,
+    @required ChatMessage item,
     @required ChatItem previousItem,
     @required ChatItem nextItem,
     @required bool isMine,

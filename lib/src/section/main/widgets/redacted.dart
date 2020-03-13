@@ -17,9 +17,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/di.dart' as di;
 import 'package:pattle/src/resources/localizations.dart';
 
+import '../../../matrix.dart';
 import '../../../util//user.dart';
 
 class Redacted extends StatelessWidget {
@@ -39,7 +39,7 @@ class Redacted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<TextSpan> text;
-    if (event.redaction.sender == di.getLocalUser()) {
+    if (event.redaction.sender == Matrix.of(context).user) {
       text = [TextSpan(text: ' ${l(context).youDeletedThisMessage}')];
     } else {
       text = l(context).hasDeletedThisMessage(

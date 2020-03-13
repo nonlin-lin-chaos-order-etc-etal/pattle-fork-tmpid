@@ -31,7 +31,7 @@ abstract class StateBubble extends Bubble {
   static const borderRadius = BorderRadius.all(Bubble.radiusForBorder);
 
   StateBubble({
-    @required ChatEvent item,
+    @required ChatMessage item,
     @required ChatItem previousItem,
     @required ChatItem nextItem,
     @required bool isMine,

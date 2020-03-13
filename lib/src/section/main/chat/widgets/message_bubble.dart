@@ -39,7 +39,7 @@ abstract class MessageBubble extends Bubble {
   final bool isRepliedTo;
 
   MessageBubble({
-    @required ChatEvent item,
+    @required ChatMessage item,
     ChatItem previousItem,
     ChatItem nextItem,
     @required bool isMine,
@@ -140,14 +140,14 @@ abstract class MessageBubbleState<T extends MessageBubble>
     }
 
     if (_isStartOfGroup == null) {
-      if (widget.previousItem is! ChatEvent ||
-          (widget.previousItem is ChatEvent &&
-              (widget.previousItem as ChatEvent).event is StateEvent)) {
+      if (widget.previousItem is! ChatMessage ||
+          (widget.previousItem is ChatMessage &&
+              (widget.previousItem as ChatMessage).event is StateEvent)) {
         _isStartOfGroup = true;
         return _isStartOfGroup;
       }
 
-      final previousEvent = (widget.previousItem as ChatEvent).event;
+      final previousEvent = (widget.previousItem as ChatMessage).event;
 
       final previousHasSameSender = previousEvent != null &&
           previousEvent.sender.displayName == widget.event.sender.displayName &&
@@ -184,14 +184,14 @@ abstract class MessageBubbleState<T extends MessageBubble>
     }
 
     if (_isEndOfGroup == null) {
-      if (widget.nextItem is! ChatEvent ||
-          (widget.nextItem is ChatEvent &&
-              (widget.nextItem as ChatEvent).event is StateEvent)) {
+      if (widget.nextItem is! ChatMessage ||
+          (widget.nextItem is ChatMessage &&
+              (widget.nextItem as ChatMessage).event is StateEvent)) {
         _isEndOfGroup = true;
         return _isEndOfGroup;
       }
 
-      final nextEvent = (widget.nextItem as ChatEvent).event;
+      final nextEvent = (widget.nextItem as ChatMessage).event;
 
       final nextHasSameSender = nextEvent != null &&
           nextEvent.sender.displayName == widget.event.sender.displayName &&

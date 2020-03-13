@@ -22,7 +22,7 @@ import 'package:chopper/chopper.dart';
 import 'package:pattle/src/resources/localizations.dart';
 import 'dart:io';
 
-import '../../../sync_bloc.dart';
+import '../../../matrix.dart';
 
 class ErrorBanner extends StatefulWidget {
   @override
@@ -52,7 +52,8 @@ class ErrorBannerState extends State<ErrorBanner>
 
   @override
   Widget build(BuildContext context) => StreamBuilder<SyncState>(
-        stream: syncBloc.stream,
+        // TODO: Temporary
+        stream: Matrix.of(context).user.sync,
         builder: (BuildContext context, AsyncSnapshot<SyncState> snapshot) {
           final state = snapshot.data;
           final error = state?.exception ?? snapshot.error;

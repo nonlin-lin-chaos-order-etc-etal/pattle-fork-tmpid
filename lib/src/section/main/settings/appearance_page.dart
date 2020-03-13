@@ -16,30 +16,33 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 
-import 'settings_bloc.dart';
+import 'bloc.dart';
 import 'widgets/header.dart';
 
-class AppearancePageState extends State<AppearancePage> {
-  final bloc = SettingsBloc();
+class AppearancePage extends StatefulWidget {
+  AppearancePage._();
 
-  Brightness brightness;
-
-  @override
-  void initState() {
-    super.initState();
+  static Widget withGivenBloc(SettingsBloc settingsBloc) {
+    return BlocProvider<SettingsBloc>.value(
+      value: settingsBloc,
+      child: AppearancePage._(),
+    );
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
+  State<StatefulWidget> createState() => _AppearancePageState();
+}
+
+class _AppearancePageState extends State<AppearancePage> {
+  Brightness _brightness;
 
   @override
   Widget build(BuildContext context) {
-    brightness = Theme.of(context).brightness;
+    _brightness = Theme.of(context).brightness;
 
     return Scaffold(
       appBar: AppBar(
@@ -49,7 +52,7 @@ class AppearancePageState extends State<AppearancePage> {
         children: <Widget>[
           ListTile(
             leading: Icon(
-              brightness == Brightness.light
+              _brightness == Brightness.light
                   ? Icons.brightness_high
                   : Icons.brightness_3,
               color: redOnBackground(context),
@@ -57,7 +60,7 @@ class AppearancePageState extends State<AppearancePage> {
             title: Header(l(context).brightness),
           ),
           RadioListTile(
-            groupValue: brightness,
+            groupValue: _brightness,
             value: Brightness.light,
             onChanged: (brightness) {
               DynamicTheme.of(context).setBrightness(brightness);
@@ -65,7 +68,7 @@ class AppearancePageState extends State<AppearancePage> {
             title: Text(l(context).light),
           ),
           RadioListTile(
-            groupValue: brightness,
+            groupValue: _brightness,
             value: Brightness.dark,
             onChanged: (brightness) {
               DynamicTheme.of(context).setBrightness(brightness);
@@ -77,9 +80,4 @@ class AppearancePageState extends State<AppearancePage> {
       ),
     );
   }
-}
-
-class AppearancePage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => AppearancePageState();
 }

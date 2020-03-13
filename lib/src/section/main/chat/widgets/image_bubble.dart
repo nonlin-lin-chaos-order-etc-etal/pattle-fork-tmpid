@@ -35,12 +35,13 @@ class ImageBubble extends MessageBubble {
   static const double maxHeight = 292;
 
   double get height {
-    return (event.content.info.height / (event.content.info.width / width))
+    return (event.content.info?.height ??
+            0 / (event.content.info?.width ?? 0 / width))
         .clamp(minHeight, maxHeight);
   }
 
   ImageBubble({
-    @required ChatEvent item,
+    @required ChatMessage item,
     ChatItem previousItem,
     ChatItem nextItem,
     @required bool isMine,

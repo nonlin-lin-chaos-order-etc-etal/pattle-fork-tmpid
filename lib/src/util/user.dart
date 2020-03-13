@@ -21,7 +21,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/di.dart' as di;
+
+import 'package:pattle/src/matrix.dart';
 
 const _limit = 28;
 String _limited(String name) {
@@ -45,7 +46,7 @@ extension UserExtensions on User {
   /// This is however not always desired, mostly only when showing the
   /// display name to the end user.
   String getDisplayName([BuildContext context]) =>
-      context != null && this == di.getLocalUser()
+      context != null && this == Matrix.of(context).user
           ? l(context).you
           : _limited(name) ?? _displayId;
 
