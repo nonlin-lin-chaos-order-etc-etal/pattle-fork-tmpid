@@ -52,14 +52,18 @@ class TextContent extends StatelessWidget {
           padding: EdgeInsets.all(8).copyWith(
             left: needsBorder ? _replyLeftPadding : null,
           ),
-          child: Column(
-            crossAxisAlignment: bubble.message.isMine
-                ? CrossAxisAlignment.end
-                : CrossAxisAlignment.start,
+          child: Wrap(
+            runAlignment:
+                bubble.message.isMine ? WrapAlignment.end : WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.end,
+            spacing: 4,
+            runSpacing: 4,
             children: <Widget>[
-              Sender(
-                padding: EdgeInsets.only(bottom: 4),
-              ),
+              if (Sender.necessary(context))
+                Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Sender(),
+                ),
               // Only build the replied-to message if this itself
               // is not a replied-to message (to prevent very long
               // reply chains)
@@ -72,8 +76,11 @@ class TextContent extends StatelessWidget {
                     child: Container() // TODO: REPLY
                     ),
               _Content(),
-              SizedBox(height: 4),
-              MessageInfo(),
+              if (MessageInfo.necessary(context))
+                Padding(
+                  padding: EdgeInsets.only(top: 4),
+                  child: MessageInfo(),
+                ),
             ],
           ),
         ),
@@ -119,7 +126,7 @@ class _Content extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Sender(),
+          if (Sender.necessary(context)) Sender(),
           Flexible(
             child: html,
           )

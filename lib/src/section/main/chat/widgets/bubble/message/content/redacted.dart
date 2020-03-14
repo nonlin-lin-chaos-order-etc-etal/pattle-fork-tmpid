@@ -38,7 +38,7 @@ class RedactedContent extends StatelessWidget {
               ? CrossAxisAlignment.end
               : CrossAxisAlignment.start,
           children: <Widget>[
-            Sender(),
+            if (Sender.necessary(context)) Sender(),
             DefaultTextStyle(
               style: TextStyle(
                 color: themed(
@@ -51,8 +51,11 @@ class RedactedContent extends StatelessWidget {
               ),
               child: Redacted(event: bubble.message.event),
             ),
-            SizedBox(height: 4),
-            MessageInfo()
+            if (MessageInfo.necessary(context))
+              Padding(
+                padding: EdgeInsets.only(top: 4),
+                child: MessageInfo(),
+              ),
           ],
         ),
       ),

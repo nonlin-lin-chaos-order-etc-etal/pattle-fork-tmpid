@@ -74,7 +74,7 @@ class _ImageContentState extends State<ImageContent> {
               ),
             ),
           ),
-          if (bubble.isEndOfGroup) _MessageInfo(),
+          if (MessageInfo.necessary(context)) _MessageInfo(),
           if (bubble.message.isMine && bubble.isStartOfGroup) _Sender(),
           Positioned.fill(
             child: Clickable(

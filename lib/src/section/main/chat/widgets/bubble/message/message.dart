@@ -313,13 +313,15 @@ class Clickable extends StatelessWidget {
 class MessageInfo extends StatelessWidget {
   const MessageInfo({Key key}) : super(key: key);
 
+  static bool necessary(BuildContext context) {
+    final bubble = MessageBubble.of(context);
+
+    return bubble.isEndOfGroup;
+  }
+
   @override
   Widget build(BuildContext context) {
     final bubble = MessageBubble.of(context);
-
-    if (!bubble.isEndOfGroup) {
-      return Container(width: 0, height: 0);
-    }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -355,36 +357,30 @@ class Sender extends StatelessWidget {
   /// If true, the color of the sender will be based on their Matrix ID.
   final bool personalizedColor;
 
-  final EdgeInsets padding;
-
   const Sender({
     Key key,
     this.personalizedColor = true,
-    this.padding = EdgeInsets.zero,
   }) : super(key: key);
+
+  static bool necessary(BuildContext context) {
+    final bubble = MessageBubble.of(context);
+
+    return (bubble.isStartOfGroup ||
+            (bubble.isReply != null && !bubble.message.isMine)) &&
+        !bubble.message.room.isDirect;
+  }
 
   @override
   Widget build(BuildContext context) {
     final bubble = MessageBubble.of(context);
 
-    final showSender = (bubble.isStartOfGroup ||
-            (bubble.isReply != null && !bubble.message.isMine)) &&
-        !bubble.message.room.isDirect;
-
-    if (!showSender) {
-      return Container(width: 0, height: 0);
-    }
-
-    return Padding(
-      padding: padding,
-      child: Text(
-        bubble.message.event.sender.displayName,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: personalizedColor
-              ? bubble.message.event.sender.getColor(context)
-              : null,
-        ),
+    return Text(
+      bubble.message.event.sender.displayName,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: personalizedColor
+            ? bubble.message.event.sender.getColor(context)
+            : null,
       ),
     );
   }
