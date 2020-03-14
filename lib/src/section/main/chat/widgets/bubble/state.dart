@@ -15,28 +15,4 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:matrix_sdk/matrix_sdk.dart';
-
-abstract class ChatItem {}
-
-class DateItem implements ChatItem {
-  final DateTime date;
-
-  DateItem(this.date);
-}
-
-class ChatMessage<T extends RoomEvent> implements ChatItem {
-  final Room room;
-  final T event;
-
-  ChatMessage(this.room, this.event);
-
-  ChatMessage<E> as<E extends RoomEvent>() {
-    final e = event;
-    if (e is E) {
-      return ChatMessage<E>(room, e);
-    } else {
-      return null;
-    }
-  }
-}
+export 'state/state.dart';

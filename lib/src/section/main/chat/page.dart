@@ -26,7 +26,6 @@ import 'package:pattle/src/app.dart';
 
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/models/chat_item.dart';
 import 'package:pattle/src/section/main/widgets/chat_name.dart';
 import 'package:pattle/src/section/main/widgets/error.dart';
 import 'package:pattle/src/section/main/widgets/title_with_sub.dart';
@@ -38,7 +37,8 @@ import '../../../util/url.dart';
 
 import 'bloc.dart';
 import 'util/typing_span.dart';
-import 'widgets/bubble.dart';
+import 'widgets/bubble/message.dart';
+import 'widgets/bubble/state.dart';
 import 'widgets/date_header.dart';
 
 class ChatPage extends StatefulWidget {
@@ -263,47 +263,55 @@ class _ChatPageState extends State<ChatPage> {
     return BlocBuilder<ChatBloc, ChatState>(
       builder: (context, state) {
         if (state is ChatLoaded) {
-          final me = Matrix.of(context).user;
-
           return ListView.builder(
             controller: _scrollController,
             reverse: true,
-            itemCount:
-                state.endReached ? state.items.length : state.items.length + 1,
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            itemCount: state.endReached
+                ? state.messages.length
+                : state.messages.length + 1,
             itemBuilder: (context, index) {
-              if (index >= state.items.length) {
+              if (index >= state.messages.length) {
                 return CircularProgressIndicator();
               }
 
-              final item = state.items[index];
+              final message = state.messages[index];
 
-              if (item is ChatMessage) {
-                final event = item.event;
-                final isMine = event.sender == me;
+              final event = message.event;
 
-                var previousItem, nextItem;
-                // Note: Because the items are reversed in the
-                // ListView.builder, the 'previous' event is actually the next
-                // one in the list.
-                if (index != state.items.length - 1) {
-                  previousItem = state.items[index + 1];
-                }
+              var previousMessage, nextMessage;
+              // Note: Because the items are reversed in the
+              // ListView.builder, the 'previous' event is actually the next
+              // one in the list.
+              if (index != state.messages.length - 1) {
+                previousMessage = state.messages[index + 1];
+              }
 
-                if (index != 0) {
-                  nextItem = state.items[index - 1];
-                }
+              if (index != 0) {
+                nextMessage = state.messages[index - 1];
+              }
 
-                return Bubble.fromItem(
-                      item: item,
-                      previousItem: previousItem,
-                      nextItem: nextItem,
-                      isMine: isMine,
-                    ) ??
-                    Container();
-              } else if (item is DateItem) {
-                return DateHeader(item);
+              Widget bubble;
+              if (event is StateEvent) {
+                bubble = StateBubble.withContent(message: message);
               } else {
-                return Container();
+                bubble = MessageBubble.withContent(
+                  message: message,
+                  previousMessage: previousMessage,
+                  nextMessage: nextMessage,
+                );
+              }
+
+              // Insert DateHeader if there's a day difference
+              if (previousMessage != null &&
+                  event != null &&
+                  previousMessage.event.time.day != event.time.day) {
+                return DateHeader(
+                  date: previousMessage.event.time,
+                  child: bubble,
+                );
+              } else {
+                return bubble;
               }
             },
           );

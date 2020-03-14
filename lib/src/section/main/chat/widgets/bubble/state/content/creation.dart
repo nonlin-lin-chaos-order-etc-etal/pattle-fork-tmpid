@@ -1,4 +1,5 @@
 // Copyright (C) 2019  Wilko Manger
+// Copyright (C) 2019  Mathieu Velten (FLA signed)
 //
 // This file is part of Pattle.
 //
@@ -16,34 +17,32 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/section/main/models/chat_message.dart';
 
-import '../../../../util/date_format.dart';
+import '../../../../../../../util/user.dart';
 
-class DateHeader extends StatelessWidget {
-  final DateTime date;
-  final Widget child;
+import '../state.dart';
 
-  const DateHeader({Key key, this.date, this.child}) : super(key: key);
+/// If [message] is `null`, will try to get the [message] from the
+/// ancestor [StateBubble]'s [StateBubble].
+class CreationContent extends StatelessWidget {
+  final ChatMessage message;
+
+  const CreationContent({Key key, this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        SizedBox(height: 8),
-        Center(
-          child: Text(
-            formatAsDate(context, date).toUpperCase(),
-            style: Theme.of(context).textTheme.display1.copyWith(
-                  fontSize: 16,
-                ),
+    final message = this.message ?? StateBubble.of(context).message;
+
+    return RichText(
+      text: TextSpan(
+        children: l(context).createdThisGroup(
+          TextSpan(
+            text: message.room.creator.displayName,
           ),
         ),
-        SizedBox(height: 8),
-        SizedBox(
-          width: double.infinity,
-          child: child,
-        ),
-      ],
+      ),
     );
   }
 }

@@ -23,7 +23,7 @@ import 'package:image/image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:mime/mime.dart';
 import 'package:pattle/src/section/main/chat/event.dart';
-import 'package:pattle/src/section/main/models/chat_item.dart';
+import 'package:pattle/src/section/main/models/chat_message.dart';
 
 import '../../../matrix.dart';
 import '../../../util/room.dart';
@@ -133,10 +133,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     final events = await room.timeline.paginate(page: page);
 
-    final chatItems = List<ChatItem>();
+    final messages = List<ChatMessage>();
 
-    // Remember: 'previous' is actually next in time
-    RoomEvent previousEvent;
     RoomEvent event;
     for (event in events) {
       var shouldIgnore = false;
@@ -171,34 +169,43 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         continue;
       }
 
-      // Insert DateHeader if there's a day difference
-      if (previousEvent != null &&
-          event != null &&
-          previousEvent.time.day != event.time.day) {
-        chatItems.add(DateItem(previousEvent.time));
+      ChatMessage inReplyTo;
+      if (event is MessageEvent && event.content.inReplyToId != null) {
+        final inReplyToEvent = await room.timeline[event.content.inReplyToId];
+
+        if (inReplyToEvent != null) {
+          inReplyTo = ChatMessage(
+            room,
+            inReplyToEvent,
+            isMine: inReplyToEvent.sender == me,
+          );
+        }
       }
 
-      chatItems.add(ChatMessage(room, event));
-      previousEvent = event;
+      messages.add(
+        ChatMessage(
+          room,
+          event,
+          inReplyTo: inReplyTo,
+          isMine: event.sender == me,
+        ),
+      );
     }
 
     bool endReached = false;
-    // Add date header above first event in room
     if (event is RoomCreationEvent) {
-      chatItems.add(DateItem(event.time));
-
       endReached = true;
     }
 
     if (currentState is ChatLoaded) {
       return currentState.copyWith(
-        items: currentState.items + chatItems,
+        messages: currentState.messages + messages,
         pageCount: page + 1,
         endReached: endReached,
       );
     } else {
       return ChatLoaded(
-        items: chatItems,
+        messages: messages,
         pageCount: page + 1,
         endReached: endReached,
       );

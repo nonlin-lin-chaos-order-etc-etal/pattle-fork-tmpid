@@ -15,34 +15,36 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/material.dart';
-import 'package:pattle/src/section/main/models/chat_item.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:matrix_sdk/matrix_sdk.dart';
 
-abstract class Item extends StatefulWidget {
-  final ChatItem item;
+class ChatMessage {
+  final Room room;
+  final RoomEvent event;
 
-  final ChatItem previousItem;
-  final ChatItem nextItem;
+  final ChatMessage inReplyTo;
+  final bool isMine;
 
-  // Styling;
-  static const betweenMargin = 8.0;
-  static const sideMargin = 16.0;
-
-  Item({
-    @required this.item,
-    @required this.previousItem,
-    @required this.nextItem,
+  ChatMessage(
+    this.room,
+    this.event, {
+    this.inReplyTo,
+    @required this.isMine,
   });
-}
 
-abstract class ItemState<T extends Item> extends State<T>
-    with AutomaticKeepAliveClientMixin {
   @override
-  final bool wantKeepAlive = true;
+  bool operator ==(other) {
+    if (other is ChatMessage) {
+      return room == other.room &&
+          event == other.event &&
+          inReplyTo == other.inReplyTo &&
+          isMine == other.isMine;
+    } else {
+      return false;
+    }
+  }
 
-  @protected
-  double marginBottom() => Item.betweenMargin;
-
-  @protected
-  double marginTop() => widget.previousItem == null ? Item.betweenMargin : 0;
+  @override
+  int get hashCode =>
+      room.hashCode + event.hashCode + inReplyTo.hashCode + isMine.hashCode;
 }
