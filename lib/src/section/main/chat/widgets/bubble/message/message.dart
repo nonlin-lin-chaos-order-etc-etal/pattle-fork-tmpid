@@ -326,7 +326,7 @@ class MessageInfo extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        if (bubble.message.isMine)
+        if (bubble.message.isMine) ...[
           Icon(
             bubble.message.event.sentState != SentState.sent
                 ? Icons.access_time
@@ -334,7 +334,8 @@ class MessageInfo extends StatelessWidget {
             color: Colors.white,
             size: 14,
           ),
-        SizedBox(width: 4),
+          SizedBox(width: 4),
+        ],
         if (bubble.isEndOfGroup)
           Text(
             formatAsTime(bubble.message.event.time),
