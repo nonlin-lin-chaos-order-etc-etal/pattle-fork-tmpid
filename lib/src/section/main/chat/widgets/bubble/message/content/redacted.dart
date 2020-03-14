@@ -28,13 +28,13 @@ import '../../message.dart';
 class RedactedContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final info = MessageBubble.of(context);
+    final bubble = MessageBubble.of(context);
 
     return Clickable(
       child: Padding(
-        padding: info.contentPadding,
+        padding: bubble.contentPadding,
         child: Column(
-          crossAxisAlignment: info.message.isMine
+          crossAxisAlignment: bubble.message.isMine
               ? CrossAxisAlignment.end
               : CrossAxisAlignment.start,
           children: <Widget>[
@@ -43,12 +43,13 @@ class RedactedContent extends StatelessWidget {
               style: TextStyle(
                 color: themed(
                   context,
-                  light:
-                      info.message.isMine ? Colors.grey[300] : Colors.grey[700],
-                  dark: info.message.isMine ? Colors.white30 : Colors.white70,
+                  light: bubble.message.isMine
+                      ? Colors.grey[300]
+                      : Colors.grey[700],
+                  dark: bubble.message.isMine ? Colors.white30 : Colors.white70,
                 ),
               ),
-              child: Redacted(event: info.message.event),
+              child: Redacted(event: bubble.message.event),
             ),
             SizedBox(height: 4),
             MessageInfo()

@@ -47,10 +47,10 @@ class _ImageContentState extends State<ImageContent> {
 
   @override
   Widget build(BuildContext context) {
-    final info = MessageBubble.of(context);
-    assert(info.message.event is ImageMessageEvent);
+    final bubble = MessageBubble.of(context);
+    assert(bubble.message.event is ImageMessageEvent);
 
-    final event = info.message.event as ImageMessageEvent;
+    final event = bubble.message.event as ImageMessageEvent;
 
     final height = (event.content.info?.height ??
             0 / (event.content.info?.width ?? 0 / _width))
@@ -59,12 +59,12 @@ class _ImageContentState extends State<ImageContent> {
     return Container(
       width: _width,
       height: height,
-      decoration: BoxDecoration(borderRadius: info.borderRadius),
+      decoration: BoxDecoration(borderRadius: bubble.borderRadius),
       child: Stack(
         children: <Widget>[
           Positioned.fill(
             child: ClipRRect(
-              borderRadius: info.borderRadius,
+              borderRadius: bubble.borderRadius,
               child: Hero(
                 tag: event.id,
                 child: CachedNetworkImage(
@@ -74,8 +74,8 @@ class _ImageContentState extends State<ImageContent> {
               ),
             ),
           ),
-          if (info.isEndOfGroup) _MessageInfo(),
-          if (info.message.isMine && info.isStartOfGroup) _Sender(),
+          if (bubble.isEndOfGroup) _MessageInfo(),
+          if (bubble.message.isMine && bubble.isStartOfGroup) _Sender(),
           Positioned.fill(
             child: Clickable(
               extraMaterial: true,
@@ -91,21 +91,21 @@ class _ImageContentState extends State<ImageContent> {
 class _MessageInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final info = MessageBubble.of(context);
+    final bubble = MessageBubble.of(context);
 
     var alignment, borderRadius;
-    if (info.message.isMine) {
+    if (bubble.message.isMine) {
       alignment = Alignment.bottomRight;
-      borderRadius = info.borderRadius;
+      borderRadius = bubble.borderRadius;
     } else {
       alignment = Alignment.bottomLeft;
-      borderRadius = BorderRadius.all(info.borderRadius.bottomLeft);
+      borderRadius = BorderRadius.all(bubble.borderRadius.bottomLeft);
     }
 
     return Align(
       alignment: alignment,
       child: Padding(
-        padding: info.contentPadding,
+        padding: bubble.contentPadding,
         child: Container(
           decoration: BoxDecoration(
             borderRadius: borderRadius,
@@ -115,7 +115,7 @@ class _MessageInfo extends StatelessWidget {
             padding: EdgeInsets.all(4),
             child: DefaultTextStyle(
               style: DefaultTextStyle.of(context).style.copyWith(
-                    color: !info.message.isMine ? Colors.white : null,
+                    color: !bubble.message.isMine ? Colors.white : null,
                   ),
               child: MessageInfo(),
             ),
@@ -129,15 +129,15 @@ class _MessageInfo extends StatelessWidget {
 class _Sender extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final info = MessageBubble.of(context);
+    final bubble = MessageBubble.of(context);
 
     return Align(
       alignment: Alignment.topLeft,
       child: Padding(
-        padding: info.contentPadding,
+        padding: bubble.contentPadding,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: info.borderRadius,
+            borderRadius: bubble.borderRadius,
             color: Color(0x64000000),
           ),
           child: Padding(

@@ -33,18 +33,19 @@ class TextContent extends StatelessWidget {
   static const _replyLeftPadding = 12.0;
   @override
   Widget build(BuildContext context) {
-    final info = MessageBubble.of(context);
+    final bubble = MessageBubble.of(context);
 
-    final needsBorder = info.isReply && info.message.inReplyTo?.isMine == true;
+    final needsBorder =
+        bubble.isReply && bubble.message.inReplyTo?.isMine == true;
 
     return Clickable(
       child: CustomPaint(
         painter: needsBorder
             ? _ReplyBorderPainter(
-                color: info.message.isMine
+                color: bubble.message.isMine
                     ? Colors.white
-                    : info.message.event.sender.getColor(context),
-                borderRadius: info.borderRadius,
+                    : bubble.message.event.sender.getColor(context),
+                borderRadius: bubble.borderRadius,
               )
             : null,
         child: Padding(
@@ -52,7 +53,7 @@ class TextContent extends StatelessWidget {
             left: needsBorder ? _replyLeftPadding : null,
           ),
           child: Column(
-            crossAxisAlignment: info.message.isMine
+            crossAxisAlignment: bubble.message.isMine
                 ? CrossAxisAlignment.end
                 : CrossAxisAlignment.start,
             children: <Widget>[
@@ -62,10 +63,10 @@ class TextContent extends StatelessWidget {
               // Only build the replied-to message if this itself
               // is not a replied-to message (to prevent very long
               // reply chains)
-              if (info.message.inReplyTo != null && info.isReply)
+              if (bubble.message.inReplyTo != null && bubble.isReply)
                 Padding(
                     padding: EdgeInsets.only(
-                      top: !info.message.isMine ? 4 : 0,
+                      top: !bubble.message.isMine ? 4 : 0,
                       bottom: _replyMargin,
                     ),
                     child: Container() // TODO: REPLY
@@ -84,9 +85,9 @@ class TextContent extends StatelessWidget {
 class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final info = MessageBubble.of(context);
-    assert(info.message.event is TextMessageEvent);
-    final event = info.message.event as TextMessageEvent;
+    final bubble = MessageBubble.of(context);
+    assert(bubble.message.event is TextMessageEvent);
+    final event = bubble.message.event as TextMessageEvent;
 
     final html = Html(
       data: event.content.formattedBody ?? '',
@@ -94,7 +95,7 @@ class _Content extends StatelessWidget {
       fillWidth: false,
       linkStyle: TextStyle(
         decoration: TextDecoration.underline,
-        color: !info.message.isMine
+        color: !bubble.message.isMine
             ? themed(
                 context,
                 light: Theme.of(context).primaryColor,

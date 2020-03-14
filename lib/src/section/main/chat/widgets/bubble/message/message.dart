@@ -288,10 +288,10 @@ class Clickable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final info = MessageBubble.of(context);
+    final bubble = MessageBubble.of(context);
 
     final inkWell = InkWell(
-      customBorder: RoundedRectangleBorder(borderRadius: info.borderRadius),
+      customBorder: RoundedRectangleBorder(borderRadius: bubble.borderRadius),
       onTap: onTap ?? _showContextMenu,
       child: child,
     );
@@ -315,9 +315,9 @@ class MessageInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final info = MessageBubble.of(context);
+    final bubble = MessageBubble.of(context);
 
-    if (!info.isEndOfGroup) {
+    if (!bubble.isEndOfGroup) {
       return Container(width: 0, height: 0);
     }
 
@@ -326,18 +326,18 @@ class MessageInfo extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        if (info.message.isMine)
+        if (bubble.message.isMine)
           Icon(
-            info.message.event.sentState != SentState.sent
+            bubble.message.event.sentState != SentState.sent
                 ? Icons.access_time
                 : Icons.check,
             color: Colors.white,
             size: 14,
           ),
         SizedBox(width: 4),
-        if (info.isEndOfGroup)
+        if (bubble.isEndOfGroup)
           Text(
-            formatAsTime(info.message.event.time),
+            formatAsTime(bubble.message.event.time),
             style: DefaultTextStyle.of(context).style.apply(
                   fontSizeFactor: 0.8,
                 ),
@@ -364,11 +364,11 @@ class Sender extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final info = MessageBubble.of(context);
+    final bubble = MessageBubble.of(context);
 
-    final showSender = (info.isStartOfGroup ||
-            (info.isReply != null && !info.message.isMine)) &&
-        !info.message.room.isDirect;
+    final showSender = (bubble.isStartOfGroup ||
+            (bubble.isReply != null && !bubble.message.isMine)) &&
+        !bubble.message.room.isDirect;
 
     if (!showSender) {
       return Container(width: 0, height: 0);
@@ -377,11 +377,11 @@ class Sender extends StatelessWidget {
     return Padding(
       padding: padding,
       child: Text(
-        info.message.event.sender.displayName,
+        bubble.message.event.sender.displayName,
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: personalizedColor
-              ? info.message.event.sender.getColor(context)
+              ? bubble.message.event.sender.getColor(context)
               : null,
         ),
       ),
