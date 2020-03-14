@@ -5,6 +5,4 @@ abstract class ChatsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadPersonalChats extends ChatsEvent {}
-
-class LoadPublicChats extends ChatsEvent {}
+class LoadChats extends ChatsEvent {}

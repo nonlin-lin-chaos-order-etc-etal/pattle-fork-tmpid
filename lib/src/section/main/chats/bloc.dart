@@ -33,8 +33,10 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
 
   ChatsBloc(this.matrix);
 
-  Future<List<ChatOverview>> _loadChats() async {
+  Future<List<ChatOverview>> _getChats() async {
     final me = matrix.user;
+
+    await me.sync.first;
 
     final chats = List<ChatOverview>();
 
@@ -115,28 +117,26 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
     return chats.reversed.toList();
   }
 
-  Future<ChatsState> _loadPersonalChats() async {
-    var chats = await _loadChats();
+  Future<ChatsState> _loadChats() async {
+    final chats = await _getChats();
 
-    chats = chats
+    final personalChats = chats
         .where(
-          (chat) => chat.room.aliases == null || chat.room.aliases.isEmpty,
+          (chat) =>
+              chat.room.joinRule == JoinRule.invite ||
+              chat.room.joinRule == JoinRule.private,
         )
         .toList();
 
-    return ChatsLoaded(chats);
-  }
-
-  Future<ChatsState> _loadPublicChats() async {
-    var chats = await _loadChats();
-
-    chats = chats
+    final publicChats = chats
         .where(
-          (chat) => chat.room.aliases != null && chat.room.aliases.isNotEmpty,
+          (chat) =>
+              chat.room.joinRule == JoinRule.public ||
+              chat.room.joinRule == JoinRule.knock,
         )
         .toList();
 
-    return ChatsLoaded(chats);
+    return ChatsLoaded(personal: personalChats, public: publicChats);
   }
 
   @override
@@ -144,12 +144,9 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
 
   @override
   Stream<ChatsState> mapEventToState(ChatsEvent event) async* {
-    if (event is LoadPersonalChats) {
-      yield await _loadPersonalChats();
-    }
-
-    if (event is LoadPublicChats) {
-      yield await _loadPublicChats();
+    if (event is LoadChats) {
+      print('loading chats');
+      yield await _loadChats();
     }
   }
 }

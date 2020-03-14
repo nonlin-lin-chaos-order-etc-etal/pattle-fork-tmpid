@@ -40,26 +40,6 @@ class ChatsPage extends StatefulWidget {
 }
 
 class _ChatsPageState extends State<ChatsPage> {
-  int _currentTab = 0;
-
-  void _switchTabTo(int index) {
-    // Temporary: Don't do anything for the calls tab
-    if (index > 1) {
-      return;
-    }
-
-    final bloc = context.bloc<ChatsBloc>();
-    if (_currentTab == 0) {
-      bloc.add(LoadPublicChats());
-    } else {
-      bloc.add(LoadPersonalChats());
-    }
-
-    setState(() {
-      _currentTab = index;
-    });
-  }
-
   void _goToCreateGroup() {
     Navigator.of(context).pushNamed(Routes.chatsNew);
   }
@@ -68,69 +48,75 @@ class _ChatsPageState extends State<ChatsPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    context.bloc<ChatsBloc>().add(LoadPersonalChats());
+    context.bloc<ChatsBloc>().add(LoadChats());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l(context).appName),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () => Navigator.pushNamed(context, Routes.settings),
-          )
-        ],
-      ),
-      body: Column(
-        children: <Widget>[
-          //ErrorBanner(),
-          Expanded(
-            child: AnimatedCrossFade(
-              duration: Duration(milliseconds: 200),
-              firstChild: _ChatsTab(),
-              secondChild: _ChatsTab(),
-              crossFadeState: _currentTab == 0
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
-              alignment: Alignment.center,
-            ),
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _goToCreateGroup,
-        child: Icon(Icons.chat),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble),
-            title: Text(l(context).personal),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(l(context).appName),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () => Navigator.pushNamed(context, Routes.settings),
+            )
+          ],
+          bottom: TabBar(
+            tabs: <Widget>[
+              Tab(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.group),
+                    SizedBox(width: 8),
+                    Text(l(context).personal.toUpperCase()),
+                  ],
+                ),
+              ),
+              Tab(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Mdi.bullhorn),
+                    SizedBox(width: 8),
+                    Text(l(context).public.toUpperCase()),
+                  ],
+                ),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Mdi.bullhorn),
-            title: Text(l(context).public),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.phone),
-            title: Text(l(context).calls),
-          )
-        ],
-        currentIndex: _currentTab,
-        onTap: _switchTabTo,
+        ),
+        body: TabBarView(
+          children: <Widget>[
+            _ChatsTab(personal: true),
+            _ChatsTab(personal: false),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _goToCreateGroup,
+          child: Icon(Icons.chat),
+        ),
       ),
     );
   }
 }
 
 class _ChatsTab extends StatelessWidget {
+  final bool personal;
+
+  const _ChatsTab({Key key, this.personal}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChatsBloc, ChatsState>(builder: (context, state) {
       if (state is ChatsLoaded) {
-        return ChatOverviewList(chats: state.chats);
+        return ChatOverviewList(
+          chats: personal ? state.personal : state.public,
+        );
       } else {
         return Center(child: CircularProgressIndicator());
       }

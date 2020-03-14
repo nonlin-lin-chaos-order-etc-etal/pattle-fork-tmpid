@@ -75,11 +75,11 @@ dependency_overrides:
   matrix_sdk:
     git:
       url: https://git.pattle.im/pattle/library/matrix-dart-sdk.git
-      ref: a5b0bff21144e437cf231325d72c00e6d539b175
+      ref: f506fb387e6fcacbf90fca6551f7f8865cb6812b
   matrix_sdk_sqflite:
     git:
       url: https://git.pattle.im/pattle/library/matrix-dart-sdk-sqflite.git
-      ref: aaf9314a2ef78ee4adce31c19b0ef5b50416a88e
+      ref: 7dbb3cba4ae124c3557ccb80986dc2e95c8ae276
 
 dev_dependencies:
   flutter_launcher_icons: ^0.7.2+1
