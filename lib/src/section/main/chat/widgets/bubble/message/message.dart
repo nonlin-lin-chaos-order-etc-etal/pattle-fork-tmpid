@@ -326,15 +326,16 @@ class MessageInfo extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         if (bubble.message.isMine) ...[
-          Icon(
-            bubble.message.event.sentState != SentState.sent
-                ? Icons.access_time
-                : Icons.check,
-            color: Colors.white,
-            size: 14,
+          Center(
+            child: Icon(
+              bubble.message.event.sentState != SentState.sent
+                  ? Icons.access_time
+                  : Icons.check,
+              color: Colors.white,
+              size: 14,
+            ),
           ),
           SizedBox(width: 4),
         ],
