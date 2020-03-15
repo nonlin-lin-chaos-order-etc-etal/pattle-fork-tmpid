@@ -27,17 +27,12 @@ import '../../message.dart';
 /// Creates an [ImageContent] widget for a [MessageBubble].
 ///
 /// Must have a [MessageBubble] ancestor.
-class ImageContent extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _ImageContentState();
-}
-
-class _ImageContentState extends State<ImageContent> {
+class ImageContent extends StatelessWidget {
   static const double _width = 256;
   static const double _minHeight = 72;
   static const double _maxHeight = 292;
 
-  void _onTap() {
+  void _onTap(BuildContext context) {
     Navigator.pushNamed(
       context,
       Routes.image,
@@ -79,7 +74,7 @@ class _ImageContentState extends State<ImageContent> {
           Positioned.fill(
             child: Clickable(
               extraMaterial: true,
-              onTap: _onTap,
+              onTap: () => _onTap(context),
             ),
           ),
         ],

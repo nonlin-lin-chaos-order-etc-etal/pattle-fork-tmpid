@@ -263,7 +263,7 @@ class MessageBubble extends StatelessWidget {
   }
 
   static MessageBubble of(BuildContext context) =>
-      Provider.of<MessageBubble>(context);
+      Provider.of<MessageBubble>(context, listen: false);
 }
 
 /// Helper widget to make a [MessageBubble] clickable with a ripple. Defaults
