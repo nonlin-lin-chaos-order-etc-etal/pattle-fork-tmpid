@@ -16,35 +16,25 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/section/main/widgets/message_state.dart';
 
-import '../../../../matrix.dart';
 import 'subtitle.dart';
 
-class ImageSubtitle extends Subtitle {
+class ImageSubtitleContent extends Subtitle {
   @override
-  final ImageMessageEvent event;
+  Widget build(BuildContext context) {
+    final message = Subtitle.of(context).chat.latestMessage;
 
-  ImageSubtitle(Matrix matrix, Room room, this.event)
-      : super(matrix, room, event);
-
-  @override
-  Widget build(BuildContext context) => Row(
-        children: <Widget>[
-          buildSentStateIcon(context),
-          RichText(
-            text: senderSpan(context),
-          ),
-          Icon(
-            Icons.photo_camera,
-            color: Theme.of(context).textTheme.caption.color,
-            size: Subtitle.iconSize,
-          ),
-          Expanded(
-            child: Text(' ' + l(context).photo, style: textStyle(context)),
-          ),
-          buildNotificationCount(context)
-        ],
-      );
+    return Row(
+      children: <Widget>[
+        if (MessageState.necessary(message)) MessageState(message: message),
+        if (Sender.necessary(context)) Sender(),
+        Icon(Icons.photo_camera),
+        Expanded(
+          child: Text(' ' + l(context).photo),
+        ),
+      ],
+    );
+  }
 }

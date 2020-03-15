@@ -16,6 +16,7 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:pattle/src/section/main/models/chat_message.dart';
 import 'package:pattle/src/section/main/widgets/redacted.dart';
 
 import '../../../../../../../util/color.dart';
@@ -26,6 +27,10 @@ import '../../message.dart';
 ///
 /// Must have a [MessageBubble] as ancestor.
 class RedactedContent extends StatelessWidget {
+  final ChatMessage message;
+
+  const RedactedContent({Key key, this.message}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final bubble = MessageBubble.of(context);

@@ -52,7 +52,7 @@ class ChatOverviewListState extends State<ChatOverviewList> {
   }
 
   Widget _buildChatOverview(ChatOverview chat) {
-    final time = formatAsListItem(context, chat.latestEvent?.time);
+    final time = formatAsListItem(context, chat.latestMessage?.event?.time);
 
     return ListTile(
       title: Row(
@@ -79,7 +79,7 @@ class ChatOverviewListState extends State<ChatOverviewList> {
       },
       leading: ChatAvatar(room: chat.room),
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      subtitle: Subtitle.forChat(chat),
+      subtitle: Subtitle.withContent(chat),
     );
   }
 }

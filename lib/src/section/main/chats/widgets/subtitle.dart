@@ -18,99 +18,130 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/theme.dart';
+import 'package:pattle/src/section/main/chat/widgets/bubble/state/content/creation.dart';
+import 'package:pattle/src/section/main/chat/widgets/bubble/state/content/member_change.dart';
+import 'package:pattle/src/section/main/chat/widgets/bubble/state/content/topic_change.dart';
+import 'package:pattle/src/section/main/chat/widgets/bubble/state/content/upgrade.dart';
 import 'package:pattle/src/section/main/chats/models/chat_overview.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../matrix.dart';
 import '../../../../util/user.dart';
 
 import 'image_subtitle.dart';
-import 'member_subtitle.dart';
 import 'redacted_subtitle.dart';
 import 'text_subtitle.dart';
-import 'topic_subtitle.dart';
 import 'typing_subtitle.dart';
 import 'unsupported_subtitle.dart';
 
-abstract class Subtitle extends StatelessWidget {
-  static const iconSize = 20.0;
+class Subtitle extends StatelessWidget {
+  final ChatOverview chat;
+  final Widget child;
 
-  final Room room;
-  final RoomEvent event;
+  const Subtitle({Key key, this.chat, this.child}) : super(key: key);
 
-  @protected
-  final String senderName;
+  static Widget withContent(ChatOverview chat) {
+    Widget content;
 
-  final bool isMine;
+    // TODO: typingUsers should not contain nulls
+    if (chat.room.isSomeoneElseTyping &&
+        !chat.room.typingUsers.any((u) => u == null)) {
+      content = TypingSubtitleContent();
+    } else {
+      final event = chat.latestMessage?.event;
+      if (event == null) {
+        content = UnsupportedSubtitleContent();
+      } else if (event is TextMessageEvent) {
+        content = TextSubtitleContent();
+      } else if (event is ImageMessageEvent) {
+        content = ImageSubtitleContent();
+      } else if (event is MemberChangeEvent) {
+        content = MemberChangeContent(message: chat.latestMessage);
+      } else if (event is RedactedEvent) {
+        content = RedactedSubtitleContent();
+      } else if (event is TopicChangeEvent) {
+        content = TopicChangeContent(message: chat.latestMessage);
+      } else if (event is RoomUpgradeEvent) {
+        content = UpgradeContent(message: chat.latestMessage);
+      } else if (event is RoomCreationEvent) {
+        content = CreationContent(message: chat.latestMessage);
+      } else {
+        content = UnsupportedSubtitleContent();
+      }
+    }
 
-  Subtitle(Matrix matrix, this.room, this.event)
-      : isMine = event?.sender == matrix.user,
-        senderName =
-            event != null && event.sender != matrix.user && !room.isDirect
-                ? '${event.sender.displayName}: '
-                : '';
-
-  static Widget forChat(ChatOverview chat) {
-    return Builder(
-      builder: (context) {
-        final matrix = Matrix.of(context);
-
-        // TODO: typingUsers should not contain nulls
-        if (chat.room.isSomeoneElseTyping &&
-            !chat.room.typingUsers.any((u) => u == null)) {
-          return TypingSubtitle(matrix, chat.room);
-        } else {
-          final event = chat.latestEvent;
-          if (event == null) {
-            return UnsupportedSubtitle(matrix, chat.room, event);
-          }
-
-          if (event is TextMessageEvent) {
-            return TextSubtitle(matrix, chat.room, event);
-          } else if (event is ImageMessageEvent) {
-            return ImageSubtitle(matrix, chat.room, event);
-          } else if (event is MemberChangeEvent) {
-            return MemberSubtitle(matrix, chat.room, event);
-          } else if (event is RedactedEvent) {
-            return RedactedSubtitle(matrix, chat.room, event);
-          } else if (event is TopicChangeEvent) {
-            return TopicSubtitle(matrix, chat.room, event);
-          }
-
-          return UnsupportedSubtitle(matrix, chat.room, event);
-        }
-      },
+    return Subtitle(
+      chat: chat,
+      child: content,
     );
   }
 
-  TextStyle textStyle(BuildContext context) => Theme.of(context)
-      .textTheme
-      .body1
-      .copyWith(color: Theme.of(context).textTheme.caption.color);
+  static Subtitle of(BuildContext context) =>
+      Provider.of<Subtitle>(context, listen: false);
 
-  TextSpan senderSpan(BuildContext context, {String sender}) => TextSpan(
-        text: sender ?? senderName,
-        style: Theme.of(context).textTheme.body1.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).textTheme.caption.color,
-            ),
-      );
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTextStyle(
+      style: Theme.of(context).textTheme.body1.copyWith(
+            color: Theme.of(context).textTheme.caption.color,
+          ),
+      child: Provider<Subtitle>.value(
+        value: this,
+        // Builder is necessary to get context with
+        // correct DefaultTextStyle.
+        child: Builder(
+          builder: (context) {
+            return Row(
+              children: <Widget>[
+                Expanded(
+                  child: IconTheme(
+                    data: IconThemeData(
+                      color: DefaultTextStyle.of(context).style.color,
+                      size: 20,
+                    ),
+                    child: child,
+                  ),
+                ),
+                if (_NotificationCount.necessary(context)) _NotificationCount(),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
 
-  Widget buildSentStateIcon(BuildContext context) {
-    if (isMine) {
-      return Icon(
-        event.sentState != SentState.sent ? Icons.access_time : Icons.check,
-        size: Subtitle.iconSize,
-        color: Colors.grey,
-      );
-    } else {
-      return Container(height: 0, width: 0);
-    }
+class Sender extends StatelessWidget {
+  const Sender({Key key}) : super(key: key);
+
+  static bool necessary(BuildContext context) {
+    final message = Subtitle.of(context).chat.latestMessage;
+
+    return message.event.sender != Matrix.of(context).user &&
+        !message.room.isDirect;
   }
 
-  Widget buildNotificationCount(BuildContext context) {
-    if (room.totalUnreadNotificationCount <= 0) {
-      return Container();
-    }
+  @override
+  Widget build(BuildContext context) {
+    final message = Subtitle.of(context).chat.latestMessage;
+
+    return Text(
+      '${message.event.sender.displayName}: ',
+      maxLines: 1,
+      style: TextStyle(fontWeight: FontWeight.bold),
+    );
+  }
+}
+
+class _NotificationCount extends StatelessWidget {
+  static bool necessary(BuildContext context) {
+    return Subtitle.of(context).chat.room.totalUnreadNotificationCount > 0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final room = Subtitle.of(context).chat.room;
 
     return SizedBox(
       height: 21,
@@ -125,7 +156,7 @@ abstract class Subtitle extends StatelessWidget {
             child: Center(
               child: Text(
                 room.totalUnreadNotificationCount.toString(),
-                style: textStyle(context).copyWith(
+                style: TextStyle(
                   fontSize: 13,
                   color: Colors.white,
                   fontWeight: FontWeight.w500,

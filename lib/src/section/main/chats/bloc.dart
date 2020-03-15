@@ -17,6 +17,7 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/models/chat_message.dart';
 
 import '../../../matrix.dart';
 import '../../../util/room.dart';
@@ -29,12 +30,12 @@ import 'state.dart';
 export 'state.dart';
 
 class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
-  final Matrix matrix;
+  final Matrix _matrix;
 
-  ChatsBloc(this.matrix);
+  ChatsBloc(this._matrix);
 
   Future<List<ChatOverview>> _getChats() async {
-    final me = matrix.user;
+    final me = _matrix.user;
 
     await me.sync.first;
 
@@ -78,8 +79,20 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
       final chat = ChatOverview(
         room: room,
         name: room.name,
-        latestEvent: latestEvent,
-        latestEventForSorting: latestEventForSorting,
+        latestMessage: latestEvent != null
+            ? ChatMessage(
+                room,
+                latestEvent,
+                isMine: latestEvent.sender == _matrix.user,
+              )
+            : null,
+        latestMessageForSorting: latestEventForSorting != null
+            ? ChatMessage(
+                room,
+                latestEventForSorting,
+                isMine: latestEventForSorting.sender == _matrix.user,
+              )
+            : null,
       );
 
       chats.add(chat);
@@ -98,16 +111,16 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
       } else if (a.room.totalUnreadNotificationCount <= 0 &&
           b.room.totalUnreadNotificationCount > 0) {
         return -1;
-      } else if (a.latestEventForSorting != null &&
-          b.latestEventForSorting != null) {
-        return a.latestEventForSorting.time.compareTo(
-          b.latestEventForSorting.time,
+      } else if (a.latestMessageForSorting != null &&
+          b.latestMessageForSorting != null) {
+        return a.latestMessageForSorting.event.time.compareTo(
+          b.latestMessageForSorting.event.time,
         );
-      } else if (a.latestEventForSorting != null &&
-          b.latestEventForSorting == null) {
+      } else if (a.latestMessageForSorting != null &&
+          b.latestMessageForSorting == null) {
         return 1;
-      } else if (a.latestEventForSorting == null &&
-          b.latestEventForSorting != null) {
+      } else if (a.latestMessageForSorting == null &&
+          b.latestMessageForSorting != null) {
         return -1;
       } else {
         return 0;

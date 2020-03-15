@@ -16,20 +16,13 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 
-import '../../../../matrix.dart';
-import 'subtitle.dart';
-
-class UnsupportedSubtitle extends Subtitle {
-  UnsupportedSubtitle(Matrix matrix, Room room, RoomEvent event)
-      : super(matrix, room, event);
-
+class UnsupportedSubtitleContent extends StatelessWidget {
   @override
-  Widget build(BuildContext context) =>
-      // Temporary
-      Text(
-        'Something happened!',
-        style: textStyle(context).copyWith(fontStyle: FontStyle.italic),
-      );
+  Widget build(BuildContext context) {
+    return Text(
+      'Something happened!',
+      style: TextStyle(fontStyle: FontStyle.italic),
+    );
+  }
 }

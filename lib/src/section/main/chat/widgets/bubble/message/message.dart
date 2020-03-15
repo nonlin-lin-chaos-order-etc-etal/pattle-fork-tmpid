@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/models/chat_message.dart';
+import 'package:pattle/src/section/main/widgets/message_state.dart';
 import 'package:pattle/src/util/color.dart';
 import 'package:pattle/src/util/date_format.dart';
 import 'package:provider/provider.dart';
@@ -327,12 +328,10 @@ class MessageInfo extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        if (bubble.message.isMine) ...[
+        if (MessageState.necessary(bubble.message)) ...[
           Center(
-            child: Icon(
-              bubble.message.event.sentState != SentState.sent
-                  ? Icons.access_time
-                  : Icons.check,
+            child: MessageState(
+              message: bubble.message,
               color: Colors.white,
               size: 14,
             ),

@@ -16,38 +16,26 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/chat/util/typing_span.dart';
 
-import '../../../../matrix.dart';
 import 'subtitle.dart';
 
-class TypingSubtitle extends Subtitle {
-  @override
-  final Room room;
-
-  TypingSubtitle(Matrix matrix, this.room) : super(matrix, room, null);
-
+class TypingSubtitleContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: RichText(
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            text: TextSpan(
-              style: textStyle(context).copyWith(
-                color: redOnBackground(context),
-                fontWeight: FontWeight.bold,
-              ),
-              children: typingSpan(context, room),
-            ),
-          ),
+    final room = Subtitle.of(context).chat.room;
+
+    return RichText(
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      text: TextSpan(
+        style: TextStyle(
+          color: redOnBackground(context),
+          fontWeight: FontWeight.bold,
         ),
-        buildNotificationCount(context),
-      ],
+        children: typingSpan(context, room),
+      ),
     );
   }
 }

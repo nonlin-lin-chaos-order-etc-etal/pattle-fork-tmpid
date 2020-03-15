@@ -17,6 +17,7 @@
 
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
+import 'package:pattle/src/section/main/models/chat_message.dart';
 
 /// Chat overview used in the 'chats' page.
 class ChatOverview {
@@ -24,13 +25,13 @@ class ChatOverview {
 
   final String name;
 
-  final RoomEvent latestEvent;
-  final RoomEvent latestEventForSorting;
+  final ChatMessage latestMessage;
+  final ChatMessage latestMessageForSorting;
 
   ChatOverview({
     @required this.room,
     @required this.name,
-    @required this.latestEvent,
-    @required this.latestEventForSorting,
+    @required this.latestMessage,
+    @required this.latestMessageForSorting,
   });
 }

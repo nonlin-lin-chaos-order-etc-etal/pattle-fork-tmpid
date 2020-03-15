@@ -17,81 +17,48 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-
-import '../../../../matrix.dart';
-import '../../../../util/user.dart';
+import 'package:pattle/src/section/main/widgets/message_state.dart';
 
 import 'subtitle.dart';
 
-class TextSubtitle extends Subtitle {
-  @override
-  final TextMessageEvent event;
-
-  TextSubtitle(Matrix matrix, Room room, this.event)
-      : super(matrix, room, event);
+class TextSubtitleContent extends StatelessWidget {
+  TextSubtitleContent({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final sender = senderSpan(
-      context,
-      sender: event is EmoteMessageEvent
-          ? event.sender.getDisplayName(context) + ' '
-          : null,
-    );
-    if (event.content.inReplyToId == null) {
-      return Row(
-        children: <Widget>[
-          buildSentStateIcon(context),
-          Expanded(
-            child: RichText(
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              text: TextSpan(
-                style: textStyle(context),
-                children: [
-                  sender,
-                  TextSpan(text: event.content.body ?? 'null')
-                ],
-              ),
-            ),
-          ),
-          buildNotificationCount(context)
-        ],
-      );
-    } else {
+    final message = Subtitle.of(context).chat.latestMessage;
+    final event = message.event as TextMessageEvent;
+    final isReply = event.content.inReplyToId != null;
+
+    var text = event.content.formattedBody ?? event.content.body;
+
+    if (isReply) {
       // Strip replied-to content
-      var text = event.content.formattedBody;
       final splitReply = text.split(RegExp('(<\\/*mx-reply>)'));
       if (splitReply.length >= 3) {
-        text = splitReply[2];
+        text = ' ' + splitReply[2];
       }
+    }
 
-      return Row(
-        children: <Widget>[
-          buildSentStateIcon(context),
-          RichText(
+    return Row(
+      children: <Widget>[
+        if (MessageState.necessary(message)) ...[
+          MessageState(
+            message: message,
+          ),
+          SizedBox(width: 4),
+        ],
+        if (Sender.necessary(context)) Sender(),
+        if (isReply) Icon(Icons.reply),
+        if (event is EmoteMessageEvent) Sender(),
+        Expanded(
+          child: Text(
+            text ?? 'null',
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
-            text: sender,
           ),
-          Icon(
-            Icons.reply,
-            color: Theme.of(context).textTheme.caption.color,
-            size: Subtitle.iconSize,
-          ),
-          Expanded(
-            child: RichText(
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              text: TextSpan(
-                style: textStyle(context),
-                text: ' ' + text ?? 'null',
-              ),
-            ),
-          ),
-          buildNotificationCount(context)
-        ],
-      );
-    }
+        ),
+      ],
+    );
   }
 }
