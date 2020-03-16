@@ -70,7 +70,7 @@ class ImageContent extends StatelessWidget {
             ),
           ),
           if (MessageInfo.necessary(context)) _MessageInfo(),
-          if (bubble.message.isMine && bubble.isStartOfGroup) _Sender(),
+          if (Sender.necessary(context)) _Sender(),
           Positioned.fill(
             child: Clickable(
               extraMaterial: true,
