@@ -327,14 +327,13 @@ class MessageInfo extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         if (MessageState.necessary(bubble.message)) ...[
-          Center(
-            child: MessageState(
-              message: bubble.message,
-              color: Colors.white,
-              size: 14,
-            ),
+          MessageState(
+            message: bubble.message,
+            color: Colors.white,
+            size: 14,
           ),
           SizedBox(width: 4),
         ],
