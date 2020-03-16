@@ -365,9 +365,10 @@ class Sender extends StatelessWidget {
   static bool necessary(BuildContext context) {
     final bubble = MessageBubble.of(context);
 
-    return (bubble.isStartOfGroup ||
-            (bubble.isReply != null && !bubble.message.isMine)) &&
-        !bubble.message.room.isDirect;
+    return !bubble.message.isMine &&
+        !bubble.isReply &&
+        !bubble.message.room.isDirect &&
+        bubble.isStartOfGroup;
   }
 
   @override
