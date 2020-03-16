@@ -58,11 +58,6 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  ScrollController _scrollController = ScrollController();
-  final double _scrollThreshold = 200;
-
-  TextEditingController _textController = TextEditingController();
-
   Timer _readTimer;
 
   Room get _room => widget.room;
@@ -71,7 +66,6 @@ class _ChatPageState extends State<ChatPage> {
   void dispose() {
     super.dispose();
     _readTimer.cancel();
-    _textController.dispose();
   }
 
   @override
@@ -84,20 +78,10 @@ class _ChatPageState extends State<ChatPage> {
 
     final bloc = BlocProvider.of<ChatBloc>(context);
 
-    bloc.add(FetchChat());
-
     _readTimer = Timer(
       Duration(seconds: 2),
       () => bloc.add(MarkAsRead()),
     );
-
-    _scrollController.addListener(() {
-      final maxScroll = _scrollController.position.maxScrollExtent;
-      final currentScroll = _scrollController.position.pixels;
-      if (maxScroll - currentScroll <= _scrollThreshold) {
-        bloc.add(FetchChat());
-      }
-    });
   }
 
   @override
@@ -157,37 +141,143 @@ class _ChatPageState extends State<ChatPage> {
         children: <Widget>[
           ErrorBanner(),
           Expanded(
-            child: _buildBody(),
-          )
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: _MessageList(),
+                ),
+                ConstrainedBox(
+                  constraints: BoxConstraints.loose(
+                    Size.fromHeight(
+                      MediaQuery.of(context).size.height / 3,
+                    ),
+                  ),
+                  child: _Input(room: _room),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildBody() {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: _buildEventsList(),
-        ),
-        ConstrainedBox(
-          constraints: BoxConstraints.loose(
-            Size.fromHeight(
-              MediaQuery.of(context).size.height / 3,
-            ),
-          ),
-          child: _buildInput(),
-        ),
-      ],
-    );
+class _MessageList extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _MessageListState();
+}
+
+class _MessageListState extends State<_MessageList> {
+  ScrollController _scrollController = ScrollController();
+  final double _scrollThreshold = 200;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final bloc = BlocProvider.of<ChatBloc>(context);
+
+    bloc.add(FetchChat());
+
+    _scrollController.addListener(() {
+      final maxScroll = _scrollController.position.maxScrollExtent;
+      final currentScroll = _scrollController.position.pixels;
+      if (maxScroll - currentScroll <= _scrollThreshold) {
+        bloc.add(FetchChat());
+      }
+    });
   }
 
-  Widget _buildInput() {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ChatBloc, ChatState>(
+      builder: (context, state) {
+        if (state is ChatLoaded) {
+          return ListView.builder(
+            controller: _scrollController,
+            reverse: true,
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            itemCount: state.endReached
+                ? state.messages.length
+                : state.messages.length + 1,
+            itemBuilder: (context, index) {
+              if (index >= state.messages.length) {
+                return Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+
+              final message = state.messages[index];
+
+              final event = message.event;
+
+              var previousMessage, nextMessage;
+              // Note: Because the items are reversed in the
+              // ListView.builder, the 'previous' event is actually the next
+              // one in the list.
+              if (index != state.messages.length - 1) {
+                previousMessage = state.messages[index + 1];
+              }
+
+              if (index != 0) {
+                nextMessage = state.messages[index - 1];
+              }
+
+              Widget bubble;
+              if (event is StateEvent) {
+                bubble = StateBubble.withContent(message: message);
+              } else {
+                bubble = MessageBubble.withContent(
+                  message: message,
+                  previousMessage: previousMessage,
+                  nextMessage: nextMessage,
+                );
+              }
+
+              // Insert DateHeader if there's a day difference
+              if (previousMessage != null &&
+                  event != null &&
+                  previousMessage.event.time.day != event.time.day) {
+                return DateHeader(
+                  date: previousMessage.event.time,
+                  child: bubble,
+                );
+              } else {
+                return bubble;
+              }
+            },
+          );
+        }
+
+        return CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+class _Input extends StatefulWidget {
+  final Room room;
+
+  const _Input({Key key, @required this.room}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _InputState();
+}
+
+class _InputState extends State<_Input> {
+  TextEditingController _textController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
     final bloc = BlocProvider.of<ChatBloc>(context);
 
     const elevation = 8.0;
 
-    if (_room is JoinedRoom) {
+    if (widget.room is JoinedRoom) {
       return Material(
         elevation: elevation,
         color: chatBackgroundColor(context),
@@ -259,71 +349,9 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  Widget _buildEventsList() {
-    return BlocBuilder<ChatBloc, ChatState>(
-      builder: (context, state) {
-        if (state is ChatLoaded) {
-          return ListView.builder(
-            controller: _scrollController,
-            reverse: true,
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            itemCount: state.endReached
-                ? state.messages.length
-                : state.messages.length + 1,
-            itemBuilder: (context, index) {
-              if (index >= state.messages.length) {
-                return Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-
-              final message = state.messages[index];
-
-              final event = message.event;
-
-              var previousMessage, nextMessage;
-              // Note: Because the items are reversed in the
-              // ListView.builder, the 'previous' event is actually the next
-              // one in the list.
-              if (index != state.messages.length - 1) {
-                previousMessage = state.messages[index + 1];
-              }
-
-              if (index != 0) {
-                nextMessage = state.messages[index - 1];
-              }
-
-              Widget bubble;
-              if (event is StateEvent) {
-                bubble = StateBubble.withContent(message: message);
-              } else {
-                bubble = MessageBubble.withContent(
-                  message: message,
-                  previousMessage: previousMessage,
-                  nextMessage: nextMessage,
-                );
-              }
-
-              // Insert DateHeader if there's a day difference
-              if (previousMessage != null &&
-                  event != null &&
-                  previousMessage.event.time.day != event.time.day) {
-                return DateHeader(
-                  date: previousMessage.event.time,
-                  child: bubble,
-                );
-              } else {
-                return bubble;
-              }
-            },
-          );
-        }
-
-        return CircularProgressIndicator();
-      },
-    );
+  @override
+  void dispose() {
+    super.dispose();
+    _textController.dispose();
   }
 }
