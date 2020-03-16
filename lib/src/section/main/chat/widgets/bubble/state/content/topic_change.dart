@@ -37,6 +37,7 @@ class TopicChangeContent extends StatelessWidget {
 
     return RichText(
       text: TextSpan(
+        style: DefaultTextStyle.of(context).style,
         children: l(context).changedDescriptionTapToView(
           TextSpan(
             text: message.event.sender.displayName,

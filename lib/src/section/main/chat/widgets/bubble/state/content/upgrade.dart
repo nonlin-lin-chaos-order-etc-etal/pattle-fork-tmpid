@@ -37,6 +37,7 @@ class UpgradeContent extends StatelessWidget {
 
     return RichText(
       text: TextSpan(
+        style: DefaultTextStyle.of(context).style,
         children: l(context).upgradedThisGroup(
           TextSpan(
             text: message.event.sender.displayName,

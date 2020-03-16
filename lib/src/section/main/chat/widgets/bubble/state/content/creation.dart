@@ -37,6 +37,7 @@ class CreationContent extends StatelessWidget {
 
     return RichText(
       text: TextSpan(
+        style: DefaultTextStyle.of(context).style,
         children: l(context).createdThisGroup(
           TextSpan(
             text: message.room.creator.displayName,
