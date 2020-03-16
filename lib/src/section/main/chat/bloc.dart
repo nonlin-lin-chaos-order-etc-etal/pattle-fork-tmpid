@@ -192,7 +192,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       );
     }
 
-    bool endReached = false;
+    bool endReached;
     if (event is RoomCreationEvent) {
       endReached = true;
     }
@@ -207,7 +207,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       return ChatLoaded(
         messages: messages,
         pageCount: page + 1,
-        endReached: endReached,
+        endReached: endReached ?? false,
       );
     }
   }

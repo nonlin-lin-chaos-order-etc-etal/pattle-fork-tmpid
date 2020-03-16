@@ -272,7 +272,12 @@ class _ChatPageState extends State<ChatPage> {
                 : state.messages.length + 1,
             itemBuilder: (context, index) {
               if (index >= state.messages.length) {
-                return CircularProgressIndicator();
+                return Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
               }
 
               final message = state.messages[index];
