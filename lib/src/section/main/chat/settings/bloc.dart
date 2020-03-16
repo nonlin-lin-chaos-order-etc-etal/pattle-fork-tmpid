@@ -34,7 +34,6 @@ class ChatSettingsBloc extends Bloc<ChatSettingsEvent, ChatSettingsState> {
   ChatSettingsBloc(this._matrix, this._room);
 
   @override
-  // TODO: implement initialState
   ChatSettingsState get initialState => ChatSettingsUninitialized();
 
   @override
@@ -42,9 +41,11 @@ class ChatSettingsBloc extends Bloc<ChatSettingsEvent, ChatSettingsState> {
     if (event is FetchMembers) {
       final me = await _room.members[_matrix.user.id];
 
-      final members = List.of(
+      var members = List.of(
         await _room.members.get(upTo: !event.all ? 6 : _room.members.count),
       );
+
+      members = members.where((u) => u.state.membership is Joined).toList();
 
       members.remove(me);
       members.insert(0, me);
