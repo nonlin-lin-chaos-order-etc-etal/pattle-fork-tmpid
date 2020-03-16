@@ -52,12 +52,8 @@ class TextContent extends StatelessWidget {
           padding: EdgeInsets.all(8).copyWith(
             left: needsBorder ? _replyLeftPadding : null,
           ),
-          child: Wrap(
-            runAlignment:
-                bubble.message.isMine ? WrapAlignment.end : WrapAlignment.start,
-            crossAxisAlignment: WrapCrossAlignment.end,
-            spacing: 4,
-            runSpacing: 4,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               if (Sender.necessary(context))
                 Padding(
@@ -75,12 +71,22 @@ class TextContent extends StatelessWidget {
                     ),
                     child: Container() // TODO: REPLY
                     ),
-              _Content(),
-              if (MessageInfo.necessary(context))
-                Padding(
-                  padding: EdgeInsets.only(top: 4),
-                  child: MessageInfo(),
-                ),
+              Wrap(
+                runAlignment: bubble.message.isMine
+                    ? WrapAlignment.end
+                    : WrapAlignment.start,
+                crossAxisAlignment: WrapCrossAlignment.end,
+                spacing: 4,
+                runSpacing: 4,
+                children: <Widget>[
+                  _Content(),
+                  if (MessageInfo.necessary(context))
+                    Padding(
+                      padding: EdgeInsets.only(top: 4),
+                      child: MessageInfo(),
+                    ),
+                ],
+              ),
             ],
           ),
         ),
