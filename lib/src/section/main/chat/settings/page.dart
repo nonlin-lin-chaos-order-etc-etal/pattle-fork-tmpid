@@ -222,6 +222,7 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
                     );
                   },
                 ),
+                SizedBox(height: 16)
               ],
             ),
           ),
