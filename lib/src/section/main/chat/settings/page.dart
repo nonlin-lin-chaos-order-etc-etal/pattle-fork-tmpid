@@ -51,13 +51,6 @@ class ChatSettingsPage extends StatefulWidget {
 class _ChatSettingsPageState extends State<ChatSettingsPage> {
   Room get room => widget.room;
 
-  bool _previewMembers;
-  @override
-  void initState() {
-    super.initState();
-    _previewMembers = true;
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -106,9 +99,9 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
           slivers: <Widget>[
             SliverList(
               delegate: SliverChildListDelegate.fixed([
-                _buildDescription(),
+                if (!room.isDirect) _Description(),
                 SizedBox(height: 16),
-                _buildMembers(),
+                if (!room.isDirect) _MemberList(room: room)
               ]),
             )
           ],
@@ -116,12 +109,15 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
       ),
     );
   }
+}
 
-  Widget _buildDescription() {
-    if (room.isDirect) {
-      return Container(height: 0);
-    }
+class _Description extends StatelessWidget {
+  final String description;
 
+  const _Description({Key key, this.description}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -142,9 +138,9 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    room.topic ?? l(context).noDescriptionSet,
+                    description ?? l(context).noDescriptionSet,
                     style: TextStyle(
-                      fontStyle: room.topic == null
+                      fontStyle: description == null
                           ? FontStyle.italic
                           : FontStyle.normal,
                     ),
@@ -157,12 +153,27 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
       ],
     );
   }
+}
 
-  Widget _buildMembers() {
-    if (room.isDirect) {
-      return Container(height: 0);
-    }
+class _MemberList extends StatefulWidget {
+  final Room room;
 
+  const _MemberList({Key key, @required this.room}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _MemberListState();
+}
+
+class _MemberListState extends State<_MemberList> {
+  bool _previewMembers;
+  @override
+  void initState() {
+    super.initState();
+    _previewMembers = true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -174,7 +185,7 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
                 Padding(
                   padding: EdgeInsets.only(left: 16, top: 16),
                   child: Text(
-                    l(context).xParticipants(room.members.count),
+                    l(context).xParticipants(widget.room.members.count),
                     style: TextStyle(
                       color: redOnBackground(context),
                       fontSize: 16,
@@ -191,7 +202,8 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
                     }
 
                     final isLoading = state is MembersLoading;
-                    final allShown = members.length == room.members.count;
+                    final allShown =
+                        members.length == widget.room.members.count;
 
                     return MediaQuery.removePadding(
                       context: context,
@@ -207,10 +219,15 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
                         itemBuilder: (BuildContext context, int index) {
                           // Item after all members
                           if (index == members.length) {
-                            return _buildShowMoreItem(
-                              context,
-                              members.length,
-                              isLoading,
+                            return _ShowMoreItem(
+                              room: widget.room,
+                              shownMembersCount: members.length,
+                              isLoading: isLoading,
+                              onTap: () => setState(() {
+                                BlocProvider.of<ChatSettingsBloc>(context)
+                                    .add(FetchMembers(all: true));
+                                _previewMembers = false;
+                              }),
                             );
                           }
 
@@ -222,7 +239,7 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
                     );
                   },
                 ),
-                SizedBox(height: 16)
+                SizedBox(height: 12)
               ],
             ),
           ),
@@ -230,16 +247,29 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
       ],
     );
   }
+}
 
-  Widget _buildShowMoreItem(BuildContext context, int count, bool isWaiting) {
+class _ShowMoreItem extends StatelessWidget {
+  final Room room;
+  final int shownMembersCount;
+  final bool isLoading;
+  final VoidCallback onTap;
+
+  const _ShowMoreItem({
+    Key key,
+    @required this.room,
+    @required this.shownMembersCount,
+    @required this.isLoading,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(Icons.keyboard_arrow_down, size: 32),
-      title: Text(l(context).xMore(room.members.count - count)),
-      subtitle: isWaiting ? LinearProgressIndicator() : null,
-      onTap: () => setState(() {
-        BlocProvider.of<ChatSettingsBloc>(context).add(FetchMembers(all: true));
-        _previewMembers = false;
-      }),
+      title: Text(l(context).xMore(room.members.count - shownMembersCount)),
+      subtitle: isLoading ? LinearProgressIndicator() : null,
+      onTap: onTap,
     );
   }
 }
