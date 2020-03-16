@@ -29,20 +29,21 @@ import '../../message.dart';
 ///
 /// Must have a [MessageBubble] ancestor.
 class TextContent extends StatelessWidget {
-  static const _replyMargin = 8.0;
   static const _replyLeftPadding = 12.0;
+
   @override
   Widget build(BuildContext context) {
     final bubble = MessageBubble.of(context);
 
     final needsBorder =
-        bubble.isReply && bubble.message.inReplyTo?.isMine == true;
+        !bubble.message.room.isDirect && bubble.reply?.isMine == false ||
+            bubble.message.isMine && bubble.reply?.isMine == true;
 
     return Clickable(
       child: CustomPaint(
         painter: needsBorder
             ? _ReplyBorderPainter(
-                color: bubble.message.isMine
+                color: bubble.message.isMine && bubble.reply?.isMine == true
                     ? Colors.white
                     : bubble.message.event.sender.getColor(context),
                 borderRadius: bubble.borderRadius,
@@ -63,14 +64,14 @@ class TextContent extends StatelessWidget {
               // Only build the replied-to message if this itself
               // is not a replied-to message (to prevent very long
               // reply chains)
-              if (bubble.message.inReplyTo != null && bubble.isReply)
-                Padding(
-                    padding: EdgeInsets.only(
-                      top: !bubble.message.isMine ? 4 : 0,
-                      bottom: _replyMargin,
-                    ),
-                    child: Container() // TODO: REPLY
-                    ),
+              if (bubble.message.inReplyTo != null) ...[
+                SizedBox(height: 4),
+                MessageBubble.withContent(
+                  message: bubble.message.inReplyTo,
+                  reply: bubble.message,
+                ),
+                SizedBox(height: 8)
+              ],
               Wrap(
                 runAlignment: bubble.message.isMine
                     ? WrapAlignment.end

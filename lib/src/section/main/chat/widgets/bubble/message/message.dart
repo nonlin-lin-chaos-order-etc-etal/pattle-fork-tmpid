@@ -38,7 +38,9 @@ class MessageBubble extends StatelessWidget {
   final bool isStartOfGroup;
   final bool isEndOfGroup;
 
-  final bool isReply;
+  /// If this is not null, this bubble is rendered inside another
+  /// bubble, because it's replied to by [reply].
+  final ChatMessage reply;
 
   final BorderRadius borderRadius;
 
@@ -59,7 +61,7 @@ class MessageBubble extends StatelessWidget {
     @required this.nextMessage,
     @required this.isStartOfGroup,
     @required this.isEndOfGroup,
-    this.isReply = false,
+    this.reply,
     @required this.borderRadius,
     @required this.child,
   });
@@ -68,11 +70,11 @@ class MessageBubble extends StatelessWidget {
     ChatMessage message,
     ChatMessage previousMessage,
     ChatMessage nextMessage,
-    bool isReply = false,
+    ChatMessage reply,
     Widget child,
   }) {
-    final isStartOfGroup = _isStartOfGroup(message, previousMessage, isReply);
-    final isEndOfGroup = _isEndofGroup(message, nextMessage, isReply);
+    final isStartOfGroup = _isStartOfGroup(message, previousMessage, reply);
+    final isEndOfGroup = _isEndofGroup(message, nextMessage, reply);
 
     return MessageBubble._(
       message: message,
@@ -80,7 +82,7 @@ class MessageBubble extends StatelessWidget {
       nextMessage: nextMessage,
       isStartOfGroup: isStartOfGroup,
       isEndOfGroup: isEndOfGroup,
-      isReply: isReply,
+      reply: reply,
       borderRadius: _borderRadius(message, isEndOfGroup, isStartOfGroup),
       child: child,
     );
@@ -89,8 +91,9 @@ class MessageBubble extends StatelessWidget {
   /// Create a [MessageBubble] with the correct [child] for the given [message].
   factory MessageBubble.withContent({
     @required ChatMessage message,
-    @required ChatMessage previousMessage,
-    @required ChatMessage nextMessage,
+    ChatMessage previousMessage,
+    ChatMessage nextMessage,
+    ChatMessage reply,
   }) {
     final event = message.event;
 
@@ -108,6 +111,7 @@ class MessageBubble extends StatelessWidget {
       message: message,
       previousMessage: previousMessage,
       nextMessage: nextMessage,
+      reply: reply,
       child: content,
     );
   }
@@ -115,9 +119,9 @@ class MessageBubble extends StatelessWidget {
   static bool _isStartOfGroup(
     ChatMessage message,
     ChatMessage previousMessage,
-    bool isReply,
+    ChatMessage reply,
   ) {
-    if (isReply == true) {
+    if (reply != null) {
       return false;
     }
 
@@ -149,9 +153,9 @@ class MessageBubble extends StatelessWidget {
   static bool _isEndofGroup(
     ChatMessage message,
     ChatMessage nextMessage,
-    bool isReply,
+    ChatMessage reply,
   ) {
-    if (isReply == true) {
+    if (reply != null) {
       return false;
     }
 
@@ -225,41 +229,47 @@ class MessageBubble extends StatelessWidget {
 
     final border = RoundedRectangleBorder(borderRadius: borderRadius);
 
-    return Align(
-      alignment: message.isMine ? Alignment.centerRight : Alignment.centerLeft,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment:
-            message.isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
-        children: [
-          Flexible(
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: message.isMine ? _oppositePadding : 0,
-                right: !message.isMine ? _oppositePadding : 0,
-                top: previousMessage == null ? _paddingBetween : 0,
-                bottom:
-                    isEndOfGroup ? _paddingBetween : _paddingBetweenSameGroup,
-              ),
-              child: Material(
-                color: color,
-                elevation: 1,
-                shape: border,
-                child: DefaultTextStyle(
-                  style: Theme.of(context).textTheme.body1.apply(
-                        fontSizeFactor: 1.1,
-                        color: message.isMine ? Colors.white : null,
-                      ),
-                  child: Provider<MessageBubble>.value(
-                    value: this,
-                    child: child,
+    return Column(
+      crossAxisAlignment:
+          message.isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment:
+              message.isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Padding(
+                padding: reply == null
+                    ? EdgeInsets.only(
+                        left: message.isMine ? _oppositePadding : 0,
+                        right: !message.isMine ? _oppositePadding : 0,
+                        top: previousMessage == null ? _paddingBetween : 0,
+                        bottom: isEndOfGroup
+                            ? _paddingBetween
+                            : _paddingBetweenSameGroup,
+                      )
+                    : EdgeInsets.zero,
+                child: Material(
+                  color: color,
+                  elevation: 1,
+                  shape: border,
+                  child: DefaultTextStyle(
+                    style: Theme.of(context).textTheme.body1.apply(
+                          fontSizeFactor: 1.1,
+                          color: message.isMine ? Colors.white : null,
+                        ),
+                    child: Provider<MessageBubble>.value(
+                      value: this,
+                      child: child,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -365,9 +375,8 @@ class Sender extends StatelessWidget {
     final bubble = MessageBubble.of(context);
 
     return !bubble.message.isMine &&
-        !bubble.isReply &&
         !bubble.message.room.isDirect &&
-        bubble.isStartOfGroup;
+        (bubble.isStartOfGroup || bubble.reply != null);
   }
 
   @override
