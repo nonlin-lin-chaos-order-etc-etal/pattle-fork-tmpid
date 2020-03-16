@@ -49,7 +49,8 @@ class ImageContent extends StatelessWidget {
 
     final height = (event.content.info?.height ??
             0 / (event.content.info?.width ?? 0 / _width))
-        .clamp(_minHeight, _maxHeight);
+        .clamp(_minHeight, _maxHeight)
+        .toDouble();
 
     return Container(
       width: _width,
