@@ -22,7 +22,7 @@ import 'package:pattle/src/section/main/chat/widgets/bubble/state/content/creati
 import 'package:pattle/src/section/main/chat/widgets/bubble/state/content/member_change.dart';
 import 'package:pattle/src/section/main/chat/widgets/bubble/state/content/topic_change.dart';
 import 'package:pattle/src/section/main/chat/widgets/bubble/state/content/upgrade.dart';
-import 'package:pattle/src/section/main/chats/models/chat_overview.dart';
+import 'package:pattle/src/section/main/chats/models/chat.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../matrix.dart';

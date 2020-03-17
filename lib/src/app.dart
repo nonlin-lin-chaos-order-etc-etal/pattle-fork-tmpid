@@ -31,7 +31,7 @@ import 'resources/theme.dart';
 import 'section/main/chat/page.dart';
 import 'section/main/chat/image/page.dart';
 import 'section/main/chat/settings/page.dart';
-import 'section/main/chats/models/chat_overview.dart';
+import 'section/main/chats/models/chat.dart';
 import 'section/main/chats/page.dart';
 import 'section/main/chats/create/group/details_page.dart';
 import 'section/main/chats/create/group/members_page.dart';

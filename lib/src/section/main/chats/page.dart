@@ -23,7 +23,7 @@ import 'package:pattle/src/resources/localizations.dart';
 
 import '../../../matrix.dart';
 import 'bloc.dart';
-import 'widgets/chat_overview_list.dart';
+import 'widgets/chat_list.dart';
 
 class ChatsPage extends StatefulWidget {
   ChatsPage._();
@@ -114,7 +114,7 @@ class _ChatsTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ChatsBloc, ChatsState>(builder: (context, state) {
       if (state is ChatsLoaded) {
-        return ChatOverviewList(
+        return ChatList(
           chats: personal ? state.personal : state.public,
         );
       } else {

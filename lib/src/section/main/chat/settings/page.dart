@@ -23,7 +23,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/chats/models/chat_overview.dart';
+import 'package:pattle/src/section/main/chats/models/chat.dart';
 import 'package:pattle/src/section/main/widgets/chat_name.dart';
 import 'package:pattle/src/section/main/widgets/user_item.dart';
 

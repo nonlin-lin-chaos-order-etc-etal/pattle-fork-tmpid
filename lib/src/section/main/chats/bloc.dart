@@ -21,7 +21,7 @@ import 'package:pattle/src/section/main/models/chat_message.dart';
 
 import '../../../matrix.dart';
 import '../../../util/room.dart';
-import 'models/chat_overview.dart';
+import 'models/chat.dart';
 
 import 'event.dart';
 export 'event.dart';

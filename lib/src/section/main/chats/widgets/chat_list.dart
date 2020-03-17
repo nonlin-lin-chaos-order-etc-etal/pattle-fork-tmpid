@@ -17,23 +17,23 @@
 
 import 'package:flutter/material.dart';
 import 'package:pattle/src/app.dart';
-import 'package:pattle/src/section/main/chats/models/chat_overview.dart';
+import 'package:pattle/src/section/main/chats/models/chat.dart';
 import 'package:pattle/src/section/main/widgets/chat_name.dart';
 import 'package:pattle/src/util/date_format.dart';
 
 import 'chat_avatar.dart';
 import 'subtitle.dart';
 
-class ChatOverviewList extends StatefulWidget {
+class ChatList extends StatefulWidget {
   final List<Chat> chats;
 
-  const ChatOverviewList({Key key, this.chats}) : super(key: key);
+  const ChatList({Key key, this.chats}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => ChatOverviewListState();
+  State<StatefulWidget> createState() => ChatListState();
 }
 
-class ChatOverviewListState extends State<ChatOverviewList> {
+class ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
@@ -45,13 +45,13 @@ class ChatOverviewListState extends State<ChatOverviewList> {
         ),
         itemCount: widget.chats.length,
         itemBuilder: (context, index) {
-          return _buildChatOverview(widget.chats[index]);
+          return _buildChat(widget.chats[index]);
         },
       ),
     );
   }
 
-  Widget _buildChatOverview(Chat chat) {
+  Widget _buildChat(Chat chat) {
     final time = formatAsListItem(context, chat.latestMessage?.event?.time);
 
     return ListTile(
