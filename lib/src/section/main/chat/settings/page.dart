@@ -67,7 +67,7 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
       ),
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          final url = avatarUrlOf(room)?.toDownloadString(context);
+          final url = widget.room.displayAvatarUrl?.toDownloadString(context);
           return <Widget>[
             SliverAppBar(
               expandedHeight: 128.0,

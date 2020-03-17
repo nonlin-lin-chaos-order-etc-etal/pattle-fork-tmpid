@@ -33,7 +33,7 @@ class ChatAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avatarUrl = avatarUrlOf(room);
+    final avatarUrl = room.displayAvatarUrl;
     if (avatarUrl != null) {
       return Container(
         width: 48,

@@ -24,74 +24,66 @@ import 'package:pattle/src/resources/localizations.dart';
 import '../matrix.dart';
 import '../util/user.dart';
 
-Uri avatarUrlOf(Room room) =>
-    room.avatarUrl ??
-    (room.isDirect ? room.directUser.avatarUrl : room.avatarUrl);
+extension RoomExtension on Room {
+  Uri get displayAvatarUrl =>
+      avatarUrl ?? (isDirect ? directUser.avatarUrl : avatarUrl);
 
-FutureOr<String> nameOf(Room room, [BuildContext context]) {
-  if (room.name != null) {
-    return room.name;
-  }
-
-  if (room.isDirect) {
-    return room.directUser.getDisplayName(context);
-  }
-
-  String calculateName(Iterable<User> members) {
-    var name = '';
-    if (members != null) {
-      if (members.length == 1 && context != null) {
-        return l(context).you;
-        // TODO: Check for aliases (public chats)
-      } else {
-        final nonMeMembers = members
-            .where((user) => context != null && user != Matrix.of(context).user)
-            .toList(growable: false);
-
-        var i = 0;
-        for (User member in nonMeMembers) {
-          if (i > 4) {
-            name += ' ${l(context).andOthers}';
-            break;
-          }
-
-          name += member.getDisplayName(context);
-
-          if (i != nonMeMembers.length - 1) {
-            name += ', ';
-          }
-
-          i++;
-        }
-      }
-    } else {
-      return room.id.toString();
+  FutureOr<String> getDisplayName([BuildContext context]) {
+    if (name != null) {
+      return name;
     }
 
-    return name.isNotEmpty ? name : room.id.toString();
+    if (isDirect) {
+      return directUser.getDisplayName(context);
+    }
+
+    String calculateName(Iterable<User> members) {
+      var name = '';
+      if (members != null) {
+        if (members.length == 1 && context != null) {
+          return l(context).you;
+          // TODO: Check for aliases (public chats)
+        } else {
+          final nonMeMembers = members
+              .where(
+                  (user) => context != null && user != Matrix.of(context).user)
+              .toList(growable: false);
+
+          var i = 0;
+          for (User member in nonMeMembers) {
+            if (i > 4) {
+              name += ' ${l(context).andOthers}';
+              break;
+            }
+
+            name += member.getDisplayName(context);
+
+            if (i != nonMeMembers.length - 1) {
+              name += ', ';
+            }
+
+            i++;
+          }
+        }
+      } else {
+        return id.toString();
+      }
+
+      return name.isNotEmpty ? name : id.toString();
+    }
+
+    final futureOrMembers = members.get(upTo: 6);
+    if (futureOrMembers is Future<Iterable<User>>) {
+      return futureOrMembers.then(calculateName);
+    } else {
+      return calculateName(futureOrMembers);
+    }
   }
 
-  final futureOrMembers = room.members.get(upTo: 6);
-  if (futureOrMembers is Future<Iterable<User>>) {
-    return futureOrMembers.then(calculateName);
-  } else {
-    return calculateName(futureOrMembers);
-  }
-}
-
-List<Type> ignoredEventsOf(Room room, {@required bool isOverview}) {
-  List<Type> ignored = [
-    RedactionEvent,
-    AvatarChangeEvent,
-  ];
-
-  if (isOverview) {
-    ignored.add(DisplayNameChangeEvent);
-  }
-
-  if (room.isDirect) {
-    ignored.add(RoomCreationEvent);
-  }
-
-  return ignored;
+  List<Type> get ignoredEvents => [
+        RedactionEvent,
+        AvatarChangeEvent,
+        DisplayNameChangeEvent,
+        if (isDirect) RoomCreationEvent,
+      ];
 }

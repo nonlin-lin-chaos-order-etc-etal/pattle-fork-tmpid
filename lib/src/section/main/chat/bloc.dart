@@ -48,8 +48,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
   }
 
-  List<Type> get _ignoredEvents => ignoredEventsOf(room, isOverview: false);
-
   LocalUser get me => matrix.user;
 
   // TODO: Move to separate bloc
@@ -165,7 +163,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       // Don't show creation events in rooms that are replacements
       shouldIgnore |= event is RoomCreationEvent && room.isReplacement;
 
-      if (_ignoredEvents.contains(event.runtimeType) || shouldIgnore) {
+      if (room.ignoredEvents.contains(event.runtimeType) || shouldIgnore) {
         continue;
       }
 

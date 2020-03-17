@@ -48,12 +48,10 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
         continue;
       }
 
-      final ignoredEvents = ignoredEventsOf(room, isOverview: true);
-
       // TODO: Add optional filter argument to up to call
       final latestEvent =
           (await room.timeline.get(upTo: 10, allowRemote: false)).firstWhere(
-        (event) => !ignoredEvents.contains(event.runtimeType),
+        (event) => !room.ignoredEvents.contains(event.runtimeType),
         orElse: () => null,
       );
 

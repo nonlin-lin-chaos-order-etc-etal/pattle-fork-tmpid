@@ -172,7 +172,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
       await plugin.show(
         event.id.hashCode,
-        nameOf(room),
+        room.getDisplayName(),
         message.text,
         NotificationDetails(
           AndroidNotificationDetails(
@@ -186,7 +186,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
             style: AndroidNotificationStyle.Messaging,
             styleInformation: MessagingStyleInformation(
               senderPerson,
-              conversationTitle: !room.isDirect ? await nameOf(room) : null,
+              conversationTitle:
+                  !room.isDirect ? await room.getDisplayName() : null,
               groupConversation: room.isDirect,
               messages: [message],
             ),

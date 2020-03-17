@@ -87,7 +87,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     Widget avatar = Container();
-    final avatarUrl = avatarUrlOf(_room);
+    final avatarUrl = widget.room.displayAvatarUrl;
     if (avatarUrl != null) {
       avatar = Hero(
         tag: _room.id,
