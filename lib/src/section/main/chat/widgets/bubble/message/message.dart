@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/theme.dart';
+import 'package:pattle/src/section/main/chat/widgets/bubble/message/content/loading.dart';
 import 'package:pattle/src/section/main/models/chat_message.dart';
 import 'package:pattle/src/section/main/widgets/message_state.dart';
 import 'package:pattle/src/util/color.dart';
@@ -44,6 +45,8 @@ class MessageBubble extends StatelessWidget {
 
   final BorderRadius borderRadius;
 
+  final Color color;
+
   final Widget child;
 
   final EdgeInsets contentPadding = EdgeInsets.all(8);
@@ -57,21 +60,23 @@ class MessageBubble extends StatelessWidget {
 
   MessageBubble._({
     @required this.message,
-    @required this.previousMessage,
-    @required this.nextMessage,
+    this.previousMessage,
+    this.nextMessage,
     @required this.isStartOfGroup,
     @required this.isEndOfGroup,
     this.reply,
     @required this.borderRadius,
     @required this.child,
+    this.color,
   });
 
   factory MessageBubble({
-    ChatMessage message,
+    @required ChatMessage message,
     ChatMessage previousMessage,
     ChatMessage nextMessage,
     ChatMessage reply,
-    Widget child,
+    Color color,
+    @required Widget child,
   }) {
     final isStartOfGroup = _isStartOfGroup(message, previousMessage, reply);
     final isEndOfGroup = _isEndofGroup(message, nextMessage, reply);
@@ -84,6 +89,7 @@ class MessageBubble extends StatelessWidget {
       isEndOfGroup: isEndOfGroup,
       reply: reply,
       borderRadius: _borderRadius(message, isEndOfGroup, isStartOfGroup),
+      color: color,
       child: child,
     );
   }
@@ -113,6 +119,34 @@ class MessageBubble extends StatelessWidget {
       nextMessage: nextMessage,
       reply: reply,
       child: content,
+    );
+  }
+
+  factory MessageBubble.loading({@required Room room, bool isMine = false}) {
+    return MessageBubble(
+      color: Colors.grey[300],
+      message: ChatMessage(
+        room,
+        TextMessageEvent(
+          RoomEventArgs(
+            id: EventId('1234'),
+            sender: User(
+              id: UserId('@wilko:pattle.im'),
+              state: UserState(
+                roomId: RoomId('!343432:pattle.im'),
+                displayName: 'Wilko',
+                since: DateTime.now(),
+              ),
+            ),
+            time: DateTime.now(),
+          ),
+          content: TextMessage(
+            body: 'Blabla',
+          ),
+        ),
+        isMine: isMine,
+      ),
+      child: LoadingContent(),
     );
   }
 
@@ -215,17 +249,18 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = message.isMine
-        ? themed(
-            context,
-            light: LightColors.red[450],
-            dark: LightColors.red[700],
-          )
-        : themed(
-            context,
-            light: Colors.white,
-            dark: Colors.grey[800],
-          );
+    final color = this.color ??
+        (message.isMine
+            ? themed(
+                context,
+                light: LightColors.red[450],
+                dark: LightColors.red[700],
+              )
+            : themed(
+                context,
+                light: Colors.white,
+                dark: Colors.grey[800],
+              ));
 
     final border = RoundedRectangleBorder(borderRadius: borderRadius);
 

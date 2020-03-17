@@ -144,7 +144,7 @@ class _ChatPageState extends State<ChatPage> {
             child: Column(
               children: <Widget>[
                 Expanded(
-                  child: _MessageList(),
+                  child: _MessageList(room: _room),
                 ),
                 ConstrainedBox(
                   constraints: BoxConstraints.loose(
@@ -164,6 +164,10 @@ class _ChatPageState extends State<ChatPage> {
 }
 
 class _MessageList extends StatefulWidget {
+  final Room room;
+
+  const _MessageList({Key key, @required this.room}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _MessageListState();
 }
@@ -253,7 +257,16 @@ class _MessageListState extends State<_MessageList> {
           );
         }
 
-        return CircularProgressIndicator();
+        return ListView(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          reverse: true,
+          children: List.generate(10, (i) {
+            return MessageBubble.loading(
+              room: widget.room,
+              isMine: i % 2 == 0,
+            );
+          }),
+        );
       },
     );
   }
