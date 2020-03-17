@@ -26,6 +26,7 @@ import 'package:pattle/src/app.dart';
 
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
+import 'package:pattle/src/section/main/chats/models/chat_overview.dart';
 import 'package:pattle/src/section/main/widgets/chat_name.dart';
 import 'package:pattle/src/section/main/widgets/error.dart';
 import 'package:pattle/src/section/main/widgets/title_with_sub.dart';
@@ -42,14 +43,14 @@ import 'widgets/bubble/state.dart';
 import 'widgets/date_header.dart';
 
 class ChatPage extends StatefulWidget {
-  final Room room;
+  final Chat chat;
 
-  ChatPage._(this.room);
+  ChatPage._(this.chat);
 
-  static Widget withBloc(Room room) {
+  static Widget withBloc(Chat chat) {
     return BlocProvider<ChatBloc>(
-      create: (c) => ChatBloc(Matrix.of(c), room),
-      child: ChatPage._(room),
+      create: (c) => ChatBloc(Matrix.of(c), chat.room),
+      child: ChatPage._(chat),
     );
   }
 
@@ -60,7 +61,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   Timer _readTimer;
 
-  Room get _room => widget.room;
+  Room get _room => widget.chat.room;
 
   @override
   void dispose() {
@@ -87,7 +88,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     Widget avatar = Container();
-    final avatarUrl = widget.room.displayAvatarUrl;
+    final avatarUrl = widget.chat.room.displayAvatarUrl;
     if (avatarUrl != null) {
       avatar = Hero(
         tag: _room.id,
@@ -103,7 +104,7 @@ class _ChatPageState extends State<ChatPage> {
     final settingsGestureDetector = ({Widget child}) {
       return GestureDetector(
         onTap: () => Navigator.of(context)
-            .pushNamed(Routes.chatsSettings, arguments: _room),
+            .pushNamed(Routes.chatsSettings, arguments: widget.chat),
         child: child,
       );
     };
@@ -112,14 +113,14 @@ class _ChatPageState extends State<ChatPage> {
     Widget title =
         _room.isSomeoneElseTyping && !_room.typingUsers.any((u) => u == null)
             ? TitleWithSub(
-                title: ChatName(room: _room),
+                title: ChatName(chat: widget.chat),
                 subtitle: RichText(
                   text: TextSpan(
                     children: typingSpan(context, _room),
                   ),
                 ),
               )
-            : ChatName(room: _room);
+            : ChatName(chat: widget.chat);
 
     return Scaffold(
       backgroundColor: chatBackgroundColor(context),

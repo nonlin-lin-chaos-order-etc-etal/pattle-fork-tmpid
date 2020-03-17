@@ -35,12 +35,12 @@ import 'typing_subtitle.dart';
 import 'unsupported_subtitle.dart';
 
 class Subtitle extends StatelessWidget {
-  final ChatOverview chat;
+  final Chat chat;
   final Widget child;
 
   const Subtitle({Key key, this.chat, this.child}) : super(key: key);
 
-  static Widget withContent(ChatOverview chat) {
+  static Widget withContent(Chat chat) {
     Widget content;
 
     // TODO: typingUsers should not contain nulls

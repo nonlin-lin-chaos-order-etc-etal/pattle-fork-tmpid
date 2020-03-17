@@ -23,6 +23,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
+import 'package:pattle/src/section/main/chats/models/chat_overview.dart';
 import 'package:pattle/src/section/main/widgets/chat_name.dart';
 import 'package:pattle/src/section/main/widgets/user_item.dart';
 
@@ -33,14 +34,14 @@ import '../../../../util/room.dart';
 import 'bloc.dart';
 
 class ChatSettingsPage extends StatefulWidget {
-  final Room room;
+  final Chat chat;
 
-  ChatSettingsPage._(this.room);
+  ChatSettingsPage._(this.chat);
 
-  static Widget withBloc(Room room) {
+  static Widget withBloc(Chat chat) {
     return BlocProvider<ChatSettingsBloc>(
-      create: (c) => ChatSettingsBloc(Matrix.of(c), room),
-      child: ChatSettingsPage._(room),
+      create: (c) => ChatSettingsBloc(Matrix.of(c), chat.room),
+      child: ChatSettingsPage._(chat),
     );
   }
 
@@ -49,7 +50,7 @@ class ChatSettingsPage extends StatefulWidget {
 }
 
 class _ChatSettingsPageState extends State<ChatSettingsPage> {
-  Room get room => widget.room;
+  Room get room => widget.chat.room;
 
   @override
   void didChangeDependencies() {
@@ -67,15 +68,15 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
       ),
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          final url = widget.room.displayAvatarUrl?.toDownloadString(context);
+          final url =
+              widget.chat.room.displayAvatarUrl?.toDownloadString(context);
           return <Widget>[
             SliverAppBar(
               expandedHeight: 128.0,
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                title: ChatName(
-                  room: room,
+                title: DefaultTextStyle(
                   style: TextStyle(
                     shadows: [
                       Shadow(
@@ -83,6 +84,9 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
                         blurRadius: 1,
                       )
                     ],
+                  ),
+                  child: ChatName(
+                    chat: widget.chat,
                   ),
                 ),
                 background: url != null

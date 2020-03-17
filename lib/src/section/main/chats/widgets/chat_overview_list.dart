@@ -25,7 +25,7 @@ import 'chat_avatar.dart';
 import 'subtitle.dart';
 
 class ChatOverviewList extends StatefulWidget {
-  final List<ChatOverview> chats;
+  final List<Chat> chats;
 
   const ChatOverviewList({Key key, this.chats}) : super(key: key);
 
@@ -51,7 +51,7 @@ class ChatOverviewListState extends State<ChatOverviewList> {
     );
   }
 
-  Widget _buildChatOverview(ChatOverview chat) {
+  Widget _buildChatOverview(Chat chat) {
     final time = formatAsListItem(context, chat.latestMessage?.event?.time);
 
     return ListTile(
@@ -61,7 +61,7 @@ class ChatOverviewListState extends State<ChatOverviewList> {
         children: <Widget>[
           Expanded(
             child: ChatName(
-              room: chat.room,
+              chat: chat,
             ),
           ),
           Text(
@@ -75,7 +75,7 @@ class ChatOverviewListState extends State<ChatOverviewList> {
       ),
       dense: false,
       onTap: () {
-        Navigator.pushNamed(context, Routes.chats, arguments: chat.room);
+        Navigator.pushNamed(context, Routes.chats, arguments: chat);
       },
       leading: ChatAvatar(room: chat.room),
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),

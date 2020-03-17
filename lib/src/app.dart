@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/redirect.dart';
 import 'package:provider/provider.dart';
 
@@ -32,6 +31,7 @@ import 'resources/theme.dart';
 import 'section/main/chat/page.dart';
 import 'section/main/chat/image/page.dart';
 import 'section/main/chat/settings/page.dart';
+import 'section/main/chats/models/chat_overview.dart';
 import 'section/main/chats/page.dart';
 import 'section/main/chats/create/group/details_page.dart';
 import 'section/main/chats/create/group/members_page.dart';
@@ -67,7 +67,7 @@ final routes = {
       ),
   Routes.chats: (Object arguments) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.chats),
-        builder: (context) => arguments is Room
+        builder: (context) => arguments is Chat
             ? ChatPage.withBloc(arguments)
             : ChatsPage.withBloc(),
       ),

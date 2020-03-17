@@ -16,43 +16,24 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:future_or_builder/future_or_builder.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
-
-import '../../../util/room.dart';
+import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/section/main/chats/models/chat_overview.dart';
 
 class ChatName extends StatelessWidget {
-  final Room room;
+  final Chat chat;
 
-  final TextStyle style;
-
-  ChatName({
-    @required this.room,
-    this.style = const TextStyle(),
-  });
-
-  TextStyle _textStyle() => style.copyWith(
-        fontWeight: FontWeight.w600,
-      );
+  ChatName({@required this.chat});
 
   @override
   Widget build(BuildContext context) {
-    return FutureOrBuilder<String>(
-      futureOr: room.getDisplayName(context),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        if (snapshot.hasData) {
-          final name = snapshot.data;
-          return Text(
-            name,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            style: _textStyle(),
-          );
-        }
-
-        return Container();
-      },
+    return Text(
+      chat.isJustYou ? l(context).you : chat.name,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+      style: TextStyle(
+        fontWeight: FontWeight.w600,
+      ),
     );
   }
 }

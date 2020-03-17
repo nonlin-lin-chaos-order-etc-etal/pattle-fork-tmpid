@@ -10,8 +10,8 @@ abstract class ChatsState extends Equatable {
 class ChatsLoading extends ChatsState {}
 
 class ChatsLoaded extends ChatsState {
-  final List<ChatOverview> personal;
-  final List<ChatOverview> public;
+  final List<Chat> personal;
+  final List<Chat> public;
 
   ChatsLoaded({@required this.personal, @required this.public});
 

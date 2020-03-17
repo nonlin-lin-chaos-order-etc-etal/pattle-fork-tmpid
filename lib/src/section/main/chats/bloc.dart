@@ -34,12 +34,12 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
 
   ChatsBloc(this._matrix);
 
-  Future<List<ChatOverview>> _getChats() async {
+  Future<List<Chat>> _getChats() async {
     final me = _matrix.user;
 
     await me.sync.first;
 
-    final chats = List<ChatOverview>();
+    final chats = List<Chat>();
 
     // Get all rooms and push them as a single list
     for (Room room in await me.rooms.get()) {
@@ -74,9 +74,10 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
         latestEventForSorting = latestEvent;
       }
 
-      final chat = ChatOverview(
+      final chat = Chat(
         room: room,
-        name: room.name,
+        name: await room.getDisplayName(),
+        isJustYou: room.members.count == 1,
         latestMessage: latestEvent != null
             ? ChatMessage(
                 room,
