@@ -172,20 +172,20 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         final inReplyToEvent = await room.timeline[event.content.inReplyToId];
 
         if (inReplyToEvent != null) {
-          inReplyTo = ChatMessage(
+          inReplyTo = await ChatMessage.create(
             room,
             inReplyToEvent,
-            isMine: inReplyToEvent.sender == me,
+            isMe: (u) => u == matrix.user,
           );
         }
       }
 
       messages.add(
-        ChatMessage(
+        await ChatMessage.create(
           room,
           event,
           inReplyTo: inReplyTo,
-          isMine: event.sender == me,
+          isMe: (u) => u == matrix.user,
         ),
       );
     }

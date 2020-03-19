@@ -26,7 +26,6 @@ import 'package:pattle/src/section/main/chats/models/chat.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../matrix.dart';
-import '../../../../util/user.dart';
 
 import 'image_subtitle.dart';
 import 'redacted_subtitle.dart';
@@ -127,7 +126,7 @@ class Sender extends StatelessWidget {
     final message = Subtitle.of(context).chat.latestMessage;
 
     return Text(
-      '${message.event.sender.displayName}: ',
+      '${message.sender.name}: ',
       maxLines: 1,
       style: TextStyle(fontWeight: FontWeight.bold),
     );

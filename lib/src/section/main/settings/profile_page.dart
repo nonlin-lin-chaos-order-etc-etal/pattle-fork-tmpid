@@ -19,9 +19,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/widgets/user_avatar.dart';
+import 'package:pattle/src/section/main/widgets/chat_member_avatar.dart';
 import '../../../matrix.dart';
-import '../../../util/user.dart';
+
+import '../../../util/local_user.dart';
 
 import '../../../app.dart';
 import 'bloc.dart';
@@ -43,6 +44,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    // TODO: Use ChatMember
     final me = Matrix.of(context).user;
 
     return Scaffold(
@@ -59,8 +61,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: <Widget>[
                   Hero(
                     tag: me.id,
-                    child: UserAvatar(
-                      user: me,
+                    child: ChatMemberAvatar(
+                      member: me.toChatMember(),
                       radius: 96,
                     ),
                   ),
@@ -84,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: redOnBackground(context),
                     ),
                     title: Text(l(context).name),
-                    subtitle: Text(me.displayName),
+                    subtitle: Text(me.name),
                     trailing: Icon(Icons.edit),
                     onTap: () => Navigator.pushNamed(
                       context,

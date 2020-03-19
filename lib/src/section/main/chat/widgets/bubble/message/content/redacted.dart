@@ -54,7 +54,7 @@ class RedactedContent extends StatelessWidget {
                   dark: bubble.message.isMine ? Colors.white30 : Colors.white70,
                 ),
               ),
-              child: Redacted(event: bubble.message.event),
+              child: Redacted(redaction: bubble.message.redaction),
             ),
             if (MessageInfo.necessary(context))
               Padding(

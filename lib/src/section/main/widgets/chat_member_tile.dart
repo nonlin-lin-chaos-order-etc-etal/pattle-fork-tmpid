@@ -17,24 +17,24 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/theme.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 
-import '../../../util/user.dart';
+import '../../../util/chat_member.dart';
 
-import 'user_avatar.dart';
+import 'chat_member_avatar.dart';
 
-class UserItem extends StatefulWidget {
-  final User user;
+class ChatMemberTile extends StatefulWidget {
+  final ChatMember member;
   final bool checkable;
   final bool checked;
 
   final VoidCallback onSelected;
   final VoidCallback onUnselected;
 
-  const UserItem({
+  const ChatMemberTile({
     Key key,
-    @required this.user,
+    @required this.member,
     this.checkable = false,
     this.checked = false,
     this.onSelected,
@@ -42,10 +42,10 @@ class UserItem extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => UserItemState();
+  State<StatefulWidget> createState() => ChatMemberTileState();
 }
 
-class UserItemState extends State<UserItem> {
+class ChatMemberTileState extends State<ChatMemberTile> {
   bool checked;
 
   @override
@@ -58,8 +58,8 @@ class UserItemState extends State<UserItem> {
   Widget build(BuildContext context) {
     final avatarSize = 42.0;
 
-    Widget avatar = UserAvatar(
-      user: widget.user,
+    Widget avatar = ChatMemberAvatar(
+      member: widget.member,
       radius: avatarSize * 0.5,
     );
 
@@ -92,7 +92,7 @@ class UserItemState extends State<UserItem> {
     return ListTile(
       leading: avatar,
       title: Text(
-        widget.user.getDisplayName(context),
+        widget.member.nameOrYou(context),
         style: TextStyle(
           fontWeight: FontWeight.w600,
         ),

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/models/chat_message.dart';
 
 abstract class ImageState extends Equatable {
   @override
@@ -11,10 +11,10 @@ class ImagesUninitialized extends ImageState {}
 class ImagesLoading extends ImageState {}
 
 class ImagesLoaded extends ImageState {
-  final List<ImageMessageEvent> events;
+  final List<ChatMessage> messages;
 
-  ImagesLoaded(this.events);
+  ImagesLoaded(this.messages);
 
   @override
-  List<Object> get props => [events];
+  List<Object> get props => [messages];
 }

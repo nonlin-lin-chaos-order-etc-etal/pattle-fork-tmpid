@@ -21,7 +21,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 import '../../../../../../../util/color.dart';
-import '../../../../../../../util/user.dart';
+import '../../../../../../../util/chat_member.dart';
 
 import '../../message.dart';
 
@@ -45,7 +45,7 @@ class TextContent extends StatelessWidget {
             ? _ReplyBorderPainter(
                 color: bubble.message.isMine && bubble.reply?.isMine == true
                     ? Colors.white
-                    : bubble.message.event.sender.getColor(context),
+                    : bubble.message.sender.color(context),
                 borderRadius: bubble.borderRadius,
               )
             : null,

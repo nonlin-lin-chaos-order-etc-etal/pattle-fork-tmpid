@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/chat/widgets/bubble/message/content/loading.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 import 'package:pattle/src/section/main/models/chat_message.dart';
 import 'package:pattle/src/section/main/widgets/message_state.dart';
 import 'package:pattle/src/util/color.dart';
@@ -29,7 +30,7 @@ import 'content/image.dart';
 import 'content/redacted.dart';
 import 'content/text.dart';
 
-import '../../../../../../util/user.dart';
+import '../../../../../../util/chat_member.dart';
 
 class MessageBubble extends StatelessWidget {
   final ChatMessage message;
@@ -144,7 +145,18 @@ class MessageBubble extends StatelessWidget {
             body: 'Blabla',
           ),
         ),
-        isMine: isMine,
+        sender: ChatMember(
+          User(
+            id: UserId('@wilko:pattle.im'),
+            state: UserState(
+              roomId: RoomId('!343432:pattle.im'),
+              displayName: 'Wilko',
+              since: DateTime.now(),
+            ),
+          ),
+          isYou: isMine,
+          name: 'Wilko',
+        ),
       ),
       child: LoadingContent(),
     );
@@ -167,7 +179,7 @@ class MessageBubble extends StatelessWidget {
     }
 
     final previousHasSameSender = previousEvent != null &&
-        previousEvent.sender.displayName == event.sender.displayName &&
+        previousMessage.sender.name == previousMessage.sender.name &&
         previousEvent.sender == event.sender;
 
     if (!previousHasSameSender) {
@@ -201,7 +213,7 @@ class MessageBubble extends StatelessWidget {
     }
 
     final nextHasSameSender = nextEvent != null &&
-        nextEvent.sender.displayName == event.sender.displayName &&
+        nextMessage.sender.name == nextMessage.sender.name &&
         nextEvent.sender == event.sender;
 
     if (!nextHasSameSender) {
@@ -419,12 +431,10 @@ class Sender extends StatelessWidget {
     final bubble = MessageBubble.of(context);
 
     return Text(
-      bubble.message.event.sender.displayName,
+      bubble.message.sender.name,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        color: personalizedColor
-            ? bubble.message.event.sender.getColor(context)
-            : null,
+        color: personalizedColor ? bubble.message.sender.color(context) : null,
       ),
     );
   }

@@ -24,8 +24,9 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/chats/models/chat.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 import 'package:pattle/src/section/main/widgets/chat_name.dart';
-import 'package:pattle/src/section/main/widgets/user_item.dart';
+import 'package:pattle/src/section/main/widgets/chat_member_tile.dart';
 
 import '../../../../matrix.dart';
 import '../../../../util/url.dart';
@@ -200,7 +201,7 @@ class _MemberListState extends State<_MemberList> {
                 SizedBox(height: 4),
                 BlocBuilder<ChatSettingsBloc, ChatSettingsState>(
                   builder: (context, state) {
-                    var members = List<User>();
+                    var members = List<ChatMember>();
                     if (state is MembersLoaded) {
                       members = state.members;
                     }
@@ -235,8 +236,8 @@ class _MemberListState extends State<_MemberList> {
                             );
                           }
 
-                          return UserItem(
-                            user: members[index],
+                          return ChatMemberTile(
+                            member: members[index],
                           );
                         },
                       ),

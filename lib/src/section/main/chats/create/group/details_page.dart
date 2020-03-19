@@ -21,9 +21,8 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/section/main/widgets/error.dart';
-import 'package:pattle/src/section/main/widgets/user_avatar.dart';
+import 'package:pattle/src/section/main/widgets/chat_member_avatar.dart';
 
-import '../../../../../util/user.dart';
 import 'bloc.dart';
 
 class CreateGroupDetailsPage extends StatefulWidget {
@@ -138,7 +137,7 @@ class _CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
       builder: (context, state) {
         final children = List<Widget>();
 
-        for (final user in state?.members) {
+        for (final member in state?.members) {
           children.add(
             Column(
               mainAxisSize: MainAxisSize.min,
@@ -149,12 +148,12 @@ class _CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
                     padding: EdgeInsets.all(8),
                     child: AspectRatio(
                       aspectRatio: 1 / 1,
-                      child: UserAvatar(user: user, radius: 32),
+                      child: ChatMemberAvatar(member: member, radius: 32),
                     ),
                   ),
                 ),
                 Text(
-                  user.getDisplayName(context),
+                  member.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,

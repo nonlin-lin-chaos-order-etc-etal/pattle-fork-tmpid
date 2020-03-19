@@ -22,8 +22,8 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/localizations.dart';
 
 import '../matrix.dart';
-import '../util/user.dart';
 
+// TODO: Incorporate into Chat
 extension RoomExtension on Room {
   Uri get displayAvatarUrl =>
       avatarUrl ?? (isDirect ? directUser.avatarUrl : avatarUrl);
@@ -34,7 +34,7 @@ extension RoomExtension on Room {
     }
 
     if (isDirect) {
-      return directUser.getDisplayName(context);
+      return directUser.name;
     }
 
     String calculateName(Iterable<User> members) {
@@ -56,7 +56,7 @@ extension RoomExtension on Room {
               break;
             }
 
-            name += member.getDisplayName(context);
+            name += member.name;
 
             if (i != nonMeMembers.length - 1) {
               name += ', ';

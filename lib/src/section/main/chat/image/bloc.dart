@@ -18,6 +18,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/models/chat_message.dart';
 
 import '../../../../matrix.dart';
 import 'event.dart';
@@ -54,7 +55,13 @@ class ImageBloc extends Bloc<ImageEvent, ImageState> {
         }
       }
 
-      yield ImagesLoaded(imageMessageEvents);
+      final messages = await Future.wait(
+        imageMessageEvents.map(
+          (i) => ChatMessage.create(_room, i, isMe: (u) => u == _matrix.user),
+        ),
+      );
+
+      yield ImagesLoaded(messages);
     }
   }
 

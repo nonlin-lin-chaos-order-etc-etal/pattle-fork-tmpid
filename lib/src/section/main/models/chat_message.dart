@@ -15,23 +15,32 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 
 class ChatMessage {
   final Room room;
   final RoomEvent event;
+  final ChatMember sender;
 
   final ChatMessage inReplyTo;
-  final bool isMine;
+  bool get isMine => sender.isYou;
+
+  /// Message that redacted this message, if any.
+  final ChatMessage redaction;
+
+  /// Subject of a member change state change, if any.
+  final ChatMember subject;
 
   ChatMessage(
     this.room,
     this.event, {
+    @required this.sender,
     this.inReplyTo,
-    @required this.isMine,
+    this.redaction,
+    this.subject,
   });
-
   @override
   bool operator ==(other) {
     if (other is ChatMessage) {
@@ -42,6 +51,47 @@ class ChatMessage {
     } else {
       return false;
     }
+  }
+
+  static Future<ChatMessage> create(
+    Room room,
+    RoomEvent event, {
+    ChatMessage inReplyTo,
+    @required bool Function(User) isMe,
+  }) async {
+    ChatMessage redactionMessage;
+    ChatMember subject;
+
+    if (event is RedactedEvent) {
+      redactionMessage = ChatMessage(
+        room,
+        event.redaction,
+        sender: await ChatMember.fromUser(
+          room,
+          event.redaction.sender,
+          isYou: isMe(event.redaction.sender),
+        ),
+      );
+    } else if (event is MemberChangeEvent) {
+      subject = await ChatMember.fromUser(
+        room,
+        event.subject,
+        isYou: isMe(event.subject),
+      );
+    }
+
+    return ChatMessage(
+      room,
+      event,
+      sender: await ChatMember.fromUser(
+        room,
+        event.sender,
+        isYou: isMe(event.sender),
+      ),
+      inReplyTo: inReplyTo,
+      redaction: redactionMessage,
+      subject: subject,
+    );
   }
 
   @override

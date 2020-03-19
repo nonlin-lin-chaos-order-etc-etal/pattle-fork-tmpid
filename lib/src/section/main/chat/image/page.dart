@@ -19,28 +19,28 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 import 'package:pattle/src/section/main/models/chat_message.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 import '../../../../matrix.dart';
 import '../../../../util/date_format.dart';
-import '../../../../util/user.dart';
 import '../../../../util/url.dart';
 
 import 'bloc.dart';
 
 class ImagePage extends StatefulWidget {
-  final ImageMessageEvent event;
+  final ChatMessage message;
 
-  ImagePage._(this.event);
+  ImagePage._(this.message);
 
   static Widget withBloc(ChatMessage message) {
     assert(message.event is ImageMessageEvent);
 
     return BlocProvider<ImageBloc>(
       create: (c) => ImageBloc(Matrix.of(c), message.room),
-      child: ImagePage._(message.event),
+      child: ImagePage._(message),
     );
   }
 
@@ -49,7 +49,7 @@ class ImagePage extends StatefulWidget {
 }
 
 class _ImagePageState extends State<ImagePage> {
-  User _messageSender;
+  ChatMember _messageSender;
   String _date;
 
   @override
@@ -63,10 +63,10 @@ class _ImagePageState extends State<ImagePage> {
 
     BlocProvider.of<ImageBloc>(context).add(FetchImages());
 
-    _messageSender = widget.event.sender;
+    _messageSender = widget.message.sender;
 
-    _date = '${formatAsDate(context, widget.event.time)},'
-        ' ${formatAsTime(widget.event.time)}';
+    _date = '${formatAsDate(context, widget.message.event.time)},'
+        ' ${formatAsTime(widget.message.event.time)}';
   }
 
   @override
@@ -85,7 +85,7 @@ class _ImagePageState extends State<ImagePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(_messageSender.displayName),
+                  Text(_messageSender.name),
                   SizedBox(height: 2),
                   Text(
                     _date,
@@ -108,28 +108,30 @@ class _ImagePageState extends State<ImagePage> {
     return BlocBuilder<ImageBloc, ImageState>(
       builder: (context, state) {
         if (state is ImagesLoaded) {
-          final events = state.events;
+          final messages = state.messages;
           return PhotoViewGallery.builder(
-            itemCount: events.length,
+            itemCount: messages.length,
             reverse: true,
             builder: (context, index) {
+              final event = messages[index].event as ImageMessageEvent;
+
               return PhotoViewGalleryPageOptions(
                 imageProvider: CachedNetworkImageProvider(
-                  events[index].content.url.toDownloadString(context),
+                  event.content.url.toDownloadString(context),
                 ),
-                heroTag: widget.event.id,
+                heroTag: widget.message.event.id,
                 minScale: PhotoViewComputedScale.contained,
               );
             },
             onPageChanged: (index) {
               setState(() {
-                _messageSender = events[index].sender;
-                _date = '${formatAsDate(context, events[index].time)}, '
-                    '${formatAsTime(events[index].time)}';
+                _messageSender = messages[index].sender;
+                _date = '${formatAsDate(context, messages[index].event.time)}, '
+                    '${formatAsTime(messages[index].event.time)}';
               });
             },
             pageController: PageController(
-              initialPage: events.indexOf(widget.event),
+              initialPage: messages.indexOf(widget.message),
             ),
           );
         }

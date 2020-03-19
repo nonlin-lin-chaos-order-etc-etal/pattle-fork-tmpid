@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 
 abstract class CreateGroupEvent extends Equatable {
   @override
@@ -18,15 +18,15 @@ class UpdateGroupName extends CreateGroupEvent {
 }
 
 class AddMember extends CreateGroupEvent {
-  final User user;
+  final ChatMember member;
 
-  AddMember(this.user);
+  AddMember(this.member);
 }
 
 class RemoveMember extends CreateGroupEvent {
-  final User user;
+  final ChatMember member;
 
-  RemoveMember(this.user);
+  RemoveMember(this.member);
 }
 
 class CreateGroup extends CreateGroupEvent {}

@@ -19,11 +19,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:mdi/mdi.dart';
-import 'package:pattle/src/resources/theme.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../../../../util/room.dart';
-import '../../../../util/user.dart';
 import '../../../../util/url.dart';
 
 class ChatAvatar extends StatelessWidget {
@@ -51,9 +49,10 @@ class ChatAvatar extends StatelessWidget {
     } else {
       return CircleAvatar(
         foregroundColor: Colors.white,
-        backgroundColor: room.isDirect
-            ? room.directUser.getColor(context)
-            : LightColors.red[500],
+        // TODO: Use Chat
+        /*backgroundColor: room.isDirect
+            ? room.directUser.color(context)
+            : LightColors.red[500],*/
         radius: 24,
         child: _icon(),
       );

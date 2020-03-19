@@ -17,6 +17,7 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 import 'package:pattle/src/section/main/models/chat_message.dart';
 
 import '../../../matrix.dart';
@@ -79,17 +80,21 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
         name: await room.getDisplayName(),
         isJustYou: room.members.count == 1,
         latestMessage: latestEvent != null
-            ? ChatMessage(
+            ? await ChatMessage.create(
                 room,
                 latestEvent,
-                isMine: latestEvent.sender == _matrix.user,
+                isMe: (u) => u == _matrix.user,
               )
             : null,
         latestMessageForSorting: latestEventForSorting != null
             ? ChatMessage(
                 room,
                 latestEventForSorting,
-                isMine: latestEventForSorting.sender == _matrix.user,
+                sender: await ChatMember.fromUser(
+                  room,
+                  latestEventForSorting.sender,
+                  isYou: latestEventForSorting.sender == _matrix.user,
+                ),
               )
             : null,
       );

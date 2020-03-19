@@ -15,16 +15,16 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/material.dart';
-import 'package:pattle/src/section/main/widgets/redacted.dart';
+import 'dart:ui';
 
-import 'subtitle.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/theme.dart';
 
-class RedactedSubtitleContent extends Subtitle {
-  @override
-  Widget build(BuildContext context) {
-    return Redacted(
-      redaction: Subtitle.of(context).chat.latestMessage.redaction,
-    );
-  }
+import 'package:pattle/src/section/main/models/chat_member.dart';
+
+extension ChatMemberExtension on ChatMember {
+  Color color(BuildContext context) => userColor(context, displayColor.index);
+
+  String nameOrYou(BuildContext context) => isYou ? l(context).you : name;
 }

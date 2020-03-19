@@ -20,8 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/section/main/models/chat_message.dart';
 
-import '../../../../../../../util/user.dart';
-
 import '../state.dart';
 
 /// If [message] is `null`, will try to get the [message] from the
@@ -40,7 +38,7 @@ class UpgradeContent extends StatelessWidget {
         style: DefaultTextStyle.of(context).style,
         children: l(context).upgradedThisGroup(
           TextSpan(
-            text: message.event.sender.displayName,
+            text: message.sender.name,
           ),
         ),
       ),

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 
 abstract class ChatSettingsState extends Equatable {
   @override
@@ -11,7 +11,7 @@ class ChatSettingsUninitialized extends ChatSettingsState {}
 class MembersLoading extends ChatSettingsState {}
 
 class MembersLoaded extends ChatSettingsState {
-  final List<User> members;
+  final List<ChatMember> members;
 
   MembersLoaded(this.members);
 

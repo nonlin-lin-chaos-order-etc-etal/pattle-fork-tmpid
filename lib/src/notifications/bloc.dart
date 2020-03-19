@@ -24,12 +24,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 
 import '../auth/bloc.dart';
 import '../matrix.dart';
 
 import '../util/room.dart';
-import '../util/user.dart';
 import '../util/url.dart';
 
 import 'event.dart';
@@ -115,7 +115,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   static Message _eventToMessage(RoomEvent event, Person person) {
     if (event is EmoteMessageEvent) {
       return Message(
-        '${event.sender.displayName} ${event.content.body}',
+        '${person.name} ${event.content.body}',
         event.time,
         person,
       );
@@ -150,15 +150,19 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     final room = await user.rooms[message.roomId];
     final event = await room.timeline[message.eventId];
 
-    final senderName = event.sender.displayName;
-
     final icon = await DefaultCacheManager().getSingleFile(
       event.sender.avatarUrl.toThumbnailStringWith(user.homeserver),
     );
 
+    final sender = await ChatMember.fromUser(
+      room,
+      event.sender,
+      isYou: false,
+    );
+
     final senderPerson = Person(
       bot: false,
-      name: senderName,
+      name: sender.name,
       icon: icon.path,
       iconSource: IconSource.FilePath,
     );

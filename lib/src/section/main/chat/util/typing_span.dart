@@ -19,8 +19,7 @@ import 'package:flutter/widgets.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/localizations.dart';
 
-import '../../../../util/user.dart';
-
+// TODO: Use Widget and ChatMember
 List<TextSpan> typingSpan(BuildContext context, Room room) {
   if (room.isDirect) {
     return l(context).typing;
@@ -29,7 +28,7 @@ List<TextSpan> typingSpan(BuildContext context, Room room) {
   if (room.typingUsers.length == 1) {
     return l(context).isTyping(
       TextSpan(
-        text: room.typingUsers.first.displayName,
+        text: room.typingUsers.first.name,
       ),
     );
   }
@@ -37,20 +36,20 @@ List<TextSpan> typingSpan(BuildContext context, Room room) {
   if (room.typingUsers.length == 2) {
     return l(context).areTyping(
       TextSpan(
-        text: room.typingUsers.first.displayName,
+        text: room.typingUsers.first.name,
       ),
       TextSpan(
-        text: room.typingUsers[1].displayName,
+        text: room.typingUsers[1].name,
       ),
     );
   }
 
   return l(context).andMoreAreTyping(
     TextSpan(
-      text: room.typingUsers.first.displayName,
+      text: room.typingUsers.first.name,
     ),
     TextSpan(
-      text: room.typingUsers[1].displayName,
+      text: room.typingUsers[1].name,
     ),
   );
 }

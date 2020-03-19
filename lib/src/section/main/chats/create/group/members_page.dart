@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pattle/src/app.dart';
 import 'package:pattle/src/resources/localizations.dart';
-import 'package:pattle/src/section/main/widgets/user_item.dart';
+import 'package:pattle/src/section/main/widgets/chat_member_tile.dart';
 
 import '../../../../../matrix.dart';
 import 'bloc.dart';
@@ -82,8 +82,8 @@ class _CreateGroupMembersPageState extends State<CreateGroupMembersPage> {
 
           return ListView.builder(
             itemCount: users.length,
-            itemBuilder: (BuildContext context, int index) => UserItem(
-              user: users[index],
+            itemBuilder: (BuildContext context, int index) => ChatMemberTile(
+              member: users[index],
               checkable: true,
               onSelected: () => bloc.add(AddMember(users[index])),
               onUnselected: () => bloc.add(RemoveMember(users[index])),

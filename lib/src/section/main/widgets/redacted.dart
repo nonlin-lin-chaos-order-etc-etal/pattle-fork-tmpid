@@ -16,20 +16,17 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/resources/localizations.dart';
-
-import '../../../matrix.dart';
-import '../../../util//user.dart';
+import 'package:pattle/src/section/main/models/chat_message.dart';
 
 class Redacted extends StatelessWidget {
-  final RedactedEvent event;
+  final ChatMessage redaction;
 
   final Color color;
   final double iconSize;
 
   const Redacted({
-    @required this.event,
+    @required this.redaction,
     this.iconSize,
     this.color,
   }) : super();
@@ -37,11 +34,11 @@ class Redacted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<TextSpan> text;
-    if (event.redaction.sender == Matrix.of(context).user) {
+    if (redaction.isMine) {
       text = [TextSpan(text: ' ${l(context).youDeletedThisMessage}')];
     } else {
       text = l(context).hasDeletedThisMessage(
-        TextSpan(text: ' ${event.redaction.sender.displayName}'),
+        TextSpan(text: ' ${redaction.sender.name}'),
       );
     }
 

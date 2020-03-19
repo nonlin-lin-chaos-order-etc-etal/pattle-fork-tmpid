@@ -19,6 +19,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 
 import '../../../../matrix.dart';
 import 'event.dart';
@@ -41,14 +42,20 @@ class ChatSettingsBloc extends Bloc<ChatSettingsEvent, ChatSettingsState> {
     if (event is FetchMembers) {
       final me = await _room.members[_matrix.user.id];
 
-      var members = List.of(
+      var user = List.of(
         await _room.members.get(upTo: !event.all ? 6 : _room.members.count),
       );
 
-      members = members.where((u) => u.state.membership is Joined).toList();
+      user = user.where((u) => u.state.membership is Joined).toList();
 
-      members.remove(me);
-      members.insert(0, me);
+      user.remove(me);
+      user.insert(0, me);
+
+      final members = await Future.wait(
+        user.map(
+          (u) => ChatMember.fromUser(_room, u, isYou: _matrix.user == u),
+        ),
+      );
 
       yield MembersLoaded(members);
     }

@@ -1,9 +1,10 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 
 abstract class CreateGroupState extends Equatable {
-  final List<User> members;
+  final List<ChatMember> members;
 
   CreateGroupState(this.members);
 
@@ -16,11 +17,11 @@ class InitialCreateGroupState extends CreateGroupState {
 }
 
 class UserListUpdated extends CreateGroupState {
-  final List<User> users;
+  final List<ChatMember> users;
 
   UserListUpdated(
     this.users, {
-    @required List<User> members,
+    @required List<ChatMember> members,
   }) : super(members);
 
   @override
@@ -28,14 +29,14 @@ class UserListUpdated extends CreateGroupState {
 }
 
 class MemberListUpdated extends CreateGroupState {
-  MemberListUpdated(List<User> members) : super(members);
+  MemberListUpdated(List<ChatMember> members) : super(members);
 
   @override
   List<Object> get props => [members];
 }
 
 class CreatingGroup extends CreateGroupState {
-  CreatingGroup({@required List<User> members}) : super(members);
+  CreatingGroup({@required List<ChatMember> members}) : super(members);
 }
 
 class CreatedGroup extends CreateGroupState {
@@ -43,7 +44,7 @@ class CreatedGroup extends CreateGroupState {
 
   CreatedGroup(
     this.room, {
-    @required List<User> members,
+    @required List<ChatMember> members,
   }) : super(members);
 
   @override

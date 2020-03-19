@@ -16,9 +16,9 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 
 import '../../../../../matrix.dart';
-import '../../../../../util/user.dart';
 
 import 'event.dart';
 export 'event.dart';
@@ -31,7 +31,7 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
 
   bool _isCreatingGroup = false;
 
-  final _members = List<User>();
+  final _members = List<ChatMember>();
 
   String _groupName;
 
@@ -44,13 +44,13 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
   CreateGroupState get initialState => InitialCreateGroupState();
 
   Stream<CreateGroupState> _loadUsers() async* {
-    final users = Set<User>();
+    final users = Set<ChatMember>();
     // Load members of some rooms, in the future
     // this'll be based on activity and what not
     for (final room in await matrix.user.rooms.get(upTo: 10)) {
       for (final user in await room.members.get(upTo: 20)) {
         if (user != matrix.user) {
-          users.add(user);
+          users.add(await ChatMember.fromUser(room, user, isYou: false));
         }
       }
     }
@@ -58,7 +58,7 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
     yield UserListUpdated(
       users.toList(growable: false)
         ..sort(
-          (User a, User b) => a.displayName.compareTo(b.displayName),
+          (a, b) => a.name.compareTo(b.name),
         ),
       members: _members,
     );
@@ -72,7 +72,7 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
 
       final id = await matrix.user.rooms.create(
         name: _groupName,
-        invitees: _members,
+        invitees: _members.map((m) => m.user),
       );
 
       // Await the next sync so the room has been processed
@@ -97,12 +97,12 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
     }
 
     if (event is AddMember) {
-      _members.add(event.user);
+      _members.add(event.member);
       yield MemberListUpdated(_members);
     }
 
     if (event is RemoveMember) {
-      _members.remove(event.user);
+      _members.remove(event.member);
       yield MemberListUpdated(_members);
     }
   }

@@ -17,30 +17,30 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 
-import '../../../util/user.dart';
+import '../../../util/chat_member.dart';
 import '../../../util/url.dart';
 
-class UserAvatar extends StatelessWidget {
-  final User user;
+class ChatMemberAvatar extends StatelessWidget {
+  final ChatMember member;
   final double radius;
 
-  UserAvatar({@required this.user, this.radius});
+  ChatMemberAvatar({@required this.member, this.radius});
 
   @override
   Widget build(BuildContext context) {
-    if (user.avatarUrl != null) {
+    if (member.user.avatarUrl != null) {
       return CircleAvatar(
         radius: radius,
         backgroundColor: Colors.transparent,
         backgroundImage: CachedNetworkImageProvider(
-          user.avatarUrl.toThumbnailString(context),
+          member.user.avatarUrl.toThumbnailString(context),
         ),
       );
     } else {
       return CircleAvatar(
-        backgroundColor: user.getColor(context),
+        backgroundColor: member.color(context),
         radius: radius,
         child: Icon(
           Icons.person,
