@@ -91,7 +91,7 @@ class _ImagePageState extends State<ImagePage> {
                     _date,
                     style: Theme.of(context)
                         .textTheme
-                        .body1
+                        .bodyText2
                         .copyWith(color: Colors.white),
                   ),
                 ],

@@ -33,7 +33,7 @@ class DateHeader extends StatelessWidget {
         Center(
           child: Text(
             formatAsDate(context, date).toUpperCase(),
-            style: Theme.of(context).textTheme.display1.copyWith(
+            style: Theme.of(context).textTheme.headline4.copyWith(
                   fontSize: 16,
                 ),
           ),

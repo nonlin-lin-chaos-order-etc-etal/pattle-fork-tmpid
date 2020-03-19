@@ -302,7 +302,7 @@ class MessageBubble extends StatelessWidget {
                   elevation: 1,
                   shape: border,
                   child: DefaultTextStyle(
-                    style: Theme.of(context).textTheme.body1.apply(
+                    style: Theme.of(context).textTheme.bodyText2.apply(
                           fontSizeFactor: 1.1,
                           color: message.isMine ? Colors.white : null,
                         ),

@@ -66,7 +66,7 @@ class ChatListState extends State<ChatList> {
           ),
           Text(
             time,
-            style: Theme.of(context).textTheme.subtitle.copyWith(
+            style: Theme.of(context).textTheme.subtitle2.copyWith(
                   fontWeight: FontWeight.normal,
                   color: Theme.of(context).textTheme.caption.color,
                 ),

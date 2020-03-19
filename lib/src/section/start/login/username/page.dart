@@ -114,7 +114,7 @@ class UsernameLoginPageState extends State<UsernameLoginPage> {
                     children: <Widget>[
                       Text(
                         l(context).login.toUpperCase(),
-                        style: Theme.of(context).textTheme.headline.copyWith(
+                        style: Theme.of(context).textTheme.headline5.copyWith(
                               fontWeight: FontWeight.bold,
                               color: redOnBackground(context),
                             ),

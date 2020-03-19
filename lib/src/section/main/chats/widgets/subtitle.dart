@@ -81,7 +81,7 @@ class Subtitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
-      style: Theme.of(context).textTheme.body1.copyWith(
+      style: Theme.of(context).textTheme.bodyText2.copyWith(
             color: Theme.of(context).textTheme.caption.color,
           ),
       child: Provider<Subtitle>.value(
