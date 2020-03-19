@@ -16,16 +16,52 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/chat/util/typing_span.dart';
+import 'package:pattle/src/section/main/chats/models/chat.dart';
 
-import '../subtitle.dart';
+class TypingContent extends StatelessWidget {
+  final Chat chat;
 
-class TypingSubtitleContent extends StatelessWidget {
+  const TypingContent({Key key, @required this.chat}) : super(key: key);
+
+  List<TextSpan> _span(BuildContext context, Room room) {
+    if (room.isDirect) {
+      return l(context).typing;
+    }
+
+    if (room.typingUsers.length == 1) {
+      return l(context).isTyping(
+        TextSpan(
+          text: room.typingUsers.first.name,
+        ),
+      );
+    }
+
+    if (room.typingUsers.length == 2) {
+      return l(context).areTyping(
+        TextSpan(
+          text: room.typingUsers.first.name,
+        ),
+        TextSpan(
+          text: room.typingUsers[1].name,
+        ),
+      );
+    }
+
+    return l(context).andMoreAreTyping(
+      TextSpan(
+        text: room.typingUsers.first.name,
+      ),
+      TextSpan(
+        text: room.typingUsers[1].name,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final room = Subtitle.of(context).chat.room;
-
     return RichText(
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -34,7 +70,7 @@ class TypingSubtitleContent extends StatelessWidget {
           color: redOnBackground(context),
           fontWeight: FontWeight.bold,
         ),
-        children: typingSpan(context, room),
+        children: _span(context, chat.room),
       ),
     );
   }

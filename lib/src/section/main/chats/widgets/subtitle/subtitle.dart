@@ -30,7 +30,7 @@ import '../../../../../matrix.dart';
 import 'content/image.dart';
 import 'content/redacted.dart';
 import 'content/text.dart';
-import 'content/typing.dart';
+import '../typing_content.dart';
 import 'content/unsupported.dart';
 
 class Subtitle extends StatelessWidget {
@@ -45,7 +45,7 @@ class Subtitle extends StatelessWidget {
     // TODO: typingUsers should not contain nulls
     if (chat.room.isSomeoneElseTyping &&
         !chat.room.typingUsers.any((u) => u == null)) {
-      content = TypingSubtitleContent();
+      content = TypingContent(chat: chat);
     } else {
       final event = chat.latestMessage?.event;
       if (event == null) {

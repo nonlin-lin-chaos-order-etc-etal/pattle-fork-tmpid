@@ -27,6 +27,7 @@ import 'package:pattle/src/app.dart';
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/chats/models/chat.dart';
+import 'package:pattle/src/section/main/chats/widgets/typing_content.dart';
 import 'package:pattle/src/section/main/widgets/chat_name.dart';
 import 'package:pattle/src/section/main/widgets/error.dart';
 import 'package:pattle/src/section/main/widgets/title_with_sub.dart';
@@ -36,7 +37,6 @@ import '../../../util/color.dart';
 import '../../../util/url.dart';
 
 import 'bloc.dart';
-import 'util/typing_span.dart';
 import 'widgets/bubble/message.dart';
 import 'widgets/bubble/state.dart';
 import 'widgets/date_header.dart';
@@ -113,11 +113,7 @@ class _ChatPageState extends State<ChatPage> {
         _room.isSomeoneElseTyping && !_room.typingUsers.any((u) => u == null)
             ? TitleWithSub(
                 title: ChatName(chat: widget.chat),
-                subtitle: RichText(
-                  text: TextSpan(
-                    children: typingSpan(context, _room),
-                  ),
-                ),
+                subtitle: TypingContent(chat: widget.chat),
               )
             : ChatName(chat: widget.chat);
 
