@@ -22,7 +22,7 @@ import 'package:pattle/src/section/main/widgets/chat_name.dart';
 import 'package:pattle/src/util/date_format.dart';
 
 import 'chat_avatar.dart';
-import 'subtitle.dart';
+import 'subtitle/subtitle.dart';
 
 class ChatList extends StatefulWidget {
   final List<Chat> chats;

@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/section/main/widgets/message_state.dart';
 
-import 'subtitle.dart';
+import '../subtitle.dart';
 
 class TextSubtitleContent extends StatelessWidget {
   TextSubtitleContent({Key key}) : super(key: key);

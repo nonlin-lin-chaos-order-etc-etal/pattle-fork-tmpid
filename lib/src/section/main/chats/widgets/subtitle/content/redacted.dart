@@ -16,26 +16,15 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/chat/util/typing_span.dart';
+import 'package:pattle/src/section/main/widgets/redacted.dart';
 
-import 'subtitle.dart';
+import '../subtitle.dart';
 
-class TypingSubtitleContent extends StatelessWidget {
+class RedactedSubtitleContent extends Subtitle {
   @override
   Widget build(BuildContext context) {
-    final room = Subtitle.of(context).chat.room;
-
-    return RichText(
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      text: TextSpan(
-        style: TextStyle(
-          color: redOnBackground(context),
-          fontWeight: FontWeight.bold,
-        ),
-        children: typingSpan(context, room),
-      ),
+    return Redacted(
+      redaction: Subtitle.of(context).chat.latestMessage.redaction,
     );
   }
 }

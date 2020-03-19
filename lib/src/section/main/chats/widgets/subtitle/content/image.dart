@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/section/main/widgets/message_state.dart';
 
-import 'subtitle.dart';
+import '../subtitle.dart';
 
 class ImageSubtitleContent extends Subtitle {
   @override

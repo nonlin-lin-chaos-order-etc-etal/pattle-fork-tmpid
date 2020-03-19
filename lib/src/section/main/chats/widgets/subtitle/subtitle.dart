@@ -25,13 +25,13 @@ import 'package:pattle/src/section/main/chat/widgets/bubble/state/content/upgrad
 import 'package:pattle/src/section/main/chats/models/chat.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../matrix.dart';
+import '../../../../../matrix.dart';
 
-import 'image_subtitle.dart';
-import 'redacted_subtitle.dart';
-import 'text_subtitle.dart';
-import 'typing_subtitle.dart';
-import 'unsupported_subtitle.dart';
+import 'content/image.dart';
+import 'content/redacted.dart';
+import 'content/text.dart';
+import 'content/typing.dart';
+import 'content/unsupported.dart';
 
 class Subtitle extends StatelessWidget {
   final Chat chat;
