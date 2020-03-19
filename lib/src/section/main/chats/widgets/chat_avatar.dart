@@ -22,7 +22,6 @@ import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/chats/models/chat.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-import '../../../../util/room.dart';
 import '../../../../util/chat_member.dart';
 import '../../../../util/url.dart';
 
@@ -33,7 +32,7 @@ class ChatAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avatarUrl = chat.room.displayAvatarUrl;
+    final avatarUrl = chat.avatarUrl;
     if (avatarUrl != null) {
       return Container(
         width: 48,

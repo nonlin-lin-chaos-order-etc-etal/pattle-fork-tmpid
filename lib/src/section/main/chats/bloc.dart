@@ -77,7 +77,6 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
 
       final chat = Chat(
         room: room,
-        name: await room.getDisplayName(),
         isJustYou: room.members.count == 1,
         latestMessage: latestEvent != null
             ? await ChatMessage.create(

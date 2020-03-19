@@ -24,12 +24,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pattle/src/section/main/chats/models/chat.dart';
 import 'package:pattle/src/section/main/models/chat_member.dart';
 
 import '../auth/bloc.dart';
 import '../matrix.dart';
 
-import '../util/room.dart';
 import '../util/url.dart';
 
 import 'event.dart';
@@ -174,9 +174,11 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
         return;
       }
 
+      final chat = Chat(room: room);
+
       await plugin.show(
         event.id.hashCode,
-        room.getDisplayName(),
+        chat.name,
         message.text,
         NotificationDetails(
           AndroidNotificationDetails(
@@ -190,8 +192,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
             style: AndroidNotificationStyle.Messaging,
             styleInformation: MessagingStyleInformation(
               senderPerson,
-              conversationTitle:
-                  !room.isDirect ? await room.getDisplayName() : null,
+              conversationTitle: !room.isDirect ? await chat.name : null,
               groupConversation: room.isDirect,
               messages: [message],
             ),

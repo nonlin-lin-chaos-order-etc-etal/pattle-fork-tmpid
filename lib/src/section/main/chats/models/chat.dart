@@ -24,7 +24,11 @@ import 'package:pattle/src/section/main/models/chat_message.dart';
 class Chat {
   final Room room;
 
+  // TODO: When members are able to being accessed syncly, use member names
+  //       for groups
   final String name;
+
+  final Uri avatarUrl;
 
   final ChatMessage latestMessage;
   final ChatMessage latestMessageForSorting;
@@ -35,10 +39,12 @@ class Chat {
 
   Chat({
     @required this.room,
-    @required this.name,
-    @required this.latestMessage,
-    @required this.latestMessageForSorting,
+    this.latestMessage,
+    this.latestMessageForSorting,
     this.isJustYou = false,
     this.directMember,
-  });
+  })  : name = room.name ??
+            (room.isDirect ? directMember.name : room.id.toString()),
+        avatarUrl = room.avatarUrl ??
+            (room.isDirect ? directMember.user.avatarUrl : room.avatarUrl);
 }

@@ -33,7 +33,6 @@ import 'package:pattle/src/section/main/widgets/title_with_sub.dart';
 
 import '../../../matrix.dart';
 import '../../../util/color.dart';
-import '../../../util/room.dart';
 import '../../../util/url.dart';
 
 import 'bloc.dart';
@@ -88,7 +87,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     Widget avatar = Container();
-    final avatarUrl = widget.chat.room.displayAvatarUrl;
+    final avatarUrl = widget.chat.avatarUrl;
     if (avatarUrl != null) {
       avatar = Hero(
         tag: _room.id,

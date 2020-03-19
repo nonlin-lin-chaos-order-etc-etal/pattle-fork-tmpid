@@ -31,7 +31,6 @@ import 'package:pattle/src/section/main/widgets/chat_member_tile.dart';
 import '../../../../matrix.dart';
 import '../../../../util/url.dart';
 import '../../../../util/color.dart';
-import '../../../../util/room.dart';
 import 'bloc.dart';
 
 class ChatSettingsPage extends StatefulWidget {
@@ -69,8 +68,7 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
       ),
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          final url =
-              widget.chat.room.displayAvatarUrl?.toDownloadString(context);
+          final url = widget.chat.avatarUrl?.toDownloadString(context);
           return <Widget>[
             SliverAppBar(
               expandedHeight: 128.0,
