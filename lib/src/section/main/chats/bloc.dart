@@ -97,6 +97,13 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
                 ),
               )
             : null,
+        directMember: room.isDirect
+            ? await ChatMember.fromUser(
+                room,
+                room.directUser,
+                isYou: room.directUser == _matrix.user,
+              )
+            : null,
       );
 
       chats.add(chat);

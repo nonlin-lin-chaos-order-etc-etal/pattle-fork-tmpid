@@ -77,7 +77,7 @@ class ChatListState extends State<ChatList> {
       onTap: () {
         Navigator.pushNamed(context, Routes.chats, arguments: chat);
       },
-      leading: ChatAvatar(room: chat.room),
+      leading: ChatAvatar(chat: chat),
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       subtitle: Subtitle.withContent(chat),
     );

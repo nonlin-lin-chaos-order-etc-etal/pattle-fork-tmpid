@@ -17,6 +17,7 @@
 
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 import 'package:pattle/src/section/main/models/chat_message.dart';
 
 /// Chat overview used in the 'chats' page.
@@ -30,11 +31,14 @@ class Chat {
 
   final bool isJustYou;
 
+  final ChatMember directMember;
+
   Chat({
     @required this.room,
     @required this.name,
     @required this.latestMessage,
     @required this.latestMessageForSorting,
     this.isJustYou = false,
+    this.directMember,
   });
 }

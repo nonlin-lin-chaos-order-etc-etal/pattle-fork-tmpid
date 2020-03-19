@@ -17,21 +17,23 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:mdi/mdi.dart';
+import 'package:pattle/src/resources/theme.dart';
+import 'package:pattle/src/section/main/chats/models/chat.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../../../../util/room.dart';
+import '../../../../util/chat_member.dart';
 import '../../../../util/url.dart';
 
 class ChatAvatar extends StatelessWidget {
-  final Room room;
+  final Chat chat;
 
-  const ChatAvatar({Key key, this.room}) : super(key: key);
+  const ChatAvatar({Key key, this.chat}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final avatarUrl = room.displayAvatarUrl;
+    final avatarUrl = chat.room.displayAvatarUrl;
     if (avatarUrl != null) {
       return Container(
         width: 48,
@@ -49,10 +51,9 @@ class ChatAvatar extends StatelessWidget {
     } else {
       return CircleAvatar(
         foregroundColor: Colors.white,
-        // TODO: Use Chat
-        /*backgroundColor: room.isDirect
-            ? room.directUser.color(context)
-            : LightColors.red[500],*/
+        backgroundColor: chat.room.isDirect
+            ? chat.directMember.color(context)
+            : LightColors.red[500],
         radius: 24,
         child: _icon(),
       );
@@ -60,9 +61,9 @@ class ChatAvatar extends StatelessWidget {
   }
 
   Icon _icon() {
-    if (room.isDirect) {
+    if (chat.room.isDirect) {
       return Icon(Icons.person);
-    } else if (room.aliases != null && room.aliases.isNotEmpty) {
+    } else if (chat.room.aliases != null && chat.room.aliases.isNotEmpty) {
       return Icon(Mdi.bullhorn);
     } else {
       return Icon(Icons.group);
