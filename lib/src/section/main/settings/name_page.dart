@@ -22,8 +22,6 @@ import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/settings/bloc.dart';
 
-import '../../../matrix.dart';
-
 class _NamePageState extends State<NamePage> {
   final _textController = TextEditingController();
 
@@ -31,11 +29,11 @@ class _NamePageState extends State<NamePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final name = Matrix.of(context).user.name;
+    final me = BlocProvider.of<SettingsBloc>(context).state.me;
 
     _textController.value = TextEditingValue(
-      text: name,
-      selection: TextSelection(baseOffset: 0, extentOffset: name.length),
+      text: me.name,
+      selection: TextSelection(baseOffset: 0, extentOffset: me.name.length),
     );
   }
 

@@ -20,9 +20,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pattle/src/resources/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/widgets/chat_member_avatar.dart';
-import '../../../matrix.dart';
-
-import '../../../util/local_user.dart';
 
 import '../../../app.dart';
 import 'bloc.dart';
@@ -44,69 +41,72 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    // TODO: Use ChatMember
-    final me = Matrix.of(context).user;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(l(context).profile),
       ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: Stack(
-                overflow: Overflow.visible,
-                children: <Widget>[
-                  Hero(
-                    tag: me.id,
-                    child: ChatMemberAvatar(
-                      member: me.toChatMember(),
-                      radius: 96,
-                    ),
+      body: BlocBuilder<SettingsBloc, SettingsState>(
+        builder: (context, state) {
+          final me = state.me;
+
+          return Center(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Stack(
+                    overflow: Overflow.visible,
+                    children: <Widget>[
+                      Hero(
+                        tag: me.user.id,
+                        child: ChatMemberAvatar(
+                          member: me,
+                          radius: 96,
+                        ),
+                      ),
+                      Positioned(
+                        right: -1,
+                        bottom: -1,
+                        child: FloatingActionButton(
+                          child: Icon(Icons.photo_camera),
+                          onPressed: () {},
+                        ),
+                      )
+                    ],
                   ),
-                  Positioned(
-                    right: -1,
-                    bottom: -1,
-                    child: FloatingActionButton(
-                      child: Icon(Icons.photo_camera),
-                      onPressed: () {},
-                    ),
-                  )
-                ],
-              ),
+                ),
+                Expanded(
+                  child: ListView(
+                    children: <Widget>[
+                      ListTile(
+                        leading: Icon(
+                          Icons.person,
+                          color: redOnBackground(context),
+                        ),
+                        title: Text(l(context).name),
+                        subtitle: Text(me.name),
+                        trailing: Icon(Icons.edit),
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          Routes.settingsProfileName,
+                          arguments: BlocProvider.of<SettingsBloc>(context),
+                        ),
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          Icons.alternate_email,
+                          color: redOnBackground(context),
+                        ),
+                        title: Text(l(context).username),
+                        subtitle: Text(me.user.id.toString()),
+                      )
+                    ],
+                  ),
+                )
+              ],
             ),
-            Expanded(
-              child: ListView(
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(
-                      Icons.person,
-                      color: redOnBackground(context),
-                    ),
-                    title: Text(l(context).name),
-                    subtitle: Text(me.name),
-                    trailing: Icon(Icons.edit),
-                    onTap: () => Navigator.pushNamed(
-                      context,
-                      Routes.settingsProfileName,
-                      arguments: BlocProvider.of<SettingsBloc>(context),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.alternate_email,
-                      color: redOnBackground(context),
-                    ),
-                    title: Text(l(context).username),
-                    subtitle: Text(me.id.toString()),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
+          );
+        },
       ),
     );
   }

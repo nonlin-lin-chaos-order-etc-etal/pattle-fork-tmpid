@@ -16,6 +16,7 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:bloc/bloc.dart';
+import 'package:pattle/src/section/main/models/chat_member.dart';
 
 import '../../../matrix.dart';
 
@@ -31,16 +32,22 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc(this._matrix);
 
   @override
-  SettingsState get initialState => SettingsInitialized();
+  SettingsState get initialState => SettingsInitialized(
+        ChatMember(
+          _matrix.user,
+          name: _matrix.user.name,
+          isYou: true,
+        ),
+      );
 
   @override
   Stream<SettingsState> mapEventToState(SettingsEvent event) async* {
     if (event is UpdateDisplayName) {
-      yield UpdatingDisplayName();
+      yield UpdatingDisplayName(state.me);
 
       await _matrix.user.setName(event.name);
 
-      yield DisplayNameUpdated();
+      yield DisplayNameUpdated(state.me);
     }
   }
 }

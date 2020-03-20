@@ -21,7 +21,6 @@ import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/widgets/chat_member_avatar.dart';
 
 import '../../../matrix.dart';
-import '../../../util/local_user.dart';
 
 import '../../../app.dart';
 import 'bloc.dart';
@@ -44,9 +43,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<SettingsBloc>(context);
-    // TODO: Use ChatMember
-    final me = Matrix.of(context).user;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(l(context).settings),
@@ -64,33 +60,39 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               child: Padding(
                 padding: EdgeInsets.all(16),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Hero(
-                      tag: me.id,
-                      child: ChatMemberAvatar(
-                        member: me.toChatMember(),
-                        radius: 36,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            me.name,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
+                child: BlocBuilder<SettingsBloc, SettingsState>(
+                  builder: (context, state) {
+                    final me = state.me;
+
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Hero(
+                          tag: me.user.id,
+                          child: ChatMemberAvatar(
+                            member: me,
+                            radius: 36,
                           ),
-                          Text(me.id.toString())
-                        ],
-                      ),
-                    )
-                  ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                me.name,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Text(me.user.id.toString())
+                            ],
+                          ),
+                        )
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
