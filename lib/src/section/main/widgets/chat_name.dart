@@ -17,7 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/section/main/chats/models/chat.dart';
 
 class ChatName extends StatelessWidget {
@@ -28,7 +28,7 @@ class ChatName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      chat.isJustYou ? l(context).you : chat.name,
+      chat.isJustYou ? context.intl.common.you : chat.name,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: TextStyle(

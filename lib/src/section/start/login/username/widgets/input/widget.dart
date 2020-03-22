@@ -16,7 +16,7 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/util/lower_case_text_formatter.dart';
 
 import '../../../../homeserver/bloc.dart';
@@ -47,14 +47,14 @@ class UsernameInputState extends State<UsernameInput> {
 
             if (state is! UsernameChanged && state is! UsernameIsEmpty) {
               if (state is UsernameIsInvalid) {
-                errorText = l(context).usernameInvalidError;
+                errorText = context.intl.start.username.usernameInvalidError;
               } else if (state is UserIdIsInvalid) {
-                errorText = l(context).userIdInvalidError;
+                errorText = context.intl.start.username.userIdInvalidError;
               } else if (state is HostIsInvalid) {
-                errorText = l(context).hostnameInvalidError;
+                errorText = context.intl.start.username.hostnameInvalidError;
               } else {
                 print('STATE ON ERROR: $state');
-                errorText = l(context).unknownError;
+                errorText = context.intl.start.username.unknownError;
               }
             }
 
@@ -76,7 +76,7 @@ class UsernameInputState extends State<UsernameInput> {
                 // Needed so that an error does
                 // not make the layout jump
                 helperText: '',
-                labelText: l(context).username,
+                labelText: context.intl.common.username,
                 errorText: errorText,
               ),
             );

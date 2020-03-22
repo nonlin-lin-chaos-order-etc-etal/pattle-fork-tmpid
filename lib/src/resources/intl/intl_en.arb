@@ -1,0 +1,348 @@
+{
+  "@@last_modified": "2020-03-22T18:31:30.071193",
+  "appName": "Pattle",
+  "@appName": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_name": "Name",
+  "@_Common_name": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_username": "Username",
+  "@_Common_username": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_password": "Password",
+  "@_Common_password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_confirm": "Confirm",
+  "@_Common_confirm": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_next": "Next",
+  "@_Common_next": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_photo": "Photo",
+  "@_Common_photo": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_you": "You",
+  "@_Common_you": {
+    "description": "Used to denote the user using the app instead of their name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_advanced": "Advanced",
+  "@_Start_advanced": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_login": "Login",
+  "@_Start_login": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_register": "Register",
+  "@_Start_register": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_homeserver": "Homeserver",
+  "@_Start_homeserver": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_identityServer": "Identity server",
+  "@_Start_identityServer": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_loginWithPhone": "Login with phone number",
+  "@_Start_loginWithPhone": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_loginWithEmail": "Login with email",
+  "@_Start_loginWithEmail": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_loginWithUsername": "Login with username",
+  "@_Start_loginWithUsername": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_StartUsername_title": "Enter username",
+  "@_StartUsername_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_StartUsername_usernameInvalidError": "Invalid username. May only contain letters, numbers, -, ., =, _ and /",
+  "@_StartUsername_usernameInvalidError": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_StartUsername_userIdInvalidError": "Invalid user ID. Must be in the format of '@name:server.tld'",
+  "@_StartUsername_userIdInvalidError": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_StartUsername_hostnameInvalidError": "Invalid hostname",
+  "@_StartUsername_hostnameInvalidError": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_StartUsername_unknownError": "An unknown error occured",
+  "@_StartUsername_unknownError": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_StartUsername_wrongPasswordError": "Wrong password. Please try again",
+  "@_StartUsername_wrongPasswordError": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Chat_typeAMessage": "Type a message",
+  "@_Chat_typeAMessage": {
+    "description": "Hint for the chat input",
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Chat_cantSendMessages": "You can't send messages to this group because you're no longer a participant.",
+  "@_Chat_cantSendMessages": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Chat_typing": "typing...",
+  "@_Chat_typing": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Chat_isTyping": "{name} is typing...",
+  "@_Chat_isTyping": {
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "_Chat_areTyping": "{andMore,select, false{{first} and {second} are typing...}true{{first}, {second} and more are typing...}}",
+  "@_Chat_areTyping": {
+    "type": "text",
+    "placeholders": {
+      "andMore": {},
+      "first": {},
+      "second": {}
+    }
+  },
+  "_ChatMessage_deletion": "{person,select, second{You deleted this message}third{{name} deleted this message}}",
+  "@_ChatMessage_deletion": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "name": {}
+    }
+  },
+  "_ChatMessage_creation": "{person,select, second{You created this group}third{{name} created this group}}",
+  "@_ChatMessage_creation": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "name": {}
+    }
+  },
+  "_ChatMessage_upgrade": "{person,select, second{You upgraded this group}third{{name} upgraded this group}}",
+  "@_ChatMessage_upgrade": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "name": {}
+    }
+  },
+  "_ChatMessage_descriptionChange": "{person,select, second{You changed the description of this group}third{{name} changed the description of this group}}",
+  "@_ChatMessage_descriptionChange": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "name": {}
+    }
+  },
+  "_ChatMessage_join": "{person,select, second{You joined}third{{name} joined}}",
+  "@_ChatMessage_join": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "name": {}
+    }
+  },
+  "_ChatMessage_leave": "{person,select, second{You left}third{{name} left}}",
+  "@_ChatMessage_leave": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "name": {}
+    }
+  },
+  "_ChatMessage_ban": "{person,select, secondOnSecond{You were banned by yourself}secondOnThird{You were banned by {banner}}thirdOnThird{{bannee} was banned by {banner}}thirdOnSecond{{bannee} was banned by you}}",
+  "@_ChatMessage_ban": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "bannee": {},
+      "banner": {}
+    }
+  },
+  "_ChatMessage_invite": "{person,select, secondOnSecond{You were invited by yourself}secondOnThird{You were invited by {inviter}}thirdOnThird{{invitee} was invited by {inviter}}thirdOnSecond{{invitee} was invited by you}}",
+  "@_ChatMessage_invite": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "invitee": {},
+      "inviter": {}
+    }
+  },
+  "_ChatDetails_description": "Description",
+  "@_ChatDetails_description": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_ChatDetails_noDescriptionSet": "No description has been set",
+  "@_ChatDetails_noDescriptionSet": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_ChatDetails_more": "{count} more",
+  "@_ChatDetails_more": {
+    "type": "text",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "Participants": "Participants",
+  "@Participants": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_ChatDetails_participants": "{count,plural, =0{No participants}=1{{count} participant}other{{count} participants}}",
+  "@_ChatDetails_participants": {
+    "type": "text",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "_Chats_personal": "Personal",
+  "@_Chats_personal": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Chats_public": "Public",
+  "@_Chats_public": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_ChatsNewGroup_title": "New group",
+  "@_ChatsNewGroup_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_ChatsNewGroup_groupName": "Group name",
+  "@_ChatsNewGroup_groupName": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_title": "Settings",
+  "@_Settings_title": {
+    "description": "Settings page title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_accountTileTitle": "Account",
+  "@_Settings_accountTileTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_accountTileSubtitle": "Privacy, security, change password",
+  "@_Settings_accountTileSubtitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_appearanceTileTitle": "Appearance",
+  "@_Settings_appearanceTileTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_appearanceTileSubtitle": "Theme, font size",
+  "@_Settings_appearanceTileSubtitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_brightnessTileTitle": "Brightness",
+  "@_Settings_brightnessTileTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_brightnessTileOptionLight": "Light",
+  "@_Settings_brightnessTileOptionLight": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_brightnessTileOptionDark": "Dark",
+  "@_Settings_brightnessTileOptionDark": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Profile": "Profile",
+  "@Profile": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_editNameDescription": "This is not your username. This is the name that will be visible to others.",
+  "@_Settings_editNameDescription": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Error_connectionLost": "Connection has been lost.\nMake sure your phone has an active internet connection.",
+  "@_Error_connectionLost": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Error_connectionFailed": "Connection failed. Check your internet connection",
+  "@_Error_connectionFailed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Error_connectionFailedServerOverloaded": "Connection failed. The server is probably overloaded.",
+  "@_Error_connectionFailedServerOverloaded": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Error_anErrorHasOccurred": "An error has occurred:",
+  "@_Error_anErrorHasOccurred": {
+    "description": "After this message the error is displayed (hence the colon)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Error_thisErrorHasBeenReported": "This error has been reported. Please restart Pattle.",
+  "@_Error_thisErrorHasBeenReported": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Time_today": "Today",
+  "@_Time_today": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Time_yesterday": "Yesterday",
+  "@_Time_yesterday": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

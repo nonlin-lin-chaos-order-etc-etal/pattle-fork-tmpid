@@ -16,7 +16,7 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/widgets/chat_member_avatar.dart';
 
@@ -45,7 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final bloc = BlocProvider.of<SettingsBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(l(context).settings),
+        title: Text(context.intl.settings.title),
       ),
       body: ListView(
         children: <Widget>[
@@ -100,13 +100,13 @@ class _SettingsPageState extends State<SettingsPage> {
           Divider(height: 1),
           ListTile(
             leading: Icon(Icons.vpn_key, color: LightColors.red),
-            title: Text(l(context).account),
-            subtitle: Text(l(context).accountDescription),
+            title: Text(context.intl.settings.accountTileTitle),
+            subtitle: Text(context.intl.settings.accountTileSubtitle),
           ),
           ListTile(
             leading: Icon(Icons.landscape, color: LightColors.red),
-            title: Text(l(context).appearance),
-            subtitle: Text(l(context).appearanceDescription),
+            title: Text(context.intl.settings.appearanceTileTitle),
+            subtitle: Text(context.intl.settings.appearanceTileSubtitle),
             onTap: () => Navigator.of(context).pushNamed(
               Routes.settingsAppearance,
               arguments: bloc,

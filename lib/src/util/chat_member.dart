@@ -18,7 +18,7 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 
 import 'package:pattle/src/section/main/models/chat_member.dart';
@@ -26,5 +26,6 @@ import 'package:pattle/src/section/main/models/chat_member.dart';
 extension ChatMemberExtension on ChatMember {
   Color color(BuildContext context) => userColor(context, displayColor.index);
 
-  String nameOrYou(BuildContext context) => isYou ? l(context).you : name;
+  String nameOrYou(BuildContext context) =>
+      isYou ? context.intl.common.you : name;
 }

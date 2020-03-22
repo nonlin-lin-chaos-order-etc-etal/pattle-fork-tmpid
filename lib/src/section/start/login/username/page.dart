@@ -18,7 +18,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pattle/src/app.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/start/homeserver/bloc.dart';
 
@@ -99,7 +99,7 @@ class UsernameLoginPageState extends State<UsernameLoginPage> {
                   child: FlatButton(
                     onPressed: toAdvance,
                     child: Text(
-                      l(context).advanced.toUpperCase(),
+                      context.intl.start.advanced.toUpperCase(),
                     ),
                   ),
                 ),
@@ -113,7 +113,7 @@ class UsernameLoginPageState extends State<UsernameLoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        l(context).login.toUpperCase(),
+                        context.intl.start.login.toUpperCase(),
                         style: Theme.of(context).textTheme.headline5.copyWith(
                               fontWeight: FontWeight.bold,
                               color: redOnBackground(context),
@@ -129,7 +129,8 @@ class UsernameLoginPageState extends State<UsernameLoginPage> {
                           String errorText;
 
                           if (state is LoginFailed) {
-                            errorText = l(context).wrongPasswordError;
+                            errorText =
+                                context.intl.start.username.wrongPasswordError;
                           }
 
                           return TextField(
@@ -141,7 +142,7 @@ class UsernameLoginPageState extends State<UsernameLoginPage> {
                             enableInteractiveSelection: true,
                             decoration: InputDecoration(
                               filled: true,
-                              labelText: l(context).password,
+                              labelText: context.intl.common.password,
                               errorText: errorText,
                               // Needed so that an error does
                               // not make the layout jump
@@ -191,7 +192,7 @@ class UsernameLoginPageState extends State<UsernameLoginPage> {
 
                           return RaisedButton(
                             onPressed: login,
-                            child: Text(l(context).login.toUpperCase()),
+                            child: Text(context.intl.start.login.toUpperCase()),
                           );
                         },
                       ),

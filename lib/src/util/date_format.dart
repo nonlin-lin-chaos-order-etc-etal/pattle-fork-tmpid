@@ -17,7 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 
 int _weekOf(DateTime date) {
   int dayOfYear = int.parse(DateFormat("D").format(date));
@@ -48,9 +48,9 @@ String formatAsDate(BuildContext context, DateTime date) {
   final now = DateTime.now();
 
   if (_isToday(now, date)) {
-    return l(context).today;
+    return context.intl.time.today;
   } else if (_isYesterday(now, date)) {
-    return l(context).yesterday;
+    return context.intl.time.yesterday;
   } else if (_isThisWeek(now, date)) {
     return DateFormat.EEEE().format(date);
   } else if (_isThisYear(now, date)) {

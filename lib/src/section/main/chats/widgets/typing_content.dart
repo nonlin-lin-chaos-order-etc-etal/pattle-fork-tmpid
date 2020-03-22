@@ -17,7 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/chats/models/chat.dart';
 
@@ -27,37 +27,22 @@ class TypingContent extends StatelessWidget {
   const TypingContent({Key key, @required this.chat}) : super(key: key);
 
   List<TextSpan> _span(BuildContext context, Room room) {
-    if (room.isDirect) {
-      return l(context).typing;
+    if (room.isDirect || room.typingUsers.isEmpty) {
+      return [TextSpan(text: context.intl.chat.typing)];
     }
+
+    // TODO: Use ChatMember for names
 
     if (room.typingUsers.length == 1) {
-      return l(context).isTyping(
-        TextSpan(
-          text: room.typingUsers.first.name,
-        ),
+      return context.intl.chat.isTyping
+          .toTextSpans(room.typingUsers.first.name);
+    } else {
+      return context.intl.chat.areTyping.toTextSpans(
+        room.typingUsers.length > 2, // If true, shows 'and more' message
+        room.typingUsers.first.name,
+        room.typingUsers[1].name,
       );
     }
-
-    if (room.typingUsers.length == 2) {
-      return l(context).areTyping(
-        TextSpan(
-          text: room.typingUsers.first.name,
-        ),
-        TextSpan(
-          text: room.typingUsers[1].name,
-        ),
-      );
-    }
-
-    return l(context).andMoreAreTyping(
-      TextSpan(
-        text: room.typingUsers.first.name,
-      ),
-      TextSpan(
-        text: room.typingUsers[1].name,
-      ),
-    );
   }
 
   @override

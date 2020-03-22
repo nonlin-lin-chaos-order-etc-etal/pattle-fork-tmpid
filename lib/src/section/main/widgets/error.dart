@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:http/http.dart' as http;
 import 'package:chopper/chopper.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'dart:io';
 
 import '../../../matrix.dart';
@@ -68,10 +68,10 @@ class ErrorBannerState extends State<ErrorBanner>
 
           if (error is SocketException || error is http.ClientException) {
             icon = Icon(Icons.cloud_off);
-            text = Text(l(context).connectionLost);
+            text = Text(context.intl.error.connectionLost);
           } else if (error is Response && error.statusCode == 504) {
             icon = Icon(Icons.cloud_off);
-            text = Text(l(context).connectionFailedServerOverloaded);
+            text = Text(context.intl.error.connectionFailedServerOverloaded);
           } else {
             // TODO: Make error messages less complex for end users,
             // but keep it like this for now (before 1.0).
@@ -81,7 +81,7 @@ class ErrorBannerState extends State<ErrorBanner>
                 style: DefaultTextStyle.of(context).style,
                 children: [
                   TextSpan(
-                    text: '${l(context).anErrorHasOccurred}\n',
+                    text: '${context.intl.error.anErrorHasOccurred}\n',
                   ),
                   TextSpan(
                     text: error.toString(),
@@ -90,7 +90,9 @@ class ErrorBannerState extends State<ErrorBanner>
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  TextSpan(text: '\n${l(context).thisErrorHasBeenReported}'),
+                  TextSpan(
+                    text: '\n${context.intl.error.thisErrorHasBeenReported}',
+                  ),
                 ],
               ),
             );

@@ -17,7 +17,7 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/section/main/models/chat_message.dart';
 
 import '../state.dart';
@@ -36,12 +36,11 @@ class CreationContent extends StatelessWidget {
     return RichText(
       text: TextSpan(
         style: DefaultTextStyle.of(context).style,
-        children: l(context).createdThisGroup(
-          TextSpan(
-            text: message.sender.name,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+        children: context.intl.chat.message.creation.toTextSpans(
+          message.sender.person,
+          message.sender.name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),

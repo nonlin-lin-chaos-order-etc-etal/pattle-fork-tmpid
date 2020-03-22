@@ -17,7 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/widgets/chat_member_avatar.dart';
 
@@ -43,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(l(context).profile),
+        title: Text(context.intl.settings.profileTitle),
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
@@ -83,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Icons.person,
                           color: redOnBackground(context),
                         ),
-                        title: Text(l(context).name),
+                        title: Text(context.intl.common.name),
                         subtitle: Text(me.name),
                         trailing: Icon(Icons.edit),
                         onTap: () => Navigator.pushNamed(
@@ -97,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Icons.alternate_email,
                           color: redOnBackground(context),
                         ),
-                        title: Text(l(context).username),
+                        title: Text(context.intl.common.username),
                         subtitle: Text(me.user.id.toString()),
                       )
                     ],

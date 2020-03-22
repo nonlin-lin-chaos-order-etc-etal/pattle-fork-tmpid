@@ -24,7 +24,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
 
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/chats/models/chat.dart';
 import 'package:pattle/src/section/main/chats/widgets/typing_content.dart';
@@ -317,7 +317,7 @@ class _InputState extends State<_Input> {
                   ),
                 ),
                 filled: true,
-                hintText: l(context).typeAMessage,
+                hintText: context.intl.chat.typeAMessage,
                 prefixIcon: IconButton(
                   icon: Icon(Icons.attach_file),
                   onPressed: () async {
@@ -350,7 +350,7 @@ class _InputState extends State<_Input> {
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Text(
-            l(context).cantSendMessages,
+            context.intl.chat.cantSendMessages,
             textAlign: TextAlign.center,
           ),
         ),

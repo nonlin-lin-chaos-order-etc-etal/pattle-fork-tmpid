@@ -19,7 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:mdi/mdi.dart';
 import 'package:pattle/src/app.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 
 import '../../../matrix.dart';
 import 'bloc.dart';
@@ -57,7 +57,7 @@ class _ChatsPageState extends State<ChatsPage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(l(context).appName),
+          title: Text(context.intl.appName),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.settings),
@@ -72,7 +72,7 @@ class _ChatsPageState extends State<ChatsPage> {
                   children: <Widget>[
                     Icon(Icons.group),
                     SizedBox(width: 8),
-                    Text(l(context).personal.toUpperCase()),
+                    Text(context.intl.chats.personal.toUpperCase()),
                   ],
                 ),
               ),
@@ -83,7 +83,7 @@ class _ChatsPageState extends State<ChatsPage> {
                   children: <Widget>[
                     Icon(Mdi.bullhorn),
                     SizedBox(width: 8),
-                    Text(l(context).public.toUpperCase()),
+                    Text(context.intl.chats.public.toUpperCase()),
                   ],
                 ),
               ),

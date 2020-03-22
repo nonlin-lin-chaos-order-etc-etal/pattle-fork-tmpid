@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/section/main/models/chat_message.dart';
 
 import '../state.dart';
@@ -34,25 +34,33 @@ class MemberChangeContent extends StatelessWidget {
     final event = message.event;
     final style = TextStyle(fontWeight: FontWeight.bold);
 
-    final sender = TextSpan(
-      text: message.sender.name,
-      style: style,
-    );
-
-    final subject = TextSpan(
-      text: message.subject.name,
-      style: style,
-    );
-
     var text;
     if (event is JoinEvent) {
-      text = l(context).joined(subject);
+      text = context.intl.chat.message.join.toTextSpans(
+        message.subject.person,
+        message.subject.name,
+        style: style,
+      );
     } else if (event is LeaveEvent) {
-      text = l(context).left(subject);
+      text = context.intl.chat.message.leave.toTextSpans(
+        message.subject.person,
+        message.subject.name,
+        style: style,
+      );
     } else if (event is InviteEvent) {
-      text = l(context).wasInvitedBy(subject, sender);
+      text = context.intl.chat.message.invite.toTextSpans(
+        message.subject.personTo(message.sender),
+        message.subject.name,
+        message.sender.name,
+        style: style,
+      );
     } else if (event is BanEvent) {
-      text = l(context).wasBannedBy(subject, sender);
+      text = context.intl.chat.message.ban.toTextSpans(
+        message.subject.personTo(message.sender),
+        message.subject.name,
+        message.sender.name,
+        style: style,
+      );
     }
 
     return text;

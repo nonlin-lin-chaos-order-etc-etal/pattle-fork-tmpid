@@ -16,7 +16,7 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 
 import 'homeserver/bloc.dart';
 import '../../resources/theme.dart';
@@ -46,7 +46,7 @@ class AdvancedPageState extends State<AdvancedPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            l(context).advanced,
+            context.intl.start.advanced,
             style: TextStyle(
               color: Theme.of(context).primaryColor,
             ),
@@ -73,7 +73,8 @@ class AdvancedPageState extends State<AdvancedPage> {
                         var errorText;
 
                         if (state is HomeserverIsInvalid) {
-                          errorText = l(context).hostnameInvalidError;
+                          errorText =
+                              context.intl.start.username.hostnameInvalidError;
                         } else {
                           errorText = null;
                         }
@@ -82,7 +83,7 @@ class AdvancedPageState extends State<AdvancedPage> {
                           controller: homeserverTextController,
                           decoration: InputDecoration(
                             filled: true,
-                            labelText: l(context).homeserver,
+                            labelText: context.intl.start.homeserver,
                             hintText:
                                 widget.bloc.state.homeserver?.url?.toString(),
                             errorText: errorText,
@@ -107,7 +108,7 @@ class AdvancedPageState extends State<AdvancedPage> {
                     child: TextField(
                       decoration: InputDecoration(
                         filled: true,
-                        labelText: l(context).identityServer,
+                        labelText: context.intl.start.identityServer,
                       ),
                     ),
                   )
@@ -124,7 +125,7 @@ class AdvancedPageState extends State<AdvancedPage> {
                   );
                   Navigator.pop(context);
                 },
-                child: Text(l(context).confirm.toUpperCase()),
+                child: Text(context.intl.common.confirm.toUpperCase()),
               )
             ],
           ),

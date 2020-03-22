@@ -21,7 +21,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/chats/models/chat.dart';
 import 'package:pattle/src/section/main/models/chat_member.dart';
@@ -132,7 +132,7 @@ class _Description extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    l(context).description,
+                    context.intl.chat.details.description,
                     style: TextStyle(
                       color: redOnBackground(context),
                       fontSize: 16,
@@ -141,7 +141,7 @@ class _Description extends StatelessWidget {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    description ?? l(context).noDescriptionSet,
+                    description ?? context.intl.chat.details.description,
                     style: TextStyle(
                       fontStyle: description == null
                           ? FontStyle.italic
@@ -188,7 +188,9 @@ class _MemberListState extends State<_MemberList> {
                 Padding(
                   padding: EdgeInsets.only(left: 16, top: 16),
                   child: Text(
-                    l(context).xParticipants(widget.room.members.count),
+                    context.intl.chat.details.participants(
+                      widget.room.members.count,
+                    ),
                     style: TextStyle(
                       color: redOnBackground(context),
                       fontSize: 16,
@@ -270,7 +272,11 @@ class _ShowMoreItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(Icons.keyboard_arrow_down, size: 32),
-      title: Text(l(context).xMore(room.members.count - shownMembersCount)),
+      title: Text(
+        context.intl.chat.details.more(
+          room.members.count - shownMembersCount,
+        ),
+      ),
       subtitle: isLoading ? LinearProgressIndicator() : null,
       onTap: onTap,
     );

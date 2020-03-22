@@ -26,7 +26,7 @@ import 'package:provider/provider.dart';
 import 'auth/bloc.dart';
 import 'matrix.dart';
 import 'notifications/bloc.dart';
-import 'resources/localizations.dart';
+import 'resources/intl/localizations.dart';
 import 'resources/theme.dart';
 import 'section/main/chat/page.dart';
 import 'section/main/chat/image/page.dart';
@@ -156,9 +156,9 @@ class App extends StatelessWidget {
                   ),
                   child: MaterialApp(
                     onGenerateTitle: (BuildContext context) =>
-                        l(context).appName,
+                        context.intl.appName,
                     localizationsDelegates: [
-                      const AppLocalizationsDelegate(),
+                      const PattleLocalizationsDelegate(),
                       GlobalMaterialLocalizations.delegate,
                       GlobalWidgetsLocalizations.delegate,
                     ],

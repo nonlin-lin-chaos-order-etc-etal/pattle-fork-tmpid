@@ -18,7 +18,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pattle/src/app.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/section/main/widgets/chat_member_tile.dart';
 
 import '../../../../../matrix.dart';
@@ -57,7 +57,7 @@ class _CreateGroupMembersPageState extends State<CreateGroupMembersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(l(context).newGroup),
+        title: Text(context.intl.chats.newGroup.title),
       ),
       body: Column(
         children: <Widget>[

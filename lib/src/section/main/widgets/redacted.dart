@@ -16,7 +16,7 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/section/main/models/chat_message.dart';
 
 class Redacted extends StatelessWidget {
@@ -33,15 +33,6 @@ class Redacted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<TextSpan> text;
-    if (redaction.isMine) {
-      text = [TextSpan(text: ' ${l(context).youDeletedThisMessage}')];
-    } else {
-      text = l(context).hasDeletedThisMessage(
-        TextSpan(text: ' ${redaction.sender.name}'),
-      );
-    }
-
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -56,7 +47,10 @@ class Redacted extends StatelessWidget {
               color: color,
               fontStyle: FontStyle.italic,
             ),
-            children: text,
+            children: context.intl.chat.message.deletion.toTextSpans(
+              redaction.sender.person,
+              redaction.sender.name,
+            ),
           ),
         )
       ],

@@ -18,7 +18,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/resources/theme.dart';
 import 'package:pattle/src/section/main/settings/bloc.dart';
 
@@ -59,7 +59,7 @@ class _NamePageState extends State<NamePage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            l(context).name,
+            context.intl.common.name,
             style: TextStyle(
               color: redOnBackground(context),
             ),
@@ -124,7 +124,7 @@ class _NamePageState extends State<NamePage> {
                   ),
                   Expanded(
                     child: Text(
-                      l(context).editNameDescription,
+                      context.intl.settings.editNameDescription,
                       style: TextStyle(
                         color: Theme.of(context).textTheme.caption.color,
                       ),

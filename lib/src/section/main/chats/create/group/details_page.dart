@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pattle/src/app.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 import 'package:pattle/src/section/main/widgets/error.dart';
 import 'package:pattle/src/section/main/widgets/chat_member_avatar.dart';
 
@@ -73,7 +73,7 @@ class _CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(l(context).newGroup),
+          title: Text(context.intl.chats.newGroup.title),
         ),
         body: Column(
           children: <Widget>[
@@ -92,7 +92,7 @@ class _CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
                       },
                       maxLines: 1,
                       decoration: InputDecoration(
-                        labelText: l(context).groupName,
+                        labelText: context.intl.chats.newGroup.title,
                         filled: true,
                       ),
                     ),
@@ -100,7 +100,7 @@ class _CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
                 )
               ],
             ),
-            Text(l(context).participants),
+            Text(context.intl.chats.newGroup.participants),
             Expanded(child: _buildUserList(context))
           ],
         ),

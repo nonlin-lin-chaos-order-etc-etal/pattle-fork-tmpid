@@ -16,7 +16,7 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 import 'package:pattle/src/app.dart';
-import 'package:pattle/src/resources/localizations.dart';
+import 'package:pattle/src/resources/intl/localizations.dart';
 
 class StartPage extends StatelessWidget {
   void _loginWithUsername(BuildContext context) {
@@ -25,9 +25,10 @@ class StartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginWithPhone = l(context).loginWithPhone.toUpperCase();
-    final loginWithEmail = l(context).loginWithEmail.toUpperCase();
-    final loginWithUsername = l(context).loginWithUsername.toUpperCase();
+    final loginWithPhone = context.intl.start.loginWithPhone.toUpperCase();
+    final loginWithEmail = context.intl.start.loginWithEmail.toUpperCase();
+    final loginWithUsername =
+        context.intl.start.loginWithUsername.toUpperCase();
 
     return Scaffold(
       body: Container(
@@ -37,7 +38,7 @@ class StartPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Text(
-                l(context).appName,
+                context.intl.appName,
                 style: TextStyle(fontSize: 96),
               ),
               ButtonTheme.fromButtonThemeData(
