@@ -16,9 +16,9 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:pattle/src/section/main/models/chat_message.dart';
-import 'package:pattle/src/section/main/widgets/redacted.dart';
 
+import '../../../../../models/chat_message.dart';
+import '../../../../../widgets/redacted.dart';
 import '../../../../../../../util/color.dart';
 
 import '../../message.dart';

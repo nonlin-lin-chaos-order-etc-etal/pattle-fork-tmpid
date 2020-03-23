@@ -17,8 +17,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/section/main/chats/models/chat.dart';
+
+import '../../../resources/intl/localizations.dart';
+import '../chats/models/chat.dart';
 
 class ChatName extends StatelessWidget {
   final Chat chat;

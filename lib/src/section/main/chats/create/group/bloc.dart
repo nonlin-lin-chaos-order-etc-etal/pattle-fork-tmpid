@@ -16,8 +16,8 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
 
+import '../../../models/chat_member.dart';
 import '../../../../../matrix.dart';
 
 import 'event.dart';
@@ -31,7 +31,7 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
 
   bool _isCreatingGroup = false;
 
-  final _members = List<ChatMember>();
+  final _members = <ChatMember>[];
 
   String _groupName;
 
@@ -44,7 +44,7 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
   CreateGroupState get initialState => InitialCreateGroupState();
 
   Stream<CreateGroupState> _loadUsers() async* {
-    final users = Set<ChatMember>();
+    final users = <ChatMember>{};
     // Load members of some rooms, in the future
     // this'll be based on activity and what not
     for (final room in await matrix.user.rooms.get(upTo: 10)) {

@@ -16,10 +16,11 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
+
+import '../../resources/theme.dart';
+import '../../resources/intl/localizations.dart';
 
 import 'homeserver/bloc.dart';
-import '../../resources/theme.dart';
 
 class AdvancedPage extends StatefulWidget {
   final HomeserverBloc bloc;
@@ -31,12 +32,12 @@ class AdvancedPage extends StatefulWidget {
 }
 
 class AdvancedPageState extends State<AdvancedPage> {
-  final homeserverTextController = TextEditingController();
+  final _homeserverTextController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    homeserverTextController.text =
+    _homeserverTextController.text =
         widget.bloc.state.homeserver?.url?.toString();
   }
 
@@ -69,7 +70,7 @@ class AdvancedPageState extends State<AdvancedPage> {
                   Flexible(
                     child: BlocBuilder<HomeserverBloc, HomeserverState>(
                       bloc: widget.bloc,
-                      builder: (BuildContext context, HomeserverState state) {
+                      builder: (context, state) {
                         var errorText;
 
                         if (state is HomeserverIsInvalid) {
@@ -80,7 +81,7 @@ class AdvancedPageState extends State<AdvancedPage> {
                         }
 
                         return TextField(
-                          controller: homeserverTextController,
+                          controller: _homeserverTextController,
                           decoration: InputDecoration(
                             filled: true,
                             labelText: context.intl.start.homeserver,
@@ -119,7 +120,7 @@ class AdvancedPageState extends State<AdvancedPage> {
                 onPressed: () {
                   widget.bloc.add(
                     ChangeHomeserver(
-                      homeserverTextController.text,
+                      _homeserverTextController.text,
                       viaAdvanced: true,
                     ),
                   );

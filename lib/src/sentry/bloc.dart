@@ -17,6 +17,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io' show Platform;
 
 import 'package:bloc/bloc.dart';
 import 'package:chopper/chopper.dart';
@@ -26,7 +27,6 @@ import 'package:matrix_sdk/matrix_sdk.dart' as matrix;
 import 'package:sentry/sentry.dart';
 import 'package:package_info/package_info.dart';
 import 'package:device_info/device_info.dart';
-import 'dart:io' show Platform;
 
 import '../app.dart' as pattle;
 import '../storage.dart';
@@ -100,11 +100,11 @@ class SentryBloc extends Bloc<SentryEvent, SentryState> {
 
   void wrap(Function run) => runZoned<Future<void>>(
         () async => run(),
-        onError: (error, stackTrace) => _reportError(error, stackTrace),
+        onError: _reportError,
       );
 
   static bool get _isInDebugMode {
-    bool inDebugMode = false;
+    var inDebugMode = false;
 
     // Set to true if running debug mode (where asserts are evaluated)
     assert(inDebugMode = true);
@@ -185,7 +185,7 @@ class SentryBloc extends Bloc<SentryEvent, SentryState> {
         environmentAttributes: await _environment,
       );
 
-      FlutterError.onError = (FlutterErrorDetails details) {
+      FlutterError.onError = (details) {
         if (_isInDebugMode) {
           FlutterError.dumpErrorToConsole(details);
         } else {

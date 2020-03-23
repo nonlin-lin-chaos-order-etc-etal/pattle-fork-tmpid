@@ -19,13 +19,15 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
+
+import '../../models/chat_member.dart';
 
 import '../../../../matrix.dart';
-import 'event.dart';
-export 'event.dart';
 
+import 'event.dart';
 import 'state.dart';
+
+export 'event.dart';
 export 'state.dart';
 
 class ChatSettingsBloc extends Bloc<ChatSettingsEvent, ChatSettingsState> {

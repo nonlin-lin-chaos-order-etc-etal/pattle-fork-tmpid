@@ -22,7 +22,7 @@ import '../matrix.dart';
 
 extension UrlResolver on Uri {
   String toThumbnailString(BuildContext context) =>
-      this.toThumbnailStringWith(Matrix.of(context).user.homeserver);
+      toThumbnailStringWith(Matrix.of(context).user.homeserver);
 
   String toThumbnailStringWith(Homeserver homeserver) => homeserver
       .resolveThumbnailUrl(
@@ -33,7 +33,7 @@ extension UrlResolver on Uri {
       .toString();
 
   String toDownloadString(BuildContext context) =>
-      this.toThumbnailStringWith(Matrix.of(context).user.homeserver);
+      toThumbnailStringWith(Matrix.of(context).user.homeserver);
 
   String toDownloadStringWith(Homeserver homeserver) =>
       homeserver.resolveDownloadUrl(this).toString();

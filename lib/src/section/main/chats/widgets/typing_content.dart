@@ -17,9 +17,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/chats/models/chat.dart';
+
+import '../../../../resources/intl/localizations.dart';
+import '../../../../resources/theme.dart';
+import '../models/chat.dart';
 
 class TypingContent extends StatelessWidget {
   final Chat chat;

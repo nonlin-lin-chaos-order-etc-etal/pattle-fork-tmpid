@@ -21,16 +21,19 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/chats/models/chat.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
-import 'package:pattle/src/section/main/widgets/chat_name.dart';
-import 'package:pattle/src/section/main/widgets/chat_member_tile.dart';
+import '../../../../resources/intl/localizations.dart';
+import '../../../../resources/theme.dart';
+
+import '../../widgets/chat_name.dart';
+import '../../widgets/chat_member_tile.dart';
+
+import '../../chats/models/chat.dart';
+import '../../models/chat_member.dart';
 
 import '../../../../matrix.dart';
 import '../../../../util/url.dart';
 import '../../../../util/color.dart';
+
 import 'bloc.dart';
 
 class ChatSettingsPage extends StatefulWidget {
@@ -67,7 +70,7 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
         dark: Theme.of(context).backgroundColor,
       ),
       body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
           final url = widget.chat.avatarUrl?.toDownloadString(context);
           return <Widget>[
             SliverAppBar(
@@ -201,7 +204,7 @@ class _MemberListState extends State<_MemberList> {
                 SizedBox(height: 4),
                 BlocBuilder<ChatSettingsBloc, ChatSettingsState>(
                   builder: (context, state) {
-                    var members = List<ChatMember>();
+                    var members = <ChatMember>[];
                     if (state is MembersLoaded) {
                       members = state.members;
                     }
@@ -221,7 +224,7 @@ class _MemberListState extends State<_MemberList> {
                         itemCount: (_previewMembers && !allShown) || isLoading
                             ? members.length + 1
                             : members.length,
-                        itemBuilder: (BuildContext context, int index) {
+                        itemBuilder: (context, index) {
                           // Item after all members
                           if (index == members.length) {
                             return _ShowMoreItem(

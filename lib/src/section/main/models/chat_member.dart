@@ -19,6 +19,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
+@immutable
 class ChatMember {
   final User user;
 
@@ -48,7 +49,7 @@ class ChatMember {
   }
 
   @override
-  bool operator ==(other) => user == other?.user;
+  bool operator ==(dynamic other) => user == other.user;
 
   @override
   int get hashCode => user.hashCode;

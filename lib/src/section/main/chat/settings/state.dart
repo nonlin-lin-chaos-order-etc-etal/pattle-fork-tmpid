@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
+
+import '../../models/chat_member.dart';
 
 abstract class ChatSettingsState extends Equatable {
   @override

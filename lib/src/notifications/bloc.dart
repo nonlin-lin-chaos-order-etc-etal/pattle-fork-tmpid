@@ -24,8 +24,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/section/main/chats/models/chat.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
+
+import '../section/main/chats/models/chat.dart';
+import '../section/main/models/chat_member.dart';
 
 import '../auth/bloc.dart';
 import '../matrix.dart';

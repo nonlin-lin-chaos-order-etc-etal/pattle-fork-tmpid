@@ -22,17 +22,17 @@ import 'package:bloc/bloc.dart';
 import 'package:image/image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:mime/mime.dart';
-import 'package:pattle/src/section/main/chat/event.dart';
-import 'package:pattle/src/section/main/models/chat_message.dart';
+
+import '../models/chat_message.dart';
 
 import '../../../matrix.dart';
 import '../../../util/room.dart';
 
 import 'event.dart';
-export 'event.dart';
-
 import 'state.dart';
+
 export 'state.dart';
+export 'event.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final Matrix matrix;
@@ -120,7 +120,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   Future<ChatState> _fetch() async {
-    final currentState = this.state;
+    final currentState = state;
 
     int page;
     if (currentState is ChatLoaded) {
@@ -131,7 +131,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     final events = await room.timeline.paginate(page: page);
 
-    final messages = List<ChatMessage>();
+    final messages = <ChatMessage>[];
 
     RoomEvent event;
     for (event in events) {

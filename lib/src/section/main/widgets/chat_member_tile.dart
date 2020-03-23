@@ -17,8 +17,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
+
+import '../../../resources/theme.dart';
+import '../models/chat_member.dart';
 
 import '../../../util/chat_member.dart';
 

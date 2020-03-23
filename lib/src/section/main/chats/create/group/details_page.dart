@@ -18,10 +18,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/app.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/section/main/widgets/error.dart';
-import 'package:pattle/src/section/main/widgets/chat_member_avatar.dart';
+
+import '../../../../../app.dart';
+import '../../../../../resources/intl/localizations.dart';
+import '../../../widgets/error.dart';
+import '../../../widgets/chat_member_avatar.dart';
 
 import 'bloc.dart';
 
@@ -135,7 +136,7 @@ class _CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
       condition: (prevState, nextState) =>
           prevState?.members?.length != nextState?.members?.length,
       builder: (context, state) {
-        final children = List<Widget>();
+        final children = <Widget>[];
 
         for (final member in state?.members) {
           children.add(

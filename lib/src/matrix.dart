@@ -18,11 +18,12 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:matrix_sdk_sqflite/matrix_sdk_sqflite.dart';
-import 'package:pattle/src/auth/bloc.dart';
 import 'package:provider/provider.dart';
 
+import 'auth/bloc.dart';
+
 class Matrix {
-  static final store = SqfliteStore(path: 'pattle.sqlite');
+  static final SqfliteStore store = SqfliteStore(path: 'pattle.sqlite');
 
   // Used for listening to auth state changes
   final AuthBloc _authBloc;

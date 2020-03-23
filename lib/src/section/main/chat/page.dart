@@ -22,15 +22,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/app.dart';
+import '../../../app.dart';
 
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/chats/models/chat.dart';
-import 'package:pattle/src/section/main/chats/widgets/typing_content.dart';
-import 'package:pattle/src/section/main/widgets/chat_name.dart';
-import 'package:pattle/src/section/main/widgets/error.dart';
-import 'package:pattle/src/section/main/widgets/title_with_sub.dart';
+import '../../../resources/intl/localizations.dart';
+import '../../../resources/theme.dart';
+import '../chats/models/chat.dart';
+import '../chats/widgets/typing_content.dart';
+import '../widgets/chat_name.dart';
+import '../widgets/error.dart';
+import '../widgets/title_with_sub.dart';
 
 import '../../../matrix.dart';
 import '../../../util/color.dart';
@@ -100,14 +100,6 @@ class _ChatPageState extends State<ChatPage> {
       );
     }
 
-    final settingsGestureDetector = ({Widget child}) {
-      return GestureDetector(
-        onTap: () => Navigator.of(context)
-            .pushNamed(Routes.chatsSettings, arguments: widget.chat),
-        child: child,
-      );
-    };
-
     // TODO: typingUsers should not contain nulls
     Widget title =
         _room.isSomeoneElseTyping && !_room.typingUsers.any((u) => u == null)
@@ -121,7 +113,11 @@ class _ChatPageState extends State<ChatPage> {
       backgroundColor: chatBackgroundColor(context),
       appBar: AppBar(
         titleSpacing: 0,
-        title: settingsGestureDetector(
+        title: GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(
+            Routes.chatsSettings,
+            arguments: widget.chat,
+          ),
           child: Row(
             children: <Widget>[
               avatar,
@@ -169,7 +165,7 @@ class _MessageList extends StatefulWidget {
 }
 
 class _MessageListState extends State<_MessageList> {
-  ScrollController _scrollController = ScrollController();
+  final _scrollController = ScrollController();
   final double _scrollThreshold = 200;
 
   @override
@@ -278,7 +274,7 @@ class _Input extends StatefulWidget {
 }
 
 class _InputState extends State<_Input> {
-  TextEditingController _textController = TextEditingController();
+  final _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,12 @@
-# Defines a default set of lint rules enforced for
-# projects at Google. For details and rationale,
-# see https://github.com/dart-lang/pedantic#enabled-lints.
-include: package:pedantic/analysis_options.yaml
+include: package:effective_dart/analysis_options.yaml
 
 analyzer:
   errors:
     missing_required_param: error
+  exclude:
+    - lib/src/resources/intl/messages*.dart
+
+linter:
+  rules:
+    public_member_api_docs: false
+    directives_ordering: false

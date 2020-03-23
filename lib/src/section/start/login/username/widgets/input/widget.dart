@@ -16,11 +16,12 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/util/lower_case_text_formatter.dart';
 
+import '../../../../../../resources/intl/localizations.dart';
+import '../../../../../../util/lower_case_text_formatter.dart';
 import '../../../../homeserver/bloc.dart';
 import '../../../bloc.dart';
+
 import 'bloc.dart';
 
 class UsernameInput extends StatefulWidget {
@@ -42,7 +43,7 @@ class UsernameInputState extends State<UsernameInput> {
       ),
       child: Builder(builder: (context) {
         return BlocBuilder<UsernameBloc, UsernameState>(
-          builder: (BuildContext context, UsernameState state) {
+          builder: (context, state) {
             String errorText;
 
             if (state is! UsernameChanged && state is! UsernameIsEmpty) {

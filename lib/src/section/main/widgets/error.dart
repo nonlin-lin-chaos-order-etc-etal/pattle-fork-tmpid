@@ -15,13 +15,14 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:http/http.dart' as http;
 import 'package:chopper/chopper.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'dart:io';
 
+import '../../../resources/intl/localizations.dart';
 import '../../../matrix.dart';
 
 class ErrorBanner extends StatefulWidget {
@@ -54,7 +55,7 @@ class ErrorBannerState extends State<ErrorBanner>
   Widget build(BuildContext context) => StreamBuilder<SyncState>(
         // TODO: Temporary
         stream: Matrix.of(context).user.sync,
-        builder: (BuildContext context, AsyncSnapshot<SyncState> snapshot) {
+        builder: (context, snapshot) {
           final state = snapshot.data;
           final error = state?.exception ?? snapshot.error;
 

@@ -17,7 +17,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/section/main/widgets/message_state.dart';
+
+import '../../../../widgets/message_state.dart';
 
 import '../subtitle.dart';
 
@@ -36,7 +37,7 @@ class TextSubtitleContent extends StatelessWidget {
       // Strip replied-to content
       final splitReply = text.split(RegExp('(<\\/*mx-reply>)'));
       if (splitReply.length >= 3) {
-        text = ' ' + splitReply[2];
+        text = ' ${splitReply[2]}';
       }
     }
 

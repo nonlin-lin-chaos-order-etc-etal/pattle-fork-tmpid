@@ -18,8 +18,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pattle/src/section/main/chat/widgets/bubble/message.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../message.dart';
 
 class LoadingContent extends StatefulWidget {
   @override

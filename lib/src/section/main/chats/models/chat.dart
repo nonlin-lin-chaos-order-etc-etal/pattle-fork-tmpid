@@ -17,8 +17,9 @@
 
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
-import 'package:pattle/src/section/main/models/chat_message.dart';
+
+import '../../models/chat_member.dart';
+import '../../models/chat_message.dart';
 
 /// Chat overview used in the 'chats' page.
 class Chat {

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 abstract class SentryEvent extends Equatable {
   @override
@@ -10,7 +11,7 @@ class Initialize extends SentryEvent {}
 class ChangeMayReportCrashes extends SentryEvent {
   final bool mayReportCrashes;
 
-  ChangeMayReportCrashes(this.mayReportCrashes);
+  ChangeMayReportCrashes({@required this.mayReportCrashes});
 
   @override
   List<Object> get props => [mayReportCrashes];

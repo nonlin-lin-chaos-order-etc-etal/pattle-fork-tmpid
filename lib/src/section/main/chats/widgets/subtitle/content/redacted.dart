@@ -16,7 +16,8 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:pattle/src/section/main/widgets/redacted.dart';
+
+import '../../../../widgets/redacted.dart';
 
 import '../subtitle.dart';
 

@@ -18,14 +18,15 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/section/main/models/chat_message.dart';
 
+import '../../models/chat_message.dart';
 import '../../../../matrix.dart';
-import 'event.dart';
-export 'event.dart';
 
+import 'event.dart';
 import 'state.dart';
+
 export 'state.dart';
+export 'event.dart';
 
 class ImageBloc extends Bloc<ImageEvent, ImageState> {
   final Matrix _matrix;
@@ -46,7 +47,7 @@ class ImageBloc extends Bloc<ImageEvent, ImageState> {
   Stream<ImageState> mapEventToState(ImageEvent event) async* {
     if (event is FetchImages) {
       yield ImagesLoading();
-      final imageMessageEvents = List<ImageMessageEvent>();
+      final imageMessageEvents = <ImageMessageEvent>[];
 
       RoomEvent event;
       for (event in await _room.timeline.get(allowRemote: false)) {

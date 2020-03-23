@@ -17,8 +17,10 @@
 
 import 'package:meta/meta.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
 
+import 'chat_member.dart';
+
+@immutable
 class ChatMessage {
   final Room room;
   final RoomEvent event;
@@ -42,7 +44,7 @@ class ChatMessage {
     this.subject,
   });
   @override
-  bool operator ==(other) {
+  bool operator ==(dynamic other) {
     if (other is ChatMessage) {
       return room == other.room &&
           event == other.event &&

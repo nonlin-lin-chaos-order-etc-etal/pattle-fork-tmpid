@@ -17,8 +17,9 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/resources/theme.dart';
+
+import '../../../resources/intl/localizations.dart';
+import '../../../resources/theme.dart';
 
 import 'bloc.dart';
 import 'widgets/header.dart';

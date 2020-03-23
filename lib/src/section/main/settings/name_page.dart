@@ -18,9 +18,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/settings/bloc.dart';
+
+import '../../../resources/intl/localizations.dart';
+import '../../../resources/theme.dart';
+
+import 'bloc.dart';
 
 class _NamePageState extends State<NamePage> {
   final _textController = TextEditingController();

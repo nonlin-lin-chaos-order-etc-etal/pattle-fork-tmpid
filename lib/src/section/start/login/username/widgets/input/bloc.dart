@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/section/start/login/bloc.dart';
 
+import '../../../bloc.dart';
 import '../../../../homeserver/bloc.dart';
+
 import 'event.dart';
 import 'state.dart';
 
@@ -54,7 +55,7 @@ class UsernameBloc extends Bloc<UsernameEvent, UsernameState> {
       // @joe
       if (input.contains(':')) {
         final split = input.split(':');
-        String server = split[1];
+        final server = split[1];
 
         _homeserverBloc.add(
           ChangeHomeserver(

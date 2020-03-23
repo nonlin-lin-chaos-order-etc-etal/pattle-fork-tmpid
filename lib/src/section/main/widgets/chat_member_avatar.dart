@@ -17,7 +17,8 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
+
+import '../models/chat_member.dart';
 
 import '../../../util/chat_member.dart';
 import '../../../util/url.dart';

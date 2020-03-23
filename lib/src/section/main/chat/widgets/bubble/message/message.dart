@@ -17,19 +17,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/chat/widgets/bubble/message/content/loading.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
-import 'package:pattle/src/section/main/models/chat_message.dart';
-import 'package:pattle/src/section/main/widgets/message_state.dart';
-import 'package:pattle/src/util/color.dart';
-import 'package:pattle/src/util/date_format.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../models/chat_member.dart';
+import '../../../../models/chat_message.dart';
+import '../../../../../../resources/theme.dart';
+
+import '../../../../widgets/message_state.dart';
 
 import 'content/image.dart';
 import 'content/redacted.dart';
 import 'content/text.dart';
+import 'content/loading.dart';
 
+import '../../../../../../util/color.dart';
+import '../../../../../../util/date_format.dart';
 import '../../../../../../util/chat_member.dart';
 
 class MessageBubble extends StatelessWidget {

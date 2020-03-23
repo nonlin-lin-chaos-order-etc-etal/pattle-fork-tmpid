@@ -16,8 +16,9 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/section/main/widgets/message_state.dart';
+
+import '../../../../../../resources/intl/localizations.dart';
+import '../../../../widgets/message_state.dart';
 
 import '../subtitle.dart';
 
@@ -32,7 +33,7 @@ class ImageSubtitleContent extends Subtitle {
         if (Sender.necessary(context)) Sender(),
         Icon(Icons.photo_camera),
         Expanded(
-          child: Text(' ' + context.intl.common.photo),
+          child: Text(' ${context.intl.common.photo}'),
         ),
       ],
     );

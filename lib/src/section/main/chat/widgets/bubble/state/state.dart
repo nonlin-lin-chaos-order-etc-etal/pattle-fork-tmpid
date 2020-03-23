@@ -18,16 +18,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/models/chat_message.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../../util/color.dart';
-import '../../../../../../util/date_format.dart';
+import '../../../../../../resources/theme.dart';
+import '../../../../models/chat_message.dart';
+
 import 'content/creation.dart';
 import 'content/member_change.dart';
 import 'content/topic_change.dart';
 import 'content/upgrade.dart';
+
+import '../../../../../../util/color.dart';
+import '../../../../../../util/date_format.dart';
 
 class StateBubble extends StatelessWidget {
   final ChatMessage message;

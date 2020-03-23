@@ -16,14 +16,15 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:bloc/bloc.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
+
+import '../models/chat_member.dart';
 
 import '../../../matrix.dart';
 
 import 'event.dart';
-export 'event.dart';
-
 import 'state.dart';
+
+export 'event.dart';
 export 'state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {

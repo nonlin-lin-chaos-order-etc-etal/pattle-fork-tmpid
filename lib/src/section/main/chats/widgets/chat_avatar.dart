@@ -18,9 +18,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mdi/mdi.dart';
-import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/chats/models/chat.dart';
 import 'package:transparent_image/transparent_image.dart';
+
+import '../../../../resources/theme.dart';
+import '../models/chat.dart';
 
 import '../../../../util/chat_member.dart';
 import '../../../../util/url.dart';

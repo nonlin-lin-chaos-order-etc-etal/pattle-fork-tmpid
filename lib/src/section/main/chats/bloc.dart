@@ -17,18 +17,19 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
-import 'package:pattle/src/section/main/models/chat_message.dart';
+
+import 'models/chat.dart';
+import '../models/chat_member.dart';
+import '../models/chat_message.dart';
 
 import '../../../matrix.dart';
 import '../../../util/room.dart';
-import 'models/chat.dart';
 
 import 'event.dart';
-export 'event.dart';
-
 import 'state.dart';
+
 export 'state.dart';
+export 'event.dart';
 
 class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   final Matrix _matrix;
@@ -40,10 +41,10 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
 
     await me.sync.first;
 
-    final chats = List<Chat>();
+    final chats = <Chat>[];
 
     // Get all rooms and push them as a single list
-    for (Room room in await me.rooms.get()) {
+    for (final room in await me.rooms.get()) {
       // Don't show rooms that have been upgraded
       if (room.isUpgraded) {
         continue;

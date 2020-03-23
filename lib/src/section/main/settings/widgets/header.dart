@@ -15,9 +15,9 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pattle/src/resources/theme.dart';
+
+import '../../../../resources/theme.dart';
 
 class Header extends StatelessWidget {
   final String text;

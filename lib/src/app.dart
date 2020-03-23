@@ -20,14 +20,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:pattle/src/redirect.dart';
 import 'package:provider/provider.dart';
 
-import 'auth/bloc.dart';
 import 'matrix.dart';
+import 'auth/bloc.dart';
+import 'sentry/bloc.dart';
 import 'notifications/bloc.dart';
 import 'resources/intl/localizations.dart';
 import 'resources/theme.dart';
+
 import 'section/main/chat/page.dart';
 import 'section/main/chat/image/page.dart';
 import 'section/main/chat/settings/page.dart';
@@ -42,59 +43,60 @@ import 'section/main/settings/page.dart';
 import 'section/start/advanced_page.dart';
 import 'section/start/start_page.dart';
 import 'section/start/login/username/page.dart';
-import 'sentry/bloc.dart';
 
-final routes = {
-  Routes.root: (Object params) => MaterialPageRoute(
+import 'redirect.dart';
+
+final Map<String, MaterialPageRoute Function(Object)> routes = {
+  Routes.root: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.root),
         builder: (context) => Redirect(),
       ),
-  Routes.settings: (Object params) => MaterialPageRoute(
+  Routes.settings: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.settings),
         builder: (context) => SettingsPage.withBloc(),
       ),
-  Routes.settingsProfile: (Object params) => MaterialPageRoute(
+  Routes.settingsProfile: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.settingsProfile),
         builder: (context) => ProfilePage.withGivenBloc(params),
       ),
-  Routes.settingsProfileName: (Object params) => MaterialPageRoute(
+  Routes.settingsProfileName: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.settingsProfileName),
         builder: (context) => NamePage.withGivenBloc(params),
       ),
-  Routes.settingsAppearance: (Object params) => MaterialPageRoute(
+  Routes.settingsAppearance: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.settingsAppearance),
         builder: (context) => AppearancePage.withGivenBloc(params),
       ),
-  Routes.chats: (Object arguments) => MaterialPageRoute(
+  Routes.chats: (arguments) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.chats),
         builder: (context) => arguments is Chat
             ? ChatPage.withBloc(arguments)
             : ChatsPage.withBloc(),
       ),
-  Routes.chatsSettings: (Object arguments) => MaterialPageRoute(
+  Routes.chatsSettings: (arguments) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.chatsSettings),
         builder: (context) => ChatSettingsPage.withBloc(arguments),
       ),
-  Routes.chatsNew: (Object arguments) => MaterialPageRoute(
+  Routes.chatsNew: (arguments) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.chatsNew),
         builder: (context) => CreateGroupMembersPage.withBloc(),
       ),
-  Routes.chatsNewDetails: (Object arguments) => MaterialPageRoute(
+  Routes.chatsNewDetails: (arguments) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.chatsNewDetails),
         builder: (context) => CreateGroupDetailsPage.withGivenBloc(arguments),
       ),
-  Routes.image: (Object arguments) => MaterialPageRoute(
+  Routes.image: (arguments) => MaterialPageRoute(
       settings: RouteSettings(name: Routes.image),
       builder: (context) => ImagePage.withBloc(arguments)),
-  Routes.login: (Object params) => MaterialPageRoute(
+  Routes.login: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.login),
         builder: (context) => StartPage(),
       ),
-  Routes.loginAdvanced: (Object params) => MaterialPageRoute(
+  Routes.loginAdvanced: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.loginAdvanced),
         builder: (context) => AdvancedPage(bloc: params),
       ),
-  Routes.loginUsername: (Object params) => MaterialPageRoute(
+  Routes.loginUsername: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.loginUsername),
         builder: (context) => UsernameLoginPage.withBloc(),
       ),
@@ -148,15 +150,14 @@ class App extends StatelessWidget {
           child: Provider<Matrix>(
             create: (_) => Matrix(_authBloc),
             child: Builder(
-              builder: (BuildContext c) {
+              builder: (c) {
                 return BlocProvider<NotificationsBloc>(
                   create: (context) => NotificationsBloc(
                     matrix: Matrix.of(c),
                     authBloc: _authBloc,
                   ),
                   child: MaterialApp(
-                    onGenerateTitle: (BuildContext context) =>
-                        context.intl.appName,
+                    onGenerateTitle: (context) => context.intl.appName,
                     localizationsDelegates: [
                       const PattleLocalizationsDelegate(),
                       GlobalMaterialLocalizations.delegate,

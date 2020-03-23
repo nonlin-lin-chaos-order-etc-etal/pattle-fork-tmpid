@@ -17,11 +17,12 @@
 
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/resources/theme.dart';
+import 'package:flutter/material.dart';
 
-import 'package:pattle/src/section/main/models/chat_member.dart';
+import '../resources/intl/localizations.dart';
+import '../resources/theme.dart';
+
+import '../section/main/models/chat_member.dart';
 
 extension ChatMemberExtension on ChatMember {
   Color color(BuildContext context) => userColor(context, displayColor.index);

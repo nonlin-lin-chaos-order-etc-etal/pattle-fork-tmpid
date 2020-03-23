@@ -17,7 +17,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
+
+import '../../section/main/models/chat_member.dart';
 
 import 'messages_all.dart';
 
@@ -30,9 +31,9 @@ class PattleLocalizationsDelegate
 
   @override
   Future<PattleLocalizations> load(Locale locale) {
-    final String name =
+    final name =
         locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
-    final String localeName = Intl.canonicalizedLocale(name);
+    final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       print('mjam');
       return PattleLocalizations(localeName);
@@ -96,12 +97,12 @@ List<TextSpan> _toTextSpans({
     if (args.length >= 2) placeholders[1],
   ]);
 
-  final placeholderPositions = Map<int, String>();
+  final placeholderPositions = <int, String>{};
 
   for (final placeholder in placeholders) {
     final split = message.split(placeholder);
 
-    int i = 0;
+    var i = 0;
     for (final string in split) {
       if (string != split.last) {
         placeholderPositions[i] = placeholder;
@@ -174,6 +175,7 @@ extension LocalizedTextSpansBool on String Function(
   String,
 ) {
   List<TextSpan> toTextSpans(
+    // ignore: avoid_positional_boolean_parameters
     bool condition,
     String firstName,
     String secondName, {
@@ -356,6 +358,14 @@ class _Start extends _Category {
       locale: _localeName,
     );
   }
+
+  String get reportErrorsDescription {
+    return Intl.message(
+      'Allow Pattle to send crash reports to help development',
+      name: '_Start_reportErrorsDescription',
+      locale: _localeName,
+    );
+  }
 }
 
 class _StartUsername extends _Category {
@@ -454,6 +464,7 @@ class _Chat extends _Category {
     );
   }
 
+  // ignore: avoid_positional_boolean_parameters
   String areTyping(bool andMore, String first, String second) {
     return Intl.select(
       andMore,

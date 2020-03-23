@@ -17,11 +17,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/widgets/chat_member_avatar.dart';
 
+import '../../../resources/intl/localizations.dart';
+import '../../../resources/theme.dart';
+import '../widgets/chat_member_avatar.dart';
 import '../../../app.dart';
+
 import 'bloc.dart';
 
 class ProfilePage extends StatefulWidget {

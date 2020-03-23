@@ -19,10 +19,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
-import 'package:pattle/src/section/main/models/chat_message.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+
+import '../../models/chat_member.dart';
+import '../../models/chat_message.dart';
 
 import '../../../../matrix.dart';
 import '../../../../util/date_format.dart';

@@ -16,8 +16,9 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/section/main/models/chat_message.dart';
+
+import '../../../resources/intl/localizations.dart';
+import '../models/chat_message.dart';
 
 class Redacted extends StatelessWidget {
   final ChatMessage redaction;

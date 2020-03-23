@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-22T18:31:30.071193",
+  "@@last_modified": "2020-03-23T21:58:49.230276",
   "appName": "Pattle",
   "@appName": {
     "type": "text",
@@ -78,6 +78,11 @@
   },
   "_Start_loginWithUsername": "Login with username",
   "@_Start_loginWithUsername": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_reportErrorsDescription": "Allow Pattle to send crash reports to help development",
+  "@_Start_reportErrorsDescription": {
     "type": "text",
     "placeholders": {}
   },
@@ -226,11 +231,6 @@
       "count": {}
     }
   },
-  "Participants": "Participants",
-  "@Participants": {
-    "type": "text",
-    "placeholders": {}
-  },
   "_ChatDetails_participants": "{count,plural, =0{No participants}=1{{count} participant}other{{count} participants}}",
   "@_ChatDetails_participants": {
     "type": "text",
@@ -255,6 +255,11 @@
   },
   "_ChatsNewGroup_groupName": "Group name",
   "@_ChatsNewGroup_groupName": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Participants": "Participants",
+  "@Participants": {
     "type": "text",
     "placeholders": {}
   },

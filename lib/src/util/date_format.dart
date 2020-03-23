@@ -17,10 +17,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
+
+import '../resources/intl/localizations.dart';
 
 int _weekOf(DateTime date) {
-  int dayOfYear = int.parse(DateFormat("D").format(date));
+  final dayOfYear = int.parse(DateFormat("D").format(date));
   return ((dayOfYear - date.weekday + 10) / 7).floor();
 }
 

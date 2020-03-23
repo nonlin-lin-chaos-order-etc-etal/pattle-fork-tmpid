@@ -89,6 +89,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  effective_dart: ^1.2.1
+
   intl_translation: ^0.17.9
 
 flutter_icons:

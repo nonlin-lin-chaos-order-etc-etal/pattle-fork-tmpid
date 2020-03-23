@@ -15,8 +15,9 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
-import 'package:pattle/src/app.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
+
+import '../../app.dart';
+import '../../resources/intl/localizations.dart';
 
 class StartPage extends StatelessWidget {
   void _loginWithUsername(BuildContext context) {

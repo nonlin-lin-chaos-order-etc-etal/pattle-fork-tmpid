@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:pattle/src/section/main/models/chat_message.dart';
+
+import '../../models/chat_message.dart';
 
 abstract class ImageState extends Equatable {
   @override

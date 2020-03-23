@@ -17,13 +17,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pattle/src/app.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/start/homeserver/bloc.dart';
 
 import '../../../../auth/bloc.dart';
 import '../../../../sentry/bloc.dart';
+import '../../homeserver/bloc.dart';
+
+import '../../../../resources/intl/localizations.dart';
+import '../../../../resources/theme.dart';
+
+import '../../../../app.dart';
+
 import '../bloc.dart';
 import 'widgets/input.dart';
 
@@ -34,13 +37,13 @@ class UsernameLoginPage extends StatefulWidget {
   static Widget withBloc() => MultiBlocProvider(
         providers: [
           BlocProvider<LoginBloc>(
-            create: (BuildContext context) => LoginBloc(
+            create: (context) => LoginBloc(
               context.bloc<AuthBloc>(),
               context.bloc<SentryBloc>(),
             ),
           ),
           BlocProvider<HomeserverBloc>(
-            create: (BuildContext context) => HomeserverBloc(
+            create: (context) => HomeserverBloc(
               context.bloc<LoginBloc>(),
             ),
           ),
@@ -62,6 +65,14 @@ class UsernameLoginPageState extends State<UsernameLoginPage> {
     );
   }
 
+  void _goToAdvanced() {
+    Navigator.pushNamed(
+      context,
+      Routes.loginAdvanced,
+      arguments: BlocProvider.of<HomeserverBloc>(context),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -73,14 +84,6 @@ class UsernameLoginPageState extends State<UsernameLoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final toAdvance = () {
-      Navigator.pushNamed(
-        context,
-        Routes.loginAdvanced,
-        arguments: BlocProvider.of<HomeserverBloc>(context),
-      );
-    };
-
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccessful) {
@@ -97,7 +100,7 @@ class UsernameLoginPageState extends State<UsernameLoginPage> {
                 child: Container(
                   margin: EdgeInsets.only(top: 32, right: 16),
                   child: FlatButton(
-                    onPressed: toAdvance,
+                    onPressed: _goToAdvanced,
                     child: Text(
                       context.intl.start.advanced.toUpperCase(),
                     ),
@@ -125,7 +128,7 @@ class UsernameLoginPageState extends State<UsernameLoginPage> {
                       ),
                       SizedBox(height: 8),
                       BlocBuilder<LoginBloc, LoginState>(
-                        builder: (BuildContext context, LoginState state) {
+                        builder: (context, state) {
                           String errorText;
 
                           if (state is LoginFailed) {
@@ -167,7 +170,9 @@ class UsernameLoginPageState extends State<UsernameLoginPage> {
                                 value: state.mayReportCrashes,
                                 onChanged: (value) {
                                   BlocProvider.of<SentryBloc>(context).add(
-                                    ChangeMayReportCrashes(value),
+                                    ChangeMayReportCrashes(
+                                      mayReportCrashes: value,
+                                    ),
                                   );
                                 },
                               );
@@ -175,7 +180,7 @@ class UsernameLoginPageState extends State<UsernameLoginPage> {
                           ),
                           Flexible(
                             child: Text(
-                              'Allow Pattle to send crash reports to help development',
+                              context.intl.start.reportErrorsDescription,
                             ),
                           ),
                         ],

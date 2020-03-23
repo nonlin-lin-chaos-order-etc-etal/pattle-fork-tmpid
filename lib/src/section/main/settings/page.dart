@@ -16,13 +16,14 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
-import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/widgets/chat_member_avatar.dart';
 
+import '../../../resources/intl/localizations.dart';
+import '../../../resources/theme.dart';
+
+import '../widgets/chat_member_avatar.dart';
+import '../../../app.dart';
 import '../../../matrix.dart';
 
-import '../../../app.dart';
 import 'bloc.dart';
 
 class SettingsPage extends StatefulWidget {

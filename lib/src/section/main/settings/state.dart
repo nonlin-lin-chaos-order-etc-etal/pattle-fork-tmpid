@@ -1,12 +1,15 @@
-import 'package:pattle/src/section/main/models/chat_member.dart';
+import 'package:flutter/material.dart';
 
+import '../models/chat_member.dart';
+
+@immutable
 abstract class SettingsState {
   final ChatMember me;
 
   SettingsState(this.me);
 
   @override
-  bool operator ==(other) {
+  bool operator ==(dynamic other) {
     return runtimeType == other.runtimeType &&
         me.user.state == other.me.user.state;
   }

@@ -16,7 +16,8 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/section/main/models/chat_member.dart';
+
+import '../section/main/models/chat_member.dart';
 
 extension LocalUserExtensions on LocalUser {
   ChatMember toChatMember() {

@@ -16,10 +16,11 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:pattle/src/app.dart';
-import 'package:pattle/src/section/main/chats/models/chat.dart';
-import 'package:pattle/src/section/main/widgets/chat_name.dart';
-import 'package:pattle/src/util/date_format.dart';
+
+import '../../../../app.dart';
+import '../models/chat.dart';
+import '../../widgets/chat_name.dart';
+import '../../../../util/date_format.dart';
 
 import 'chat_avatar.dart';
 import 'subtitle/subtitle.dart';

@@ -17,7 +17,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/section/main/models/chat_message.dart';
+
+import '../models/chat_message.dart';
 
 class MessageState extends StatelessWidget {
   final ChatMessage message;

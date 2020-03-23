@@ -18,8 +18,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mdi/mdi.dart';
-import 'package:pattle/src/app.dart';
-import 'package:pattle/src/resources/intl/localizations.dart';
+
+import '../../../app.dart';
+import '../../../resources/intl/localizations.dart';
 
 import '../../../matrix.dart';
 import 'bloc.dart';

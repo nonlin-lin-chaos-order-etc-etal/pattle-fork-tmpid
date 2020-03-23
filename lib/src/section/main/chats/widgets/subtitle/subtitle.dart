@@ -17,20 +17,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:pattle/src/resources/theme.dart';
-import 'package:pattle/src/section/main/chat/widgets/bubble/state/content/creation.dart';
-import 'package:pattle/src/section/main/chat/widgets/bubble/state/content/member_change.dart';
-import 'package:pattle/src/section/main/chat/widgets/bubble/state/content/topic_change.dart';
-import 'package:pattle/src/section/main/chat/widgets/bubble/state/content/upgrade.dart';
-import 'package:pattle/src/section/main/chats/models/chat.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../../resources/theme.dart';
+import '../../models/chat.dart';
 
 import '../../../../../matrix.dart';
 
+import '../../../chat/widgets/bubble/state/content/creation.dart';
+import '../../../chat/widgets/bubble/state/content/member_change.dart';
+import '../../../chat/widgets/bubble/state/content/topic_change.dart';
+import '../../../chat/widgets/bubble/state/content/upgrade.dart';
+
+import '../typing_content.dart';
 import 'content/image.dart';
 import 'content/redacted.dart';
 import 'content/text.dart';
-import '../typing_content.dart';
 import 'content/unsupported.dart';
 
 class Subtitle extends StatelessWidget {
