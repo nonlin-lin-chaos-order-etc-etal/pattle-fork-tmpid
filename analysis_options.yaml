@@ -4,6 +4,9 @@ analyzer:
   errors:
     missing_required_param: error
   exclude:
+    # The exclude functionality currently does not work (see https://github.com/dart-lang/sdk/issues/25551),
+    # therefore the generated files are formatted and have extra linter ignore statements added using
+    # ./generate_intl.sh`
     - lib/src/resources/intl/messages*.dart
 
 linter:
