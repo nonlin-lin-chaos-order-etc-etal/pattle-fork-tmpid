@@ -20,7 +20,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../../../chats/models/chat.dart';
+import '../../../../models/chat.dart';
 import '../../../../models/chat_member.dart';
 import '../../../../models/chat_message.dart';
 

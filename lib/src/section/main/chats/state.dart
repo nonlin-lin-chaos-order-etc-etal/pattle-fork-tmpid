@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-import 'models/chat.dart';
+import '../models/chat.dart';
 
 abstract class ChatsState extends Equatable {
   @override

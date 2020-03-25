@@ -26,7 +26,7 @@ import '../../../app.dart';
 
 import '../../../resources/intl/localizations.dart';
 import '../../../resources/theme.dart';
-import '../chats/models/chat.dart';
+import '../models/chat.dart';
 import '../chats/widgets/typing_content.dart';
 import '../widgets/chat_name.dart';
 import '../widgets/error.dart';

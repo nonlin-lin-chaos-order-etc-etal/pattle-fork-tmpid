@@ -23,7 +23,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-import '../../chats/models/chat.dart';
+import '../../models/chat.dart';
 import '../../models/chat_member.dart';
 import '../../models/chat_message.dart';
 

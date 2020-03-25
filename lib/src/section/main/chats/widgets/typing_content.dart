@@ -20,7 +20,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 
 import '../../../../resources/intl/localizations.dart';
 import '../../../../resources/theme.dart';
-import '../models/chat.dart';
+import '../../models/chat.dart';
 
 class TypingContent extends StatelessWidget {
   final Chat chat;

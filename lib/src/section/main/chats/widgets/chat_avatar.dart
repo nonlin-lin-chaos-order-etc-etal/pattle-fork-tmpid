@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../../../../resources/theme.dart';
-import '../models/chat.dart';
+import '../../models/chat.dart';
 
 import '../../../../util/chat_member.dart';
 import '../../../../util/url.dart';

@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app.dart';
-import '../models/chat.dart';
+import '../../models/chat.dart';
 import '../../widgets/chat_name.dart';
 import '../../../../util/date_format.dart';
 
