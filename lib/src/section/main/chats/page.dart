@@ -17,7 +17,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/material.dart';
-import 'package:mdi/mdi.dart';
 
 import '../../../app.dart';
 import '../../../resources/intl/localizations.dart';
@@ -41,10 +40,6 @@ class ChatsPage extends StatefulWidget {
 }
 
 class _ChatsPageState extends State<ChatsPage> {
-  void _goToCreateGroup() {
-    Navigator.of(context).pushNamed(Routes.chatsNew);
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -59,12 +54,6 @@ class _ChatsPageState extends State<ChatsPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(context.intl.appName),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () => Navigator.pushNamed(context, Routes.settings),
-            )
-          ],
           bottom: TabBar(
             tabs: <Widget>[
               Tab(
@@ -73,7 +62,7 @@ class _ChatsPageState extends State<ChatsPage> {
                   children: <Widget>[
                     Icon(Icons.group),
                     SizedBox(width: 8),
-                    Text(context.intl.chats.personal.toUpperCase()),
+                    Text(context.intl.chats.chats.toUpperCase()),
                   ],
                 ),
               ),
@@ -82,15 +71,16 @@ class _ChatsPageState extends State<ChatsPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Icon(Mdi.bullhorn),
+                    Icon(Icons.public),
                     SizedBox(width: 8),
-                    Text(context.intl.chats.public.toUpperCase()),
+                    Text(context.intl.chats.channels.toUpperCase()),
                   ],
                 ),
               ),
             ],
           ),
         ),
+        drawer: _Drawer(),
         body: TabBarView(
           children: <Widget>[
             _ChatsTab(personal: true),
@@ -98,7 +88,7 @@ class _ChatsPageState extends State<ChatsPage> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: _goToCreateGroup,
+          onPressed: () => Navigator.of(context).pushNamed(Routes.chatsNew),
           child: Icon(Icons.chat),
         ),
       ),
@@ -122,5 +112,49 @@ class _ChatsTab extends StatelessWidget {
         return Center(child: CircularProgressIndicator());
       }
     });
+  }
+}
+
+class _Drawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+            ),
+            child: Container(),
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.group,
+              color: Theme.of(context).primaryColor,
+            ),
+            title: Text(context.intl.chats.newGroup.title),
+            onTap: () => Navigator.of(context).pushNamed(Routes.chatsNew),
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.public,
+              color: Theme.of(context).primaryColor,
+            ),
+            title: Text(context.intl.chats.newChannel),
+            onTap: () {},
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(
+              Icons.settings,
+              color: Theme.of(context).primaryColor,
+            ),
+            title: Text(context.intl.settings.title),
+            onTap: () => Navigator.pushNamed(context, Routes.settings),
+          ),
+        ],
+      ),
+    );
   }
 }

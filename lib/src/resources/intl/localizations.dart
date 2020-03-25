@@ -639,18 +639,26 @@ class _Chats extends _Category {
       : newGroup = _ChatsNewGroup(localeName),
         super(localeName);
 
-  String get personal {
+  String get chats {
     return Intl.message(
-      'Personal',
-      name: '_Chats_personal',
+      'Chats',
+      name: '_Chats_chats',
       locale: _localeName,
     );
   }
 
-  String get public {
+  String get channels {
     return Intl.message(
-      'Public',
-      name: '_Chats_public',
+      'Channels',
+      name: '_Chats_channels',
+      locale: _localeName,
+    );
+  }
+
+  String get newChannel {
+    return Intl.message(
+      'New channel',
+      name: '_Chats_newChannel',
       locale: _localeName,
     );
   }
