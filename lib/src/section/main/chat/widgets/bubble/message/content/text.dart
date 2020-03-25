@@ -36,7 +36,7 @@ class TextContent extends StatelessWidget {
     final bubble = MessageBubble.of(context);
 
     final needsBorder =
-        !bubble.message.room.isDirect && bubble.reply?.isMine == false ||
+        !bubble.chat.isDirect && bubble.reply?.isMine == false ||
             bubble.message.isMine && bubble.reply?.isMine == true;
 
     return Clickable(
@@ -67,6 +67,7 @@ class TextContent extends StatelessWidget {
               if (bubble.message.inReplyTo != null) ...[
                 SizedBox(height: 4),
                 MessageBubble.withContent(
+                  chat: bubble.chat,
                   message: bubble.message.inReplyTo,
                   reply: bubble.message,
                 ),

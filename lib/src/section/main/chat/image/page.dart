@@ -19,9 +19,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
+import '../../chats/models/chat.dart';
 import '../../models/chat_member.dart';
 import '../../models/chat_message.dart';
 
@@ -36,11 +38,11 @@ class ImagePage extends StatefulWidget {
 
   ImagePage._(this.message);
 
-  static Widget withBloc(ChatMessage message) {
+  static Widget withBloc(Chat chat, ChatMessage message) {
     assert(message.event is ImageMessageEvent);
 
     return BlocProvider<ImageBloc>(
-      create: (c) => ImageBloc(Matrix.of(c), message.room),
+      create: (c) => ImageBloc(Matrix.of(c), chat.room),
       child: ImagePage._(message),
     );
   }

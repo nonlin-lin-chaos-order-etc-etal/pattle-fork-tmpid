@@ -22,7 +22,6 @@ import 'chat_member.dart';
 
 @immutable
 class ChatMessage {
-  final Room room;
   final RoomEvent event;
   final ChatMember sender;
 
@@ -36,7 +35,6 @@ class ChatMessage {
   final ChatMember subject;
 
   ChatMessage(
-    this.room,
     this.event, {
     @required this.sender,
     this.inReplyTo,
@@ -46,8 +44,7 @@ class ChatMessage {
   @override
   bool operator ==(dynamic other) {
     if (other is ChatMessage) {
-      return room == other.room &&
-          event == other.event &&
+      return event == other.event &&
           inReplyTo == other.inReplyTo &&
           isMine == other.isMine;
     } else {
@@ -66,7 +63,6 @@ class ChatMessage {
 
     if (event is RedactedEvent) {
       redactionMessage = ChatMessage(
-        room,
         event.redaction,
         sender: await ChatMember.fromUser(
           room,
@@ -83,7 +79,6 @@ class ChatMessage {
     }
 
     return ChatMessage(
-      room,
       event,
       sender: await ChatMember.fromUser(
         room,
@@ -98,5 +93,5 @@ class ChatMessage {
 
   @override
   int get hashCode =>
-      room.hashCode + event.hashCode + inReplyTo.hashCode + isMine.hashCode;
+      hashCode + event.hashCode + inReplyTo.hashCode + isMine.hashCode;
 }

@@ -17,10 +17,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+
 import 'package:provider/provider.dart';
 
+import '../../../../chats/models/chat.dart';
 import '../../../../models/chat_member.dart';
 import '../../../../models/chat_message.dart';
+
 import '../../../../../../resources/theme.dart';
 
 import '../../../../widgets/message_state.dart';
@@ -35,6 +38,8 @@ import '../../../../../../util/date_format.dart';
 import '../../../../../../util/chat_member.dart';
 
 class MessageBubble extends StatelessWidget {
+  final Chat chat;
+
   final ChatMessage message;
   final ChatMessage previousMessage;
   final ChatMessage nextMessage;
@@ -62,6 +67,7 @@ class MessageBubble extends StatelessWidget {
   static const _paddingBetweenSameGroup = 2.0;
 
   MessageBubble._({
+    @required this.chat,
     @required this.message,
     this.previousMessage,
     this.nextMessage,
@@ -74,6 +80,7 @@ class MessageBubble extends StatelessWidget {
   });
 
   factory MessageBubble({
+    @required Chat chat,
     @required ChatMessage message,
     ChatMessage previousMessage,
     ChatMessage nextMessage,
@@ -85,6 +92,7 @@ class MessageBubble extends StatelessWidget {
     final isEndOfGroup = _isEndofGroup(message, nextMessage, reply);
 
     return MessageBubble._(
+      chat: chat,
       message: message,
       previousMessage: previousMessage,
       nextMessage: nextMessage,
@@ -99,6 +107,7 @@ class MessageBubble extends StatelessWidget {
 
   /// Create a [MessageBubble] with the correct [child] for the given [message].
   factory MessageBubble.withContent({
+    @required Chat chat,
     @required ChatMessage message,
     ChatMessage previousMessage,
     ChatMessage nextMessage,
@@ -117,6 +126,7 @@ class MessageBubble extends StatelessWidget {
     }
 
     return MessageBubble(
+      chat: chat,
       message: message,
       previousMessage: previousMessage,
       nextMessage: nextMessage,
@@ -125,11 +135,11 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  factory MessageBubble.loading({@required Room room, bool isMine = false}) {
+  factory MessageBubble.loading({@required Chat chat, bool isMine = false}) {
     return MessageBubble(
+      chat: chat,
       color: Colors.grey[300],
       message: ChatMessage(
-        room,
         TextMessageEvent(
           RoomEventArgs(
             id: EventId('1234'),
@@ -424,7 +434,7 @@ class Sender extends StatelessWidget {
     final bubble = MessageBubble.of(context);
 
     return !bubble.message.isMine &&
-        !bubble.message.room.isDirect &&
+        !bubble.chat.isDirect &&
         (bubble.isStartOfGroup || bubble.reply != null);
   }
 

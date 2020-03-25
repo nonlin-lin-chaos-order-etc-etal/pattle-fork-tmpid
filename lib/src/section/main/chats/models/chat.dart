@@ -38,6 +38,10 @@ class Chat {
 
   final ChatMember directMember;
 
+  bool get isDirect => room.isDirect;
+  bool get isChannel =>
+      room.joinRule == JoinRule.public || room.joinRule == JoinRule.knock;
+
   Chat({
     @required this.room,
     this.latestMessage,

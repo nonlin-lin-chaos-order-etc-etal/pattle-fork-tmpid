@@ -17,7 +17,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:mdi/mdi.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../../../../resources/theme.dart';
@@ -55,16 +54,16 @@ class ChatAvatar extends StatelessWidget {
             ? chat.directMember.color(context)
             : LightColors.red[500],
         radius: 24,
-        child: _icon(),
+        child: _icon,
       );
     }
   }
 
-  Icon _icon() {
-    if (chat.room.isDirect) {
+  Icon get _icon {
+    if (chat.isDirect) {
       return Icon(Icons.person);
-    } else if (chat.room.aliases != null && chat.room.aliases.isNotEmpty) {
-      return Icon(Mdi.bullhorn);
+    } else if (chat.isChannel) {
+      return Icon(Icons.public);
     } else {
       return Icon(Icons.group);
     }

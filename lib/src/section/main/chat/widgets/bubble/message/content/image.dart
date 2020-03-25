@@ -32,10 +32,11 @@ class ImageContent extends StatelessWidget {
   static const double _maxHeight = 292;
 
   void _onTap(BuildContext context) {
+    final bubble = MessageBubble.of(context);
     Navigator.pushNamed(
       context,
       Routes.image,
-      arguments: MessageBubble.of(context).message,
+      arguments: [bubble.chat, bubble.message],
     );
   }
 

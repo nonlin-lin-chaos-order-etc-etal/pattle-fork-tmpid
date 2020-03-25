@@ -85,9 +85,9 @@ final Map<String, MaterialPageRoute Function(Object)> routes = {
         settings: RouteSettings(name: Routes.chatsNewDetails),
         builder: (context) => CreateGroupDetailsPage.withGivenBloc(arguments),
       ),
-  Routes.image: (arguments) => MaterialPageRoute(
+  Routes.image: (dynamic arguments) => MaterialPageRoute(
       settings: RouteSettings(name: Routes.image),
-      builder: (context) => ImagePage.withBloc(arguments)),
+      builder: (context) => ImagePage.withBloc(arguments[0], arguments[1])),
   Routes.login: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.login),
         builder: (context) => StartPage(),

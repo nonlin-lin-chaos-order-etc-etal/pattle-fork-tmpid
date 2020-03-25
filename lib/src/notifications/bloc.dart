@@ -193,8 +193,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
             style: AndroidNotificationStyle.Messaging,
             styleInformation: MessagingStyleInformation(
               senderPerson,
-              conversationTitle: !room.isDirect ? await chat.name : null,
-              groupConversation: room.isDirect,
+              conversationTitle: !chat.isDirect ? await chat.name : null,
+              groupConversation: chat.isDirect,
               messages: [message],
             ),
           ),

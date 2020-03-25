@@ -136,7 +136,7 @@ class _ChatPageState extends State<ChatPage> {
             child: Column(
               children: <Widget>[
                 Expanded(
-                  child: _MessageList(room: _room),
+                  child: _MessageList(chat: widget.chat),
                 ),
                 ConstrainedBox(
                   constraints: BoxConstraints.loose(
@@ -156,9 +156,9 @@ class _ChatPageState extends State<ChatPage> {
 }
 
 class _MessageList extends StatefulWidget {
-  final Room room;
+  final Chat chat;
 
-  const _MessageList({Key key, @required this.room}) : super(key: key);
+  const _MessageList({Key key, @required this.chat}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _MessageListState();
@@ -228,6 +228,7 @@ class _MessageListState extends State<_MessageList> {
                 bubble = StateBubble.withContent(message: message);
               } else {
                 bubble = MessageBubble.withContent(
+                  chat: widget.chat,
                   message: message,
                   previousMessage: previousMessage,
                   nextMessage: nextMessage,
@@ -254,7 +255,7 @@ class _MessageListState extends State<_MessageList> {
           reverse: true,
           children: List.generate(10, (i) {
             return MessageBubble.loading(
-              room: widget.room,
+              chat: widget.chat,
               isMine: i % 2 == 0,
             );
           }),

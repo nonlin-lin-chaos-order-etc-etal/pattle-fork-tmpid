@@ -88,7 +88,6 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
             : null,
         latestMessageForSorting: latestEventForSorting != null
             ? ChatMessage(
-                room,
                 latestEventForSorting,
                 sender: await ChatMember.fromUser(
                   room,
@@ -144,21 +143,8 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   Future<ChatsState> _loadChats() async {
     final chats = await _getChats();
 
-    final personalChats = chats
-        .where(
-          (chat) =>
-              chat.room.joinRule == JoinRule.invite ||
-              chat.room.joinRule == JoinRule.private,
-        )
-        .toList();
-
-    final publicChats = chats
-        .where(
-          (chat) =>
-              chat.room.joinRule == JoinRule.public ||
-              chat.room.joinRule == JoinRule.knock,
-        )
-        .toList();
+    final personalChats = chats.where((chat) => !chat.isChannel).toList();
+    final publicChats = chats.where((chat) => chat.isChannel).toList();
 
     return ChatsLoaded(personal: personalChats, public: publicChats);
   }

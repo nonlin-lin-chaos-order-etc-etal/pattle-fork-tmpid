@@ -117,10 +117,10 @@ class Sender extends StatelessWidget {
   const Sender({Key key}) : super(key: key);
 
   static bool necessary(BuildContext context) {
-    final message = Subtitle.of(context).chat.latestMessage;
+    final chat = Subtitle.of(context).chat;
+    final message = chat.latestMessage;
 
-    return message.event.sender != Matrix.of(context).user &&
-        !message.room.isDirect;
+    return message.event.sender != Matrix.of(context).user && !chat.isDirect;
   }
 
   @override
