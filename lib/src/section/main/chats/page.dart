@@ -22,8 +22,11 @@ import '../../../app.dart';
 import '../../../resources/intl/localizations.dart';
 
 import '../../../matrix.dart';
-import 'bloc.dart';
+
 import 'widgets/chat_list.dart';
+import '../widgets/pattle_logo.dart';
+
+import 'bloc.dart';
 
 class ChatsPage extends StatefulWidget {
   ChatsPage._();
@@ -126,7 +129,9 @@ class _Drawer extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
             ),
-            child: Container(),
+            child: Center(
+              child: PattleLogo(width: 128),
+            ),
           ),
           ListTile(
             leading: Icon(

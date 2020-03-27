@@ -64,6 +64,8 @@ dependencies:
 
   shimmer: ^1.1.0
 
+  flutter_svg: ^0.17.3+1
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
@@ -96,10 +98,10 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path_android: "assets/icons/launcher.png"
-  image_path_ios: "assets/icons/launcher-full.png"
+  image_path_android: "assets/logo/launcher.png"
+  image_path_ios: "assets/logo/launcher_full.png"
   adaptive_icon_background: "#aa4139"
-  adaptive_icon_foreground: "assets/icons/launcher-foreground.png"
+  adaptive_icon_foreground: "assets/logo/launcher_foreground.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -114,3 +116,4 @@ flutter:
 
   assets:
   - .env
+  - assets/logo/logo.svg
