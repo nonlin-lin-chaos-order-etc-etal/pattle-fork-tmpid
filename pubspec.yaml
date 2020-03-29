@@ -56,8 +56,6 @@ dependencies:
 
   mime: ^0.9.6+3
 
-  dynamic_theme: ^1.0.1
-
   shared_preferences: ^0.5.3+4
 
   mdi: ^0.2.1

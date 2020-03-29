@@ -25,7 +25,8 @@ import '../resources/theme.dart';
 import '../section/main/models/chat_member.dart';
 
 extension ChatMemberExtension on ChatMember {
-  Color color(BuildContext context) => userColor(context, displayColor.index);
+  Color color(BuildContext context) =>
+      context.pattleTheme.userColors[displayColor];
 
   String nameOrYou(BuildContext context) =>
       isYou ? context.intl.common.you : name;

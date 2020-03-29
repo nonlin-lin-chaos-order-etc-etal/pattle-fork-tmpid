@@ -20,7 +20,8 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-import '../../../../../../../util/color.dart';
+import '../../../../../../../resources/theme.dart';
+
 import '../../../../../../../util/chat_member.dart';
 
 import '../../message.dart';
@@ -110,13 +111,7 @@ class _Content extends StatelessWidget {
       fillWidth: false,
       linkStyle: TextStyle(
         decoration: TextDecoration.underline,
-        color: !bubble.message.isMine
-            ? themed(
-                context,
-                light: Theme.of(context).primaryColor,
-                dark: Colors.white,
-              )
-            : null,
+        color: !bubble.message.isMine ? context.pattleTheme.linkColor : null,
       ),
       renderNewlines: true,
       onLinkTap: (url) async {

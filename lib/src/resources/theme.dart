@@ -16,84 +16,65 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../util/color.dart';
+import '../section/main/models/chat_member.dart';
 
 const creteRound = 'CreteRound';
 
-final _theme = ThemeData(
-  primarySwatch: LightColors.red,
-  primaryColorDark: LightColors.red[700],
-  accentColor: LightColors.red,
-  primaryColorBrightness: Brightness.dark,
-  accentColorBrightness: Brightness.dark,
-  cursorColor: LightColors.red,
-  buttonTheme: ButtonThemeData(
-    buttonColor: LightColors.red[500],
-    textTheme: ButtonTextTheme.primary,
+final PattleTheme pattleLightTheme = PattleTheme(
+  primaryColorOnBackground: PattleTheme._primarySwatch[500],
+  linkColor: PattleTheme._primarySwatch,
+  chat: ChatTheme(
+    backgroundColor: PattleTheme._primarySwatch[50],
+    inputColor: Colors.white,
+    myMessageColor: PattleTheme._primarySwatch[450],
+    theirMessageColor: Colors.white,
+    stateMessageColor: PattleTheme._primarySwatch[100],
+    myRedactedContentColor: Colors.grey[300],
+    theirRedactedContentColor: Colors.grey[700],
   ),
-  appBarTheme: AppBarTheme(
-    color: LightColors.red,
+  userColors: {
+    DisplayColor.green: Color(0xFF79740E),
+    DisplayColor.yellow: Color(0xFFB57614),
+    DisplayColor.blue: Color(0xFF076678),
+    DisplayColor.purple: Color(0xFF8F3F71),
+    DisplayColor.green: Color(0xFF427B58),
+    DisplayColor.red: Color(0xFFAF3A03),
+  },
+  themeData: (base) => base.copyWith(brightness: Brightness.light),
+);
+
+final PattleTheme pattleDarkTheme = PattleTheme(
+  primaryColorOnBackground: PattleTheme._primarySwatch[100],
+  linkColor: Colors.white,
+  chat: ChatTheme(
+    backgroundColor: Colors.grey[900],
+    inputColor: Colors.grey[800],
+    myMessageColor: PattleTheme._primarySwatch[700],
+    theirMessageColor: Colors.grey[800],
+    stateMessageColor: PattleTheme._primarySwatch[900],
+    myRedactedContentColor: Colors.white30,
+    theirRedactedContentColor: Colors.white70,
+  ),
+  userColors: {
+    DisplayColor.green: Color(0xFFE7DF35),
+    DisplayColor.yellow: Color(0xFFECB258),
+    DisplayColor.blue: Color(0xFF25D1F2),
+    DisplayColor.purple: Color(0xFFC780AC),
+    DisplayColor.green: Color(0xFF81BB98),
+    DisplayColor.red: Color(0xFFFB783C),
+  },
+  themeData: (base) => base.copyWith(
+    brightness: Brightness.dark,
+    toggleableActiveColor: PattleTheme._primarySwatch[400],
+    textSelectionHandleColor: PattleTheme._primarySwatch[400],
   ),
 );
 
-final ThemeData lightTheme = _theme.copyWith(
-  brightness: Brightness.light,
-);
-
-final ThemeData darkTheme = _theme.copyWith(
-  //brightness: Brightness.dark,
-  toggleableActiveColor: LightColors.red[400],
-  textSelectionHandleColor: LightColors.red[400],
-);
-
-extension Themes on ThemeData {
-  Widget withTransparentAppBar({@required Widget child}) => Builder(
-        builder: (context) {
-          return Theme(
-            data: copyWith(
-              appBarTheme: AppBarTheme(
-                color: Colors.transparent,
-                iconTheme: IconThemeData(
-                  color: Theme.of(context).primaryColor,
-                ),
-                elevation: 0,
-              ),
-            ),
-            child: child,
-          );
-        },
-      );
-}
-
-Color chatBackgroundColor(BuildContext context) {
-  return themed(
-    context,
-    light: LightColors.red[50],
-    dark: Colors.grey[900],
-  );
-}
-
-Color redOnBackground(BuildContext context) {
-  return themed(
-    context,
-    light: LightColors.red[500],
-    dark: LightColors.red[100],
-  );
-}
-
-Color userColor(BuildContext context, int index) => themed(
-      context,
-      light: LightColors.userColors[index],
-      dark: DarkColors.userColors[index],
-    );
-
-class LightColors {
-  LightColors._();
-
+class PattleTheme {
   static const _redPrimary = 0xFFAA4139;
-
-  static const MaterialColor red = MaterialColor(
+  static const _primarySwatch = MaterialColor(
     _redPrimary,
     <int, Color>{
       50: Color(0xFFf5E8E7),
@@ -111,25 +92,83 @@ class LightColors {
     },
   );
 
-  static const userColors = [
-    Color(0xFF79740E),
-    Color(0xFFB57614),
-    Color(0xFF076678),
-    Color(0xFF8F3F71),
-    Color(0xFF427B58),
-    Color(0xFFAF3A03),
-  ];
+  final MaterialColor primarySwatch;
+
+  final ThemeData themeData;
+
+  static ThemeData _baseThemeData(MaterialColor primary) {
+    return ThemeData(
+      primarySwatch: primary,
+      primaryColorDark: primary[700],
+      accentColor: primary,
+      primaryColorBrightness: Brightness.dark,
+      accentColorBrightness: Brightness.dark,
+      cursorColor: primary,
+      buttonTheme: ButtonThemeData(
+        buttonColor: primary[500],
+        textTheme: ButtonTextTheme.primary,
+      ),
+      appBarTheme: AppBarTheme(
+        color: primary,
+      ),
+    );
+  }
+
+  PattleTheme({
+    this.primarySwatch = _primarySwatch,
+    @required this.primaryColorOnBackground,
+    @required this.linkColor,
+    @required this.chat,
+    @required this.userColors,
+    ThemeData Function(ThemeData base) themeData,
+  }) : themeData = themeData == null
+            ? _baseThemeData(primarySwatch)
+            : themeData(_baseThemeData(primarySwatch));
+
+  Color get primaryColor => themeData.primaryColor;
+
+  Color get primaryColorLight => themeData.primaryColorLight;
+
+  Color get primaryColorDark => themeData.primaryColorDark;
+
+  final Color primaryColorOnBackground;
+
+  final Color linkColor;
+
+  final ChatTheme chat;
+
+  final Map<DisplayColor, Color> userColors;
+
+  static PattleTheme of(BuildContext context, {bool listen = true}) =>
+      Provider.of<PattleTheme>(
+        context,
+        listen: listen,
+      );
 }
 
-class DarkColors {
-  DarkColors._();
+class ChatTheme {
+  final Color backgroundColor;
+  final Color inputColor;
 
-  static const userColors = [
-    Color(0xFFE7DF35),
-    Color(0xFFECB258),
-    Color(0xFF25D1F2),
-    Color(0xFFC780AC),
-    Color(0xFF81BB98),
-    Color(0xFFFB783C),
-  ];
+  final Color myMessageColor;
+  final Color theirMessageColor;
+
+  final Color stateMessageColor;
+
+  final Color myRedactedContentColor;
+  final Color theirRedactedContentColor;
+
+  ChatTheme({
+    @required this.backgroundColor,
+    @required this.inputColor,
+    @required this.myMessageColor,
+    @required this.theirMessageColor,
+    @required this.stateMessageColor,
+    @required this.myRedactedContentColor,
+    @required this.theirRedactedContentColor,
+  });
+}
+
+extension PattleThemeContext on BuildContext {
+  PattleTheme get pattleTheme => PattleTheme.of(this);
 }

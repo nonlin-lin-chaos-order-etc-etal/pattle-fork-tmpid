@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -128,51 +127,51 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DynamicTheme(
-      defaultBrightness: Brightness.light,
-      data: (brightness) =>
-          brightness == Brightness.dark ? darkTheme : lightTheme,
-      themedWidgetBuilder: (context, theme) {
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider<AuthBloc>.value(
-              value: _authBloc,
-            ),
-            BlocProvider<SentryBloc>.value(
-              value: _sentryBloc,
-            ),
-          ],
-          child: Provider<Matrix>(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>.value(
+          value: _authBloc,
+        ),
+        BlocProvider<SentryBloc>.value(
+          value: _sentryBloc,
+        ),
+      ],
+      child: MultiProvider(
+        providers: [
+          Provider<Matrix>(
             create: (_) => Matrix(_authBloc),
-            child: Builder(
-              builder: (c) {
-                return BlocProvider<NotificationsBloc>(
-                  create: (context) => NotificationsBloc(
-                    matrix: Matrix.of(c),
-                    authBloc: _authBloc,
-                  ),
-                  child: MaterialApp(
-                    onGenerateTitle: (context) => context.intl.appName,
-                    localizationsDelegates: [
-                      const PattleLocalizationsDelegate(),
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
-                    ],
-                    supportedLocales: [
-                      const Locale('en', 'US'),
-                    ],
-                    initialRoute: Routes.root,
-                    onGenerateRoute: (settings) {
-                      return routes[settings.name](settings.arguments);
-                    },
-                    theme: theme,
-                  ),
-                );
-              },
-            ),
           ),
-        );
-      },
+          Provider<PattleTheme>.value(
+            value: pattleLightTheme,
+          ),
+        ],
+        child: Builder(
+          builder: (c) {
+            return BlocProvider<NotificationsBloc>(
+              create: (context) => NotificationsBloc(
+                matrix: Matrix.of(c),
+                authBloc: _authBloc,
+              ),
+              child: MaterialApp(
+                onGenerateTitle: (context) => context.intl.appName,
+                localizationsDelegates: [
+                  const PattleLocalizationsDelegate(),
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                ],
+                supportedLocales: [
+                  const Locale('en', 'US'),
+                ],
+                initialRoute: Routes.root,
+                onGenerateRoute: (settings) {
+                  return routes[settings.name](settings.arguments);
+                },
+                theme: Provider.of<PattleTheme>(c).themeData,
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

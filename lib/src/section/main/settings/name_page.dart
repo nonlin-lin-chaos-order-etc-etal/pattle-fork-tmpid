@@ -63,12 +63,12 @@ class _NamePageState extends State<NamePage> {
           title: Text(
             context.intl.common.name,
             style: TextStyle(
-              color: redOnBackground(context),
+              color: context.pattleTheme.primaryColorOnBackground,
             ),
           ),
           brightness: Theme.of(context).brightness,
           iconTheme: IconThemeData(
-            color: redOnBackground(context),
+            color: context.pattleTheme.primaryColorOnBackground,
           ),
           actions: <Widget>[
             IconButton(
@@ -95,7 +95,7 @@ class _NamePageState extends State<NamePage> {
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.zero,
                 ),
-                fillColor: LightColors.red,
+                fillColor: context.pattleTheme.primaryColor,
                 focusColor: Colors.white,
               ),
               onSubmitted: (_) => setName(),
@@ -104,8 +104,10 @@ class _NamePageState extends State<NamePage> {
               builder: (context, state) {
                 if (state is UpdatingDisplayName) {
                   return LinearProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation(LightColors.red[300]),
-                    backgroundColor: LightColors.red[100],
+                    valueColor: AlwaysStoppedAnimation(
+                      context.pattleTheme.primarySwatch[300],
+                    ),
+                    backgroundColor: context.pattleTheme.primarySwatch[100],
                   );
                 } else {
                   return Container(height: 6);

@@ -33,7 +33,6 @@ import '../widgets/error.dart';
 import '../widgets/title_with_sub.dart';
 
 import '../../../matrix.dart';
-import '../../../util/color.dart';
 import '../../../util/url.dart';
 
 import 'bloc.dart';
@@ -110,7 +109,7 @@ class _ChatPageState extends State<ChatPage> {
             : ChatName(chat: widget.chat);
 
     return Scaffold(
-      backgroundColor: chatBackgroundColor(context),
+      backgroundColor: context.pattleTheme.chat.backgroundColor,
       appBar: AppBar(
         titleSpacing: 0,
         title: GestureDetector(
@@ -286,7 +285,7 @@ class _InputState extends State<_Input> {
     if (widget.room is JoinedRoom) {
       return Material(
         elevation: elevation,
-        color: chatBackgroundColor(context),
+        color: context.pattleTheme.chat.backgroundColor,
         // On dark theme, draw a divider line because the shadow is gone
         shape: Theme.of(context).brightness == Brightness.dark
             ? Border(top: BorderSide(color: Colors.grey[800]))
@@ -299,7 +298,7 @@ class _InputState extends State<_Input> {
               topLeft: Radius.circular(8),
               topRight: Radius.circular(8),
             ),
-            color: themed(context, light: Colors.white, dark: Colors.grey[800]),
+            color: context.pattleTheme.chat.backgroundColor,
             child: TextField(
               controller: _textController,
               keyboardType: TextInputType.multiline,

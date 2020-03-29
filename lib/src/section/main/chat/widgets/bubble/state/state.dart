@@ -28,7 +28,6 @@ import 'content/member_change.dart';
 import 'content/topic_change.dart';
 import 'content/upgrade.dart';
 
-import '../../../../../../util/color.dart';
 import '../../../../../../util/date_format.dart';
 
 class StateBubble extends StatelessWidget {
@@ -80,11 +79,7 @@ class StateBubble extends StatelessWidget {
             child: Center(
               child: Material(
                 elevation: 1,
-                color: themed(
-                  context,
-                  light: LightColors.red[100],
-                  dark: LightColors.red[900],
-                ),
+                color: context.pattleTheme.chat.stateMessageColor,
                 shape: shape,
                 child: InkWell(
                   customBorder: shape,

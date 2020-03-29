@@ -32,7 +32,6 @@ import '../../models/chat_member.dart';
 
 import '../../../../matrix.dart';
 import '../../../../util/url.dart';
-import '../../../../util/color.dart';
 
 import 'bloc.dart';
 
@@ -64,11 +63,7 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: themed(
-        context,
-        light: LightColors.red[50],
-        dark: Theme.of(context).backgroundColor,
-      ),
+      backgroundColor: context.pattleTheme.chat.backgroundColor,
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           final url = widget.chat.avatarUrl?.toDownloadString(context);
@@ -137,7 +132,7 @@ class _Description extends StatelessWidget {
                   Text(
                     context.intl.chat.details.description,
                     style: TextStyle(
-                      color: redOnBackground(context),
+                      color: context.pattleTheme.primaryColorOnBackground,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -195,7 +190,7 @@ class _MemberListState extends State<_MemberList> {
                       widget.room.members.count,
                     ),
                     style: TextStyle(
-                      color: redOnBackground(context),
+                      color: context.pattleTheme.primaryColorOnBackground,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),

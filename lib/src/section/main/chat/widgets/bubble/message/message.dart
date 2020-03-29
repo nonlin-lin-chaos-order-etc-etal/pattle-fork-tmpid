@@ -33,7 +33,6 @@ import 'content/redacted.dart';
 import 'content/text.dart';
 import 'content/loading.dart';
 
-import '../../../../../../util/color.dart';
 import '../../../../../../util/date_format.dart';
 import '../../../../../../util/chat_member.dart';
 
@@ -275,16 +274,8 @@ class MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = this.color ??
         (message.isMine
-            ? themed(
-                context,
-                light: LightColors.red[450],
-                dark: LightColors.red[700],
-              )
-            : themed(
-                context,
-                light: Colors.white,
-                dark: Colors.grey[800],
-              ));
+            ? context.pattleTheme.chat.myMessageColor
+            : context.pattleTheme.chat.theirMessageColor);
 
     final border = RoundedRectangleBorder(borderRadius: borderRadius);
 

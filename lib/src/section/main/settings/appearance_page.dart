@@ -14,7 +14,6 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
-import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -45,6 +44,7 @@ class _AppearancePageState extends State<AppearancePage> {
   Widget build(BuildContext context) {
     _brightness = Theme.of(context).brightness;
 
+    // TODO: Switch theme
     return Scaffold(
       appBar: AppBar(
         title: Text(context.intl.settings.appearanceTileTitle),
@@ -56,7 +56,7 @@ class _AppearancePageState extends State<AppearancePage> {
               _brightness == Brightness.light
                   ? Icons.brightness_high
                   : Icons.brightness_3,
-              color: redOnBackground(context),
+              color: context.pattleTheme.primaryColorOnBackground,
             ),
             title: Header(context.intl.settings.brightnessTileTitle),
           ),
@@ -64,7 +64,7 @@ class _AppearancePageState extends State<AppearancePage> {
             groupValue: _brightness,
             value: Brightness.light,
             onChanged: (brightness) {
-              DynamicTheme.of(context).setBrightness(brightness);
+              //DynamicTheme.of(context).setBrightness(brightness);
             },
             title: Text(context.intl.settings.brightnessTileOptionLight),
           ),
@@ -72,7 +72,7 @@ class _AppearancePageState extends State<AppearancePage> {
             groupValue: _brightness,
             value: Brightness.dark,
             onChanged: (brightness) {
-              DynamicTheme.of(context).setBrightness(brightness);
+              //DynamicTheme.of(context).setBrightness(brightness);
             },
             title: Text(context.intl.settings.brightnessTileOptionLight),
           ),

@@ -53,7 +53,7 @@ class TypingContent extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       text: TextSpan(
         style: TextStyle(
-          color: redOnBackground(context),
+          color: context.pattleTheme.primaryColorOnBackground,
           fontWeight: FontWeight.bold,
         ),
         children: _span(context, chat.room),

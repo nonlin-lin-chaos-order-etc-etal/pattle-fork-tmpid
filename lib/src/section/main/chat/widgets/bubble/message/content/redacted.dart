@@ -19,7 +19,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../../models/chat_message.dart';
 import '../../../../../widgets/redacted.dart';
-import '../../../../../../../util/color.dart';
+
+import '../../../../../../../resources/theme.dart';
 
 import '../../message.dart';
 
@@ -46,13 +47,9 @@ class RedactedContent extends StatelessWidget {
             if (Sender.necessary(context)) Sender(),
             DefaultTextStyle(
               style: TextStyle(
-                color: themed(
-                  context,
-                  light: bubble.message.isMine
-                      ? Colors.grey[300]
-                      : Colors.grey[700],
-                  dark: bubble.message.isMine ? Colors.white30 : Colors.white70,
-                ),
+                color: bubble.message.isMine
+                    ? context.pattleTheme.chat.myRedactedContentColor
+                    : context.pattleTheme.chat.theirRedactedContentColor,
               ),
               child: Redacted(redaction: bubble.message.redaction),
             ),

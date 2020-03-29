@@ -100,12 +100,18 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           Divider(height: 1),
           ListTile(
-            leading: Icon(Icons.vpn_key, color: LightColors.red),
+            leading: Icon(
+              Icons.vpn_key,
+              color: context.pattleTheme.primaryColor,
+            ),
             title: Text(context.intl.settings.accountTileTitle),
             subtitle: Text(context.intl.settings.accountTileSubtitle),
           ),
           ListTile(
-            leading: Icon(Icons.landscape, color: LightColors.red),
+            leading: Icon(
+              Icons.landscape,
+              color: context.pattleTheme.primaryColor,
+            ),
             title: Text(context.intl.settings.appearanceTileTitle),
             subtitle: Text(context.intl.settings.appearanceTileSubtitle),
             onTap: () => Navigator.of(context).pushNamed(

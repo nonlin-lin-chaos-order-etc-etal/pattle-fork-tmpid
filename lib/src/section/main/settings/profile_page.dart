@@ -82,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ListTile(
                         leading: Icon(
                           Icons.person,
-                          color: redOnBackground(context),
+                          color: context.pattleTheme.primaryColorOnBackground,
                         ),
                         title: Text(context.intl.common.name),
                         subtitle: Text(me.name),
@@ -96,7 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ListTile(
                         leading: Icon(
                           Icons.alternate_email,
-                          color: redOnBackground(context),
+                          color: context.pattleTheme.primaryColorOnBackground,
                         ),
                         title: Text(context.intl.common.username),
                         subtitle: Text(me.user.id.toString()),
