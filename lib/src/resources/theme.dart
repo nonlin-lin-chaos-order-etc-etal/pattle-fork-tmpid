@@ -108,9 +108,6 @@ class PattleTheme {
         buttonColor: primary[500],
         textTheme: ButtonTextTheme.primary,
       ),
-      appBarTheme: AppBarTheme(
-        color: primary,
-      ),
     );
   }
 
