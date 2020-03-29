@@ -313,6 +313,7 @@ class _InputState extends State<_Input> {
                   ),
                 ),
                 filled: true,
+                fillColor: context.pattleTheme.chat.inputColor,
                 hintText: context.intl.chat.typeAMessage,
                 prefixIcon: IconButton(
                   icon: Icon(Icons.attach_file),
