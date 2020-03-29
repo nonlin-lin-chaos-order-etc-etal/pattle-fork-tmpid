@@ -35,7 +35,7 @@ final PattleTheme pattleLightTheme = PattleTheme(
     theirRedactedContentColor: Colors.grey[700],
   ),
   userColors: {
-    DisplayColor.green: Color(0xFF79740E),
+    DisplayColor.greenYellow: Color(0xFF79740E),
     DisplayColor.yellow: Color(0xFFB57614),
     DisplayColor.blue: Color(0xFF076678),
     DisplayColor.purple: Color(0xFF8F3F71),
@@ -58,7 +58,7 @@ final PattleTheme pattleDarkTheme = PattleTheme(
     theirRedactedContentColor: Colors.white70,
   ),
   userColors: {
-    DisplayColor.green: Color(0xFFE7DF35),
+    DisplayColor.greenYellow: Color(0xFFE7DF35),
     DisplayColor.yellow: Color(0xFFECB258),
     DisplayColor.blue: Color(0xFF25D1F2),
     DisplayColor.purple: Color(0xFFC780AC),
