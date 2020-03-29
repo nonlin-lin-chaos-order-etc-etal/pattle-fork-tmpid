@@ -40,8 +40,7 @@ import 'section/main/settings/appearance_page.dart';
 import 'section/main/settings/name_page.dart';
 import 'section/main/settings/profile_page.dart';
 import 'section/main/settings/page.dart';
-import 'section/start/advanced_page.dart';
-import 'section/start/start_page.dart';
+import 'section/start/page.dart';
 import 'section/start/login/username/page.dart';
 
 import 'redirect.dart';
@@ -90,11 +89,7 @@ final Map<String, MaterialPageRoute Function(Object)> routes = {
       builder: (context) => ImagePage.withBloc(arguments[0], arguments[1])),
   Routes.login: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.login),
-        builder: (context) => StartPage(),
-      ),
-  Routes.loginAdvanced: (params) => MaterialPageRoute(
-        settings: RouteSettings(name: Routes.loginAdvanced),
-        builder: (context) => AdvancedPage(bloc: params),
+        builder: (context) => StartPage.withBloc(),
       ),
   Routes.loginUsername: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.loginUsername),

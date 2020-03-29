@@ -117,3 +117,10 @@ flutter:
   assets:
   - .env
   - assets/logo/logo.svg
+
+  fonts:
+    - family: CreteRound
+      fonts:
+        - asset: assets/fonts/crete_round_regular.ttf
+        - asset: assets/fonts/crete_round_italic.ttf
+          style: italic

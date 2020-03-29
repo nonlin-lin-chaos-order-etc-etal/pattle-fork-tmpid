@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
 
 abstract class LoginEvent extends Equatable {
@@ -18,20 +17,26 @@ class Login extends LoginEvent {
   List<Object> get props => [password];
 }
 
-class UsernameUpdated extends LoginEvent {
-  final Username username;
+class ChangeUsername extends LoginEvent {
+  final String username;
 
-  UsernameUpdated(this.username);
+  ChangeUsername(this.username);
 
   @override
   List<Object> get props => [username];
 }
 
-class HomeserverUpdated extends LoginEvent {
-  final Homeserver homeserver;
+class ChangeHomeserver extends LoginEvent {
+  final String url;
 
-  HomeserverUpdated(this.homeserver);
+  /// Whether the homeserver was changed explicitly. We
+  /// don't override it then.
+  final bool setExplicitly;
+
+  ChangeHomeserver(this.url, {this.setExplicitly = false});
 
   @override
-  List<Object> get props => [homeserver];
+  List<Object> get props => [url, setExplicitly];
 }
+
+class PasswordChanged extends LoginEvent {}

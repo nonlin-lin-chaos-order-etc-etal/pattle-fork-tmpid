@@ -15,6 +15,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:matrix_sdk_sqflite/matrix_sdk_sqflite.dart';
@@ -31,6 +33,10 @@ class Matrix {
   LocalUser _user;
   LocalUser get user => _user;
 
+  StreamSubscription _firstSyncSubscription;
+  final Completer<void> _firstSyncCompleter = Completer();
+  Future<void> get firstSync => _firstSyncCompleter.future;
+
   Matrix(this._authBloc) {
     _authBloc.listen(_processAuthState);
   }
@@ -39,6 +45,11 @@ class Matrix {
     if (state is Authenticated) {
       _user = state.user;
       _user.startSync();
+
+      _firstSyncSubscription = _user.sync.listen((state) {
+        _firstSyncCompleter.complete();
+        _firstSyncSubscription.cancel();
+      });
     }
 
     if (state is NotAuthenticated) {
