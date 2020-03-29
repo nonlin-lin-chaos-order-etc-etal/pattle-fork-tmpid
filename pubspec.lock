@@ -191,12 +191,10 @@ packages:
   flutter_html:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "5a9523745e89755eccb32fb8123d5723593db02a"
-      url: "https://git.pattle.im/forks/flutter_html.git"
-    source: git
-    version: "0.9.6"
+      name: flutter_html
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.11.1"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -241,7 +239,7 @@ packages:
       name: html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.4+2"
+    version: "0.14.0+3"
   http:
     dependency: transitive
     description:
@@ -624,13 +622,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.4.1"
-  utf:
-    dependency: transitive
-    description:
-      name: utf
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.0+5"
   uuid:
     dependency: transitive
     description:

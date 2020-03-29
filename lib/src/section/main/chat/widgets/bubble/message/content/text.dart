@@ -108,7 +108,7 @@ class _Content extends StatelessWidget {
     final html = Html(
       data: event.content.formattedBody ?? '',
       useRichText: true,
-      fillWidth: false,
+      shrinkToFit: true,
       linkStyle: TextStyle(
         decoration: TextDecoration.underline,
         color: !bubble.message.isMine ? context.pattleTheme.linkColor : null,
