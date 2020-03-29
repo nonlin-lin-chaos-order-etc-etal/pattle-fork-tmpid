@@ -98,9 +98,9 @@ class SentryBloc extends Bloc<SentryEvent, SentryState> {
     }
   }
 
-  void wrap(Function run) => runZoned<Future<void>>(
+  void wrap(Function run) => runZonedGuarded<Future<void>>(
         () async => run(),
-        onError: _reportError,
+        _reportError,
       );
 
   static bool get _isInDebugMode {
