@@ -191,9 +191,11 @@ packages:
   flutter_html:
     dependency: "direct main"
     description:
-      name: flutter_html
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "71406a09f9e591f9d35635e6a086007ccc678ae3"
+      resolved-ref: "71406a09f9e591f9d35635e6a086007ccc678ae3"
+      url: "https://github.com/pattle-org/flutter_html.git"
+    source: git
     version: "0.11.1"
   flutter_launcher_icons:
     dependency: "direct dev"

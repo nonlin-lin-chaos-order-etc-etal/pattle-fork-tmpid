@@ -18,6 +18,8 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
+import '../chat/widgets/bubble/message.dart';
+
 import '../models/chat_message.dart';
 
 class MessageState extends StatelessWidget {
@@ -33,6 +35,12 @@ class MessageState extends StatelessWidget {
   }) : super(key: key);
 
   static bool necessary(ChatMessage message) => message.isMine;
+
+  static bool necessaryInBubble(BuildContext context) {
+    final bubble = MessageBubble.of(context);
+
+    return bubble.message.isMine ? bubble.isEndOfGroup : false;
+  }
 
   @override
   Widget build(BuildContext context) {

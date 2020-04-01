@@ -26,6 +26,8 @@ class ChatMessage {
   final ChatMember sender;
 
   final ChatMessage inReplyTo;
+  bool get isReply => inReplyTo != null;
+
   bool get isMine => sender.isYou;
 
   /// Message that redacted this message, if any.

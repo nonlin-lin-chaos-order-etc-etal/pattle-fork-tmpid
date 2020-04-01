@@ -28,8 +28,22 @@ final PattleTheme pattleLightTheme = PattleTheme(
   chat: ChatTheme(
     backgroundColor: PattleTheme._primarySwatch[50],
     inputColor: Colors.white,
-    myMessageColor: PattleTheme._primarySwatch[450],
-    theirMessageColor: Colors.white,
+    myMessage: MessageTheme(
+      backgroundColor: PattleTheme._primarySwatch[450],
+      contentColor: Colors.white,
+      repliedTo: MessageTheme(
+        backgroundColor: PattleTheme._primarySwatch[300],
+        contentColor: Colors.grey[100],
+      ),
+    ),
+    theirMessage: MessageTheme(
+      backgroundColor: Colors.white,
+      contentColor: null,
+      repliedTo: MessageTheme(
+        backgroundColor: Colors.grey[250],
+        contentColor: Colors.grey[600],
+      ),
+    ),
     stateMessageColor: PattleTheme._primarySwatch[100],
     myRedactedContentColor: Colors.grey[300],
     theirRedactedContentColor: Colors.grey[700],
@@ -51,8 +65,22 @@ final PattleTheme pattleDarkTheme = PattleTheme(
   chat: ChatTheme(
     backgroundColor: Colors.grey[900],
     inputColor: Colors.grey[800],
-    myMessageColor: PattleTheme._primarySwatch[700],
-    theirMessageColor: Colors.grey[800],
+    myMessage: MessageTheme(
+      backgroundColor: PattleTheme._primarySwatch[700],
+      contentColor: Colors.white,
+      repliedTo: MessageTheme(
+        backgroundColor: PattleTheme._primarySwatch[300],
+        contentColor: Colors.grey[200],
+      ),
+    ),
+    theirMessage: MessageTheme(
+      backgroundColor: Colors.grey[800],
+      contentColor: null,
+      repliedTo: MessageTheme(
+        backgroundColor: null,
+        contentColor: null,
+      ),
+    ),
     stateMessageColor: PattleTheme._primarySwatch[900],
     myRedactedContentColor: Colors.white30,
     theirRedactedContentColor: Colors.white70,
@@ -147,8 +175,8 @@ class ChatTheme {
   final Color backgroundColor;
   final Color inputColor;
 
-  final Color myMessageColor;
-  final Color theirMessageColor;
+  final MessageTheme myMessage;
+  final MessageTheme theirMessage;
 
   final Color stateMessageColor;
 
@@ -158,11 +186,24 @@ class ChatTheme {
   ChatTheme({
     @required this.backgroundColor,
     @required this.inputColor,
-    @required this.myMessageColor,
-    @required this.theirMessageColor,
+    @required this.myMessage,
+    @required this.theirMessage,
     @required this.stateMessageColor,
     @required this.myRedactedContentColor,
     @required this.theirRedactedContentColor,
+  });
+}
+
+class MessageTheme {
+  final Color backgroundColor;
+  final Color contentColor;
+
+  final MessageTheme repliedTo;
+
+  MessageTheme({
+    @required this.backgroundColor,
+    @required this.contentColor,
+    this.repliedTo,
   });
 }
 

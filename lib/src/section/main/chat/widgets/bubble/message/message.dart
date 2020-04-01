@@ -15,7 +15,10 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
 import 'package:provider/provider.dart';
@@ -46,9 +49,11 @@ class MessageBubble extends StatelessWidget {
   final bool isStartOfGroup;
   final bool isEndOfGroup;
 
-  /// If this is not null, this bubble is rendered inside another
+  /// If this is not null, this bubble is rendered above another
   /// bubble, because it's replied to by [reply].
   final ChatMessage reply;
+
+  bool get isRepliedTo => reply != null;
 
   final BorderRadius borderRadius;
 
@@ -57,6 +62,8 @@ class MessageBubble extends StatelessWidget {
   final Widget child;
 
   final EdgeInsets contentPadding = EdgeInsets.all(8);
+
+  final double replySlideUnderDistance = 16;
 
   static const _groupTimeLimit = Duration(minutes: 3);
 
@@ -272,60 +279,188 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = this.color ??
-        (message.isMine
-            ? context.pattleTheme.chat.myMessageColor
-            : context.pattleTheme.chat.theirMessageColor);
+    var color = this.color;
+
+    if (color == null) {
+      if (message.isMine) {
+        if (!isRepliedTo) {
+          color = context.pattleTheme.chat.myMessage.backgroundColor;
+        } else {
+          color = context.pattleTheme.chat.myMessage.repliedTo.backgroundColor;
+        }
+      } else {
+        if (!isRepliedTo) {
+          color = context.pattleTheme.chat.theirMessage.backgroundColor;
+        } else {
+          color =
+              context.pattleTheme.chat.theirMessage.repliedTo.backgroundColor;
+        }
+      }
+    }
 
     final border = RoundedRectangleBorder(borderRadius: borderRadius);
 
-    return Column(
-      crossAxisAlignment:
-          message.isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment:
-              message.isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Padding(
-                padding: reply == null
-                    ? EdgeInsets.only(
-                        left: message.isMine ? _oppositePadding : 0,
-                        right: !message.isMine ? _oppositePadding : 0,
-                        top: previousMessage == null ? _paddingBetween : 0,
-                        bottom: isEndOfGroup
-                            ? _paddingBetween
-                            : _paddingBetweenSameGroup,
-                      )
-                    : EdgeInsets.zero,
-                child: Material(
-                  color: color,
-                  elevation: 1,
-                  shape: border,
-                  child: DefaultTextStyle(
-                    style: Theme.of(context).textTheme.bodyText2.apply(
-                          fontSizeFactor: 1.1,
-                          color: message.isMine ? Colors.white : null,
-                        ),
-                    child: Provider<MessageBubble>.value(
-                      value: this,
-                      child: child,
-                    ),
-                  ),
-                ),
-              ),
+    Widget widget = Material(
+      color: color,
+      elevation: 1,
+      shape: border,
+      child: DefaultTextStyle(
+        style: Theme.of(context).textTheme.bodyText2.apply(
+              fontSizeFactor: 1.1,
+              color: message.isMine ? Colors.white : null,
             ),
-          ],
+        child: Provider<MessageBubble>.value(
+          value: this,
+          child: child,
         ),
-      ],
+      ),
     );
+
+    if (message.inReplyTo != null) {
+      widget = _ReplyLayout(
+        replySlideUnderDistance: replySlideUnderDistance,
+        reply: MessageBubble.withContent(
+          chat: chat,
+          message: message.inReplyTo,
+          reply: message,
+        ),
+        message: widget,
+      );
+    }
+
+    if (!isRepliedTo) {
+      return Align(
+        alignment:
+            message.isMine ? Alignment.centerRight : Alignment.centerLeft,
+        child: Padding(
+          padding: reply == null
+              ? EdgeInsets.only(
+                  left: message.isMine ? _oppositePadding : 0,
+                  right: !message.isMine ? _oppositePadding : 0,
+                  top: previousMessage == null ? _paddingBetween : 0,
+                  bottom:
+                      isEndOfGroup ? _paddingBetween : _paddingBetweenSameGroup,
+                )
+              : EdgeInsets.zero,
+          child: widget,
+        ),
+      );
+    } else {
+      return widget;
+    }
   }
 
   static MessageBubble of(BuildContext context) =>
       Provider.of<MessageBubble>(context, listen: false);
 }
+
+class _ReplyLayout extends MultiChildRenderObjectWidget {
+  final Widget reply;
+  final Widget message;
+
+  final double replySlideUnderDistance;
+
+  _ReplyLayout({
+    @required this.reply,
+    @required this.message,
+    @required this.replySlideUnderDistance,
+  }) : super(
+          children: [
+            reply,
+            message,
+          ],
+        );
+
+  @override
+  _ReplyLayoutRenderBox createRenderObject(BuildContext context) {
+    return _ReplyLayoutRenderBox()
+      ..replySlideUnderDistance = replySlideUnderDistance;
+  }
+
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    covariant _ReplyLayoutRenderBox renderObject,
+  ) {
+    renderObject.replySlideUnderDistance = replySlideUnderDistance;
+  }
+}
+
+class _ReplyLayoutRenderBox extends RenderBox
+    with
+        ContainerRenderObjectMixin<RenderBox, _ReplyLayoutParentData>,
+        RenderBoxContainerDefaultsMixin<RenderBox, _ReplyLayoutParentData> {
+  double replySlideUnderDistance;
+
+  @override
+  void setupParentData(RenderBox child) {
+    if (child.parentData is! _ReplyLayoutParentData) {
+      child.parentData = _ReplyLayoutParentData();
+    }
+  }
+
+  RenderBox get _reply {
+    return firstChild;
+  }
+
+  RenderBox get _message {
+    return (firstChild.parentData as _ReplyLayoutParentData).nextSibling;
+  }
+
+  @override
+  void performLayout() {
+    assert(childCount == 2);
+
+    final reply = _reply;
+    final message = _message;
+
+    reply.layout(
+      constraints,
+      parentUsesSize: true,
+    );
+
+    message.layout(
+      constraints,
+      parentUsesSize: true,
+    );
+
+    final height =
+        message.size.height + reply.size.height - replySlideUnderDistance;
+
+    final width = max(
+      reply.size.width,
+      message.size.width,
+    );
+
+    message.layout(
+      BoxConstraints.tightFor(width: width),
+      parentUsesSize: true,
+    );
+
+    size = constraints.constrain(Size(width, height));
+
+    final messageParentData = message.parentData as _ReplyLayoutParentData;
+    messageParentData.offset = Offset(
+      0,
+      reply.size.height - replySlideUnderDistance,
+    );
+
+    final replyParentData = reply.parentData as _ReplyLayoutParentData;
+    replyParentData.offset = Offset(message.size.width - reply.size.width, 0);
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    defaultPaint(context, offset);
+  }
+
+  @override
+  bool hitTestChildren(HitTestResult result, {Offset position}) {
+    return defaultHitTestChildren(result, position: position);
+  }
+}
+
+class _ReplyLayoutParentData extends ContainerBoxParentData<RenderBox> {}
 
 /// Helper widget to make a [MessageBubble] clickable with a ripple. Defaults
 /// to showing a context menu on tap, and being selected on long press.
@@ -377,7 +512,7 @@ class MessageInfo extends StatelessWidget {
   static bool necessary(BuildContext context) {
     final bubble = MessageBubble.of(context);
 
-    return bubble.isEndOfGroup;
+    return bubble.isEndOfGroup || MessageState.necessaryInBubble(context);
   }
 
   @override
@@ -389,10 +524,10 @@ class MessageInfo extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        if (MessageState.necessary(bubble.message)) ...[
+        if (MessageState.necessaryInBubble(context)) ...[
           MessageState(
             message: bubble.message,
-            color: Colors.white,
+            color: context.pattleTheme.chat.myMessage.contentColor,
             size: 14,
           ),
           SizedBox(width: 4),
@@ -433,11 +568,13 @@ class Sender extends StatelessWidget {
   Widget build(BuildContext context) {
     final bubble = MessageBubble.of(context);
 
+    var color = personalizedColor ? bubble.message.sender.color(context) : null;
+
     return Text(
       bubble.message.sender.name,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        color: personalizedColor ? bubble.message.sender.color(context) : null,
+        color: bubble.isRepliedTo ? color?.withOpacity(0.70) : color,
       ),
     );
   }

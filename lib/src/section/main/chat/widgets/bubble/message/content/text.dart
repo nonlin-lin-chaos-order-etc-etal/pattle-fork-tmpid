@@ -16,13 +16,12 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 import '../../../../../../../resources/theme.dart';
-
-import '../../../../../../../util/chat_member.dart';
 
 import '../../message.dart';
 
@@ -30,68 +29,32 @@ import '../../message.dart';
 ///
 /// Must have a [MessageBubble] ancestor.
 class TextContent extends StatelessWidget {
-  static const _replyLeftPadding = 12.0;
-
   @override
   Widget build(BuildContext context) {
     final bubble = MessageBubble.of(context);
 
-    final needsBorder =
-        !bubble.chat.isDirect && bubble.reply?.isMine == false ||
-            bubble.message.isMine && bubble.reply?.isMine == true;
-
     return Clickable(
-      child: CustomPaint(
-        painter: needsBorder
-            ? _ReplyBorderPainter(
-                color: bubble.message.isMine && bubble.reply?.isMine == true
-                    ? Colors.white
-                    : bubble.message.sender.color(context),
-                borderRadius: bubble.borderRadius,
-              )
-            : null,
-        child: Padding(
-          padding: EdgeInsets.all(8).copyWith(
-            left: needsBorder ? _replyLeftPadding : null,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              if (Sender.necessary(context))
-                Padding(
+      child: Padding(
+        padding: EdgeInsets.all(8).copyWith(
+          bottom:
+              bubble.reply != null ? bubble.replySlideUnderDistance + 8 : null,
+        ),
+        child: _ContentLayout(
+          sender: Sender.necessary(context)
+              ? Padding(
                   padding: EdgeInsets.only(bottom: 4),
                   child: Sender(),
-                ),
-              // Only build the replied-to message if this itself
-              // is not a replied-to message (to prevent very long
-              // reply chains)
-              if (bubble.message.inReplyTo != null) ...[
-                SizedBox(height: 4),
-                MessageBubble.withContent(
-                  chat: bubble.chat,
-                  message: bubble.message.inReplyTo,
-                  reply: bubble.message,
-                ),
-                SizedBox(height: 8)
-              ],
-              Wrap(
-                runAlignment: bubble.message.isMine
-                    ? WrapAlignment.end
-                    : WrapAlignment.start,
-                crossAxisAlignment: WrapCrossAlignment.end,
-                spacing: 4,
-                runSpacing: 4,
-                children: <Widget>[
-                  _Content(),
-                  if (MessageInfo.necessary(context))
-                    Padding(
-                      padding: EdgeInsets.only(top: 4),
-                      child: MessageInfo(),
-                    ),
-                ],
-              ),
-            ],
-          ),
+                )
+              : null,
+          content: _Content(),
+          info: MessageInfo.necessary(context)
+              ? Padding(
+                  padding: EdgeInsets.only(
+                    left: 8,
+                  ),
+                  child: MessageInfo(),
+                )
+              : null,
         ),
       ),
     );
@@ -105,10 +68,20 @@ class _Content extends StatelessWidget {
     assert(bubble.message.event is TextMessageEvent);
     final event = bubble.message.event as TextMessageEvent;
 
-    final html = Html(
+    Widget widget = Html(
       data: event.content.formattedBody ?? '',
       useRichText: true,
       shrinkToFit: true,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      defaultTextStyle: TextStyle(
+        color: bubble.message.isMine
+            ? bubble.isRepliedTo
+                ? context.pattleTheme.chat.myMessage.repliedTo.contentColor
+                : context.pattleTheme.chat.myMessage.contentColor
+            : bubble.isRepliedTo
+                ? context.pattleTheme.chat.theirMessage.repliedTo.contentColor
+                : context.pattleTheme.chat.theirMessage.contentColor,
+      ),
       linkStyle: TextStyle(
         decoration: TextDecoration.underline,
         color: !bubble.message.isMine ? context.pattleTheme.linkColor : null,
@@ -121,48 +94,234 @@ class _Content extends StatelessWidget {
       },
     );
 
-    if (event is! EmoteMessageEvent) {
-      return html;
-    } else {
-      return Row(
+    if (event is EmoteMessageEvent) {
+      widget = Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (Sender.necessary(context)) Sender(),
           Flexible(
-            child: html,
+            child: widget,
           )
         ],
       );
     }
+
+    return widget;
   }
 }
 
-class _ReplyBorderPainter extends CustomPainter {
-  static const width = 4.0;
+class _ContentLayout extends MultiChildRenderObjectWidget {
+  final Widget sender;
+  final Widget content;
+  final Widget info;
 
-  final Color color;
-
-  /// Only the top left and bottom left values are used, because the line
-  /// is drawn left.
-  final BorderRadius borderRadius;
-
-  _ReplyBorderPainter({@required this.color, @required this.borderRadius});
+  _ContentLayout({
+    this.sender,
+    @required this.content,
+    this.info,
+  }) : super(
+          children: [
+            if (sender != null)
+              _ContentLayoutParentDataWidget(
+                slot: _Slot.sender,
+                child: sender,
+              ),
+            _ContentLayoutParentDataWidget(
+              slot: _Slot.content,
+              child: content,
+            ),
+            if (info != null)
+              _ContentLayoutParentDataWidget(
+                slot: _Slot.info,
+                child: info,
+              ),
+          ],
+        );
 
   @override
-  void paint(Canvas canvas, Size size) {
-    canvas.drawRRect(
-      RRect.fromRectAndCorners(
-        Rect.fromPoints(Offset(0, 0), Offset(width, size.height)),
-        topLeft: borderRadius.topLeft,
-        bottomLeft: borderRadius.bottomLeft,
-      ),
-      Paint()..color = color,
+  _ContentLayoutRenderBox createRenderObject(BuildContext context) {
+    return _ContentLayoutRenderBox();
+  }
+}
+
+class _ContentLayoutRenderBox extends RenderBox
+    with
+        ContainerRenderObjectMixin<RenderBox, _ContentLayoutParentData>,
+        RenderBoxContainerDefaultsMixin<RenderBox, _ContentLayoutParentData> {
+  @override
+  void setupParentData(RenderObject child) {
+    if (child.parentData is! _ContentLayoutParentData) {
+      child.parentData = _ContentLayoutParentData();
+    }
+  }
+
+  RenderBox get _sender {
+    return getChildrenAsList().firstWhere(
+      (r) => (r.parentData as _ContentLayoutParentData).slot == _Slot.sender,
+      orElse: () => null,
+    );
+  }
+
+  RenderBox get _content {
+    return getChildrenAsList().firstWhere(
+      (r) => (r.parentData as _ContentLayoutParentData).slot == _Slot.content,
+      orElse: () => null,
+    );
+  }
+
+  RenderBox get _info {
+    return getChildrenAsList().firstWhere(
+      (r) => (r.parentData as _ContentLayoutParentData).slot == _Slot.info,
+      orElse: () => null,
     );
   }
 
   @override
-  bool shouldRepaint(_ReplyBorderPainter oldDelegate) =>
-      color != oldDelegate.color;
+  void performLayout() {
+    final sender = _sender;
+    final content = _content;
+    final info = _info;
+
+    var infoYOffset = 0.0;
+    var width = 0.0, height = 0.0;
+
+    if (sender != null) {
+      sender.layout(constraints, parentUsesSize: true);
+
+      height += sender.size.height;
+
+      (content.parentData as _ContentLayoutParentData).offset =
+          Offset(0, height);
+      infoYOffset = height;
+    }
+
+    content.layout(
+      constraints,
+      parentUsesSize: true,
+    );
+
+    width += content.size.width;
+    height += content.size.height;
+
+    if (info != null) {
+      final minWidth =
+          info.computeMinIntrinsicWidth(constraints.smallest.height);
+
+      info.layout(
+        BoxConstraints.tightFor(width: minWidth),
+        parentUsesSize: true,
+      );
+
+      final contentParagraph = _getRenderParagraph(content);
+
+      final lastLineBox = contentParagraph
+          .getBoxesForSelection(
+            TextSelection(
+              baseOffset: 0,
+              extentOffset: _getContentTextLength(contentParagraph),
+            ),
+          )
+          .lastWhere(
+            (_) => true,
+            orElse: () => null,
+          );
+
+      if (lastLineBox != null) {
+        final fitsLastLine =
+            constraints.maxWidth - lastLineBox.right > info.size.width;
+
+        final infoParentData = info.parentData as _ContentLayoutParentData;
+        infoParentData.offset = Offset(
+          width.round() == constraints.maxWidth.round() || !fitsLastLine
+              ? content.size.width - info.size.width
+              : content.size.width,
+          infoYOffset +
+              content.size.height -
+              info.size.height +
+              (!fitsLastLine ? info.size.height : 0),
+        );
+
+        width += info.size.width;
+
+        if (!fitsLastLine) {
+          height += info.size.height;
+        }
+      }
+    }
+
+    size = constraints.constrain(Size(width, height));
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    defaultPaint(context, offset);
+  }
+
+  @override
+  bool hitTestChildren(HitTestResult result, {Offset position}) {
+    return defaultHitTestChildren(result, position: position);
+  }
+
+  RenderParagraph _getRenderParagraph(RenderObject renderObject) {
+    if (renderObject is RenderParagraph) {
+      return renderObject;
+    } else {
+      RenderObject child;
+      renderObject.visitChildren((c) {
+        child = _getRenderParagraph(c);
+      });
+
+      return child;
+    }
+  }
+
+  int _getContentTextLength(RenderParagraph renderParagraph) {
+    final span = renderParagraph.text as TextSpan;
+
+    if (span.children == null) {
+      return 0;
+    }
+
+    var length = 0;
+    for (final childSpan in span?.children) {
+      if (childSpan is TextSpan) {
+        length += childSpan.text?.length ?? 0;
+      }
+    }
+
+    return length;
+  }
+}
+
+class _ContentLayoutParentData extends ContainerBoxParentData<RenderBox> {
+  _Slot slot;
+
+  _ContentLayoutParentData();
+}
+
+enum _Slot {
+  sender,
+  content,
+  info,
+}
+
+class _ContentLayoutParentDataWidget
+    extends ParentDataWidget<_ContentLayoutParentData> {
+  final _Slot slot;
+
+  _ContentLayoutParentDataWidget({@required this.slot, @required Widget child})
+      : super(child: child);
+
+  @override
+  void applyParentData(RenderObject renderObject) {
+    final _ContentLayoutParentData parentData = renderObject.parentData;
+    if (parentData.slot != slot) {
+      parentData.slot = slot;
+    }
+  }
+
+  @override
+  Type get debugTypicalAncestorWidgetClass => _ContentLayoutParentData;
 }

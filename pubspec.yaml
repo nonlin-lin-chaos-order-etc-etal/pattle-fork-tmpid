@@ -36,7 +36,11 @@ dependencies:
   device_info: ^0.4.1+1
   package_info: ^0.4.0+5
 
-  flutter_html: ^0.11.1
+  # TODO: Use official package when PR is merged
+  flutter_html:
+    git:
+      url: https://github.com/pattle-org/flutter_html.git
+      ref: 71406a09f9e591f9d35635e6a086007ccc678ae3
 
   flutter_dotenv: ^2.0.1
 
