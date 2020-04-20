@@ -306,6 +306,7 @@ class MessageBubble extends StatelessWidget {
           message: message.inReplyTo,
           reply: message,
         ),
+        messageIsMine: message.isMine,
         message: widget,
       );
     }
@@ -340,11 +341,13 @@ class _ReplyLayout extends MultiChildRenderObjectWidget {
   final Widget reply;
   final Widget message;
 
+  final bool messageIsMine;
   final double replySlideUnderDistance;
 
   _ReplyLayout({
     @required this.reply,
     @required this.message,
+    @required this.messageIsMine,
     @required this.replySlideUnderDistance,
   }) : super(
           children: [
@@ -356,6 +359,7 @@ class _ReplyLayout extends MultiChildRenderObjectWidget {
   @override
   _ReplyLayoutRenderBox createRenderObject(BuildContext context) {
     return _ReplyLayoutRenderBox()
+      ..messageIsMine = messageIsMine
       ..replySlideUnderDistance = replySlideUnderDistance;
   }
 
@@ -372,6 +376,7 @@ class _ReplyLayoutRenderBox extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, _ReplyLayoutParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, _ReplyLayoutParentData> {
+  bool messageIsMine;
   double replySlideUnderDistance;
 
   @override
@@ -427,8 +432,10 @@ class _ReplyLayoutRenderBox extends RenderBox
       reply.size.height - replySlideUnderDistance,
     );
 
-    final replyParentData = reply.parentData as _ReplyLayoutParentData;
-    replyParentData.offset = Offset(message.size.width - reply.size.width, 0);
+    if (messageIsMine) {
+      final replyParentData = reply.parentData as _ReplyLayoutParentData;
+      replyParentData.offset = Offset(message.size.width - reply.size.width, 0);
+    }
   }
 
   @override
