@@ -15,17 +15,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:http/http.dart' as http;
-import 'package:chopper/chopper.dart';
-
-import '../../../resources/intl/localizations.dart';
-import '../../../matrix.dart';
-
-class ErrorBanner extends StatefulWidget {
+/*class ErrorBanner extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => ErrorBannerState();
 }
@@ -128,4 +118,4 @@ class ErrorBannerState extends State<ErrorBanner>
           );
         },
       );
-}
+}*/

@@ -48,7 +48,7 @@ class LoginFailed extends LoginState {
 }
 
 class LoginSuccessful extends LoginState {
-  final LocalUser user;
+  final MyUser user;
 
   LoginSuccessful.from(LoginState state, {this.user}) : super.from(state);
 

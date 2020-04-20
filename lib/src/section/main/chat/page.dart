@@ -29,7 +29,6 @@ import '../../../resources/theme.dart';
 import '../models/chat.dart';
 import '../chats/widgets/typing_content.dart';
 import '../widgets/chat_name.dart';
-import '../widgets/error.dart';
 import '../widgets/title_with_sub.dart';
 
 import '../../../matrix.dart';
@@ -99,14 +98,12 @@ class _ChatPageState extends State<ChatPage> {
       );
     }
 
-    // TODO: typingUsers should not contain nulls
-    Widget title =
-        _room.isSomeoneElseTyping && !_room.typingUsers.any((u) => u == null)
-            ? TitleWithSub(
-                title: ChatName(chat: widget.chat),
-                subtitle: TypingContent(chat: widget.chat),
-              )
-            : ChatName(chat: widget.chat);
+    Widget title = _room.isSomeoneElseTyping
+        ? TitleWithSub(
+            title: ChatName(chat: widget.chat),
+            subtitle: TypingContent(chat: widget.chat),
+          )
+        : ChatName(chat: widget.chat);
 
     return Scaffold(
       backgroundColor: context.pattleTheme.chat.backgroundColor,
@@ -130,7 +127,7 @@ class _ChatPageState extends State<ChatPage> {
       ),
       body: Column(
         children: <Widget>[
-          ErrorBanner(),
+          //ErrorBanner(),
           Expanded(
             child: Column(
               children: <Widget>[
@@ -167,97 +164,97 @@ class _MessageListState extends State<_MessageList> {
   final _scrollController = ScrollController();
   final double _scrollThreshold = 200;
 
+  bool _requestingMore = false;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     final bloc = BlocProvider.of<ChatBloc>(context);
 
-    bloc.add(FetchChat());
+    bloc.add(FetchChat(refresh: false));
 
     _scrollController.addListener(() {
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.position.pixels;
-      if (maxScroll - currentScroll <= _scrollThreshold) {
-        bloc.add(FetchChat());
+
+      final state = bloc.state;
+
+      if (maxScroll - currentScroll <= _scrollThreshold &&
+          !state.endReached &&
+          !_requestingMore) {
+        _requestingMore = true;
+        bloc.add(FetchChat(refresh: false));
       }
     });
   }
 
+  void _onStateChange(ChatState state) {
+    _requestingMore = false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatBloc, ChatState>(
+    return BlocConsumer<ChatBloc, ChatState>(
+      listener: (context, state) => _onStateChange(state),
       builder: (context, state) {
-        if (state is ChatLoaded) {
-          return ListView.builder(
-            controller: _scrollController,
-            reverse: true,
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            itemCount: state.endReached
-                ? state.messages.length
-                : state.messages.length + 1,
-            itemBuilder: (context, index) {
-              if (index >= state.messages.length) {
-                return Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-
-              final message = state.messages[index];
-
-              final event = message.event;
-
-              var previousMessage, nextMessage;
-              // Note: Because the items are reversed in the
-              // ListView.builder, the 'previous' event is actually the next
-              // one in the list.
-              if (index != state.messages.length - 1) {
-                previousMessage = state.messages[index + 1];
-              }
-
-              if (index != 0) {
-                nextMessage = state.messages[index - 1];
-              }
-
-              Widget bubble;
-              if (event is StateEvent) {
-                bubble = StateBubble.withContent(message: message);
-              } else {
-                bubble = MessageBubble.withContent(
-                  chat: widget.chat,
-                  message: message,
-                  previousMessage: previousMessage,
-                  nextMessage: nextMessage,
-                );
-              }
-
-              // Insert DateHeader if there's a day difference
-              if (previousMessage != null &&
-                  event != null &&
-                  previousMessage.event.time.day != event.time.day) {
-                return DateHeader(
-                  date: previousMessage.event.time,
-                  child: bubble,
-                );
-              } else {
-                return bubble;
-              }
-            },
-          );
-        }
-
-        return ListView(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+        return ListView.builder(
+          controller: _scrollController,
           reverse: true,
-          children: List.generate(10, (i) {
-            return MessageBubble.loading(
-              chat: widget.chat,
-              isMine: i % 2 == 0,
-            );
-          }),
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          itemCount: state.endReached
+              ? state.messages.length
+              : state.messages.length + 1,
+          itemBuilder: (context, index) {
+            if (index >= state.messages.length) {
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+
+            final message = state.messages[index];
+
+            final event = message.event;
+
+            var previousMessage, nextMessage;
+            // Note: Because the items are reversed in the
+            // ListView.builder, the 'previous' event is actually the next
+            // one in the list.
+            if (index != state.messages.length - 1) {
+              previousMessage = state.messages[index + 1];
+            }
+
+            if (index != 0) {
+              nextMessage = state.messages[index - 1];
+            }
+
+            Widget bubble;
+            if (event is StateEvent) {
+              bubble = StateBubble.withContent(message: message);
+            } else {
+              bubble = MessageBubble.withContent(
+                chat: widget.chat,
+                message: message,
+                previousMessage: previousMessage,
+                nextMessage: nextMessage,
+              );
+            }
+
+            // Insert DateHeader if there's a day difference
+            if (previousMessage != null &&
+                event != null &&
+                previousMessage.event.time.day != event.time.day) {
+              return DateHeader(
+                date: event.time,
+                child: bubble,
+              );
+            } else {
+              return bubble;
+            }
+          },
         );
       },
     );
@@ -282,7 +279,7 @@ class _InputState extends State<_Input> {
 
     const elevation = 8.0;
 
-    if (widget.room is JoinedRoom) {
+    if (widget.room.myMembership is Joined) {
       return Material(
         elevation: elevation,
         color: context.pattleTheme.chat.backgroundColor,

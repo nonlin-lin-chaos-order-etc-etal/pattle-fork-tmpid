@@ -69,7 +69,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Hero(
-                          tag: me.user.id,
+                          tag: me.userId,
                           child: ChatMemberAvatar(
                             member: me,
                             radius: 36,
@@ -87,7 +87,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              Text(me.user.id.toString())
+                              Text(me.userId.toString())
                             ],
                           ),
                         )

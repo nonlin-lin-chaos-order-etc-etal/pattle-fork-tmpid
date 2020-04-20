@@ -17,9 +17,9 @@
 
 import 'package:bloc/bloc.dart';
 
-import '../models/chat_member.dart';
-
 import '../../../matrix.dart';
+
+import '../../../util/my_user.dart';
 
 import 'event.dart';
 import 'state.dart';
@@ -33,13 +33,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc(this._matrix);
 
   @override
-  SettingsState get initialState => SettingsInitialized(
-        ChatMember(
-          _matrix.user,
-          name: _matrix.user.name,
-          isYou: true,
-        ),
-      );
+  SettingsState get initialState =>
+      SettingsInitialized(_matrix.user.toChatMember());
 
   @override
   Stream<SettingsState> mapEventToState(SettingsEvent event) async* {

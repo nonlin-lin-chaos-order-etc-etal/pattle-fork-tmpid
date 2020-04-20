@@ -187,7 +187,7 @@ class _MemberListState extends State<_MemberList> {
                   padding: EdgeInsets.only(left: 16, top: 16),
                   child: Text(
                     context.intl.chat.details.participants(
-                      widget.room.members.count,
+                      widget.room.summary.joinedMembersCount,
                     ),
                     style: TextStyle(
                       color: context.pattleTheme.primaryColorOnBackground,
@@ -205,8 +205,8 @@ class _MemberListState extends State<_MemberList> {
                     }
 
                     final isLoading = state is MembersLoading;
-                    final allShown =
-                        members.length == widget.room.members.count;
+                    final allShown = members.length ==
+                        widget.room.summary.joinedMembersCount;
 
                     return MediaQuery.removePadding(
                       context: context,
@@ -272,7 +272,7 @@ class _ShowMoreItem extends StatelessWidget {
       leading: Icon(Icons.keyboard_arrow_down, size: 32),
       title: Text(
         context.intl.chat.details.more(
-          room.members.count - shownMembersCount,
+          room.summary.joinedMembersCount - shownMembersCount,
         ),
       ),
       subtitle: isLoading ? LinearProgressIndicator() : null,

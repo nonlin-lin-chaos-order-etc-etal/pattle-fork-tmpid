@@ -9,7 +9,7 @@ abstract class AuthEvent extends Equatable {
 class Check extends AuthEvent {}
 
 class LoggedIn extends AuthEvent {
-  final LocalUser user;
+  final MyUser user;
 
   LoggedIn(this.user);
 

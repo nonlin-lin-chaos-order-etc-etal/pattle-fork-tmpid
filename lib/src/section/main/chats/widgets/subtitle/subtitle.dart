@@ -44,9 +44,7 @@ class Subtitle extends StatelessWidget {
   static Widget withContent(Chat chat) {
     Widget content;
 
-    // TODO: typingUsers should not contain nulls
-    if (chat.room.isSomeoneElseTyping &&
-        !chat.room.typingUsers.any((u) => u == null)) {
+    if (chat.room.isSomeoneElseTyping) {
       content = TypingContent(chat: chat);
     } else {
       final event = chat.latestMessage?.event;
@@ -120,7 +118,8 @@ class Sender extends StatelessWidget {
     final chat = Subtitle.of(context).chat;
     final message = chat.latestMessage;
 
-    return message.event.sender != Matrix.of(context).user && !chat.isDirect;
+    return message.event.senderId != Matrix.of(context).user.id &&
+        !chat.isDirect;
   }
 
   @override

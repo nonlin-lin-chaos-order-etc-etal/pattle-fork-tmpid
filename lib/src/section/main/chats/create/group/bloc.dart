@@ -33,10 +33,10 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
 
   final _members = <ChatMember>[];
 
-  String _groupName;
+  //String _groupName;
 
-  JoinedRoom _createdRoom;
-  JoinedRoom get createdRoom => _createdRoom;
+  Room _createdRoom;
+  Room get createdRoom => _createdRoom;
 
   CreateGroupBloc(this.matrix);
 
@@ -45,15 +45,8 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
 
   Stream<CreateGroupState> _loadUsers() async* {
     final users = <ChatMember>{};
-    // Load members of some rooms, in the future
-    // this'll be based on activity and what not
-    for (final room in await matrix.user.rooms.get(upTo: 10)) {
-      for (final user in await room.members.get(upTo: 20)) {
-        if (user != matrix.user) {
-          users.add(await ChatMember.fromUser(room, user, isYou: false));
-        }
-      }
-    }
+
+    // TODO: Redesign
 
     yield UserListUpdated(
       users.toList(growable: false)
@@ -70,7 +63,8 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
 
       yield CreatingGroup(members: _members);
 
-      final id = await matrix.user.rooms.create(
+      // TODO: Add create
+      /*final id = await matrix.user.rooms.create(
         name: _groupName,
         invitees: _members.map((m) => m.user),
       );
@@ -82,7 +76,7 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
       }
 
       _isCreatingGroup = false;
-      yield CreatedGroup(_createdRoom, members: _members);
+      yield CreatedGroup(_createdRoom, members: _members);*/
     }
   }
 

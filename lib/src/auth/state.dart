@@ -10,7 +10,7 @@ abstract class AuthState extends Equatable {
 class Unchecked extends AuthState {}
 
 class Authenticated extends AuthState {
-  final LocalUser user;
+  final MyUser user;
   final bool fromStore;
 
   Authenticated(this.user, {@required this.fromStore});

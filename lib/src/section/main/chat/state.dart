@@ -3,36 +3,27 @@ import 'package:meta/meta.dart';
 
 import '../models/chat_message.dart';
 
-abstract class ChatState extends Equatable {
-  @override
-  List<Object> get props => [];
-}
-
-class ChatLoading extends ChatState {}
-
-class ChatLoaded extends ChatState {
-  final int pageCount;
+class ChatState extends Equatable {
   final List<ChatMessage> messages;
   final bool endReached;
 
-  ChatLoaded({
+  ChatState({
     @required this.messages,
-    @required this.pageCount,
     this.endReached = true,
   });
 
-  ChatLoaded copyWith({
-    @required List<ChatMessage> messages,
-    @required int pageCount,
-    bool endReached = true,
+  ChatState copyWith({
+    List<ChatMessage> messages,
+    int pageCount,
+    bool endReached,
+    bool loadingMore,
   }) {
-    return ChatLoaded(
+    return ChatState(
       messages: messages ?? this.messages,
-      pageCount: pageCount ?? this.pageCount,
-      endReached: endReached ?? this.endReached,
+      endReached: endReached ?? this.endReached ?? true,
     );
   }
 
   @override
-  List<Object> get props => [messages, pageCount, endReached];
+  List<Object> get props => [messages, endReached];
 }

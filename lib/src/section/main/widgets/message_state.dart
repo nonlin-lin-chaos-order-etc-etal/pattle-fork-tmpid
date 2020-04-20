@@ -45,7 +45,7 @@ class MessageState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Icon(
-      message.event.sentState != SentState.sent
+      message.event.sentState == SentState.unsent
           ? Icons.access_time
           : Icons.check,
       color: color,

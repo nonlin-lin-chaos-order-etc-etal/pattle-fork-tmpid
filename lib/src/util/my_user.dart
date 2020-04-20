@@ -19,11 +19,12 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 
 import '../section/main/models/chat_member.dart';
 
-extension LocalUserExtensions on LocalUser {
+extension MyUserExtensions on MyUser {
   ChatMember toChatMember() {
     return ChatMember(
-      this,
+      id,
       name: name,
+      avatarUrl: avatarUrl,
       isYou: true,
     );
   }

@@ -35,7 +35,6 @@ class PattleLocalizationsDelegate
         locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
-      print('mjam');
       return PattleLocalizations(localeName);
     });
   }

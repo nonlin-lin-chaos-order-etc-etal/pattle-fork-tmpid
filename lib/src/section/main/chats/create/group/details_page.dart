@@ -21,7 +21,6 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 
 import '../../../../../app.dart';
 import '../../../../../resources/intl/localizations.dart';
-import '../../../widgets/error.dart';
 import '../../../widgets/chat_member_avatar.dart';
 
 import 'bloc.dart';
@@ -78,7 +77,7 @@ class _CreateGroupDetailsPageState extends State<CreateGroupDetailsPage> {
         ),
         body: Column(
           children: <Widget>[
-            ErrorBanner(),
+            //ErrorBanner(),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[

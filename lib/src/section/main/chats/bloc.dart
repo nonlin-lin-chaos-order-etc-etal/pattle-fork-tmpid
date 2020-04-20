@@ -15,6 +15,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
@@ -34,37 +36,39 @@ export 'event.dart';
 class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   final Matrix _matrix;
 
-  ChatsBloc(this._matrix);
+  StreamSubscription _subscription;
+  ChatsBloc(this._matrix) {
+    _matrix.userAvaible.then((_) {
+      _subscription = _matrix.user.updates.listen((update) {
+        add(LoadChats());
+      });
+    });
+  }
 
   Future<List<Chat>> _getChats() async {
     final me = _matrix.user;
 
-    await me.sync.first;
-
     final chats = <Chat>[];
 
-    // Get all rooms and push them as a single list
-    for (final room in await me.rooms.get()) {
+    for (final room in await me.rooms) {
       // Don't show rooms that have been upgraded
       if (room.isUpgraded) {
         continue;
       }
 
-      // TODO: Add optional filter argument to up to call
-      final latestEvent =
-          (await room.timeline.get(upTo: 10, allowRemote: false)).firstWhere(
+      // We should always have at least 30 items in the timeline, so don't load
+      final latestEvent = room.timeline.firstWhere(
         (event) => !room.ignoredEvents.contains(event.runtimeType),
         orElse: () => null,
       );
 
-      var latestEventForSorting =
-          (await room.timeline.get(upTo: 10, allowRemote: false)).firstWhere(
+      var latestEventForSorting = room.timeline.firstWhere(
         (event) =>
             (event is! MemberChangeEvent ||
                 (event is JoinEvent &&
                     event is! DisplayNameChangeEvent &&
                     event is! AvatarChangeEvent &&
-                    event.subject.id == me.id)) &&
+                    event.subjectId == me.id)) &&
             event is! RedactionEvent,
         orElse: () => null,
       );
@@ -78,29 +82,26 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
 
       final chat = Chat(
         room: room,
-        isJustYou: room.members.count == 1,
+        isJustMe: room.summary.joinedMembersCount == 1,
         latestMessage: latestEvent != null
-            ? await ChatMessage.create(
+            ? ChatMessage(
                 room,
                 latestEvent,
-                isMe: (u) => u == _matrix.user,
+                isMe: (id) => id == _matrix.user.id,
               )
             : null,
         latestMessageForSorting: latestEventForSorting != null
             ? ChatMessage(
+                room,
                 latestEventForSorting,
-                sender: await ChatMember.fromUser(
-                  room,
-                  latestEventForSorting.sender,
-                  isYou: latestEventForSorting.sender == _matrix.user,
-                ),
+                isMe: (id) => id == _matrix.user.id,
               )
             : null,
         directMember: room.isDirect
-            ? await ChatMember.fromUser(
+            ? ChatMember.fromRoomAndUserId(
                 room,
-                room.directUser,
-                isYou: room.directUser == _matrix.user,
+                room.directUserId,
+                isMe: room.directUserId == _matrix.user.id,
               )
             : null,
       );
@@ -155,8 +156,13 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   @override
   Stream<ChatsState> mapEventToState(ChatsEvent event) async* {
     if (event is LoadChats) {
-      print('loading chats');
       yield await _loadChats();
     }
+  }
+
+  @override
+  Future<void> close() async {
+    await _subscription.cancel();
+    await super.close();
   }
 }

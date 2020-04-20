@@ -10,12 +10,11 @@ abstract class SettingsState {
 
   @override
   bool operator ==(dynamic other) {
-    return runtimeType == other.runtimeType &&
-        me.user.state == other.me.user.state;
+    return runtimeType == other.runtimeType && me == other.me.user;
   }
 
   @override
-  int get hashCode => runtimeType.hashCode + me.user.state.hashCode;
+  int get hashCode => runtimeType.hashCode + me.hashCode;
 }
 
 class SettingsInitialized extends SettingsState {

@@ -34,7 +34,7 @@ class Chat {
   final ChatMessage latestMessage;
   final ChatMessage latestMessageForSorting;
 
-  final bool isJustYou;
+  final bool isJustMe;
 
   final ChatMember directMember;
 
@@ -46,10 +46,10 @@ class Chat {
     @required this.room,
     this.latestMessage,
     this.latestMessageForSorting,
-    this.isJustYou = false,
+    this.isJustMe = false,
     this.directMember,
   })  : name = room.name ??
             (room.isDirect ? directMember.name : room.id.toString()),
         avatarUrl = room.avatarUrl ??
-            (room.isDirect ? directMember.user.avatarUrl : room.avatarUrl);
+            (room.isDirect ? directMember.avatarUrl : room.avatarUrl);
 }

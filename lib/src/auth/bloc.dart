@@ -33,7 +33,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   @override
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
     if (event is Check) {
-      final user = await LocalUser.fromStore(Matrix.store);
+      final user = await MyUser.fromStore(Matrix.store);
 
       if (user != null) {
         yield Authenticated(user, fromStore: true);

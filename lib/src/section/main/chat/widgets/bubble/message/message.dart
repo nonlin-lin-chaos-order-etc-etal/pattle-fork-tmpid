@@ -24,7 +24,6 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../models/chat.dart';
-import '../../../../models/chat_member.dart';
 import '../../../../models/chat_message.dart';
 
 import '../../../../../../resources/theme.dart';
@@ -146,35 +145,18 @@ class MessageBubble extends StatelessWidget {
       chat: chat,
       color: Colors.grey[300],
       message: ChatMessage(
+        chat.room,
         TextMessageEvent(
           RoomEventArgs(
             id: EventId('1234'),
-            sender: User(
-              id: UserId('@wilko:pattle.im'),
-              state: UserState(
-                roomId: RoomId('!343432:pattle.im'),
-                displayName: 'Wilko',
-                since: DateTime.now(),
-              ),
-            ),
+            senderId: UserId('@wilko:pattle.im'),
             time: DateTime.now(),
           ),
           content: TextMessage(
             body: 'Blabla',
           ),
         ),
-        sender: ChatMember(
-          User(
-            id: UserId('@wilko:pattle.im'),
-            state: UserState(
-              roomId: RoomId('!343432:pattle.im'),
-              displayName: 'Wilko',
-              since: DateTime.now(),
-            ),
-          ),
-          isYou: isMine,
-          name: 'Wilko',
-        ),
+        isMe: (id) => isMine,
       ),
       child: LoadingContent(),
     );
@@ -198,7 +180,7 @@ class MessageBubble extends StatelessWidget {
 
     final previousHasSameSender = previousEvent != null &&
         previousMessage.sender.name == previousMessage.sender.name &&
-        previousEvent.sender == event.sender;
+        previousEvent.senderId == event.senderId;
 
     if (!previousHasSameSender) {
       return true;
@@ -232,7 +214,7 @@ class MessageBubble extends StatelessWidget {
 
     final nextHasSameSender = nextEvent != null &&
         nextMessage.sender.name == nextMessage.sender.name &&
-        nextEvent.sender == event.sender;
+        nextEvent.senderId == event.senderId;
 
     if (!nextHasSameSender) {
       return true;

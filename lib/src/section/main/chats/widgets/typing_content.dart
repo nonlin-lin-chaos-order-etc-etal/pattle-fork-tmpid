@@ -28,13 +28,15 @@ class TypingContent extends StatelessWidget {
   const TypingContent({Key key, @required this.chat}) : super(key: key);
 
   List<TextSpan> _span(BuildContext context, Room room) {
-    if (room.isDirect || room.typingUsers.isEmpty) {
+    if (room.isDirect || room.typingUserIds.isEmpty) {
       return [TextSpan(text: context.intl.chat.typing)];
     }
 
+    return [];
+
     // TODO: Use ChatMember for names
 
-    if (room.typingUsers.length == 1) {
+    /*if (room.typingUsers.length == 1) {
       return context.intl.chat.isTyping
           .toTextSpans(room.typingUsers.first.name);
     } else {
@@ -43,7 +45,7 @@ class TypingContent extends StatelessWidget {
         room.typingUsers.first.name,
         room.typingUsers[1].name,
       );
-    }
+    }*/
   }
 
   @override

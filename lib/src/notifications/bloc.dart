@@ -79,7 +79,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   @override
   Stream<NotificationsState> mapEventToState(NotificationsEvent event) async* {}
 
-  Future<void> _setPusher(LocalUser user) async {
+  Future<void> _setPusher(MyUser user) async {
     await DotEnv().load();
 
     await user.pushers.set(
@@ -145,20 +145,20 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   static Future<void> _showNotification(
     FlutterLocalNotificationsPlugin plugin,
-    LocalUser user,
+    MyUser user,
     DataMessage message,
   ) async {
     final room = await user.rooms[message.roomId];
     final event = await room.timeline[message.eventId];
 
-    final icon = await DefaultCacheManager().getSingleFile(
-      event.sender.avatarUrl.toThumbnailStringWith(user.homeserver),
+    final sender = await ChatMember.fromRoomAndUserId(
+      room,
+      event.senderId,
+      isMe: false,
     );
 
-    final sender = await ChatMember.fromUser(
-      room,
-      event.sender,
-      isYou: false,
+    final icon = await DefaultCacheManager().getSingleFile(
+      sender.avatarUrl.toThumbnailStringWith(user.context.homeserver),
     );
 
     final senderPerson = Person(
@@ -208,8 +208,11 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 Future<dynamic> _handleBackgroundMessage(Map<String, dynamic> message) async {
   final plugin = await NotificationsBloc._getPlugin();
 
-  final user = await LocalUser.fromStore(Matrix.store);
-  await user.syncOnce();
+  final user = await MyUser.fromStore(Matrix.store);
+  // TODO: Add sync once?
+  await user.startSync();
+  await user.updates.firstSync;
+  await user.stopSync();
 
   await NotificationsBloc._showNotification(
     plugin,

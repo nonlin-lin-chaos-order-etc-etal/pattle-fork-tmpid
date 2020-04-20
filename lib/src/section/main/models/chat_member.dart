@@ -15,44 +15,46 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
 @immutable
-class ChatMember {
-  final User user;
+class ChatMember extends Equatable {
+  final UserId userId;
 
   final String name;
+  final Uri avatarUrl;
+
   final bool isYou;
   final DisplayColor displayColor;
 
   ChatMember(
-    this.user, {
+    this.userId, {
     @required this.name,
+    this.avatarUrl,
     @required this.isYou,
   }) : displayColor =
-            DisplayColor.values[user.id.hashCode % DisplayColor.values.length];
+            DisplayColor.values[userId.hashCode % DisplayColor.values.length];
 
-  static Future<ChatMember> fromUser(
+  factory ChatMember.fromRoomAndUserId(
     Room room,
-    User user, {
-    @required bool isYou,
-  }) async {
-    final currentName = (await room.members.getStateOf(user.id)).name;
+    UserId userId, {
+    @required bool isMe,
+  }) {
+    final currentMember = room.members.get(userId);
 
     return ChatMember(
-      user,
-      name: currentName ?? user.id.toString().split(':')[0],
-      isYou: isYou,
+      userId,
+      name: currentMember?.name ?? userId.toString().split(':')[0],
+      avatarUrl: currentMember?.avatarUrl,
+      isYou: isMe,
     );
   }
 
   @override
-  bool operator ==(dynamic other) => user == other.user;
-
-  @override
-  int get hashCode => user.hashCode;
+  List<Object> get props => [userId, name, isYou, displayColor];
 }
 
 enum DisplayColor {

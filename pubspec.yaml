@@ -13,7 +13,6 @@ dependencies:
   injector: ^1.0.8
 
   matrix_sdk: ^0.29.0
-  matrix_sdk_sqflite: ^0.20.0
 
   bloc: ^3.0.0
   flutter_bloc: ^3.2.0
@@ -28,6 +27,9 @@ dependencies:
   sqflite: ^1.1.6
 
   async: ^2.3.0
+
+  path_provider: ^1.6.5
+  path: ^1.6.4
 
   # TODO: Use official package when PR is merged
   sentry:
@@ -79,11 +81,7 @@ dependency_overrides:
   matrix_sdk:
     git:
       url: https://git.pattle.im/pattle/library/matrix-dart-sdk.git
-      ref: f506fb387e6fcacbf90fca6551f7f8865cb6812b
-  matrix_sdk_sqflite:
-    git:
-      url: https://git.pattle.im/pattle/library/matrix-dart-sdk-sqflite.git
-      ref: 7dbb3cba4ae124c3557ccb80986dc2e95c8ae276
+      ref: 428982632e529e710f71c3a6e746946b57b59dcd
 
 dev_dependencies:
   flutter_launcher_icons: ^0.7.2+1

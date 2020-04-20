@@ -36,7 +36,7 @@ class ChatMessage {
   /// Subject of a member change state change, if any.
   final ChatMember subject;
 
-  ChatMessage(
+  ChatMessage._(
     this.event, {
     @required this.sender,
     this.inReplyTo,
@@ -54,38 +54,38 @@ class ChatMessage {
     }
   }
 
-  static Future<ChatMessage> create(
+  factory ChatMessage(
     Room room,
     RoomEvent event, {
     ChatMessage inReplyTo,
-    @required bool Function(User) isMe,
-  }) async {
+    @required bool Function(UserId) isMe,
+  }) {
     ChatMessage redactionMessage;
     ChatMember subject;
 
     if (event is RedactedEvent) {
-      redactionMessage = ChatMessage(
+      redactionMessage = ChatMessage._(
         event.redaction,
-        sender: await ChatMember.fromUser(
+        sender: ChatMember.fromRoomAndUserId(
           room,
-          event.redaction.sender,
-          isYou: isMe(event.redaction.sender),
+          event.redaction.senderId,
+          isMe: isMe(event.redaction.senderId),
         ),
       );
     } else if (event is MemberChangeEvent) {
-      subject = await ChatMember.fromUser(
+      subject = ChatMember.fromRoomAndUserId(
         room,
-        event.subject,
-        isYou: isMe(event.subject),
+        event.subjectId,
+        isMe: isMe(event.subjectId),
       );
     }
 
-    return ChatMessage(
+    return ChatMessage._(
       event,
-      sender: await ChatMember.fromUser(
+      sender: ChatMember.fromRoomAndUserId(
         room,
-        event.sender,
-        isYou: isMe(event.sender),
+        event.senderId,
+        isMe: isMe(event.senderId),
       ),
       inReplyTo: inReplyTo,
       redaction: redactionMessage,

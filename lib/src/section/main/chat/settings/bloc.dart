@@ -32,7 +32,7 @@ export 'state.dart';
 
 class ChatSettingsBloc extends Bloc<ChatSettingsEvent, ChatSettingsState> {
   final Matrix _matrix;
-  final Room _room;
+  Room _room;
 
   ChatSettingsBloc(this._matrix, this._room);
 
@@ -44,22 +44,30 @@ class ChatSettingsBloc extends Bloc<ChatSettingsEvent, ChatSettingsState> {
     if (event is FetchMembers) {
       final me = await _room.members[_matrix.user.id];
 
-      var user = List.of(
-        await _room.members.get(upTo: !event.all ? 6 : _room.members.count),
-      );
+      if (_room.members.length < 6 &&
+          _room.members.length != _room.summary.joinedMembersCount) {
+        final update = await _room.memberTimeline.load(
+          count: !event.all ? 6 : null,
+        );
+        _room = update.user.rooms[_room.id];
+      }
 
-      user = user.where((u) => u.state.membership is Joined).toList();
+      var members = List.of(_room.members);
 
-      user.remove(me);
-      user.insert(0, me);
+      members = members.where((m) => m.membership is Joined).toList();
 
-      final members = await Future.wait(
-        user.map(
-          (u) => ChatMember.fromUser(_room, u, isYou: _matrix.user == u),
+      members.remove(me);
+      members.insert(0, me);
+
+      yield MembersLoaded(
+        members.map(
+          (u) => ChatMember.fromRoomAndUserId(
+            _room,
+            u.id,
+            isMe: _matrix.user.id == u.id,
+          ),
         ),
       );
-
-      yield MembersLoaded(members);
     }
   }
 }

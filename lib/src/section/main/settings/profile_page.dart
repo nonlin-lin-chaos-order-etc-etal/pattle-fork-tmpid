@@ -59,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     overflow: Overflow.visible,
                     children: <Widget>[
                       Hero(
-                        tag: me.user.id,
+                        tag: me.userId,
                         child: ChatMemberAvatar(
                           member: me,
                           radius: 96,
@@ -99,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: context.pattleTheme.primaryColorOnBackground,
                         ),
                         title: Text(context.intl.common.username),
-                        subtitle: Text(me.user.id.toString()),
+                        subtitle: Text(me.userId.toString()),
                       )
                     ],
                   ),

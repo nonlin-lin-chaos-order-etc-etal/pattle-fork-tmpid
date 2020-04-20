@@ -7,7 +7,7 @@ abstract class NotificationsEvent extends Equatable {
 }
 
 class LoggedIn extends NotificationsEvent {
-  final LocalUser user;
+  final MyUser user;
 
   LoggedIn(this.user);
 

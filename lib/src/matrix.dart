@@ -16,39 +16,53 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:matrix_sdk_sqflite/matrix_sdk_sqflite.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:moor/moor.dart';
+import 'package:moor_ffi/moor_ffi.dart';
+import 'package:path/path.dart' as path;
 
 import 'auth/bloc.dart';
 
 class Matrix {
-  static final SqfliteStore store = SqfliteStore(path: 'pattle.sqlite');
+  static final MoorStore store = MoorStore(
+    LazyDatabase(() async {
+      final dataDir = await getApplicationDocumentsDirectory();
+      return VmDatabase(File(path.join(dataDir.path, 'pattle.sqlite')));
+    }),
+  );
 
   // Used for listening to auth state changes
   final AuthBloc _authBloc;
 
-  LocalUser _user;
-  LocalUser get user => _user;
+  MyUser _user;
+  MyUser get user => _user;
 
-  StreamSubscription _firstSyncSubscription;
   final Completer<void> _firstSyncCompleter = Completer();
   Future<void> get firstSync => _firstSyncCompleter.future;
+
+  final Completer<void> _userAvailable = Completer();
+  Future<void> get userAvaible => _userAvailable.future;
 
   Matrix(this._authBloc) {
     _authBloc.listen(_processAuthState);
   }
 
-  void _processAuthState(AuthState state) {
+  Future<void> _processAuthState(AuthState state) async {
     if (state is Authenticated) {
       _user = state.user;
+      _userAvailable.complete();
       _user.startSync();
 
-      _firstSyncSubscription = _user.sync.listen((state) {
-        _firstSyncCompleter.complete();
-        _firstSyncSubscription.cancel();
+      _user = await _user.updates.firstSync.then((u) => u.user);
+      _firstSyncCompleter.complete();
+
+      _user.updates.listen((update) {
+        _user = update.user;
       });
     }
 

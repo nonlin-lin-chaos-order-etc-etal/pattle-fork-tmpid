@@ -30,12 +30,13 @@ export 'event.dart';
 
 class ImageBloc extends Bloc<ImageEvent, ImageState> {
   final Matrix _matrix;
-  final Room _room;
+  Room _room;
 
   StreamSubscription _sub;
 
   ImageBloc(this._matrix, this._room) {
-    _matrix.user.sync.listen((_) {
+    _sub = _matrix.user.updates.onlySync.listen((update) {
+      _room = update.user.rooms[_room.id];
       add(FetchImages());
     });
   }
@@ -49,20 +50,24 @@ class ImageBloc extends Bloc<ImageEvent, ImageState> {
       yield ImagesLoading();
       final imageMessageEvents = <ImageMessageEvent>[];
 
-      RoomEvent event;
-      for (event in await _room.timeline.get(allowRemote: false)) {
+      final update = await _room.timeline.load();
+      _room = update.user.rooms[_room.id];
+
+      for (final event in _room.timeline) {
         if (event is ImageMessageEvent) {
           imageMessageEvents.add(event);
         }
       }
 
-      final messages = await Future.wait(
+      yield ImagesLoaded(
         imageMessageEvents.map(
-          (i) => ChatMessage.create(_room, i, isMe: (u) => u == _matrix.user),
+          (i) => ChatMessage(
+            _room,
+            i,
+            isMe: (id) => id == _matrix.user.id,
+          ),
         ),
       );
-
-      yield ImagesLoaded(messages);
     }
   }
 

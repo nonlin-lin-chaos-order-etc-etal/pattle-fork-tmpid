@@ -31,12 +31,12 @@ class ChatMemberAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (member.user.avatarUrl != null) {
+    if (member.avatarUrl != null) {
       return CircleAvatar(
         radius: radius,
         backgroundColor: Colors.transparent,
         backgroundImage: CachedNetworkImageProvider(
-          member.user.avatarUrl.toThumbnailString(context),
+          member.avatarUrl.toThumbnailString(context),
         ),
       );
     } else {

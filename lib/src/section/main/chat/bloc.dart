@@ -35,20 +35,21 @@ export 'state.dart';
 export 'event.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  final Matrix matrix;
-  final Room room;
+  static const _pageSize = 30;
+
+  final Matrix _matrix;
+  Room _room;
 
   StreamSubscription _syncSub;
 
-  ChatBloc(this.matrix, this.room) {
-    _syncSub = matrix.user.sync.listen((state) {
-      if (state.dirtyRooms.contains(room)) {
-        add(FetchChat());
-      }
+  ChatBloc(this._matrix, this._room) {
+    _syncSub = _room.updates.onlySync.listen((update) {
+      _room = update.user.rooms[_room.id];
+      add(FetchChat(refresh: true));
     });
   }
 
-  LocalUser get me => matrix.user;
+  MyUser get me => _matrix.user;
 
   // TODO: Move to separate bloc
   //bool _notifying = false;
@@ -98,12 +99,19 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   @override
-  ChatState get initialState => ChatLoading();
+  ChatState get initialState => _loadMessages();
 
   @override
   Stream<ChatState> mapEventToState(ChatEvent event) async* {
     if (event is FetchChat) {
-      yield await _fetch();
+      if (!event.refresh) {
+        yield state.copyWith(loadingMore: true);
+
+        final update = await _room.timeline.load(count: _pageSize);
+        _room = update.user.rooms[_room.id];
+      }
+
+      yield _loadMessages();
     }
 
     if (event is MarkAsRead) {
@@ -119,112 +127,88 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  Future<ChatState> _fetch() async {
-    final currentState = state;
-
-    int page;
-    if (currentState is ChatLoaded) {
-      page = currentState.pageCount;
-    } else {
-      page = 0;
-    }
-
-    final events = await room.timeline.paginate(page: page);
-
+  ChatState _loadMessages() {
     final messages = <ChatMessage>[];
 
     RoomEvent event;
-    for (event in events) {
+    for (event in _room.timeline) {
       var shouldIgnore = false;
       // In direct chats, don't show the invite event between this user
       // and the direct user.
       //
       // Also in direct chats, don't show the join events between this user
       // and the direct user.
-      if (room.isDirect) {
+      if (_room.isDirect) {
         if (event is InviteEvent) {
           final iInvitedYou =
-              event.sender == me && event.subject == room.directUser;
+              event.senderId == me && event.subjectId == _room.directUserId;
 
           final youInvitedMe =
-              event.sender == room.directUser && event.subject == me;
+              event.senderId == _room.directUserId && event.subjectId == me.id;
 
           shouldIgnore = iInvitedYou || youInvitedMe;
         } else if (event is JoinEvent) {
-          final subject = event.subject;
-          shouldIgnore = subject == me || subject == room.directUser;
+          final subject = event.subjectId;
+          shouldIgnore = subject == me || subject == _room.directUserId;
         }
       }
 
       shouldIgnore |= event is JoinEvent &&
           event is! DisplayNameChangeEvent &&
-          room.creator == event.subject;
+          _room.creatorId == event.subjectId;
 
       // Don't show creation events in rooms that are replacements
-      shouldIgnore |= event is RoomCreationEvent && room.isReplacement;
+      shouldIgnore |= event is RoomCreationEvent && _room.isReplacement;
 
-      if (room.ignoredEvents.contains(event.runtimeType) || shouldIgnore) {
+      if (_room.ignoredEvents.contains(event.runtimeType) || shouldIgnore) {
         continue;
       }
 
       ChatMessage inReplyTo;
-      if (event is MessageEvent && event.content.inReplyToId != null) {
-        final inReplyToEvent = await room.timeline[event.content.inReplyToId];
+      if (event is MessageEvent && event.content?.inReplyToId != null) {
+        // TODO: Might not be loaded?
+        final inReplyToEvent = _room.timeline[event.content.inReplyToId];
 
         if (inReplyToEvent != null) {
-          inReplyTo = await ChatMessage.create(
-            room,
+          inReplyTo = ChatMessage(
+            _room,
             inReplyToEvent,
-            isMe: (u) => u == matrix.user,
+            isMe: (id) => id == _matrix.user.id,
           );
         }
       }
 
       messages.add(
-        await ChatMessage.create(
-          room,
+        ChatMessage(
+          _room,
           event,
           inReplyTo: inReplyTo,
-          isMe: (u) => u == matrix.user,
+          isMe: (id) => id == _matrix.user.id,
         ),
       );
     }
 
-    bool endReached;
+    var endReached = false;
     if (event is RoomCreationEvent) {
       endReached = true;
     }
 
-    if (currentState is ChatLoaded) {
-      return currentState.copyWith(
-        messages: currentState.messages + messages,
-        pageCount: page + 1,
-        endReached: endReached,
-      );
-    } else {
-      return ChatLoaded(
-        messages: messages,
-        pageCount: page + 1,
-        endReached: endReached ?? false,
-      );
-    }
+    return ChatState(
+      messages: messages,
+      endReached: endReached,
+    );
   }
 
   Future<void> _markAllAsRead() async {
-    final latestEvent = (await room.timeline.get(upTo: 1)).first;
-
-    final r = room as JoinedRoom;
-
-    await r.markRead(until: latestEvent.id);
+    await _room.markRead(until: _room.timeline.first.id);
   }
 
   Future<void> _sendMessage(String text) async {
-    final room = this.room;
     // TODO: Check if text is just whitespace
-    if (room is JoinedRoom && text.isNotEmpty) {
+    if (text.isNotEmpty) {
       // Refresh the list every time the sent state changes.
-      await for (var _ in room.send(TextMessage(body: text))) {
-        add(FetchChat());
+      await for (var _ in _room.send(TextMessage(body: text))) {
+        add(FetchChat(refresh: true));
       }
     }
   }
@@ -233,15 +217,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     final fileName = file.path.split('/').last;
 
     final matrixUrl = await me.upload(
-      byteStream: file.openRead(),
+      bytes: file.openRead(),
       length: await file.length(),
       fileName: fileName,
       contentType: lookupMimeType(fileName),
     );
 
     final image = decodeImage(file.readAsBytesSync());
-
-    final r = room as JoinedRoom;
 
     final message = ImageMessage(
       url: matrixUrl,
@@ -252,8 +234,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       ),
     );
 
-    await for (var _ in r.send(message)) {
-      add(FetchChat());
+    await for (var _ in _room.send(message)) {
+      add(FetchChat(refresh: true));
     }
   }
 }
