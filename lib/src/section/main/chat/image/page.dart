@@ -42,7 +42,7 @@ class ImagePage extends StatefulWidget {
     assert(message.event is ImageMessageEvent);
 
     return BlocProvider<ImageBloc>(
-      create: (c) => ImageBloc(Matrix.of(c), chat.room),
+      create: (c) => ImageBloc(Matrix.of(c), chat.room.id),
       child: ImagePage._(message),
     );
   }

@@ -42,7 +42,7 @@ class ChatSettingsPage extends StatefulWidget {
 
   static Widget withBloc(Chat chat) {
     return BlocProvider<ChatSettingsBloc>(
-      create: (c) => ChatSettingsBloc(Matrix.of(c), chat.room),
+      create: (c) => ChatSettingsBloc(Matrix.of(c), chat.room.id),
       child: ChatSettingsPage._(chat),
     );
   }

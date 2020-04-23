@@ -34,7 +34,8 @@ class ChatSettingsBloc extends Bloc<ChatSettingsEvent, ChatSettingsState> {
   final Matrix _matrix;
   Room _room;
 
-  ChatSettingsBloc(this._matrix, this._room);
+  ChatSettingsBloc(this._matrix, RoomId roomId)
+      : _room = _matrix.user.rooms[roomId];
 
   @override
   ChatSettingsState get initialState => ChatSettingsUninitialized();

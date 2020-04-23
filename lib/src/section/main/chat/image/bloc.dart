@@ -34,7 +34,7 @@ class ImageBloc extends Bloc<ImageEvent, ImageState> {
 
   StreamSubscription _sub;
 
-  ImageBloc(this._matrix, this._room) {
+  ImageBloc(this._matrix, RoomId roomId) : _room = _matrix.user.rooms[roomId] {
     _sub = _matrix.user.updates.onlySync.listen((update) {
       _room = update.user.rooms[_room.id];
       add(FetchImages());

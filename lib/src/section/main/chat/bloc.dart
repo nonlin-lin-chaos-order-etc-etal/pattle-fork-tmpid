@@ -42,7 +42,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   StreamSubscription _syncSub;
 
-  ChatBloc(this._matrix, this._room) {
+  ChatBloc(this._matrix, RoomId roomId) : _room = _matrix.user.rooms[roomId] {
     _syncSub = _room.updates.onlySync.listen((update) {
       _room = update.user.rooms[_room.id];
       add(FetchChat(refresh: true));
