@@ -24,38 +24,42 @@ import '../../models/chat.dart';
 
 class TypingContent extends StatelessWidget {
   final Chat chat;
+  final TextStyle style;
 
-  const TypingContent({Key key, @required this.chat}) : super(key: key);
+  const TypingContent({
+    Key key,
+    @required this.chat,
+    this.style,
+  }) : super(key: key);
 
   List<TextSpan> _span(BuildContext context, Room room) {
     if (room.isDirect || room.typingUserIds.isEmpty) {
       return [TextSpan(text: context.intl.chat.typing)];
     }
 
-    return [];
-
-    // TODO: Use ChatMember for names
-
-    /*if (room.typingUsers.length == 1) {
-      return context.intl.chat.isTyping
-          .toTextSpans(room.typingUsers.first.name);
+    if (chat.typingMembers.length == 1) {
+      return context.intl.chat.isTyping.toTextSpans(
+        chat.typingMembers.first.name,
+      );
     } else {
       return context.intl.chat.areTyping.toTextSpans(
-        room.typingUsers.length > 2, // If true, shows 'and more' message
-        room.typingUsers.first.name,
-        room.typingUsers[1].name,
+        chat.typingMembers.length > 2, // If true, shows 'and more' message
+        chat.typingMembers.first.name,
+        chat.typingMembers[1].name,
       );
-    }*/
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final style = this.style ??
+        TextStyle(color: context.pattleTheme.primaryColorOnBackground);
+
     return RichText(
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       text: TextSpan(
-        style: TextStyle(
-          color: context.pattleTheme.primaryColorOnBackground,
+        style: style.copyWith(
           fontWeight: FontWeight.bold,
         ),
         children: _span(context, chat.room),

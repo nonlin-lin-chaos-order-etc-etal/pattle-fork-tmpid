@@ -101,7 +101,14 @@ class _ChatPageState extends State<ChatPage> {
     Widget title = _room.isSomeoneElseTyping
         ? TitleWithSub(
             title: ChatName(chat: widget.chat),
-            subtitle: TypingContent(chat: widget.chat),
+            subtitle: TypingContent(
+              chat: widget.chat,
+              style: TextStyle(
+                color:
+                    Theme.of(context).appBarTheme.textTheme?.headline6?.color ??
+                        Theme.of(context).primaryTextTheme.headline6.color,
+              ),
+            ),
           )
         : ChatName(chat: widget.chat);
 

@@ -22,6 +22,7 @@ import 'chat_member.dart';
 import 'chat_message.dart';
 
 /// Chat overview used in the 'chats' page.
+@immutable
 class Chat {
   final Room room;
 
@@ -38,6 +39,8 @@ class Chat {
 
   final ChatMember directMember;
 
+  final List<ChatMember> typingMembers;
+
   bool get isDirect => room.isDirect;
   bool get isChannel =>
       room.joinRule == JoinRule.public || room.joinRule == JoinRule.knock;
@@ -51,5 +54,8 @@ class Chat {
   })  : name = room.name ??
             (room.isDirect ? directMember.name : room.id.toString()),
         avatarUrl = room.avatarUrl ??
-            (room.isDirect ? directMember.avatarUrl : room.avatarUrl);
+            (room.isDirect ? directMember.avatarUrl : room.avatarUrl),
+        typingMembers = room.typingUserIds
+            .map((id) => ChatMember.fromRoomAndUserId(room, id, isMe: false))
+            .toList();
 }
