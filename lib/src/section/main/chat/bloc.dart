@@ -115,7 +115,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
 
     if (event is MarkAsRead) {
-      await _markAllAsRead();
+      _markAllAsRead();
     }
 
     if (event is SendTextMessage) {
@@ -202,7 +202,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   Future<void> _markAllAsRead() async {
-    await _room.markRead(until: _room.timeline.first.id);
+    final id = _room.timeline
+        .firstWhere(
+          (e) => e.sentState != SentState.unsent,
+          orElse: () => null,
+        )
+        ?.id;
+
+    if (id != null) {
+      await _room.markRead(until: id);
+    }
   }
 
   void _sendMessage(String text) async {
