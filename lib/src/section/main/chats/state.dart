@@ -15,4 +15,7 @@ class ChatsLoaded extends ChatsState {
   final List<Chat> public;
 
   ChatsLoaded({@required this.personal, @required this.public});
+
+  @override
+  List<Object> get props => [personal, public];
 }
