@@ -25,6 +25,9 @@ class SendTextMessage extends ChatEvent {
   final String message;
 
   SendTextMessage(this.message);
+
+  @override
+  List<Object> get props => [message];
 }
 
 class SendImageMessage extends ChatEvent {

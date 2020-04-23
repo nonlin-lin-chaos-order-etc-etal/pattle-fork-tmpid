@@ -119,7 +119,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
 
     if (event is SendTextMessage) {
-      await _sendMessage(event.message);
+      _sendMessage(event.message);
     }
 
     if (event is SendImageMessage) {
@@ -129,6 +129,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   ChatState _loadMessages() {
     final messages = <ChatMessage>[];
+
+    _room = _matrix.user.rooms[_room.id];
 
     RoomEvent event;
     for (event in _room.timeline) {
@@ -203,13 +205,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     await _room.markRead(until: _room.timeline.first.id);
   }
 
-  Future<void> _sendMessage(String text) async {
+  void _sendMessage(String text) async {
     // TODO: Check if text is just whitespace
     if (text.isNotEmpty) {
       // Refresh the list every time the sent state changes.
-      await for (var _ in _room.send(TextMessage(body: text))) {
+      _room.send(TextMessage(body: text)).forEach((_) {
         add(FetchChat(refresh: true));
-      }
+      });
     }
   }
 
