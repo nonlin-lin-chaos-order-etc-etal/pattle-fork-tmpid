@@ -172,8 +172,6 @@ class _MessageListState extends State<_MessageList> {
 
     final bloc = BlocProvider.of<ChatBloc>(context);
 
-    bloc.add(FetchChat(refresh: false));
-
     _scrollController.addListener(() {
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.position.pixels;
