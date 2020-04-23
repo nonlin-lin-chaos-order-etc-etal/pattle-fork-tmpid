@@ -23,6 +23,7 @@ import 'package:image/image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:mime/mime.dart';
 
+import '../models/chat.dart';
 import '../models/chat_message.dart';
 
 import '../../../matrix.dart';
@@ -38,14 +39,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   static const _pageSize = 30;
 
   final Matrix _matrix;
-  Room _room;
+
+  Chat _chat;
+  Room get _room => _chat.room;
 
   StreamSubscription _syncSub;
 
-  ChatBloc(this._matrix, RoomId roomId) : _room = _matrix.user.rooms[roomId] {
-    _syncSub = _room.updates.onlySync.listen((update) {
-      _room = update.user.rooms[_room.id];
-      add(FetchChat(refresh: true));
+  ChatBloc(this._matrix, RoomId roomId) : _chat = _matrix.chats[roomId] {
+    _syncSub = _matrix.updatesFor(roomId).listen((chat) {
+      _chat = chat;
+      add(UpdateChat(refresh: true));
     });
   }
 
@@ -103,12 +106,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   @override
   Stream<ChatState> mapEventToState(ChatEvent event) async* {
-    if (event is FetchChat) {
+    if (event is UpdateChat) {
       if (!event.refresh) {
-        yield state.copyWith(loadingMore: true);
-
-        final update = await _room.timeline.load(count: _pageSize);
-        _room = update.user.rooms[_room.id];
+        await _room.timeline.load(count: _pageSize);
+        return;
       }
 
       yield _loadMessages();
@@ -129,8 +130,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   ChatState _loadMessages() {
     final messages = <ChatMessage>[];
-
-    _room = _matrix.user.rooms[_room.id];
 
     RoomEvent event;
     for (event in _room.timeline) {
@@ -196,6 +195,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
 
     return ChatState(
+      chat: _chat,
       messages: messages,
       endReached: endReached,
     );
@@ -219,7 +219,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     if (text.isNotEmpty) {
       // Refresh the list every time the sent state changes.
       _room.send(TextMessage(body: text)).forEach((_) {
-        add(FetchChat(refresh: true));
+        add(UpdateChat(refresh: true));
       });
     }
   }
@@ -246,7 +246,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     );
 
     await for (var _ in _room.send(message)) {
-      add(FetchChat(refresh: true));
+      add(UpdateChat(refresh: true));
     }
   }
 }

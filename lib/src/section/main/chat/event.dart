@@ -8,12 +8,12 @@ abstract class ChatEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchChat extends ChatEvent {
+class UpdateChat extends ChatEvent {
   /// If true, don't request more items, just show what's already in the
   /// timeline (which might've been updated by a sync).
   final bool refresh;
 
-  FetchChat({@required this.refresh});
+  UpdateChat({@required this.refresh});
 
   @override
   List<Object> get props => [refresh];

@@ -40,14 +40,14 @@ import 'widgets/bubble/state.dart';
 import 'widgets/date_header.dart';
 
 class ChatPage extends StatefulWidget {
-  final Chat chat;
+  final RoomId roomId;
 
-  ChatPage._(this.chat);
+  ChatPage._(this.roomId);
 
-  static Widget withBloc(Chat chat) {
+  static Widget withBloc(RoomId roomId) {
     return BlocProvider<ChatBloc>(
-      create: (c) => ChatBloc(Matrix.of(c), chat.room.id),
-      child: ChatPage._(chat),
+      create: (c) => ChatBloc(Matrix.of(c), roomId),
+      child: ChatPage._(roomId),
     );
   }
 
@@ -57,8 +57,6 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   Timer _readTimer;
-
-  Room get _room => widget.chat.room;
 
   @override
   void dispose() {
@@ -84,76 +82,85 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget avatar = Container();
-    final avatarUrl = widget.chat.avatarUrl;
-    if (avatarUrl != null) {
-      avatar = Hero(
-        tag: _room.id,
-        child: CircleAvatar(
-          backgroundColor: Colors.white,
-          backgroundImage: CachedNetworkImageProvider(
-            avatarUrl.toThumbnailString(context),
-          ),
-        ),
-      );
-    }
+    return BlocBuilder<ChatBloc, ChatState>(
+      builder: (context, state) {
+        final chat = state.chat;
 
-    Widget title = _room.isSomeoneElseTyping
-        ? TitleWithSub(
-            title: ChatName(chat: widget.chat),
-            subtitle: TypingContent(
-              chat: widget.chat,
-              style: TextStyle(
-                color:
-                    Theme.of(context).appBarTheme.textTheme?.headline6?.color ??
-                        Theme.of(context).primaryTextTheme.headline6.color,
+        Widget avatar = Container();
+        final avatarUrl = chat.avatarUrl;
+        if (avatarUrl != null) {
+          avatar = Hero(
+            tag: chat.room.id,
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              backgroundImage: CachedNetworkImageProvider(
+                avatarUrl.toThumbnailString(context),
               ),
             ),
-          )
-        : ChatName(chat: widget.chat);
+          );
+        }
 
-    return Scaffold(
-      backgroundColor: context.pattleTheme.chat.backgroundColor,
-      appBar: AppBar(
-        titleSpacing: 0,
-        title: GestureDetector(
-          onTap: () => Navigator.of(context).pushNamed(
-            Routes.chatsSettings,
-            arguments: widget.chat,
+        Widget title = chat.room.isSomeoneElseTyping
+            ? TitleWithSub(
+                title: ChatName(chat: chat),
+                subtitle: TypingContent(
+                  chat: chat,
+                  style: TextStyle(
+                    color: Theme.of(context)
+                            .appBarTheme
+                            .textTheme
+                            ?.headline6
+                            ?.color ??
+                        Theme.of(context).primaryTextTheme.headline6.color,
+                  ),
+                ),
+              )
+            : ChatName(chat: chat);
+
+        return Scaffold(
+          backgroundColor: context.pattleTheme.chat.backgroundColor,
+          appBar: AppBar(
+            titleSpacing: 0,
+            title: GestureDetector(
+              onTap: () => Navigator.of(context).pushNamed(
+                Routes.chatsSettings,
+                arguments: chat,
+              ),
+              child: Row(
+                children: <Widget>[
+                  avatar,
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: title,
+                  ),
+                ],
+              ),
+            ),
           ),
-          child: Row(
+          body: Column(
             children: <Widget>[
-              avatar,
-              SizedBox(width: 16),
+              //ErrorBanner(),
               Expanded(
-                child: title,
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: _MessageList(chat: chat),
+                    ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints.loose(
+                        Size.fromHeight(
+                          MediaQuery.of(context).size.height / 3,
+                        ),
+                      ),
+                      child: _Input(room: chat.room),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
-        ),
-      ),
-      body: Column(
-        children: <Widget>[
-          //ErrorBanner(),
-          Expanded(
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: _MessageList(chat: widget.chat),
-                ),
-                ConstrainedBox(
-                  constraints: BoxConstraints.loose(
-                    Size.fromHeight(
-                      MediaQuery.of(context).size.height / 3,
-                    ),
-                  ),
-                  child: _Input(room: _room),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -189,7 +196,7 @@ class _MessageListState extends State<_MessageList> {
           !state.endReached &&
           !_requestingMore) {
         _requestingMore = true;
-        bloc.add(FetchChat(refresh: false));
+        bloc.add(UpdateChat(refresh: false));
       }
     });
   }

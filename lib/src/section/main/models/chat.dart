@@ -21,6 +21,8 @@ import 'package:meta/meta.dart';
 import 'chat_member.dart';
 import 'chat_message.dart';
 
+import '../../../util/room.dart';
+
 /// Chat overview used in the 'chats' page.
 @immutable
 class Chat {
@@ -58,4 +60,64 @@ class Chat {
         typingMembers = room.typingUserIds
             .map((id) => ChatMember.fromRoomAndUserId(room, id, isMe: false))
             .toList();
+
+  @override
+  bool operator ==(dynamic other) => other is Chat ? other.room == room : false;
+
+  @override
+  int get hashCode => room.hashCode;
+}
+
+extension RoomToChat on Room {
+  Chat toChat({@required UserId myId}) {
+    // We should always have at least 30 items in the timeline, so don't load
+    final latestEvent = timeline.firstWhere(
+      (event) => !ignoredEvents.contains(event.runtimeType),
+      orElse: () => null,
+    );
+
+    var latestEventForSorting = timeline.firstWhere(
+      (event) =>
+          (event is! MemberChangeEvent ||
+              (event is JoinEvent &&
+                  event is! DisplayNameChangeEvent &&
+                  event is! AvatarChangeEvent &&
+                  event.subjectId == myId)) &&
+          event is! RedactionEvent,
+      orElse: () => null,
+    );
+
+    // If there is no non-MemberChangeEvent in the last
+    // 10 messages, just settle for the most recent one (which ever
+    // type it is).
+    if (latestEventForSorting == null) {
+      latestEventForSorting = latestEvent;
+    }
+
+    return Chat(
+      room: this,
+      isJustMe: summary.joinedMembersCount == 1,
+      latestMessage: latestEvent != null
+          ? ChatMessage(
+              this,
+              latestEvent,
+              isMe: (id) => id == myId,
+            )
+          : null,
+      latestMessageForSorting: latestEventForSorting != null
+          ? ChatMessage(
+              this,
+              latestEventForSorting,
+              isMe: (id) => id == myId,
+            )
+          : null,
+      directMember: isDirect
+          ? ChatMember.fromRoomAndUserId(
+              this,
+              directUserId,
+              isMe: directUserId == myId,
+            )
+          : null,
+    );
+  }
 }

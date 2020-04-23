@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:provider/provider.dart';
 
 import 'matrix.dart';
@@ -31,7 +32,6 @@ import 'resources/theme.dart';
 import 'section/main/chat/page.dart';
 import 'section/main/chat/image/page.dart';
 import 'section/main/chat/settings/page.dart';
-import 'section/main/models/chat.dart';
 import 'section/main/chats/page.dart';
 import 'section/main/chats/create/group/details_page.dart';
 import 'section/main/chats/create/group/members_page.dart';
@@ -67,7 +67,7 @@ final Map<String, MaterialPageRoute Function(Object)> routes = {
       ),
   Routes.chats: (arguments) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.chats),
-        builder: (context) => arguments is Chat
+        builder: (context) => arguments is RoomId
             ? ChatPage.withBloc(arguments)
             : ChatsPage.withBloc(),
       ),

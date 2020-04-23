@@ -27,6 +27,7 @@ import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path/path.dart' as path;
 
 import 'auth/bloc.dart';
+import 'section/main/models/chat.dart';
 
 class Matrix {
   static final MoorStore store = MoorStore(
@@ -48,6 +49,9 @@ class Matrix {
   final Completer<void> _userAvailable = Completer();
   Future<void> get userAvaible => _userAvailable.future;
 
+  var _chats = <RoomId, Chat>{};
+  Map<RoomId, Chat> get chats => _chats;
+
   Matrix(this._authBloc) {
     _authBloc.listen(_processAuthState);
   }
@@ -58,12 +62,10 @@ class Matrix {
       _userAvailable.complete();
       _user.startSync();
 
-      _user = await _user.updates.firstSync.then((u) => u.user);
+      await _user.updates.firstSync.then(_processUpdate);
       _firstSyncCompleter.complete();
 
-      _user.updates.listen((update) {
-        _user = update.user;
-      });
+      _user.updates.listen(_processUpdate);
     }
 
     if (state is NotAuthenticated) {
@@ -71,6 +73,28 @@ class Matrix {
       _user = null;
     }
   }
+
+  void _processUpdate(Update update) {
+    _user = update.user;
+
+    _chats = Map.fromEntries(
+      _user.rooms.where((r) => !r.isUpgraded).map(
+            (r) => MapEntry(
+              r.id,
+              r.toChat(myId: _user.id),
+            ),
+          ),
+    );
+
+    _chatUpdatesController.add(_chats);
+  }
+
+  final _chatUpdatesController =
+      StreamController<Map<RoomId, Chat>>.broadcast();
+
+  Stream<Chat> updatesFor(RoomId roomId) => _chatUpdatesController.stream
+      .map((chats) => chats[roomId])
+      .where((chat) => chat != null);
 
   static Matrix of(BuildContext context) => Provider.of<Matrix>(
         context,

@@ -18,14 +18,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 
 import '../models/chat.dart';
-import '../models/chat_member.dart';
-import '../models/chat_message.dart';
 
 import '../../../matrix.dart';
-import '../../../util/room.dart';
 
 import 'event.dart';
 import 'state.dart';
@@ -46,68 +42,7 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   }
 
   Future<List<Chat>> _getChats() async {
-    final me = _matrix.user;
-
-    final chats = <Chat>[];
-
-    for (final room in await me.rooms) {
-      // Don't show rooms that have been upgraded
-      if (room.isUpgraded) {
-        continue;
-      }
-
-      // We should always have at least 30 items in the timeline, so don't load
-      final latestEvent = room.timeline.firstWhere(
-        (event) => !room.ignoredEvents.contains(event.runtimeType),
-        orElse: () => null,
-      );
-
-      var latestEventForSorting = room.timeline.firstWhere(
-        (event) =>
-            (event is! MemberChangeEvent ||
-                (event is JoinEvent &&
-                    event is! DisplayNameChangeEvent &&
-                    event is! AvatarChangeEvent &&
-                    event.subjectId == me.id)) &&
-            event is! RedactionEvent,
-        orElse: () => null,
-      );
-
-      // If there is no non-MemberChangeEvent in the last
-      // 10 messages, just settle for the most recent one (which ever
-      // type it is).
-      if (latestEventForSorting == null) {
-        latestEventForSorting = latestEvent;
-      }
-
-      final chat = Chat(
-        room: room,
-        isJustMe: room.summary.joinedMembersCount == 1,
-        latestMessage: latestEvent != null
-            ? ChatMessage(
-                room,
-                latestEvent,
-                isMe: (id) => id == _matrix.user.id,
-              )
-            : null,
-        latestMessageForSorting: latestEventForSorting != null
-            ? ChatMessage(
-                room,
-                latestEventForSorting,
-                isMe: (id) => id == _matrix.user.id,
-              )
-            : null,
-        directMember: room.isDirect
-            ? ChatMember.fromRoomAndUserId(
-                room,
-                room.directUserId,
-                isMe: room.directUserId == _matrix.user.id,
-              )
-            : null,
-      );
-
-      chats.add(chat);
-    }
+    final chats = _matrix.chats.values.toList();
 
     chats.sort((a, b) {
       if (a.room.highlightedUnreadNotificationCount > 0 &&
