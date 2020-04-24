@@ -42,7 +42,7 @@ class ChatAvatar extends StatelessWidget {
             fit: BoxFit.cover,
             placeholder: MemoryImage(kTransparentImage),
             image: CachedNetworkImageProvider(
-              avatarUrl.toThumbnailString(context),
+              avatarUrl.toHttps(context, thumbnail: true),
             ),
           ),
         ),

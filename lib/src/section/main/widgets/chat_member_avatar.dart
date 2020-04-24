@@ -36,7 +36,7 @@ class ChatMemberAvatar extends StatelessWidget {
         radius: radius,
         backgroundColor: Colors.transparent,
         backgroundImage: CachedNetworkImageProvider(
-          member.avatarUrl.toThumbnailString(context),
+          member.avatarUrl.toHttps(context, thumbnail: true),
         ),
       );
     } else {

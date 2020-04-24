@@ -158,7 +158,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     );
 
     final icon = await DefaultCacheManager().getSingleFile(
-      sender.avatarUrl.toThumbnailStringWith(user.context.homeserver),
+      sender.avatarUrl.toHttpsWith(user.context.homeserver, thumbnail: true),
     );
 
     final senderPerson = Person(

@@ -15,18 +15,25 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
 import '../../../../../../../app.dart';
 import '../../message.dart';
-import '../../../../../../../util/url.dart';
+
+import '../../../../util/image_provider.dart';
 
 /// Creates an [ImageContent] widget for a [MessageBubble].
 ///
 /// Must have a [MessageBubble] ancestor.
-class ImageContent extends StatelessWidget {
+class ImageContent extends StatefulWidget {
+  ImageContent({Key key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _ImageContentState();
+}
+
+class _ImageContentState extends State<ImageContent> {
   static const double _width = 256;
   static const double _minHeight = 72;
   static const double _maxHeight = 292;
@@ -36,25 +43,42 @@ class ImageContent extends StatelessWidget {
     Navigator.pushNamed(
       context,
       Routes.image,
-      arguments: [bubble.chat, bubble.message],
+      arguments: [bubble.chat.room.id, bubble.message.event.id],
     );
   }
 
+  bool get _isFile => _fileUri != null;
+  Uri _fileUri;
+
+  double _height;
+
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     final bubble = MessageBubble.of(context);
     assert(bubble.message.event is ImageMessageEvent);
 
     final event = bubble.message.event as ImageMessageEvent;
 
-    final height = (event.content.info?.height ??
+    _height = (event.content.info?.height ??
             0 / (event.content.info?.width ?? 0 / _width))
         .clamp(_minHeight, _maxHeight)
         .toDouble();
 
+    if (event.content.url.isScheme('file')) {
+      _fileUri = event.content.url;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bubble = MessageBubble.of(context);
+    final event = bubble.message.event as ImageMessageEvent;
+
     return Container(
       width: _width,
-      height: height,
+      height: _height,
       decoration: BoxDecoration(borderRadius: bubble.borderRadius),
       child: Stack(
         children: <Widget>[
@@ -63,8 +87,11 @@ class ImageContent extends StatelessWidget {
               borderRadius: bubble.borderRadius,
               child: Hero(
                 tag: event.id,
-                child: CachedNetworkImage(
-                  imageUrl: event.content.url.toThumbnailString(context),
+                child: Image(
+                  image: imageProvider(
+                    context: context,
+                    url: _isFile ? _fileUri : event.content.url,
+                  ),
                   fit: BoxFit.cover,
                 ),
               ),

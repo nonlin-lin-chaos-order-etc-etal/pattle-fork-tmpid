@@ -93,7 +93,7 @@ class _ChatPageState extends State<ChatPage> {
             child: CircleAvatar(
               backgroundColor: Colors.white,
               backgroundImage: CachedNetworkImageProvider(
-                avatarUrl.toThumbnailString(context),
+                avatarUrl.toHttps(context, thumbnail: true),
               ),
             ),
           );

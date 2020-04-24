@@ -125,7 +125,10 @@ class MessageBubble extends StatelessWidget {
     if (event is TextMessageEvent) {
       content = TextContent();
     } else if (event is ImageMessageEvent) {
-      content = ImageContent();
+      content = ImageContent(
+          key: ValueKey(
+        message.event.transactionId ?? message.event.id.toString(),
+      ));
     } else if (event is RedactedEvent) {
       content = RedactedContent();
     }

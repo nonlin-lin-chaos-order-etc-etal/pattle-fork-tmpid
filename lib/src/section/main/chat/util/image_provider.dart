@@ -1,4 +1,4 @@
-// Copyright (C) 2019  Wilko Manger
+// Copyright (C) 2020  Wilko Manger
 //
 // This file is part of Pattle.
 //
@@ -15,32 +15,19 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:matrix_sdk/matrix_sdk.dart';
 
-import '../matrix.dart';
+import '../../../../util/url.dart';
 
-extension UrlResolver on Uri {
-  String toHttps(
-    BuildContext context, {
-    bool thumbnail = false,
-  }) {
-    return toHttpsWith(
-      Matrix.of(context).user.context.homeserver,
-      thumbnail: thumbnail,
-    );
-  }
-
-  String toHttpsWith(
-    Homeserver homeserver, {
-    bool thumbnail = false,
-  }) {
-    if (thumbnail) {
-      return homeserver
-          .resolveThumbnailUrl(this, width: 256, height: 256)
-          .toString();
-    } else {
-      return homeserver.resolveDownloadUrl(this).toString();
-    }
-  }
+ImageProvider imageProvider({
+  @required BuildContext context,
+  @required Uri url,
+  bool thumbnail = false,
+}) {
+  return url.isScheme('file')
+      ? FileImage(File(url.toFilePath(windows: Platform.isWindows)))
+      : CachedNetworkImageProvider(url.toHttps(context, thumbnail: thumbnail));
 }

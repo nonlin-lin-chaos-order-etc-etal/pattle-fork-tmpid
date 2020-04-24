@@ -19,9 +19,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:image/image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:mime/mime.dart';
 
 import '../../../../../matrix.dart';
 import '../../bloc.dart';
@@ -33,17 +31,16 @@ export 'state.dart';
 export 'event.dart';
 
 class InputBloc extends Bloc<InputEvent, InputState> {
-  final Matrix _matrix;
   final ChatBloc _chatBloc;
 
   // Doesn't need the most up to date room instance.
   final Room _room;
 
   InputBloc(
-    this._matrix,
+    Matrix matrix,
     this._chatBloc,
     RoomId roomId,
-  ) : _room = _matrix.chats[roomId].room;
+  ) : _room = matrix.chats[roomId].room;
 
   @override
   InputState get initialState => InputState();
@@ -112,28 +109,13 @@ class InputBloc extends Bloc<InputEvent, InputState> {
   }
 
   Future<void> _sendImage(File file) async {
-    final fileName = file.path.split('/').last;
-
-    final matrixUrl = await _matrix.user.upload(
-      bytes: file.openRead(),
-      length: await file.length(),
-      fileName: fileName,
-      contentType: lookupMimeType(fileName),
-    );
-
-    final image = decodeImage(file.readAsBytesSync());
-
     final message = ImageMessage(
-      url: matrixUrl,
-      body: fileName,
-      info: ImageInfo(
-        width: image.width,
-        height: image.height,
-      ),
+      url: Uri.file(file.path),
+      body: file.path.split(Platform.pathSeparator).last,
     );
 
-    await for (var _ in _room.send(message)) {
+    _room.send(message).forEach((_) {
       _chatBloc.add(UpdateChat(refresh: true));
-    }
+    });
   }
 }

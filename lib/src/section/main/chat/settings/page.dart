@@ -66,7 +66,10 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
       backgroundColor: context.pattleTheme.chat.backgroundColor,
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
-          final url = widget.chat.avatarUrl?.toDownloadString(context);
+          final url = widget.chat.avatarUrl?.toHttps(
+            context,
+            thumbnail: true,
+          );
           return <Widget>[
             SliverAppBar(
               expandedHeight: 128.0,

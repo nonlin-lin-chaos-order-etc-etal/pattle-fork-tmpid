@@ -35,40 +35,42 @@ class ImageBloc extends Bloc<ImageEvent, ImageState> {
   StreamSubscription _sub;
 
   ImageBloc(this._matrix, RoomId roomId) : _room = _matrix.user.rooms[roomId] {
-    _sub = _matrix.user.updates.onlySync.listen((update) {
+    _sub = _room.updates.listen((update) {
       _room = update.user.rooms[_room.id];
       add(FetchImages());
     });
   }
 
   @override
-  ImageState get initialState => ImagesUninitialized();
+  ImageState get initialState => _loadImages();
 
   @override
   Stream<ImageState> mapEventToState(ImageEvent event) async* {
     if (event is FetchImages) {
-      yield ImagesLoading();
-      final imageMessageEvents = <ImageMessageEvent>[];
-
-      final update = await _room.timeline.load();
-      _room = update.user.rooms[_room.id];
-
-      for (final event in _room.timeline) {
-        if (event is ImageMessageEvent) {
-          imageMessageEvents.add(event);
-        }
-      }
-
-      yield ImagesLoaded(
-        imageMessageEvents.map(
-          (i) => ChatMessage(
-            _room,
-            i,
-            isMe: (id) => id == _matrix.user.id,
-          ),
-        ),
-      );
+      yield _loadImages();
     }
+  }
+
+  ImageState _loadImages() {
+    final imageMessageEvents = <ImageMessageEvent>[];
+
+    for (final event in _room.timeline) {
+      if (event is ImageMessageEvent) {
+        imageMessageEvents.add(event);
+      }
+    }
+
+    return ImageState(
+      imageMessageEvents
+          .map(
+            (i) => ChatMessage(
+              _room,
+              i,
+              isMe: (id) => id == _matrix.user.id,
+            ),
+          )
+          .toList(),
+    );
   }
 
   @override
