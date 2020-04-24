@@ -14,17 +14,15 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
+
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import '../../../app.dart';
 
-import '../../../resources/intl/localizations.dart';
 import '../../../resources/theme.dart';
 import '../models/chat.dart';
 import '../chats/widgets/typing_content.dart';
@@ -38,6 +36,7 @@ import 'bloc.dart';
 import 'widgets/bubble/message.dart';
 import 'widgets/bubble/state.dart';
 import 'widgets/date_header.dart';
+import 'widgets/input/widget.dart';
 
 class ChatPage extends StatefulWidget {
   final RoomId roomId;
@@ -152,7 +151,10 @@ class _ChatPageState extends State<ChatPage> {
                           MediaQuery.of(context).size.height / 3,
                         ),
                       ),
-                      child: _Input(room: chat.room),
+                      child: Input.withBloc(
+                        roomId: chat.room.id,
+                        canSendMessages: chat.room.myMembership is Joined,
+                      ),
                     ),
                   ],
                 ),
@@ -270,103 +272,5 @@ class _MessageListState extends State<_MessageList> {
         );
       },
     );
-  }
-}
-
-class _Input extends StatefulWidget {
-  final Room room;
-
-  const _Input({Key key, @required this.room}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _InputState();
-}
-
-class _InputState extends State<_Input> {
-  final _textController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<ChatBloc>(context);
-
-    const elevation = 8.0;
-
-    if (widget.room.myMembership is Joined) {
-      return Material(
-        elevation: elevation,
-        color: context.pattleTheme.chat.backgroundColor,
-        // On dark theme, draw a divider line because the shadow is gone
-        shape: Theme.of(context).brightness == Brightness.dark
-            ? Border(top: BorderSide(color: Colors.grey[800]))
-            : null,
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Material(
-            elevation: elevation,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
-            ),
-            color: context.pattleTheme.chat.backgroundColor,
-            child: TextField(
-              controller: _textController,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              textInputAction: TextInputAction.newline,
-              autocorrect: true,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(8),
-                  ),
-                ),
-                filled: true,
-                fillColor: context.pattleTheme.chat.inputColor,
-                hintText: context.intl.chat.typeAMessage,
-                prefixIcon: IconButton(
-                  icon: Icon(Icons.attach_file),
-                  onPressed: () async {
-                    await bloc.add(
-                      SendImageMessage(
-                        await ImagePicker.pickImage(
-                          source: ImageSource.gallery,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-                    bloc.add(SendTextMessage(_textController.value.text));
-                    _textController.clear();
-                    setState(() {});
-                  },
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Material(
-        elevation: elevation,
-        color: Colors.white,
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Text(
-            context.intl.chat.cantSendMessages,
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _textController.dispose();
   }
 }

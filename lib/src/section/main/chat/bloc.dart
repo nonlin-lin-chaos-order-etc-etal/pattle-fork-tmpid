@@ -16,12 +16,9 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:image/image.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
-import 'package:mime/mime.dart';
 
 import '../models/chat.dart';
 import '../models/chat_message.dart';
@@ -54,53 +51,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   MyUser get me => _matrix.user;
 
-  // TODO: Move to separate bloc
-  //bool _notifying = false;
-  //bool _typing = false;
-  //final _stopwatch = Stopwatch();
-  //Timer _notTypingTimer;
-  //String _lastInput;
-  /*Future<void> notifyInputChanged(String input) async {
-    final room = this.room as JoinedRoom;
-
-    if (!_notifying) {
-      // Ignore null -> to '' input, triggers when clicking
-      // on the textfield
-      if (_lastInput == null && input.isEmpty) return;
-
-      _lastInput = input;
-
-      _notifying = true;
-
-      _notTypingTimer?.cancel();
-
-      if (_stopwatch.elapsed >= const Duration(seconds: 4) ||
-          !_stopwatch.isRunning) {
-        _typing = true;
-
-        await room.setIsTyping(true, timeout: const Duration(seconds: 7));
-
-        _stopwatch.reset();
-        _stopwatch.start();
-      }
-
-      _notifying = false;
-    }
-
-    _notTypingTimer = Timer(const Duration(seconds: 5), () async {
-      if (_typing) {
-        _typing = false;
-        await room.setIsTyping(false);
-      }
-    });
-  }*/
-
-  @override
-  Future<void> close() async {
-    await super.close();
-    await _syncSub.cancel();
-  }
-
   @override
   ChatState get initialState => _loadMessages();
 
@@ -117,14 +67,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     if (event is MarkAsRead) {
       _markAllAsRead();
-    }
-
-    if (event is SendTextMessage) {
-      _sendMessage(event.message);
-    }
-
-    if (event is SendImageMessage) {
-      await _sendImage(event.file);
     }
   }
 
@@ -214,39 +156,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  void _sendMessage(String text) async {
-    // TODO: Check if text is just whitespace
-    if (text.isNotEmpty) {
-      // Refresh the list every time the sent state changes.
-      _room.send(TextMessage(body: text)).forEach((_) {
-        add(UpdateChat(refresh: true));
-      });
-    }
-  }
-
-  Future<void> _sendImage(File file) async {
-    final fileName = file.path.split('/').last;
-
-    final matrixUrl = await me.upload(
-      bytes: file.openRead(),
-      length: await file.length(),
-      fileName: fileName,
-      contentType: lookupMimeType(fileName),
-    );
-
-    final image = decodeImage(file.readAsBytesSync());
-
-    final message = ImageMessage(
-      url: matrixUrl,
-      body: fileName,
-      info: ImageInfo(
-        width: image.width,
-        height: image.height,
-      ),
-    );
-
-    await for (var _ in _room.send(message)) {
-      add(UpdateChat(refresh: true));
-    }
+  @override
+  Future<void> close() async {
+    await super.close();
+    await _syncSub.cancel();
   }
 }
