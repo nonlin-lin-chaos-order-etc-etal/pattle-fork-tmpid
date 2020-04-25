@@ -21,8 +21,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+
 import '../../../app.dart';
 
+import '../../../notifications/bloc.dart';
 import '../../../resources/theme.dart';
 import '../models/chat.dart';
 import '../chats/widgets/typing_content.dart';
@@ -45,7 +47,11 @@ class ChatPage extends StatefulWidget {
 
   static Widget withBloc(RoomId roomId) {
     return BlocProvider<ChatBloc>(
-      create: (c) => ChatBloc(Matrix.of(c), roomId),
+      create: (c) => ChatBloc(
+        Matrix.of(c),
+        c.bloc<NotificationsBloc>(),
+        roomId,
+      ),
       child: ChatPage._(roomId),
     );
   }

@@ -19,12 +19,15 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:pedantic/pedantic.dart';
 
 import '../models/chat.dart';
 import '../models/chat_message.dart';
 
 import '../../../matrix.dart';
 import '../../../util/room.dart';
+
+import '../../../notifications/bloc.dart';
 
 import 'event.dart';
 import 'state.dart';
@@ -36,13 +39,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   static const _pageSize = 30;
 
   final Matrix _matrix;
+  final NotificationsBloc _notificationsBloc;
 
   Chat _chat;
   Room get _room => _chat.room;
 
   StreamSubscription _syncSub;
 
-  ChatBloc(this._matrix, RoomId roomId) : _chat = _matrix.chats[roomId] {
+  ChatBloc(
+    this._matrix,
+    this._notificationsBloc,
+    RoomId roomId,
+  ) : _chat = _matrix.chats[roomId] {
     _syncSub = _matrix.updatesFor(roomId).listen((chat) {
       _chat = chat;
       add(UpdateChat(refresh: true));
@@ -152,7 +160,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         ?.id;
 
     if (id != null) {
-      await _room.markRead(until: id);
+      _notificationsBloc.add(RemoveNotifications(roomId: _room.id, until: id));
+      unawaited(_room.markRead(until: id));
     }
   }
 

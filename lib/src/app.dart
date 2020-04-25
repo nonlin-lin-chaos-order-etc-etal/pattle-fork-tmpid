@@ -148,10 +148,8 @@ class App extends StatelessWidget {
         child: Builder(
           builder: (c) {
             return BlocProvider<NotificationsBloc>(
-              create: (context) => NotificationsBloc(
-                matrix: Matrix.of(c),
-                authBloc: _authBloc,
-              ),
+              create: (context) => NotificationsBloc(Matrix.of(c), _authBloc),
+              lazy: false,
               child: MaterialApp(
                 onGenerateTitle: (context) => context.intl.appName,
                 localizationsDelegates: [

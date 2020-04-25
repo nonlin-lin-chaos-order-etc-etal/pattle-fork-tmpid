@@ -78,13 +78,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1+1"
-  clock:
-    dependency: transitive
-    description:
-      name: clock
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   collection:
     dependency: transitive
     description:
@@ -148,13 +141,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
-  fake_async:
-    dependency: transitive
-    description:
-      name: fake_async
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
   ffi:
     dependency: transitive
     description:
@@ -297,7 +283,7 @@ packages:
       name: intl_translation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.17.10"
+    version: "0.17.9"
   js:
     dependency: transitive
     description:
@@ -323,8 +309,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "04dd287ec4b575cebbceda293cf8c7236813bfb8"
-      resolved-ref: "04dd287ec4b575cebbceda293cf8c7236813bfb8"
+      ref: f46b702f541844830099f6f46dff7487a2a94b34
+      resolved-ref: f46b702f541844830099f6f46dff7487a2a94b34
       url: "https://git.pattle.im/pattle/library/matrix-dart-sdk.git"
     source: git
     version: "0.0.0"
@@ -404,7 +390,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.0"
+    version: "1.6.4"
   path_drawing:
     dependency: transitive
     description:
@@ -453,7 +439,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.2"
+    version: "2.4.0"
   photo_view:
     dependency: "direct main"
     description:
@@ -489,6 +475,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.4"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.3"
   respect_24_hour:
     dependency: "direct main"
     description:
@@ -656,7 +649,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.7.0"
+    version: "3.6.1"
   yaml:
     dependency: transitive
     description:

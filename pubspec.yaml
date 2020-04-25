@@ -67,7 +67,7 @@ dependency_overrides:
   matrix_sdk:
     git:
       url: https://git.pattle.im/pattle/library/matrix-dart-sdk.git
-      ref: 04dd287ec4b575cebbceda293cf8c7236813bfb8
+      ref: f46b702f541844830099f6f46dff7487a2a94b34
 
 dev_dependencies:
   flutter_launcher_icons: ^0.7.2+1

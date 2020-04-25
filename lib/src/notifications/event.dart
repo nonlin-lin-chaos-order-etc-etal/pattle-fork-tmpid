@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
 abstract class NotificationsEvent extends Equatable {
@@ -6,11 +7,12 @@ abstract class NotificationsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoggedIn extends NotificationsEvent {
-  final MyUser user;
+class RemoveNotifications extends NotificationsEvent {
+  final RoomId roomId;
+  final EventId until;
 
-  LoggedIn(this.user);
+  RemoveNotifications({@required this.roomId, @required this.until});
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [roomId, until];
 }
