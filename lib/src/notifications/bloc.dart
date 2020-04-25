@@ -345,7 +345,6 @@ class NotificationData {
     var room = user.rooms[message.roomId];
     var event = room.timeline[message.eventId];
 
-    // TODO: Still needed?
     if (event == null) {
       final wasSyncing = user.isSyncing;
       if (!wasSyncing) {
