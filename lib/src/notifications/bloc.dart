@@ -65,6 +65,10 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   /// SendPort to send the NotificationData to.
   SendPort _sendPort;
 
+  /// RoomId which notifications should not be shown for. Ignored for
+  /// background notifications.
+  RoomId _hiddenRoomId;
+
   Future<void> _handlePortMessage(dynamic message) async {
     if (message is SendPort) {
       _sendPort = message;
@@ -96,12 +100,19 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       if (authState is Authenticated) {
         FirebaseMessaging()
           ..configure(
-            onMessage: (message) async => _showNotification(
-              await NotificationData.fromDataMessage(
-                DataMessage.fromJson(message),
-                user: _matrix.user,
-              ),
-            ),
+            onMessage: (message) async {
+              final dataMessage = DataMessage.fromJson(message);
+              if (dataMessage.roomId == _hiddenRoomId) {
+                return;
+              }
+
+              await _showNotification(
+                await NotificationData.fromDataMessage(
+                  dataMessage,
+                  user: _matrix.user,
+                ),
+              );
+            },
             onBackgroundMessage: _handleBackgroundMessage,
           );
 
@@ -120,6 +131,16 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   Stream<NotificationsState> mapEventToState(NotificationsEvent event) async* {
     if (event is RemoveNotifications) {
       _removeNotifications(event);
+    }
+
+    if (event is HideNotifications) {
+      _hiddenRoomId = event.roomId;
+    }
+
+    if (event is UnhideNotifications) {
+      if (_hiddenRoomId == event.roomId) {
+        _hiddenRoomId = null;
+      }
     }
   }
 

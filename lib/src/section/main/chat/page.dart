@@ -70,17 +70,42 @@ class _ChatPageState extends State<ChatPage> {
 
     final bloc = BlocProvider.of<ChatBloc>(context);
 
+    context.bloc<NotificationsBloc>().add(
+          HideNotifications(bloc.state.chat.room.id),
+        );
+
     bloc.add(MarkAsRead());
+  }
+
+  Future<bool> _onWillPop(BuildContext context, ChatState state) async {
+    context.bloc<NotificationsBloc>().add(
+          UnhideNotifications(state.chat.room.id),
+        );
+
+    return true;
+  }
+
+  void _onStateChange(BuildContext context, ChatState state) {
+    if (state.wasRefresh) {
+      context.bloc<ChatBloc>().add(MarkAsRead());
+    }
+  }
+
+  void _goToChatSettings(BuildContext context, ChatState state) {
+    Navigator.of(context).pushNamed(
+      Routes.chatsSettings,
+      arguments: state.chat,
+    );
+
+    context.bloc<NotificationsBloc>().add(
+          UnhideNotifications(state.chat.room.id),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ChatBloc, ChatState>(
-      listener: (context, state) {
-        if (state.wasRefresh) {
-          context.bloc<ChatBloc>().add(MarkAsRead());
-        }
-      },
+      listener: _onStateChange,
       builder: (context, state) {
         final chat = state.chat;
 
@@ -115,50 +140,50 @@ class _ChatPageState extends State<ChatPage> {
               )
             : ChatName(chat: chat);
 
-        return Scaffold(
-          backgroundColor: context.pattleTheme.chat.backgroundColor,
-          appBar: AppBar(
-            titleSpacing: 0,
-            title: GestureDetector(
-              onTap: () => Navigator.of(context).pushNamed(
-                Routes.chatsSettings,
-                arguments: chat,
-              ),
-              child: Row(
-                children: <Widget>[
-                  avatar,
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: title,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          body: Column(
-            children: <Widget>[
-              //ErrorBanner(),
-              Expanded(
-                child: Column(
+        return WillPopScope(
+          onWillPop: () => _onWillPop(context, state),
+          child: Scaffold(
+            backgroundColor: context.pattleTheme.chat.backgroundColor,
+            appBar: AppBar(
+              titleSpacing: 0,
+              title: GestureDetector(
+                onTap: () => _goToChatSettings(context, state),
+                child: Row(
                   children: <Widget>[
+                    avatar,
+                    SizedBox(width: 16),
                     Expanded(
-                      child: _MessageList(chat: chat),
-                    ),
-                    ConstrainedBox(
-                      constraints: BoxConstraints.loose(
-                        Size.fromHeight(
-                          MediaQuery.of(context).size.height / 3,
-                        ),
-                      ),
-                      child: Input.withBloc(
-                        roomId: chat.room.id,
-                        canSendMessages: chat.room.myMembership is Joined,
-                      ),
+                      child: title,
                     ),
                   ],
                 ),
               ),
-            ],
+            ),
+            body: Column(
+              children: <Widget>[
+                //ErrorBanner(),
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: _MessageList(chat: chat),
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints.loose(
+                          Size.fromHeight(
+                            MediaQuery.of(context).size.height / 3,
+                          ),
+                        ),
+                        child: Input.withBloc(
+                          roomId: chat.room.id,
+                          canSendMessages: chat.room.myMembership is Joined,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
