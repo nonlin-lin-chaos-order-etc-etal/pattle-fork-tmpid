@@ -101,3 +101,6 @@ coverage/
 
 .env
 lib-native/
+
+android/app/pattle.keystore
+android/app/google-services.json
