@@ -29,7 +29,6 @@ import 'package:package_info/package_info.dart';
 import 'package:device_info/device_info.dart';
 
 import '../app.dart' as pattle;
-import '../storage.dart';
 
 import 'event.dart';
 import 'state.dart';
@@ -39,7 +38,6 @@ export 'state.dart';
 
 class SentryBloc extends Bloc<SentryEvent, SentryState> {
   SentryClient _client;
-  Storage _storage;
 
   Future<void> _reportError(dynamic error, dynamic stackTrace) async {
     if (!state.mayReportCrashes) {
@@ -198,11 +196,7 @@ class SentryBloc extends Bloc<SentryEvent, SentryState> {
     }
 
     if (event is ChangeMayReportCrashes) {
-      if (_storage == null) {
-        _storage = await Storage.load();
-      }
-
-      _storage.mayReportCrashes = event.mayReportCrashes;
+      // TODO: Listen to SettingsBloc changes
 
       // Initialize if may report crashes was false before but now true,
       // otherwise just reyield the updated current state
