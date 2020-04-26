@@ -1,4 +1,4 @@
-// Copyright (C) 2019  Wilko Manger
+// Copyright (C) 2020  Wilko Manger
 //
 // This file is part of Pattle.
 //
@@ -19,10 +19,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../resources/intl/localizations.dart';
-import '../../../resources/theme.dart';
+import '../../../../../resources/intl/localizations.dart';
+import '../../../../../resources/theme.dart';
 
-import 'bloc.dart';
+import '../../bloc.dart';
+
+class NamePage extends StatefulWidget {
+  NamePage._();
+
+  static Widget withGivenBloc(SettingsBloc settingsBloc) {
+    return BlocProvider<SettingsBloc>.value(
+      value: settingsBloc,
+      child: NamePage._(),
+    );
+  }
+
+  @override
+  State<StatefulWidget> createState() => _NamePageState();
+}
 
 class _NamePageState extends State<NamePage> {
   final _textController = TextEditingController();
@@ -142,18 +156,4 @@ class _NamePageState extends State<NamePage> {
       ),
     );
   }
-}
-
-class NamePage extends StatefulWidget {
-  NamePage._();
-
-  static Widget withGivenBloc(SettingsBloc settingsBloc) {
-    return BlocProvider<SettingsBloc>.value(
-      value: settingsBloc,
-      child: NamePage._(),
-    );
-  }
-
-  @override
-  State<StatefulWidget> createState() => _NamePageState();
 }

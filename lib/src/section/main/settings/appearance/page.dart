@@ -17,11 +17,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../resources/intl/localizations.dart';
-import '../../../resources/theme.dart';
+import '../../../../resources/intl/localizations.dart';
+import '../../../../resources/theme.dart';
 
-import 'bloc.dart';
-import 'widgets/header.dart';
+import '../bloc.dart';
+import '../widgets/header.dart';
 
 class AppearancePage extends StatefulWidget {
   AppearancePage._();

@@ -18,12 +18,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../resources/intl/localizations.dart';
-import '../../../resources/theme.dart';
-import '../widgets/chat_member_avatar.dart';
-import '../../../app.dart';
+import '../../../../resources/intl/localizations.dart';
+import '../../../../resources/theme.dart';
+import '../../widgets/chat_member_avatar.dart';
+import '../../../../app.dart';
 
-import 'bloc.dart';
+import '../bloc.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage._();
