@@ -42,18 +42,21 @@ class Redacted extends StatelessWidget {
           color: color,
           size: iconSize,
         ),
-        RichText(
-          text: TextSpan(
-            style: TextStyle(
-              color: color,
-              fontStyle: FontStyle.italic,
-            ),
-            children: context.intl.chat.message.deletion.toTextSpans(
-              redaction.sender.person,
-              redaction.sender.name,
+        SizedBox(width: 8),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(
+                color: color,
+                fontStyle: FontStyle.italic,
+              ),
+              children: context.intl.chat.message.deletion.toTextSpans(
+                redaction.sender.person,
+                redaction.sender.name,
+              ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

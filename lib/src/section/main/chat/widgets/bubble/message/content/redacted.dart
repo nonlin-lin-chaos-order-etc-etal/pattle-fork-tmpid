@@ -45,13 +45,11 @@ class RedactedContent extends StatelessWidget {
               : CrossAxisAlignment.start,
           children: <Widget>[
             if (Sender.necessary(context)) Sender(),
-            DefaultTextStyle(
-              style: TextStyle(
-                color: bubble.message.isMine
-                    ? context.pattleTheme.chat.myRedactedContentColor
-                    : context.pattleTheme.chat.theirRedactedContentColor,
-              ),
-              child: Redacted(redaction: bubble.message.redaction),
+            Redacted(
+              redaction: bubble.message.redaction,
+              color: bubble.message.isMine
+                  ? context.pattleTheme.chat.myRedactedContentColor
+                  : context.pattleTheme.chat.theirRedactedContentColor,
             ),
             if (MessageInfo.necessary(context))
               Padding(
