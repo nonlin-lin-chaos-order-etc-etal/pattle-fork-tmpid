@@ -81,7 +81,8 @@ class UsernameLoginPageState extends State<UsernameLoginPage>
   bool _visible;
   bool _homeserverSectionVisible = false;
 
-  FocusNode _previousFocusNode;
+  /// Focus node of either username or password field.
+  FocusNode _mainFocusNode;
 
   bool _showPassword = false;
 
@@ -105,10 +106,6 @@ class UsernameLoginPageState extends State<UsernameLoginPage>
         _usernameFocusNode.hasFocus ||
         _passwordFocusNode.hasFocus;
 
-    var currentFocus = _usernameFocusNode.hasFocus
-        ? _usernameFocusNode
-        : _passwordFocusNode.hasFocus ? _passwordFocusNode : null;
-
     setState(() {
       _showHomeserverSection = !_showHomeserverSection;
     });
@@ -124,11 +121,7 @@ class UsernameLoginPageState extends State<UsernameLoginPage>
             extentOffset: inputLength,
           );
         } else {
-          _previousFocusNode.requestFocus();
-        }
-
-        if (currentFocus != null) {
-          _previousFocusNode = currentFocus;
+          _mainFocusNode.requestFocus();
         }
       }
     });
@@ -172,6 +165,18 @@ class UsernameLoginPageState extends State<UsernameLoginPage>
     });
 
     _visiblityController.value = _visible ? 1 : 0;
+
+    _usernameFocusNode.addListener(() {
+      if (_usernameFocusNode.hasFocus) {
+        _mainFocusNode = _usernameFocusNode;
+      }
+    });
+
+    _passwordFocusNode.addListener(() {
+      if (_passwordFocusNode.hasFocus) {
+        _mainFocusNode = _passwordFocusNode;
+      }
+    });
   }
 
   @override
@@ -273,7 +278,6 @@ class UsernameLoginPageState extends State<UsernameLoginPage>
                         UsernameTextField(
                           textEditingController: _usernameController,
                           focusNode: _usernameFocusNode,
-                          enabled: !_showHomeserverSection,
                         ),
                         SizedBox(height: 8),
                         BlocBuilder<LoginBloc, LoginState>(
@@ -288,7 +292,6 @@ class UsernameLoginPageState extends State<UsernameLoginPage>
                             return TextField(
                               controller: _passwordController,
                               focusNode: _passwordFocusNode,
-                              enabled: !_showHomeserverSection,
                               onChanged: (_) => _notifyPasswordChange(),
                               onEditingComplete: () {},
                               obscureText: !_showPassword,
