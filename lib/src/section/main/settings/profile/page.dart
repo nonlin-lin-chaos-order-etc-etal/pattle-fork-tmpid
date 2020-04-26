@@ -65,14 +65,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           radius: 96,
                         ),
                       ),
-                      Positioned(
-                        right: -1,
-                        bottom: -1,
-                        child: FloatingActionButton(
-                          child: Icon(Icons.photo_camera),
-                          onPressed: () {},
-                        ),
-                      )
                     ],
                   ),
                 ),
