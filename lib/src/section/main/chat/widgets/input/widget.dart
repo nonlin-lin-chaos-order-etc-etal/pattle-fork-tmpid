@@ -56,6 +56,14 @@ class Input extends StatefulWidget {
 class _InputState extends State<Input> {
   final _textController = TextEditingController();
 
+  void _sendMessage(BuildContext context) {
+    context.bloc<InputBloc>().add(SendTextMessage(_textController.value.text));
+    _textController.clear();
+    // Needed because otherwise auto-capitalization isn't working after
+    // sending the first message
+    _textController.selection = TextSelection.collapsed(offset: 0);
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<InputBloc>(context);
@@ -110,11 +118,7 @@ class _InputState extends State<Input> {
                 ),
                 suffixIcon: IconButton(
                   icon: Icon(Icons.send),
-                  onPressed: () {
-                    bloc.add(SendTextMessage(_textController.value.text));
-                    _textController.clear();
-                    setState(() {});
-                  },
+                  onPressed: () => _sendMessage(context),
                 ),
               ),
             ),
