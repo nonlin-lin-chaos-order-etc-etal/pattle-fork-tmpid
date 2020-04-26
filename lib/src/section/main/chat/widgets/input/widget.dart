@@ -56,7 +56,11 @@ class Input extends StatefulWidget {
 class _InputState extends State<Input> {
   final _textController = TextEditingController();
 
-  void _sendMessage(BuildContext context) {
+  void _notifyInputChanged(String input) {
+    context.bloc<InputBloc>().add(NotifyInputChanged(input));
+  }
+
+  void _sendMessage() {
     context.bloc<InputBloc>().add(SendTextMessage(_textController.value.text));
     _textController.clear();
     // Needed because otherwise auto-capitalization isn't working after
@@ -64,10 +68,16 @@ class _InputState extends State<Input> {
     _textController.selection = TextSelection.collapsed(offset: 0);
   }
 
+  Future<void> _sendImage() async {
+    context.bloc<InputBloc>().add(
+          SendImageMessage(
+            await ImagePicker.pickImage(source: ImageSource.gallery),
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<InputBloc>(context);
-
     const elevation = 8.0;
 
     if (widget.canSendMessages) {
@@ -94,7 +104,7 @@ class _InputState extends State<Input> {
               textInputAction: TextInputAction.newline,
               autocorrect: true,
               textCapitalization: TextCapitalization.sentences,
-              onChanged: (input) => bloc.add(NotifyInputChanged(input)),
+              onChanged: _notifyInputChanged,
               decoration: InputDecoration(
                 border: UnderlineInputBorder(
                   borderRadius: BorderRadius.vertical(
@@ -106,19 +116,11 @@ class _InputState extends State<Input> {
                 hintText: context.intl.chat.typeAMessage,
                 prefixIcon: IconButton(
                   icon: Icon(Icons.attach_file),
-                  onPressed: () async {
-                    await bloc.add(
-                      SendImageMessage(
-                        await ImagePicker.pickImage(
-                          source: ImageSource.gallery,
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: _sendImage,
                 ),
                 suffixIcon: IconButton(
                   icon: Icon(Icons.send),
-                  onPressed: () => _sendMessage(context),
+                  onPressed: _sendMessage,
                 ),
               ),
             ),
