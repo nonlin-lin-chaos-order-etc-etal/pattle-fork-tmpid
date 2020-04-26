@@ -43,7 +43,23 @@ class ChatSettingsBloc extends Bloc<ChatSettingsEvent, ChatSettingsState> {
   @override
   Stream<ChatSettingsState> mapEventToState(ChatSettingsEvent event) async* {
     if (event is FetchMembers) {
-      final me = await _room.members[_matrix.user.id];
+      final me = _room.members[_matrix.user.id] ??
+          // TODO: Fix fallback member being needed
+          Member.fromEvent(
+            MemberChangeEvent(
+              RoomEventArgs(
+                roomId: _room.id,
+                senderId: _matrix.user.id,
+                time: DateTime.now(),
+              ),
+              content: MemberChange(
+                membership: _room.myMembership,
+                displayName: _matrix.user.name,
+                avatarUrl: _matrix.user.avatarUrl,
+              ),
+              stateKey: _matrix.user.id.toString(),
+            ),
+          );
 
       if (_room.members.length < 6 &&
           _room.members.length != _room.summary.joinedMembersCount) {
@@ -61,13 +77,15 @@ class ChatSettingsBloc extends Bloc<ChatSettingsEvent, ChatSettingsState> {
       members.insert(0, me);
 
       yield MembersLoaded(
-        members.map(
-          (u) => ChatMember.fromRoomAndUserId(
-            _room,
-            u.id,
-            isMe: _matrix.user.id == u.id,
-          ),
-        ),
+        members
+            .map(
+              (u) => ChatMember.fromRoomAndUserId(
+                _room,
+                u.id,
+                isMe: _matrix.user.id == u.id,
+              ),
+            )
+            .toList(),
       );
     }
   }
