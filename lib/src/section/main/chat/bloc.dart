@@ -78,7 +78,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  ChatState _loadMessages() {
+  ChatState _loadMessages({bool isRefresh = true}) {
     final messages = <ChatMessage>[];
 
     RoomEvent event;
@@ -148,6 +148,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       chat: _chat,
       messages: messages,
       endReached: endReached,
+      wasRefresh: isRefresh,
     );
   }
 

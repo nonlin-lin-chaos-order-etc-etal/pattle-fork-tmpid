@@ -25,25 +25,15 @@ class ChatState extends Equatable {
   final Chat chat;
   final List<ChatMessage> messages;
   final bool endReached;
+  final bool wasRefresh;
 
   ChatState({
     @required this.chat,
     @required this.messages,
-    this.endReached = true,
+    @required this.endReached,
+    @required this.wasRefresh,
   });
 
-  ChatState copyWith({
-    Chat chat,
-    List<ChatMessage> messages,
-    bool endReached,
-  }) {
-    return ChatState(
-      chat: chat ?? this.chat,
-      messages: messages ?? this.messages,
-      endReached: endReached ?? this.endReached ?? true,
-    );
-  }
-
   @override
-  List<Object> get props => [chat, messages, endReached];
+  List<Object> get props => [chat, messages, endReached, wasRefresh];
 }

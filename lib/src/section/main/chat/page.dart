@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,33 +59,28 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  Timer _readTimer;
-
   @override
   void dispose() {
     super.dispose();
-    _readTimer.cancel();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (_readTimer != null) {
-      _readTimer.cancel();
-    }
-
     final bloc = BlocProvider.of<ChatBloc>(context);
 
-    _readTimer = Timer(
-      Duration(seconds: 2),
-      () => bloc.add(MarkAsRead()),
-    );
+    bloc.add(MarkAsRead());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatBloc, ChatState>(
+    return BlocConsumer<ChatBloc, ChatState>(
+      listener: (context, state) {
+        if (state.wasRefresh) {
+          context.bloc<ChatBloc>().add(MarkAsRead());
+        }
+      },
       builder: (context, state) {
         final chat = state.chat;
 
