@@ -96,7 +96,7 @@ class _InputState extends State<Input> {
               topLeft: Radius.circular(8),
               topRight: Radius.circular(8),
             ),
-            color: context.pattleTheme.chat.backgroundColor,
+            color: context.pattleTheme.chat.inputColor,
             child: TextField(
               controller: _textController,
               keyboardType: TextInputType.multiline,
@@ -112,7 +112,7 @@ class _InputState extends State<Input> {
                   ),
                 ),
                 filled: true,
-                fillColor: context.pattleTheme.chat.inputColor,
+                fillColor: Colors.transparent,
                 hintText: context.intl.chat.typeAMessage,
                 prefixIcon: IconButton(
                   icon: Icon(Icons.attach_file),
