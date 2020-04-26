@@ -59,7 +59,7 @@ dependencies:
   cupertino_icons: ^0.1.2
 
   firebase_core: ^0.4.0+9
-  firebase_messaging: ^5.1.8
+  firebase_messaging: ^6.0.13
 
   flutter_local_notifications: ^0.8.4
 
