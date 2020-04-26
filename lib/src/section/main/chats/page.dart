@@ -90,10 +90,6 @@ class _ChatsPageState extends State<ChatsPage> {
             _ChatsTab(personal: false),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).pushNamed(Routes.chatsNew),
-          child: Icon(Icons.chat),
-        ),
       ),
     );
   }
@@ -133,23 +129,6 @@ class _Drawer extends StatelessWidget {
               child: PattleLogo(width: 128),
             ),
           ),
-          ListTile(
-            leading: Icon(
-              Icons.group,
-              color: Theme.of(context).primaryColor,
-            ),
-            title: Text(context.intl.chats.newGroup.title),
-            onTap: () => Navigator.of(context).pushNamed(Routes.chatsNew),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.public,
-              color: Theme.of(context).primaryColor,
-            ),
-            title: Text(context.intl.chats.newChannel),
-            onTap: () {},
-          ),
-          Divider(),
           ListTile(
             leading: Icon(
               Icons.settings,
