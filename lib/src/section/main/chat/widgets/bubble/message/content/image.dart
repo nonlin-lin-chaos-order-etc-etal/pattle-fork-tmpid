@@ -169,7 +169,7 @@ class _Sender extends StatelessWidget {
               style: TextStyle(
                 color: Colors.white,
               ),
-              child: Sender(),
+              child: Sender(personalizedColor: false),
             ),
           ),
         ),
