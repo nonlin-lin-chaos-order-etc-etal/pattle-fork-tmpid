@@ -234,18 +234,18 @@ class _ContentLayoutRenderBox extends RenderBox
         final fitsLastLine =
             constraints.maxWidth - lastLineBox.right > info.size.width;
 
+        if (width.floor() != constraints.maxWidth.floor()) {
+          width += info.size.width;
+        }
+
         final infoParentData = info.parentData as _ContentLayoutParentData;
         infoParentData.offset = Offset(
-          width.round() == constraints.maxWidth.round() || !fitsLastLine
-              ? content.size.width - info.size.width
-              : content.size.width,
+          width - info.size.width,
           infoYOffset +
               content.size.height -
               info.size.height +
               (!fitsLastLine ? info.size.height : 0),
         );
-
-        width += info.size.width;
 
         if (!fitsLastLine) {
           height += info.size.height;
