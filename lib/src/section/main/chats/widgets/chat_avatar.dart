@@ -52,7 +52,7 @@ class ChatAvatar extends StatelessWidget {
         foregroundColor: Colors.white,
         backgroundColor: chat.room.isDirect
             ? chat.directMember.color(context)
-            : context.pattleTheme.primarySwatch[500],
+            : context.pattleTheme.data.primarySwatch[500],
         radius: 24,
         child: _icon,
       );

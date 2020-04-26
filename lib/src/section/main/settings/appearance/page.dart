@@ -20,31 +20,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../resources/intl/localizations.dart';
 import '../../../../resources/theme.dart';
 
-import '../bloc.dart';
+import '../../../../settings/bloc.dart';
 import '../widgets/header.dart';
 
 class AppearancePage extends StatefulWidget {
-  AppearancePage._();
-
-  static Widget withGivenBloc(SettingsBloc settingsBloc) {
-    return BlocProvider<SettingsBloc>.value(
-      value: settingsBloc,
-      child: AppearancePage._(),
-    );
-  }
+  AppearancePage();
 
   @override
   State<StatefulWidget> createState() => _AppearancePageState();
 }
 
 class _AppearancePageState extends State<AppearancePage> {
-  Brightness _brightness;
+  void _changeTheme(Brightness brightness) {
+    PattleTheme.of(context, listen: false).brightness = brightness;
+    context.bloc<SettingsBloc>().add(
+          UpdateThemeBrightness(brightness),
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
-    _brightness = Theme.of(context).brightness;
+    final brightness = Theme.of(context).brightness;
 
-    // TODO: Switch theme
     return Scaffold(
       appBar: AppBar(
         title: Text(context.intl.settings.appearanceTileTitle),
@@ -53,28 +50,24 @@ class _AppearancePageState extends State<AppearancePage> {
         children: <Widget>[
           ListTile(
             leading: Icon(
-              _brightness == Brightness.light
+              brightness == Brightness.light
                   ? Icons.brightness_high
                   : Icons.brightness_3,
-              color: context.pattleTheme.primaryColorOnBackground,
+              color: context.pattleTheme.data.primaryColorOnBackground,
             ),
             title: Header(context.intl.settings.brightnessTileTitle),
           ),
           RadioListTile(
-            groupValue: _brightness,
+            groupValue: brightness,
             value: Brightness.light,
-            onChanged: (brightness) {
-              //DynamicTheme.of(context).setBrightness(brightness);
-            },
+            onChanged: _changeTheme,
             title: Text(context.intl.settings.brightnessTileOptionLight),
           ),
           RadioListTile(
-            groupValue: _brightness,
+            groupValue: brightness,
             value: Brightness.dark,
-            onChanged: (brightness) {
-              //DynamicTheme.of(context).setBrightness(brightness);
-            },
-            title: Text(context.intl.settings.brightnessTileOptionLight),
+            onChanged: _changeTheme,
+            title: Text(context.intl.settings.brightnessTileOptionDark),
           ),
           Divider(height: 1)
         ],

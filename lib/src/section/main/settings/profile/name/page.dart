@@ -22,14 +22,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../resources/intl/localizations.dart';
 import '../../../../../resources/theme.dart';
 
-import '../../bloc.dart';
+import '../bloc.dart';
 
 class NamePage extends StatefulWidget {
   NamePage._();
 
-  static Widget withGivenBloc(SettingsBloc settingsBloc) {
-    return BlocProvider<SettingsBloc>.value(
-      value: settingsBloc,
+  static Widget withGivenBloc(ProfileBloc profileBloc) {
+    return BlocProvider<ProfileBloc>.value(
+      value: profileBloc,
       child: NamePage._(),
     );
   }
@@ -45,7 +45,7 @@ class _NamePageState extends State<NamePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final me = BlocProvider.of<SettingsBloc>(context).state.me;
+    final me = BlocProvider.of<ProfileBloc>(context).state.me;
 
     _textController.value = TextEditingValue(
       text: me.name,
@@ -59,14 +59,14 @@ class _NamePageState extends State<NamePage> {
   }
 
   Future<void> setName() async {
-    BlocProvider.of<SettingsBloc>(context).add(
+    BlocProvider.of<ProfileBloc>(context).add(
       UpdateDisplayName(_textController.text),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SettingsBloc, SettingsState>(
+    return BlocListener<ProfileBloc, ProfileState>(
       listener: (prevState, currentState) {
         if (currentState is DisplayNameUpdated) {
           Navigator.pop(context);
@@ -77,12 +77,12 @@ class _NamePageState extends State<NamePage> {
           title: Text(
             context.intl.common.name,
             style: TextStyle(
-              color: context.pattleTheme.primaryColorOnBackground,
+              color: context.pattleTheme.data.primaryColorOnBackground,
             ),
           ),
           brightness: Theme.of(context).brightness,
           iconTheme: IconThemeData(
-            color: context.pattleTheme.primaryColorOnBackground,
+            color: context.pattleTheme.data.primaryColorOnBackground,
           ),
           actions: <Widget>[
             IconButton(
@@ -109,19 +109,20 @@ class _NamePageState extends State<NamePage> {
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.zero,
                 ),
-                fillColor: context.pattleTheme.primaryColor,
+                fillColor: context.pattleTheme.data.primaryColor,
                 focusColor: Colors.white,
               ),
               onSubmitted: (_) => setName(),
             ),
-            BlocBuilder<SettingsBloc, SettingsState>(
+            BlocBuilder<ProfileBloc, ProfileState>(
               builder: (context, state) {
                 if (state is UpdatingDisplayName) {
                   return LinearProgressIndicator(
                     valueColor: AlwaysStoppedAnimation(
-                      context.pattleTheme.primarySwatch[300],
+                      context.pattleTheme.data.primarySwatch[300],
                     ),
-                    backgroundColor: context.pattleTheme.primarySwatch[100],
+                    backgroundColor:
+                        context.pattleTheme.data.primarySwatch[100],
                   );
                 } else {
                   return Container(height: 6);

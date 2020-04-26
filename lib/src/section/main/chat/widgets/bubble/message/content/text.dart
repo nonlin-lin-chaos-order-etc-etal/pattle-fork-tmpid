@@ -76,15 +76,17 @@ class _Content extends StatelessWidget {
       defaultTextStyle: TextStyle(
         color: bubble.message.isMine
             ? bubble.isRepliedTo
-                ? context.pattleTheme.chat.myMessage.repliedTo.contentColor
-                : context.pattleTheme.chat.myMessage.contentColor
+                ? context.pattleTheme.data.chat.myMessage.repliedTo.contentColor
+                : context.pattleTheme.data.chat.myMessage.contentColor
             : bubble.isRepliedTo
-                ? context.pattleTheme.chat.theirMessage.repliedTo.contentColor
-                : context.pattleTheme.chat.theirMessage.contentColor,
+                ? context
+                    .pattleTheme.data.chat.theirMessage.repliedTo.contentColor
+                : context.pattleTheme.data.chat.theirMessage.contentColor,
       ),
       linkStyle: TextStyle(
         decoration: TextDecoration.underline,
-        color: !bubble.message.isMine ? context.pattleTheme.linkColor : null,
+        color:
+            !bubble.message.isMine ? context.pattleTheme.data.linkColor : null,
       ),
       renderNewlines: true,
       onLinkTap: (url) async {

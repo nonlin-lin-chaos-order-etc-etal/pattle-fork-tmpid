@@ -53,7 +53,7 @@ class TypingContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = this.style ??
-        TextStyle(color: context.pattleTheme.primaryColorOnBackground);
+        TextStyle(color: context.pattleTheme.data.primaryColorOnBackground);
 
     return RichText(
       maxLines: 1,

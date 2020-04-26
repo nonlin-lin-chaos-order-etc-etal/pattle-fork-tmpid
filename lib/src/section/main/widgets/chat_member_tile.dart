@@ -80,7 +80,7 @@ class ChatMemberTileState extends State<ChatMemberTile> {
                   color: Colors.white,
                   child: Icon(
                     Icons.check_circle,
-                    color: context.pattleTheme.primaryColor,
+                    color: context.pattleTheme.data.primaryColor,
                   ),
                 ),
               ),

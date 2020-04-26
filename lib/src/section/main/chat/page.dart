@@ -143,7 +143,7 @@ class _ChatPageState extends State<ChatPage> {
         return WillPopScope(
           onWillPop: () => _onWillPop(context, state),
           child: Scaffold(
-            backgroundColor: context.pattleTheme.chat.backgroundColor,
+            backgroundColor: context.pattleTheme.data.chat.backgroundColor,
             appBar: AppBar(
               titleSpacing: 0,
               title: GestureDetector(

@@ -15,26 +15,16 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'profile/tile.dart';
 
 import '../../../resources/intl/localizations.dart';
 import '../../../resources/theme.dart';
 
-import '../widgets/chat_member_avatar.dart';
 import '../../../app.dart';
-import '../../../matrix.dart';
-
-import 'bloc.dart';
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage._({Key key});
-
-  static Widget withBloc() {
-    return BlocProvider<SettingsBloc>(
-      create: (c) => SettingsBloc(Matrix.of(c)),
-      child: SettingsPage._(),
-    );
-  }
+  SettingsPage({Key key});
 
   @override
   State<StatefulWidget> createState() => _SettingsPageState();
@@ -43,72 +33,23 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<SettingsBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(context.intl.settings.title),
       ),
       body: ListView(
         children: <Widget>[
-          Material(
-            child: InkWell(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  Routes.settingsProfile,
-                  arguments: bloc,
-                );
-              },
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: BlocBuilder<SettingsBloc, SettingsState>(
-                  builder: (context, state) {
-                    final me = state.me;
-
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Hero(
-                          tag: me.userId,
-                          child: ChatMemberAvatar(
-                            member: me,
-                            radius: 36,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                me.name,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(me.userId.toString())
-                            ],
-                          ),
-                        )
-                      ],
-                    );
-                  },
-                ),
-              ),
-            ),
-          ),
+          ProfileSettingTile.withBloc(),
           Divider(height: 1),
           ListTile(
             leading: Icon(
               Icons.landscape,
-              color: context.pattleTheme.primaryColor,
+              color: context.pattleTheme.data.listTileIconColor,
             ),
             title: Text(context.intl.settings.appearanceTileTitle),
             subtitle: Text(context.intl.settings.appearanceTileSubtitle),
             onTap: () => Navigator.of(context).pushNamed(
               Routes.settingsAppearance,
-              arguments: bloc,
             ),
           )
         ],

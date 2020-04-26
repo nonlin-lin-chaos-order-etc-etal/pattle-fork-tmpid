@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 
-abstract class SettingsEvent extends Equatable {
+abstract class ProfileEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-class UpdateDisplayName extends SettingsEvent {
+class UpdateDisplayName extends ProfileEvent {
   final String name;
 
   UpdateDisplayName(this.name);

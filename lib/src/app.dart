@@ -21,6 +21,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'matrix.dart';
 import 'auth/bloc.dart';
@@ -43,6 +44,7 @@ import 'section/start/page.dart';
 import 'section/start/login/username/page.dart';
 
 import 'redirect.dart';
+import 'settings/bloc.dart';
 
 final Map<String, MaterialPageRoute Function(Object)> routes = {
   Routes.root: (params) => MaterialPageRoute(
@@ -51,7 +53,7 @@ final Map<String, MaterialPageRoute Function(Object)> routes = {
       ),
   Routes.settings: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.settings),
-        builder: (context) => SettingsPage.withBloc(),
+        builder: (context) => SettingsPage(),
       ),
   Routes.settingsProfile: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.settingsProfile),
@@ -63,7 +65,7 @@ final Map<String, MaterialPageRoute Function(Object)> routes = {
       ),
   Routes.settingsAppearance: (params) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.settingsAppearance),
-        builder: (context) => AppearancePage.withGivenBloc(params),
+        builder: (context) => AppearancePage(),
       ),
   Routes.chats: (arguments) => MaterialPageRoute(
         settings: RouteSettings(name: Routes.chats),
@@ -117,13 +119,21 @@ class Routes {
 }
 
 class App extends StatelessWidget {
-  static Future<void> main() async => _sentryBloc.wrap(() => runApp(App()));
+  static Future<void> run() async => _sentryBloc.wrap(() async {
+        WidgetsFlutterBinding.ensureInitialized();
+        runApp(App(await SharedPreferences.getInstance()));
+      });
+
+  App(SharedPreferences sharedPreferences)
+      : _settingsBloc = SettingsBloc(sharedPreferences);
 
   static String get buildType => DotEnv().env['BUILD_TYPE'];
 
   static final _sentryBloc = SentryBloc();
 
   final _authBloc = AuthBloc();
+
+  final SettingsBloc _settingsBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -135,39 +145,40 @@ class App extends StatelessWidget {
         BlocProvider<SentryBloc>.value(
           value: _sentryBloc,
         ),
+        BlocProvider<SettingsBloc>.value(
+          value: _settingsBloc,
+        ),
       ],
-      child: MultiProvider(
-        providers: [
-          Provider<Matrix>(
-            create: (_) => Matrix(_authBloc),
+      child: Provider<Matrix>(
+        create: (_) => Matrix(_authBloc),
+        child: PattleTheme(
+          data: _settingsBloc.state.themeBrightness == Brightness.dark
+              ? pattleDarkTheme
+              : pattleLightTheme,
+          child: Builder(
+            builder: (c) {
+              return BlocProvider<NotificationsBloc>(
+                create: (context) => NotificationsBloc(Matrix.of(c), _authBloc),
+                lazy: false,
+                child: MaterialApp(
+                  onGenerateTitle: (context) => context.intl.appName,
+                  localizationsDelegates: [
+                    const PattleLocalizationsDelegate(),
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                  ],
+                  supportedLocales: [
+                    const Locale('en', 'US'),
+                  ],
+                  initialRoute: Routes.root,
+                  onGenerateRoute: (settings) {
+                    return routes[settings.name](settings.arguments);
+                  },
+                  theme: PattleTheme.of(c).data.themeData,
+                ),
+              );
+            },
           ),
-          Provider<PattleTheme>.value(
-            value: pattleLightTheme,
-          ),
-        ],
-        child: Builder(
-          builder: (c) {
-            return BlocProvider<NotificationsBloc>(
-              create: (context) => NotificationsBloc(Matrix.of(c), _authBloc),
-              lazy: false,
-              child: MaterialApp(
-                onGenerateTitle: (context) => context.intl.appName,
-                localizationsDelegates: [
-                  const PattleLocalizationsDelegate(),
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                ],
-                supportedLocales: [
-                  const Locale('en', 'US'),
-                ],
-                initialRoute: Routes.root,
-                onGenerateRoute: (settings) {
-                  return routes[settings.name](settings.arguments);
-                },
-                theme: Provider.of<PattleTheme>(c).themeData,
-              ),
-            );
-          },
         ),
       ),
     );

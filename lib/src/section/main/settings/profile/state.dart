@@ -1,4 +1,4 @@
-// Copyright (C) 2019  Wilko Manger
+// Copyright (C) 2020  Wilko Manger
 //
 // This file is part of Pattle.
 //
@@ -15,6 +15,27 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'src/app.dart';
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
-Future<void> main() => App.run();
+import '../../models/chat_member.dart';
+
+@immutable
+class ProfileState extends Equatable {
+  final ChatMember me;
+
+  ProfileState(this.me);
+
+  @override
+  List<Object> get props => [me];
+}
+
+class UpdatingDisplayName extends ProfileState {
+  @override
+  UpdatingDisplayName(ChatMember me) : super(me);
+}
+
+class DisplayNameUpdated extends ProfileState {
+  @override
+  DisplayNameUpdated(ChatMember me) : super(me);
+}

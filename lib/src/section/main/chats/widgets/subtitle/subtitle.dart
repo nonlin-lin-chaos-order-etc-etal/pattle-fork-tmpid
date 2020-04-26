@@ -149,7 +149,7 @@ class _NotificationCount extends StatelessWidget {
       child: ClipOval(
         child: Container(
           color: room.highlightedUnreadNotificationCount > 0
-              ? context.pattleTheme.primaryColor
+              ? context.pattleTheme.data.primaryColor
               : Colors.grey,
           child: Padding(
             padding: EdgeInsets.all(2),

@@ -23,14 +23,14 @@ import '../../../../resources/theme.dart';
 import '../../widgets/chat_member_avatar.dart';
 import '../../../../app.dart';
 
-import '../bloc.dart';
+import 'bloc.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage._();
 
-  static Widget withGivenBloc(SettingsBloc settingsBloc) {
-    return BlocProvider<SettingsBloc>.value(
-      value: settingsBloc,
+  static Widget withGivenBloc(ProfileBloc profileBloc) {
+    return BlocProvider<ProfileBloc>.value(
+      value: profileBloc,
       child: ProfilePage._(),
     );
   }
@@ -46,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: Text(context.intl.settings.profileTitle),
       ),
-      body: BlocBuilder<SettingsBloc, SettingsState>(
+      body: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {
           final me = state.me;
 
@@ -74,21 +74,26 @@ class _ProfilePageState extends State<ProfilePage> {
                       ListTile(
                         leading: Icon(
                           Icons.person,
-                          color: context.pattleTheme.primaryColorOnBackground,
+                          color:
+                              context.pattleTheme.data.primaryColorOnBackground,
                         ),
                         title: Text(context.intl.common.name),
                         subtitle: Text(me.name),
                         trailing: Icon(Icons.edit),
-                        onTap: () => Navigator.pushNamed(
-                          context,
-                          Routes.settingsProfileName,
-                          arguments: BlocProvider.of<SettingsBloc>(context),
-                        ),
+                        onTap: () async {
+                          await Navigator.pushNamed(
+                            context,
+                            Routes.settingsProfileName,
+                            arguments: BlocProvider.of<ProfileBloc>(context),
+                          );
+                          setState(() {});
+                        },
                       ),
                       ListTile(
                         leading: Icon(
                           Icons.alternate_email,
-                          color: context.pattleTheme.primaryColorOnBackground,
+                          color:
+                              context.pattleTheme.data.primaryColorOnBackground,
                         ),
                         title: Text(context.intl.common.username),
                         subtitle: Text(me.userId.toString()),

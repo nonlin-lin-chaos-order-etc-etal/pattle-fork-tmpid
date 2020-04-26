@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app.dart';
 import '../../../resources/intl/localizations.dart';
+import '../../../resources/theme.dart';
 
 import '../../../matrix.dart';
 
@@ -132,7 +133,7 @@ class _Drawer extends StatelessWidget {
           ListTile(
             leading: Icon(
               Icons.settings,
-              color: Theme.of(context).primaryColor,
+              color: context.pattleTheme.data.listTileIconColor,
             ),
             title: Text(context.intl.settings.title),
             onTap: () => Navigator.pushNamed(context, Routes.settings),

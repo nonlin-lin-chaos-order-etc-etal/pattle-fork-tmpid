@@ -79,7 +79,7 @@ class StateBubble extends StatelessWidget {
             child: Center(
               child: Material(
                 elevation: 1,
-                color: context.pattleTheme.chat.stateMessageColor,
+                color: context.pattleTheme.data.chat.stateMessageColor,
                 shape: shape,
                 child: InkWell(
                   customBorder: shape,

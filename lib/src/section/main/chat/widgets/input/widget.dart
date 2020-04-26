@@ -83,7 +83,7 @@ class _InputState extends State<Input> {
     if (widget.canSendMessages) {
       return Material(
         elevation: elevation,
-        color: context.pattleTheme.chat.backgroundColor,
+        color: context.pattleTheme.data.chat.backgroundColor,
         // On dark theme, draw a divider line because the shadow is gone
         shape: Theme.of(context).brightness == Brightness.dark
             ? Border(top: BorderSide(color: Colors.grey[800]))
@@ -96,7 +96,7 @@ class _InputState extends State<Input> {
               topLeft: Radius.circular(8),
               topRight: Radius.circular(8),
             ),
-            color: context.pattleTheme.chat.inputColor,
+            color: context.pattleTheme.data.chat.inputColor,
             child: TextField(
               controller: _textController,
               keyboardType: TextInputType.multiline,

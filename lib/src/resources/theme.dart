@@ -1,4 +1,4 @@
-// Copyright (C) 2019  Wilko Manger
+// Copyright (C) 2020  Wilko Manger
 //
 // This file is part of Pattle.
 //
@@ -20,31 +20,120 @@ import 'package:provider/provider.dart';
 
 import '../section/main/models/chat_member.dart';
 
+// TODO: Support branding better
+
+class PattleTheme extends StatefulWidget {
+  final Widget child;
+
+  final PattleThemeData data;
+
+  const PattleTheme({
+    Key key,
+    @required this.data,
+    @required this.child,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _PattleThemeState();
+
+  static _PattleThemeDataWithSetter of(
+    BuildContext context, {
+    bool listen = true,
+  }) =>
+      Provider.of<_PattleThemeDataWithSetter>(
+        context,
+        listen: listen,
+      );
+}
+
+class _PattleThemeState extends State<PattleTheme> {
+  _PattleThemeDataWithSetter _dataWithSetter;
+
+  get _light => _PattleThemeDataWithSetter(
+        data: pattleLightTheme,
+        onBrightnessChanged: _onBrightnessChanged,
+      );
+
+  get _dark => _PattleThemeDataWithSetter(
+        data: pattleDarkTheme,
+        onBrightnessChanged: _onBrightnessChanged,
+      );
+
+  @override
+  void initState() {
+    super.initState();
+
+    _dataWithSetter = _PattleThemeDataWithSetter(
+      data: widget.data,
+      onBrightnessChanged: _onBrightnessChanged,
+    );
+  }
+
+  void _onBrightnessChanged(Brightness brightness) {
+    setState(() {
+      if (brightness == Brightness.light) {
+        _dataWithSetter = _light;
+      } else {
+        _dataWithSetter = _dark;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Provider<_PattleThemeDataWithSetter>.value(
+      value: _dataWithSetter,
+      child: widget.child,
+    );
+  }
+}
+
+@immutable
+class _PattleThemeDataWithSetter {
+  final PattleThemeData data;
+  final ValueChanged<Brightness> _onBrightnessChanged;
+
+  const _PattleThemeDataWithSetter({
+    @required this.data,
+    ValueChanged<Brightness> onBrightnessChanged,
+  }) : _onBrightnessChanged = onBrightnessChanged;
+
+  Brightness get brightness => data.themeData.brightness;
+
+  set brightness(Brightness brightness) => _onBrightnessChanged(brightness);
+}
+
+extension PattleThemeContext on BuildContext {
+  _PattleThemeDataWithSetter get pattleTheme => PattleTheme.of(this);
+}
+
 const creteRound = 'CreteRound';
 
-final PattleTheme pattleLightTheme = PattleTheme(
-  primaryColorOnBackground: PattleTheme._primarySwatch[500],
-  linkColor: PattleTheme._primarySwatch,
-  chat: ChatTheme(
-    backgroundColor: PattleTheme._primarySwatch[50],
+final PattleThemeData pattleLightTheme = PattleThemeData(
+  brightness: Brightness.light,
+  primaryColorOnBackground: PattleThemeData._primarySwatch[500],
+  linkColor: PattleThemeData._primarySwatch,
+  listTileIconColor: PattleThemeData._primarySwatch,
+  chat: ChatThemeData(
+    backgroundColor: PattleThemeData._primarySwatch[50],
     inputColor: Colors.white,
-    myMessage: MessageTheme(
-      backgroundColor: PattleTheme._primarySwatch[450],
+    myMessage: MessageThemeData(
+      backgroundColor: PattleThemeData._primarySwatch[450],
       contentColor: Colors.white,
-      repliedTo: MessageTheme(
-        backgroundColor: PattleTheme._primarySwatch[300],
+      repliedTo: MessageThemeData(
+        backgroundColor: PattleThemeData._primarySwatch[300],
         contentColor: Colors.grey[100],
       ),
     ),
-    theirMessage: MessageTheme(
+    theirMessage: MessageThemeData(
       backgroundColor: Colors.white,
       contentColor: null,
-      repliedTo: MessageTheme(
+      repliedTo: MessageThemeData(
         backgroundColor: Colors.grey[250],
         contentColor: Colors.grey[600],
       ),
     ),
-    stateMessageColor: PattleTheme._primarySwatch[100],
+    stateMessageColor: PattleThemeData._primarySwatch[100],
     myRedactedContentColor: Colors.grey[300],
     theirRedactedContentColor: Colors.grey[700],
   ),
@@ -56,32 +145,33 @@ final PattleTheme pattleLightTheme = PattleTheme(
     DisplayColor.green: Color(0xFF427B58),
     DisplayColor.red: Color(0xFFAF3A03),
   },
-  themeData: (base) => base.copyWith(brightness: Brightness.light),
 );
 
-final PattleTheme pattleDarkTheme = PattleTheme(
-  primaryColorOnBackground: PattleTheme._primarySwatch[100],
+final PattleThemeData pattleDarkTheme = PattleThemeData(
+  brightness: Brightness.dark,
+  primaryColorOnBackground: PattleThemeData._primarySwatch[100],
   linkColor: Colors.white,
-  chat: ChatTheme(
+  listTileIconColor: PattleThemeData._primarySwatch[400],
+  chat: ChatThemeData(
     backgroundColor: Colors.grey[900],
     inputColor: Colors.grey[800],
-    myMessage: MessageTheme(
-      backgroundColor: PattleTheme._primarySwatch[700],
+    myMessage: MessageThemeData(
+      backgroundColor: PattleThemeData._primarySwatch[700],
       contentColor: Colors.white,
-      repliedTo: MessageTheme(
-        backgroundColor: PattleTheme._primarySwatch[300],
+      repliedTo: MessageThemeData(
+        backgroundColor: PattleThemeData._primarySwatch[300],
         contentColor: Colors.grey[200],
       ),
     ),
-    theirMessage: MessageTheme(
+    theirMessage: MessageThemeData(
       backgroundColor: Colors.grey[800],
       contentColor: null,
-      repliedTo: MessageTheme(
+      repliedTo: MessageThemeData(
         backgroundColor: null,
         contentColor: null,
       ),
     ),
-    stateMessageColor: PattleTheme._primarySwatch[900],
+    stateMessageColor: PattleThemeData._primarySwatch[900],
     myRedactedContentColor: Colors.white30,
     theirRedactedContentColor: Colors.white70,
   ),
@@ -94,13 +184,12 @@ final PattleTheme pattleDarkTheme = PattleTheme(
     DisplayColor.red: Color(0xFFFB783C),
   },
   themeData: (base) => base.copyWith(
-    brightness: Brightness.dark,
-    toggleableActiveColor: PattleTheme._primarySwatch[400],
-    textSelectionHandleColor: PattleTheme._primarySwatch[400],
+    toggleableActiveColor: PattleThemeData._primarySwatch[400],
+    textSelectionHandleColor: PattleThemeData._primarySwatch[400],
   ),
 );
 
-class PattleTheme {
+class PattleThemeData {
   static const _redPrimary = 0xFFAA4139;
   static const _primarySwatch = MaterialColor(
     _redPrimary,
@@ -124,8 +213,12 @@ class PattleTheme {
 
   final ThemeData themeData;
 
-  static ThemeData _baseThemeData(MaterialColor primary) {
+  static ThemeData _baseThemeData(
+    Brightness brightness,
+    MaterialColor primary,
+  ) {
     return ThemeData(
+      brightness: brightness,
       primarySwatch: primary,
       primaryColorDark: primary[700],
       accentColor: primary,
@@ -139,16 +232,18 @@ class PattleTheme {
     );
   }
 
-  PattleTheme({
+  PattleThemeData({
+    Brightness brightness = Brightness.light,
     this.primarySwatch = _primarySwatch,
     @required this.primaryColorOnBackground,
     @required this.linkColor,
+    @required this.listTileIconColor,
     @required this.chat,
     @required this.userColors,
     ThemeData Function(ThemeData base) themeData,
   }) : themeData = themeData == null
-            ? _baseThemeData(primarySwatch)
-            : themeData(_baseThemeData(primarySwatch));
+            ? _baseThemeData(brightness, primarySwatch)
+            : themeData(_baseThemeData(brightness, primarySwatch));
 
   Color get primaryColor => themeData.primaryColor;
 
@@ -160,30 +255,32 @@ class PattleTheme {
 
   final Color linkColor;
 
-  final ChatTheme chat;
+  final Color listTileIconColor;
+
+  final ChatThemeData chat;
 
   final Map<DisplayColor, Color> userColors;
 
-  static PattleTheme of(BuildContext context, {bool listen = true}) =>
-      Provider.of<PattleTheme>(
+  static PattleThemeData of(BuildContext context, {bool listen = true}) =>
+      Provider.of<PattleThemeData>(
         context,
         listen: listen,
       );
 }
 
-class ChatTheme {
+class ChatThemeData {
   final Color backgroundColor;
   final Color inputColor;
 
-  final MessageTheme myMessage;
-  final MessageTheme theirMessage;
+  final MessageThemeData myMessage;
+  final MessageThemeData theirMessage;
 
   final Color stateMessageColor;
 
   final Color myRedactedContentColor;
   final Color theirRedactedContentColor;
 
-  ChatTheme({
+  ChatThemeData({
     @required this.backgroundColor,
     @required this.inputColor,
     @required this.myMessage,
@@ -194,19 +291,15 @@ class ChatTheme {
   });
 }
 
-class MessageTheme {
+class MessageThemeData {
   final Color backgroundColor;
   final Color contentColor;
 
-  final MessageTheme repliedTo;
+  final MessageThemeData repliedTo;
 
-  MessageTheme({
+  MessageThemeData({
     @required this.backgroundColor,
     @required this.contentColor,
     this.repliedTo,
   });
-}
-
-extension PattleThemeContext on BuildContext {
-  PattleTheme get pattleTheme => PattleTheme.of(this);
 }

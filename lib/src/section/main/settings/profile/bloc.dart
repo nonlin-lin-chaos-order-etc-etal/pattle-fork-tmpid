@@ -17,9 +17,9 @@
 
 import 'package:bloc/bloc.dart';
 
-import '../../../matrix.dart';
+import '../../../../matrix.dart';
 
-import '../../../util/my_user.dart';
+import '../../../../util/my_user.dart';
 
 import 'event.dart';
 import 'state.dart';
@@ -27,23 +27,24 @@ import 'state.dart';
 export 'event.dart';
 export 'state.dart';
 
-class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
+class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final Matrix _matrix;
 
-  SettingsBloc(this._matrix);
+  ProfileBloc(this._matrix);
 
   @override
-  SettingsState get initialState =>
-      SettingsInitialized(_matrix.user.toChatMember());
+  ProfileState get initialState => ProfileState(_matrix.user.toChatMember());
 
   @override
-  Stream<SettingsState> mapEventToState(SettingsEvent event) async* {
+  Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
     if (event is UpdateDisplayName) {
       yield UpdatingDisplayName(state.me);
 
-      await _matrix.user.setName(event.name);
-
-      yield DisplayNameUpdated(state.me);
+      yield DisplayNameUpdated(
+        await _matrix.user
+            .setName(event.name)
+            .then((u) => u.user.toChatMember()),
+      );
     }
   }
 }

@@ -48,8 +48,8 @@ class RedactedContent extends StatelessWidget {
             Redacted(
               redaction: bubble.message.redaction,
               color: bubble.message.isMine
-                  ? context.pattleTheme.chat.myRedactedContentColor
-                  : context.pattleTheme.chat.theirRedactedContentColor,
+                  ? context.pattleTheme.data.chat.myRedactedContentColor
+                  : context.pattleTheme.data.chat.theirRedactedContentColor,
             ),
             if (MessageInfo.necessary(context))
               Padding(

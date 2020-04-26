@@ -63,7 +63,7 @@ class _ChatSettingsPageState extends State<ChatSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.pattleTheme.chat.backgroundColor,
+      backgroundColor: context.pattleTheme.data.chat.backgroundColor,
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           final url = widget.chat.avatarUrl?.toHttps(
@@ -135,7 +135,7 @@ class _Description extends StatelessWidget {
                   Text(
                     context.intl.chat.details.description,
                     style: TextStyle(
-                      color: context.pattleTheme.primaryColorOnBackground,
+                      color: context.pattleTheme.data.primaryColorOnBackground,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -193,7 +193,7 @@ class _MemberListState extends State<_MemberList> {
                       widget.room.summary.joinedMembersCount,
                     ),
                     style: TextStyle(
-                      color: context.pattleTheme.primaryColorOnBackground,
+                      color: context.pattleTheme.data.primaryColorOnBackground,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),

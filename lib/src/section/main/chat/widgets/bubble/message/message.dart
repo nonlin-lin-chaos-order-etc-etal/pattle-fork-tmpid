@@ -269,16 +269,17 @@ class MessageBubble extends StatelessWidget {
     if (color == null) {
       if (message.isMine) {
         if (!isRepliedTo) {
-          color = context.pattleTheme.chat.myMessage.backgroundColor;
+          color = context.pattleTheme.data.chat.myMessage.backgroundColor;
         } else {
-          color = context.pattleTheme.chat.myMessage.repliedTo.backgroundColor;
+          color =
+              context.pattleTheme.data.chat.myMessage.repliedTo.backgroundColor;
         }
       } else {
         if (!isRepliedTo) {
-          color = context.pattleTheme.chat.theirMessage.backgroundColor;
+          color = context.pattleTheme.data.chat.theirMessage.backgroundColor;
         } else {
-          color =
-              context.pattleTheme.chat.theirMessage.repliedTo.backgroundColor;
+          color = context
+              .pattleTheme.data.chat.theirMessage.repliedTo.backgroundColor;
         }
       }
     }
@@ -519,7 +520,7 @@ class MessageInfo extends StatelessWidget {
         if (MessageState.necessaryInBubble(context)) ...[
           MessageState(
             message: bubble.message,
-            color: context.pattleTheme.chat.myMessage.contentColor,
+            color: context.pattleTheme.data.chat.myMessage.contentColor,
             size: 14,
           ),
           SizedBox(width: 4),
