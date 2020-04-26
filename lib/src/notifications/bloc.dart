@@ -77,14 +77,14 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     if (message is String) {
       final dataMessage = DataMessage.fromJson(json.decode(message));
 
-      _sendPort.send(
-        await json.encode(
-          await NotificationData.fromDataMessage(
-            dataMessage,
-            user: _matrix.user,
-          ).then((nd) => nd.toJson()),
-        ),
-      );
+      final notificationData = await NotificationData.fromDataMessage(
+        dataMessage,
+        user: _matrix.user,
+      ).then((nd) => nd?.toJson());
+
+      if (notificationData != null) {
+        _sendPort.send(await json.encode(notificationData));
+      }
     }
   }
 
