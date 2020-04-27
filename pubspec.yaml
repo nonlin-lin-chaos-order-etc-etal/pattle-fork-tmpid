@@ -42,7 +42,6 @@ dependencies:
       ref: 71406a09f9e591f9d35635e6a086007ccc678ae3
 
   flutter_dotenv: ^2.0.1
-  respect_24_hour: ^0.0.2
   transparent_image: ^1.0.0
   photo_view: ^0.4.2
   url_launcher: ^5.1.0
