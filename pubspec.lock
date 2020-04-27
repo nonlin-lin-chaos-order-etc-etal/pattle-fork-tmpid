@@ -308,12 +308,10 @@ packages:
   matrix_sdk:
     dependency: "direct main"
     description:
-      path: "."
-      ref: bf41392210ba3c20c13cff89ca7bd7315f508b11
-      resolved-ref: bf41392210ba3c20c13cff89ca7bd7315f508b11
-      url: "https://git.pattle.im/pattle/library/matrix-dart-sdk.git"
-    source: git
-    version: "0.0.0"
+      name: matrix_sdk
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.30.0"
   mdi:
     dependency: "direct main"
     description:

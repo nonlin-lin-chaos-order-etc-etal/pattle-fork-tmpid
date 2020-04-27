@@ -10,7 +10,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  matrix_sdk: ^0.29.0
+  matrix_sdk: ^0.30.0
   async: ^2.3.0
 
   bloc: ^3.0.0
@@ -61,12 +61,6 @@ dependencies:
   firebase_messaging: ^6.0.13
 
   flutter_local_notifications: ^0.8.4
-
-dependency_overrides:
-  matrix_sdk:
-    git:
-      url: https://git.pattle.im/pattle/library/matrix-dart-sdk.git
-      ref: bf41392210ba3c20c13cff89ca7bd7315f508b11
 
 dev_dependencies:
   flutter_launcher_icons: ^0.7.2+1
