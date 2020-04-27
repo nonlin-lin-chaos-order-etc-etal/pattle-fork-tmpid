@@ -50,7 +50,7 @@ android {
         release {
             keyAlias System.getenv('KEY_ALIAS')
             keyPassword  System.getenv('KEY_PASSWORD')
-            storeFile file('pattle.keystore')
+            storeFile file('pattle.jks')
             storePassword System.getenv('STORE_PASSWORD')
         }
     }
