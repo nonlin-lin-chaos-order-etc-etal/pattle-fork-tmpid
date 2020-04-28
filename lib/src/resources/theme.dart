@@ -159,8 +159,8 @@ final PattleThemeData pattleDarkTheme = PattleThemeData(
       backgroundColor: PattleThemeData._primarySwatch[700],
       contentColor: Colors.white,
       repliedTo: MessageThemeData(
-        backgroundColor: PattleThemeData._primarySwatch[300],
-        contentColor: Colors.grey[200],
+        backgroundColor: PattleThemeData._primarySwatch,
+        contentColor: Colors.grey[300],
       ),
     ),
     theirMessage: MessageThemeData(
@@ -168,7 +168,7 @@ final PattleThemeData pattleDarkTheme = PattleThemeData(
       contentColor: null,
       repliedTo: MessageThemeData(
         backgroundColor: null,
-        contentColor: null,
+        contentColor: Colors.grey[300],
       ),
     ),
     stateMessageColor: PattleThemeData._primarySwatch[900],
