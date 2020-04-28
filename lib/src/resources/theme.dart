@@ -186,6 +186,28 @@ final PattleThemeData pattleDarkTheme = PattleThemeData(
   themeData: (base) => base.copyWith(
     toggleableActiveColor: PattleThemeData._primarySwatch[400],
     textSelectionHandleColor: PattleThemeData._primarySwatch[400],
+    appBarTheme: AppBarTheme(
+      color: Colors.grey[900],
+    ),
+    tabBarTheme: TabBarTheme(
+      indicator: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 2,
+            color: PattleThemeData._primarySwatch[300],
+          ),
+        ),
+      ),
+      labelColor: PattleThemeData._primarySwatch[300],
+      labelStyle: base.primaryTextTheme.bodyText1.copyWith(
+        fontWeight: FontWeight.bold,
+      ),
+      // Defaults have to be specified explicitly
+      unselectedLabelColor: base.primaryTextTheme.bodyText1.color,
+      unselectedLabelStyle: base.primaryTextTheme.bodyText1.copyWith(
+        fontWeight: FontWeight.bold,
+      ),
+    ),
   ),
 );
 
