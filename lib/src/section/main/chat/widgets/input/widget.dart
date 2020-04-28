@@ -130,7 +130,6 @@ class _InputState extends State<Input> {
     } else {
       return Material(
         elevation: elevation,
-        color: Colors.white,
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Text(
