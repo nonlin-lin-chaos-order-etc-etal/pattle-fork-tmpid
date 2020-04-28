@@ -192,7 +192,7 @@ class _ContentLayoutRenderBox extends RenderBox
     if (sender != null) {
       sender.layout(constraints, parentUsesSize: true);
 
-      height += sender.size.height;
+      height = constraints.constrainHeight(height + sender.size.height);
 
       (content.parentData as _ContentLayoutParentData).offset =
           Offset(0, height);
@@ -204,8 +204,8 @@ class _ContentLayoutRenderBox extends RenderBox
       parentUsesSize: true,
     );
 
-    width += content.size.width;
-    height += content.size.height;
+    width = constraints.constrainWidth(width + content.size.width);
+    height = constraints.constrainHeight(height + content.size.height);
 
     if (info != null) {
       final minWidth =
@@ -235,7 +235,7 @@ class _ContentLayoutRenderBox extends RenderBox
             constraints.maxWidth - lastLineBox.right > info.size.width;
 
         if (width.floor() != constraints.maxWidth.floor()) {
-          width += info.size.width;
+          width = constraints.constrainWidth(width + info.size.width);
         }
 
         final infoParentData = info.parentData as _ContentLayoutParentData;
@@ -248,12 +248,12 @@ class _ContentLayoutRenderBox extends RenderBox
         );
 
         if (!fitsLastLine) {
-          height += info.size.height;
+          height = constraints.constrainHeight(height + info.size.height);
         }
       }
     }
 
-    size = constraints.constrain(Size(width, height));
+    size = Size(width, height);
   }
 
   @override
