@@ -86,18 +86,59 @@ class Matrix {
           ),
     );
 
-    _chatUpdatesController.add(_chats);
+    _chatUpdatesController.add(
+      ChatsUpdate(
+        chats: _chats,
+        // TODO: Add toMap in SDK
+        delta: Map.fromEntries(
+          update.delta.rooms.map((room) => MapEntry(room.id, room)),
+        ),
+        timelineLoad: update is RequestUpdate<Timeline>,
+      ),
+    );
   }
 
-  final _chatUpdatesController =
-      StreamController<Map<RoomId, Chat>>.broadcast();
+  final _chatUpdatesController = StreamController<ChatsUpdate>.broadcast();
 
-  Stream<Chat> updatesFor(RoomId roomId) => _chatUpdatesController.stream
-      .map((chats) => chats[roomId])
-      .where((chat) => chat != null);
+  Stream<ChatUpdate> updatesFor(RoomId roomId) => _chatUpdatesController.stream
+      .map(
+        (update) => ChatUpdate(
+          chat: update.chats[roomId],
+          delta: update.delta[roomId],
+          timelineLoad: update.timelineLoad,
+        ),
+      )
+      .where((update) => update.delta != null);
 
   static Matrix of(BuildContext context) => Provider.of<Matrix>(
         context,
         listen: false,
       );
+}
+
+@immutable
+class ChatsUpdate {
+  final Map<RoomId, Chat> chats;
+  final Map<RoomId, Room> delta;
+
+  final bool timelineLoad;
+
+  ChatsUpdate({
+    @required this.chats,
+    @required this.delta,
+    @required this.timelineLoad,
+  });
+}
+
+class ChatUpdate {
+  final Chat chat;
+  final Room delta;
+
+  final bool timelineLoad;
+
+  ChatUpdate({
+    @required this.chat,
+    @required this.delta,
+    @required this.timelineLoad,
+  });
 }

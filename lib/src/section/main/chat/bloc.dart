@@ -20,6 +20,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:meta/meta.dart';
 
 import '../models/chat.dart';
 import '../models/chat_message.dart';
@@ -51,26 +52,40 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     this._notificationsBloc,
     RoomId roomId,
   ) : _chat = _matrix.chats[roomId] {
-    _syncSub = _matrix.updatesFor(roomId).listen((chat) {
-      _chat = chat;
-      add(UpdateChat(refresh: true));
+    _syncSub = _matrix.updatesFor(roomId).listen((update) {
+      _chat = update.chat;
+      add(
+        RefreshChat(
+          chat: _chat,
+          delta: update.delta,
+          isBecauseOfTimelineRequest: update.timelineLoad,
+        ),
+      );
     });
   }
 
   MyUser get me => _matrix.user;
 
   @override
-  ChatState get initialState => _loadMessages();
+  ChatState get initialState => _loadMessages(
+        chat: _chat,
+        delta: Room(),
+        becauseOfTimelineLoad: false,
+      );
 
   @override
   Stream<ChatState> mapEventToState(ChatEvent event) async* {
-    if (event is UpdateChat) {
-      if (!event.refresh) {
-        await _room.timeline.load(count: _pageSize);
-        return;
-      }
+    if (event is LoadMoreFromTimeline) {
+      await _room.timeline.load(count: _pageSize);
+      return;
+    }
 
-      yield _loadMessages();
+    if (event is RefreshChat) {
+      yield _loadMessages(
+        chat: event.chat,
+        delta: event.delta,
+        becauseOfTimelineLoad: event.isBecauseOfTimelineRequest,
+      );
     }
 
     if (event is MarkAsRead) {
@@ -78,51 +93,56 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  ChatState _loadMessages({bool isRefresh = true}) {
+  ChatState _loadMessages({
+    @required Chat chat,
+    @required Room delta,
+    @required bool becauseOfTimelineLoad,
+  }) {
+    final room = chat.room;
     final messages = <ChatMessage>[];
 
     RoomEvent event;
-    for (event in _room.timeline) {
+    for (event in room.timeline) {
       var shouldIgnore = false;
       // In direct chats, don't show the invite event between this user
       // and the direct user.
       //
       // Also in direct chats, don't show the join events between this user
       // and the direct user.
-      if (_room.isDirect) {
+      if (room.isDirect) {
         if (event is InviteEvent) {
           final iInvitedYou =
-              event.senderId == me && event.subjectId == _room.directUserId;
+              event.senderId == me && event.subjectId == room.directUserId;
 
           final youInvitedMe =
-              event.senderId == _room.directUserId && event.subjectId == me.id;
+              event.senderId == room.directUserId && event.subjectId == me.id;
 
           shouldIgnore = iInvitedYou || youInvitedMe;
         } else if (event is JoinEvent) {
           final subject = event.subjectId;
-          shouldIgnore = subject == me || subject == _room.directUserId;
+          shouldIgnore = subject == me || subject == room.directUserId;
         }
       }
 
       shouldIgnore |= event is JoinEvent &&
           event is! DisplayNameChangeEvent &&
-          _room.creatorId == event.subjectId;
+          room.creatorId == event.subjectId;
 
       // Don't show creation events in rooms that are replacements
-      shouldIgnore |= event is RoomCreationEvent && _room.isReplacement;
+      shouldIgnore |= event is RoomCreationEvent && room.isReplacement;
 
-      if (_room.ignoredEvents.contains(event.runtimeType) || shouldIgnore) {
+      if (room.ignoredEvents.contains(event.runtimeType) || shouldIgnore) {
         continue;
       }
 
       ChatMessage inReplyTo;
       if (event is MessageEvent && event.content?.inReplyToId != null) {
         // TODO: Might not be loaded?
-        final inReplyToEvent = _room.timeline[event.content.inReplyToId];
+        final inReplyToEvent = room.timeline[event.content.inReplyToId];
 
         if (inReplyToEvent != null) {
           inReplyTo = ChatMessage(
-            _room,
+            room,
             inReplyToEvent,
             isMe: (id) => id == _matrix.user.id,
           );
@@ -131,7 +151,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
       messages.add(
         ChatMessage(
-          _room,
+          room,
           event,
           inReplyTo: inReplyTo,
           isMe: (id) => id == _matrix.user.id,
@@ -144,11 +164,21 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       endReached = true;
     }
 
+    // Get messages new in update
+    final newMessages = delta.timeline != null
+        ? messages
+            .where(
+              (msg) => delta.timeline.any((event) => event.id == msg.event.id),
+            )
+            .toList()
+        : <ChatMessage>[];
+
     return ChatState(
-      chat: _chat,
+      chat: chat,
       messages: messages,
+      newMessages: newMessages,
       endReached: endReached,
-      wasRefresh: isRefresh,
+      wasTimelineLoad: becauseOfTimelineLoad,
     );
   }
 

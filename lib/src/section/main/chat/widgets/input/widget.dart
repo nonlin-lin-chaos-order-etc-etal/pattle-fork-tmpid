@@ -25,7 +25,6 @@ import '../../../../../matrix.dart';
 import '../../../../../resources/theme.dart';
 import '../../../../../resources/intl/localizations.dart';
 
-import '../../bloc.dart';
 import 'bloc.dart';
 
 class Input extends StatefulWidget {
@@ -44,7 +43,7 @@ class Input extends StatefulWidget {
     @required bool canSendMessages,
   }) {
     return BlocProvider<InputBloc>(
-      create: (c) => InputBloc(Matrix.of(c), c.bloc<ChatBloc>(), roomId),
+      create: (c) => InputBloc(Matrix.of(c), roomId),
       child: Input._(roomId: roomId, canSendMessages: canSendMessages),
     );
   }

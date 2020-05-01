@@ -86,7 +86,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _onStateChange(BuildContext context, ChatState state) {
-    if (state.wasRefresh) {
+    if (!state.wasTimelineLoad) {
       context.bloc<ChatBloc>().add(MarkAsRead());
     }
   }
@@ -222,7 +222,7 @@ class _MessageListState extends State<_MessageList> {
           !state.endReached &&
           !_requestingMore) {
         _requestingMore = true;
-        bloc.add(UpdateChat(refresh: false));
+        bloc.add(LoadMoreFromTimeline());
       }
     });
   }
@@ -236,6 +236,13 @@ class _MessageListState extends State<_MessageList> {
     return BlocConsumer<ChatBloc, ChatState>(
       listener: (context, state) => _onStateChange(state),
       builder: (context, state) {
+        var messages = state.messages;
+        if (state.wasTimelineLoad) {
+          messages = [...state.newMessages, ...messages];
+        } else {
+          messages = [...messages, ...state.newMessages];
+        }
+
         return ListView.builder(
           controller: _scrollController,
           reverse: true,

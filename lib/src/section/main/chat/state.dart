@@ -24,16 +24,18 @@ import '../models/chat_message.dart';
 class ChatState extends Equatable {
   final Chat chat;
   final List<ChatMessage> messages;
+  final List<ChatMessage> newMessages;
   final bool endReached;
-  final bool wasRefresh;
+  final bool wasTimelineLoad;
 
   ChatState({
     @required this.chat,
     @required this.messages,
+    @required this.newMessages,
     @required this.endReached,
-    @required this.wasRefresh,
+    @required this.wasTimelineLoad,
   });
 
   @override
-  List<Object> get props => [chat, messages, endReached, wasRefresh];
+  List<Object> get props => [chat, messages, endReached, wasTimelineLoad];
 }

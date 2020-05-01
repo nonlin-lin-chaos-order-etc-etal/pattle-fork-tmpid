@@ -15,23 +15,33 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
+
+import '../models/chat.dart';
 
 abstract class ChatEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-class UpdateChat extends ChatEvent {
-  /// If true, don't request more items, just show what's already in the
-  /// timeline (which might've been updated by a sync).
-  final bool refresh;
+class RefreshChat extends ChatEvent {
+  final Chat chat;
+  final Room delta;
 
-  UpdateChat({@required this.refresh});
+  final bool isBecauseOfTimelineRequest;
+
+  RefreshChat({
+    @required this.chat,
+    @required this.delta,
+    @required this.isBecauseOfTimelineRequest,
+  });
 
   @override
-  List<Object> get props => [refresh];
+  List<Object> get props => [chat, delta];
 }
+
+class LoadMoreFromTimeline extends ChatEvent {}
 
 class MarkAsRead extends ChatEvent {}

@@ -82,7 +82,11 @@ class MessageBubble extends StatelessWidget {
     @required this.borderRadius,
     @required this.child,
     this.color,
-  });
+  }) : super(
+          key: ValueKey(
+            message.event.transactionId ?? message.event.id.toString(),
+          ),
+        );
 
   factory MessageBubble({
     @required Chat chat,

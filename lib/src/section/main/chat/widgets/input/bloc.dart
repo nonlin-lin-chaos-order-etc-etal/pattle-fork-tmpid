@@ -22,7 +22,6 @@ import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
 import '../../../../../matrix.dart';
-import '../../bloc.dart';
 
 import 'event.dart';
 import 'state.dart';
@@ -31,14 +30,11 @@ export 'state.dart';
 export 'event.dart';
 
 class InputBloc extends Bloc<InputEvent, InputState> {
-  final ChatBloc _chatBloc;
-
   // Doesn't need the most up to date room instance.
   final Room _room;
 
   InputBloc(
     Matrix matrix,
-    this._chatBloc,
     RoomId roomId,
   ) : _room = matrix.chats[roomId].room;
 
@@ -101,10 +97,7 @@ class InputBloc extends Bloc<InputEvent, InputState> {
   void _sendMessage(String text) async {
     // TODO: Check if text is just whitespace
     if (text.isNotEmpty) {
-      // Refresh the list every time the sent state changes.
-      _room.send(TextMessage(body: text)).forEach((_) {
-        _chatBloc.add(UpdateChat(refresh: true));
-      });
+      _room.send(TextMessage(body: text)).forEach((_) {});
     }
   }
 
@@ -114,8 +107,6 @@ class InputBloc extends Bloc<InputEvent, InputState> {
       body: file.path.split(Platform.pathSeparator).last,
     );
 
-    _room.send(message).forEach((_) {
-      _chatBloc.add(UpdateChat(refresh: true));
-    });
+    _room.send(message).forEach((_) {});
   }
 }
