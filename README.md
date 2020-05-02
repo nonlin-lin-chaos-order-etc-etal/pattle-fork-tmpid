@@ -74,6 +74,8 @@
    Contributions can only be accepted if you agree to the DCO,
    indicated by the sign-off.
 
+   See [CONTRIBUTING.md](CONTRIBUTING.md) for details on contributing.
+
 ### DCO
 
    ```text
