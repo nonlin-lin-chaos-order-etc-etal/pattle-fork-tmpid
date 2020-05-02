@@ -18,6 +18,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
+import '../chat_order/bloc.dart';
+
 import '../matrix.dart';
 
 import 'event.dart';
@@ -27,13 +29,24 @@ export 'event.dart';
 export 'state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final ChatOrderBloc _chatOrderBloc;
+
+  AuthBloc(this._chatOrderBloc);
+
   @override
   AuthState get initialState => Unchecked();
 
   @override
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
     if (event is Check) {
-      final user = await MyUser.fromStore(Matrix.store);
+      final user = await MyUser.fromStore(
+        Matrix.store,
+        roomIds: _chatOrderBloc.state.personal.keys.take(10).followedBy(
+              _chatOrderBloc.state.public.keys.take(10),
+            ),
+      );
+
+      print('user.rooms: ${user?.rooms?.length}');
 
       if (user != null) {
         yield Authenticated(user, fromStore: true);

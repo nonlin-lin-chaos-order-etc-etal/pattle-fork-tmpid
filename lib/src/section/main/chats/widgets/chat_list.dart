@@ -16,29 +16,56 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app.dart';
 import '../../models/chat.dart';
 import '../../widgets/chat_name.dart';
 import '../../../../util/date_format.dart';
 
+import '../bloc.dart';
 import 'chat_avatar.dart';
 import 'subtitle/subtitle.dart';
 
 class ChatList extends StatefulWidget {
+  final bool personal;
   final List<Chat> chats;
 
-  const ChatList({Key key, this.chats}) : super(key: key);
+  const ChatList({
+    Key key,
+    @required this.personal,
+    @required this.chats,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => ChatListState();
 }
 
 class ChatListState extends State<ChatList> {
+  final _scrollController = ScrollController();
+  final double _scrollThreshold = 80;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final bloc = context.bloc<ChatsBloc>();
+
+    _scrollController.addListener(() {
+      final maxScroll = _scrollController.position.maxScrollExtent;
+      final currentScroll = _scrollController.position.pixels;
+
+      if ((currentScroll - maxScroll).abs() <= _scrollThreshold) {
+        bloc.add(LoadMoreChats(personal: widget.personal));
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
       child: ListView.separated(
+        controller: _scrollController,
         shrinkWrap: true,
         separatorBuilder: (context, index) => Divider(
           height: 1,

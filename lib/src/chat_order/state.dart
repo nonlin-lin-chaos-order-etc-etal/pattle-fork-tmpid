@@ -15,18 +15,16 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
+import 'package:matrix_sdk/matrix_sdk.dart';
 
-abstract class ChatsEvent extends Equatable {
+class ChatOrderState extends Equatable {
+  final Map<RoomId, DateTime> personal;
+  final Map<RoomId, DateTime> public;
+
+  ChatOrderState({@required this.personal, @required this.public});
+
   @override
-  List<Object> get props => [];
-}
-
-class RefreshChats extends ChatsEvent {}
-
-class LoadMoreChats extends ChatsEvent {
-  final bool personal;
-
-  LoadMoreChats({@required this.personal});
+  List<Object> get props => [personal, public];
 }

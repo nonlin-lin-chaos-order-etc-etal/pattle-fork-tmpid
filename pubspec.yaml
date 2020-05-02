@@ -13,7 +13,7 @@ dependencies:
   matrix_sdk:
     git:
       url: https://git.pattle.im/pattle/library/matrix-dart-sdk.git
-      ref: 9534016800244282eabca31b598cbc97496b6b7e
+      ref: 5d4e68a4413ff1283cbbe56d4e31a7c22d2b53aa
   async: ^2.3.0
 
   bloc: ^3.0.0

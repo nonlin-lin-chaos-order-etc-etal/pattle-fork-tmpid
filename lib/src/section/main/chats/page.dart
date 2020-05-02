@@ -18,6 +18,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/material.dart';
 
+import '../../../chat_order/bloc.dart';
+
 import '../../../app.dart';
 import '../../../resources/intl/localizations.dart';
 import '../../../resources/theme.dart';
@@ -34,7 +36,10 @@ class ChatsPage extends StatefulWidget {
 
   static Widget withBloc() {
     return BlocProvider<ChatsBloc>(
-      create: (context) => ChatsBloc(Matrix.of(context)),
+      create: (context) => ChatsBloc(
+        Matrix.of(context),
+        context.bloc<ChatOrderBloc>(),
+      ),
       child: ChatsPage._(),
     );
   }
@@ -44,13 +49,6 @@ class ChatsPage extends StatefulWidget {
 }
 
 class _ChatsPageState extends State<ChatsPage> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    context.bloc<ChatsBloc>().add(LoadChats());
-  }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -107,6 +105,7 @@ class _ChatsTab extends StatelessWidget {
       if (state is ChatsLoaded) {
         return ChatList(
           chats: personal ? state.personal : state.public,
+          personal: personal,
         );
       } else {
         return Center(child: CircularProgressIndicator());

@@ -45,6 +45,7 @@ import 'section/start/login/username/page.dart';
 
 import 'redirect.dart';
 import 'settings/bloc.dart';
+import 'chat_order/bloc.dart';
 
 final Map<String, MaterialPageRoute Function(Object)> routes = {
   Routes.root: (params) => MaterialPageRoute(
@@ -121,17 +122,30 @@ class Routes {
 class App extends StatelessWidget {
   static Future<void> run() async => _sentryBloc.wrap(() async {
         WidgetsFlutterBinding.ensureInitialized();
-        runApp(App(await SharedPreferences.getInstance()));
+
+        final prefs = await SharedPreferences.getInstance();
+
+        final settingsBloc = SettingsBloc(prefs);
+        final chatOrderBloc = ChatOrderBloc(prefs);
+
+        final authBloc = AuthBloc(chatOrderBloc);
+
+        runApp(App(settingsBloc, chatOrderBloc, authBloc));
       });
 
-  App(SharedPreferences sharedPreferences)
-      : _settingsBloc = SettingsBloc(sharedPreferences);
+  App(
+    this._settingsBloc,
+    this._chatOrderBloc,
+    this._authBloc,
+  );
 
   static String get buildType => DotEnv().env['BUILD_TYPE'];
 
   static final _sentryBloc = SentryBloc();
 
-  final _authBloc = AuthBloc();
+  final ChatOrderBloc _chatOrderBloc;
+
+  final AuthBloc _authBloc;
 
   final SettingsBloc _settingsBloc;
 
@@ -147,6 +161,9 @@ class App extends StatelessWidget {
         ),
         BlocProvider<SettingsBloc>.value(
           value: _settingsBloc,
+        ),
+        BlocProvider<ChatOrderBloc>.value(
+          value: _chatOrderBloc,
         ),
       ],
       child: Provider<Matrix>(

@@ -19,6 +19,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 
+import '../../../chat_order/bloc.dart';
+
 import '../models/chat.dart';
 
 import '../../../matrix.dart';
@@ -31,12 +33,14 @@ export 'event.dart';
 
 class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   final Matrix _matrix;
+  final ChatOrderBloc _chatOrderBloc;
 
   StreamSubscription _subscription;
-  ChatsBloc(this._matrix) {
+  ChatsBloc(this._matrix, this._chatOrderBloc) {
     _matrix.userAvaible.then((_) {
+      add(RefreshChats());
       _subscription = _matrix.user.updates.listen((update) {
-        add(LoadChats());
+        add(RefreshChats());
       });
     });
   }
@@ -82,6 +86,13 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
     final personalChats = chats.where((chat) => !chat.isChannel).toList();
     final publicChats = chats.where((chat) => chat.isChannel).toList();
 
+    _chatOrderBloc.add(
+      UpdateChatOrder(
+        personal: personalChats,
+        public: publicChats,
+      ),
+    );
+
     return ChatsLoaded(personal: personalChats, public: publicChats);
   }
 
@@ -90,8 +101,24 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
 
   @override
   Stream<ChatsState> mapEventToState(ChatsEvent event) async* {
-    if (event is LoadChats) {
+    if (event is RefreshChats) {
       yield await _loadChats();
+    }
+
+    final state = this.state;
+    if (event is LoadMoreChats && state is ChatsLoaded) {
+      final ids = event.personal
+          ? _chatOrderBloc.state.personal
+          : _chatOrderBloc.state.public;
+      final currentlyShownChats =
+          event.personal ? state.personal : state.public;
+
+      final currentlyShownIds = currentlyShownChats.map((c) => c.room.id);
+
+      final next10Ids =
+          ids.keys.where((id) => !currentlyShownIds.contains(id)).take(10);
+
+      _matrix.user.rooms.load(roomIds: next10Ids);
     }
   }
 

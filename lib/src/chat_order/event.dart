@@ -16,17 +16,21 @@
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-abstract class ChatsEvent extends Equatable {
+import '../section/main/models/chat.dart';
+
+abstract class ChatOrderEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-class RefreshChats extends ChatsEvent {}
+class UpdateChatOrder extends ChatOrderEvent {
+  final List<Chat> personal;
+  final List<Chat> public;
 
-class LoadMoreChats extends ChatsEvent {
-  final bool personal;
-
-  LoadMoreChats({@required this.personal});
+  UpdateChatOrder({
+    List<Chat> personal,
+    List<Chat> public,
+  })  : personal = personal ?? [],
+        public = public ?? [];
 }
