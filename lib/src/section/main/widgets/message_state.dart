@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
+import 'package:mdi/mdi.dart';
 
 import '../chat/widgets/bubble/message.dart';
 
@@ -45,9 +46,11 @@ class MessageState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Icon(
-      message.event.sentState == SentState.unsent
-          ? Icons.access_time
-          : Icons.check,
+      message.read
+          ? Mdi.checkAll
+          : message.event.sentState == SentState.unsent
+              ? Icons.access_time
+              : Icons.check,
       color: color,
       size: size,
     );

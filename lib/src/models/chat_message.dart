@@ -30,6 +30,8 @@ class ChatMessage {
 
   bool get isMine => sender.isYou;
 
+  final bool read;
+
   /// Message that redacted this message, if any.
   final ChatMessage redaction;
 
@@ -42,6 +44,7 @@ class ChatMessage {
     this.inReplyTo,
     this.redaction,
     this.subject,
+    @required this.read,
   });
   @override
   bool operator ==(dynamic other) {
@@ -63,6 +66,14 @@ class ChatMessage {
     ChatMessage redactionMessage;
     ChatMember subject;
 
+    bool isRead(RoomEvent e) {
+      return room.readReceipts.where((r) => !isMe(r.userId)).any(
+            (r) =>
+                r.eventId == e.id ||
+                (room.timeline[r.eventId]?.time?.isAfter(e.time) ?? false),
+          );
+    }
+
     if (event is RedactedEvent) {
       redactionMessage = ChatMessage._(
         event.redaction,
@@ -71,6 +82,7 @@ class ChatMessage {
           event.redaction.senderId,
           isMe: isMe(event.redaction.senderId),
         ),
+        read: isRead(event.redaction),
       );
     } else if (event is MemberChangeEvent) {
       subject = ChatMember.fromRoomAndUserId(
@@ -90,6 +102,7 @@ class ChatMessage {
       inReplyTo: inReplyTo,
       redaction: redactionMessage,
       subject: subject,
+      read: isRead(event),
     );
   }
 
