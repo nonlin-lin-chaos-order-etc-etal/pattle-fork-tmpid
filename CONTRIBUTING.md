@@ -10,6 +10,8 @@
   When contributing code to Pattle, your code will be licensed under the
   [AGPLv3](https://www.gnu.org/licenses/agpl-3.0.en.html).
 
+  Make sure you agree to the [DCO](#DCO).
+
 ## General contribution steps
 
   1. Fork the project.
@@ -35,14 +37,14 @@
   Every file has a license header with copyright notices. Every copyright
   notice is in the format of:
   ```
-  Copyright (C) YEAR  Full Name <email@example.com> (CLA signed)
+  Copyright (C) YEAR  Full Name <email@example.com>
   ```
   Note the double space between the year and full name.
 
   The creator of the file is on top, and every contributor afterwards is
   listed below in chronological order. An example file header would be:
 
-  ```
+  ```dart
   // Copyright (C) 2018  Wilko Manger <wilko@rens.onl>
   // Copyright (C) 2018  Nathan van Beelen <nathan@vanbeelen.org> (CLA signed)
   //
