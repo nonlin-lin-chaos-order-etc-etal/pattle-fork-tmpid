@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../models/chat_message.dart';
+import '../../../../models/chat_message.dart';
 
 class ImageState extends Equatable {
   final List<ChatMessage> messages;

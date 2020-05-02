@@ -24,7 +24,7 @@ import '../../../app.dart';
 
 import '../../../notifications/bloc.dart';
 import '../../../resources/theme.dart';
-import '../models/chat.dart';
+import '../../../models/chat.dart';
 import '../chats/widgets/typing_content.dart';
 import '../widgets/chat_name.dart';
 import '../widgets/title_with_sub.dart';

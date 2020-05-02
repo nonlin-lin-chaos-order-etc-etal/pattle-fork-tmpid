@@ -29,8 +29,8 @@ import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
-import '../section/main/models/chat.dart';
-import '../section/main/models/chat_member.dart';
+import '../models/chat.dart';
+import '../models/chat_member.dart';
 
 import '../auth/bloc.dart';
 import '../matrix.dart';

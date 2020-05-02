@@ -17,7 +17,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../section/main/models/chat.dart';
+import '../models/chat.dart';
 
 abstract class ChatOrderEvent extends Equatable {
   @override

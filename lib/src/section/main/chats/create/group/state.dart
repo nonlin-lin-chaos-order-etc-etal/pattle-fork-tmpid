@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
-import '../../../models/chat_member.dart';
+import '../../../../../models/chat_member.dart';
 
 abstract class CreateGroupState extends Equatable {
   final List<ChatMember> members;

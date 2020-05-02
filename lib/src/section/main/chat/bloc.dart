@@ -22,8 +22,8 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:meta/meta.dart';
 
-import '../models/chat.dart';
-import '../models/chat_message.dart';
+import '../../../models/chat.dart';
+import '../../../models/chat_message.dart';
 
 import '../../../matrix.dart';
 import '../../../util/room.dart';

@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../section/main/models/chat_member.dart';
+import '../models/chat_member.dart';
 
 // TODO: Support branding better
 

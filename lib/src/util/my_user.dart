@@ -17,7 +17,7 @@
 
 import 'package:matrix_sdk/matrix_sdk.dart';
 
-import '../section/main/models/chat_member.dart';
+import '../models/chat_member.dart';
 
 extension MyUserExtensions on MyUser {
   ChatMember toChatMember() {

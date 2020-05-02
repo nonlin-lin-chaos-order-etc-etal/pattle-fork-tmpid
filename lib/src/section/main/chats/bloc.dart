@@ -21,7 +21,7 @@ import 'package:bloc/bloc.dart';
 
 import '../../../chat_order/bloc.dart';
 
-import '../models/chat.dart';
+import '../../../models/chat.dart';
 
 import '../../../matrix.dart';
 

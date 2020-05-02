@@ -20,7 +20,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 
 import '../chat/widgets/bubble/message.dart';
 
-import '../models/chat_message.dart';
+import '../../../models/chat_message.dart';
 
 class MessageState extends StatelessWidget {
   final ChatMessage message;

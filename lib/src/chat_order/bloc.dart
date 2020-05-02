@@ -22,7 +22,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../section/main/models/chat.dart';
+import '../models/chat.dart';
 
 import 'event.dart';
 import 'state.dart';

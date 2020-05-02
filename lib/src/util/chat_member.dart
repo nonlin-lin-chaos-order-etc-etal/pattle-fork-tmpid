@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import '../resources/intl/localizations.dart';
 import '../resources/theme.dart';
 
-import '../section/main/models/chat_member.dart';
+import '../models/chat_member.dart';
 
 extension ChatMemberExtension on ChatMember {
   Color color(BuildContext context) =>

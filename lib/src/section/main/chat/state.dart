@@ -18,8 +18,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import '../models/chat.dart';
-import '../models/chat_message.dart';
+import '../../../models/chat.dart';
+import '../../../models/chat_message.dart';
 
 class ChatState extends Equatable {
   final Chat chat;

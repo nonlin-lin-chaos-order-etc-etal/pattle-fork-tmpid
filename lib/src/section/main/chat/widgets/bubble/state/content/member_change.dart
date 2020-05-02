@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
 import '../../../../../../../resources/intl/localizations.dart';
-import '../../../../../models/chat_message.dart';
+import '../../../../../../../models/chat_message.dart';
 
 import '../state.dart';
 

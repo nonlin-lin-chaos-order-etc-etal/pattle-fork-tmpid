@@ -27,8 +27,8 @@ import '../../../../resources/theme.dart';
 import '../../widgets/chat_name.dart';
 import '../../widgets/chat_member_tile.dart';
 
-import '../../models/chat.dart';
-import '../../models/chat_member.dart';
+import '../../../../models/chat.dart';
+import '../../../../models/chat_member.dart';
 
 import '../../../../matrix.dart';
 import '../../../../util/url.dart';

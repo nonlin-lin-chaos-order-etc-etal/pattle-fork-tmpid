@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app.dart';
-import '../../models/chat.dart';
+import '../../../../models/chat.dart';
 import '../../widgets/chat_name.dart';
 import '../../../../util/date_format.dart';
 

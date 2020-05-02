@@ -27,7 +27,7 @@ import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path/path.dart' as path;
 
 import 'auth/bloc.dart';
-import 'section/main/models/chat.dart';
+import 'models/chat.dart';
 
 class Matrix {
   static final MoorStore store = MoorStore(

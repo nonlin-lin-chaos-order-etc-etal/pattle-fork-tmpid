@@ -21,7 +21,7 @@ import 'package:meta/meta.dart';
 import 'chat_member.dart';
 import 'chat_message.dart';
 
-import '../../../util/room.dart';
+import '../util/room.dart';
 
 /// Chat overview used in the 'chats' page.
 @immutable

@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../section/main/models/chat_member.dart';
+import '../../models/chat_member.dart';
 
 import 'messages_all.dart';
 

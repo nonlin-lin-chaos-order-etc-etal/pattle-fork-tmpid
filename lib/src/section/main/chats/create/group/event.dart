@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../models/chat_member.dart';
+import '../../../../../models/chat_member.dart';
 
 abstract class CreateGroupEvent extends Equatable {
   @override

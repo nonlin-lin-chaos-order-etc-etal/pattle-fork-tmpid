@@ -20,7 +20,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:matrix_sdk/matrix_sdk.dart';
 
-import '../../models/chat_member.dart';
+import '../../../../models/chat_member.dart';
 
 import '../../../../matrix.dart';
 

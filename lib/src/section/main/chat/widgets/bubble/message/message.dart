@@ -23,8 +23,8 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../../../models/chat.dart';
-import '../../../../models/chat_message.dart';
+import '../../../../../../models/chat.dart';
+import '../../../../../../models/chat_message.dart';
 
 import '../../../../../../resources/theme.dart';
 

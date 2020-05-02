@@ -19,7 +19,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-import '../models/chat.dart';
+import '../../../models/chat.dart';
 
 abstract class ChatEvent extends Equatable {
   @override

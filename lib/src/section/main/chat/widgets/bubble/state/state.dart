@@ -21,7 +21,7 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../resources/theme.dart';
-import '../../../../models/chat_message.dart';
+import '../../../../../../models/chat_message.dart';
 
 import 'content/creation.dart';
 import 'content/member_change.dart';

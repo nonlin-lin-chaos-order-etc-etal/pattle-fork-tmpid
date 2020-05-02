@@ -18,7 +18,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import '../../models/chat_member.dart';
+import '../../../../models/chat_member.dart';
 
 @immutable
 class ProfileState extends Equatable {
