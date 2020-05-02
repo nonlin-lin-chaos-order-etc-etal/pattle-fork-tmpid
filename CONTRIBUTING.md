@@ -45,8 +45,8 @@
   listed below in chronological order. An example file header would be:
 
   ```dart
-  // Copyright (C) 2018  Wilko Manger <wilko@rens.onl>
-  // Copyright (C) 2018  Nathan van Beelen <nathan@vanbeelen.org> (CLA signed)
+  // Copyright (C) 2020  Wilko Manger <wilko@rens.onl>
+  // Copyright (C) 2020  Nathan van Beelen <nathan@vanbeelen.org>
   //
   // This file is part of Pattle.
   //
