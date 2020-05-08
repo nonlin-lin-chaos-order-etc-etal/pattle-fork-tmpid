@@ -81,7 +81,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "_Start_reportErrorsDescription": "Sta Pattle toe om crashrapporten te sturen om ontikkeling te helpen",
+  "_Start_reportErrorsDescription": "Sta Pattle toe om crashinformatie te sturen om ontikkeling te helpen",
   "@_Start_reportErrorsDescription": {
     "type": "text",
     "placeholders": {}
@@ -139,7 +139,7 @@
       "name": {}
     }
   },
-  "_Chat_areTyping": "{andMore,select, false{{first} en {second} typen...}true{{first}, {second} en meer typen...}}",
+  "_Chat_areTyping": "{andMore,select, false{{first} en {second} typen...}true{{first}, {second} en anderen typen...}}",
   "@_Chat_areTyping": {
     "type": "text",
     "placeholders": {
@@ -148,7 +148,7 @@
       "second": {}
     }
   },
-  "_ChatMessage_deletion": "{person,select, second{Jij hebt dit bericht verwijderd}third{{name} heeft dit bericht verwijderd}}",
+  "_ChatMessage_deletion": "{person,select, second{Je hebt dit bericht verwijderd}third{{name} heeft dit bericht verwijderd}}",
   "@_ChatMessage_deletion": {
     "type": "text",
     "placeholders": {
@@ -156,7 +156,7 @@
       "name": {}
     }
   },
-  "_ChatMessage_creation": "{person,select, second{Jij hebt deze groep gemaakt}third{{name} heeft deze groep gemaakt}}",
+  "_ChatMessage_creation": "{person,select, second{Je hebt deze groep gemaakt}third{{name} heeft deze groep gemaakt}}",
   "@_ChatMessage_creation": {
     "type": "text",
     "placeholders": {
@@ -164,7 +164,7 @@
       "name": {}
     }
   },
-  "_ChatMessage_upgrade": "{person,select, second{Jij hebt deze groep geüpgraded}third{{name} heeft deze groep geüpgraded}}",
+  "_ChatMessage_upgrade": "{person,select, second{Je hebt deze groep geüpgrade}third{{name} heeft deze groep geüpgrade}}",
   "@_ChatMessage_upgrade": {
     "type": "text",
     "placeholders": {
@@ -172,7 +172,7 @@
       "name": {}
     }
   },
-  "_ChatMessage_descriptionChange": "{person,select, second{Jij hebt de beschrijving van de groep aangepast}third{{name} heeft de beschrijving van de groep aangepast}}",
+  "_ChatMessage_descriptionChange": "{person,select, second{Je hebt de beschrijving van de groep aangepast}third{{name} heeft de beschrijving van de groep aangepast}}",
   "@_ChatMessage_descriptionChange": {
     "type": "text",
     "placeholders": {
@@ -180,7 +180,7 @@
       "name": {}
     }
   },
-  "_ChatMessage_join": "{person,select, second{Jij bent aan het gesprek toegevoegd}third{{name} is aan het gesprek toegevoegd}}",
+  "_ChatMessage_join": "{person,select, second{Je bent aan het gesprek toegevoegd}third{{name} is aan het gesprek toegevoegd}}",
   "@_ChatMessage_join": {
     "type": "text",
     "placeholders": {
@@ -188,7 +188,7 @@
       "name": {}
     }
   },
-  "_ChatMessage_leave": "{person,select, second{Jij hebt het gesprek verlaten}third{{name} heeft het gesprek verlaten}}",
+  "_ChatMessage_leave": "{person,select, second{Je hebt het gesprek verlaten}third{{name} heeft het gesprek verlaten}}",
   "@_ChatMessage_leave": {
     "type": "text",
     "placeholders": {
@@ -196,7 +196,7 @@
       "name": {}
     }
   },
-  "_ChatMessage_ban": "{person,select, secondOnSecond{Jij bent door jezelf verbannen}secondOnThird{Jij bent verbannen door {banner}}thirdOnThird{{bannee} is verbannen door {banner}}thirdOnSecond{{bannee} is verbannen door jou}}",
+  "_ChatMessage_ban": "{person,select, secondOnSecond{Je bent door jezelf verbannen}secondOnThird{Je bent verbannen door {banner}}thirdOnThird{{bannee} is verbannen door {banner}}thirdOnSecond{{bannee} is verbannen door jou}}",
   "@_ChatMessage_ban": {
     "type": "text",
     "placeholders": {
@@ -205,7 +205,7 @@
       "banner": {}
     }
   },
-  "_ChatMessage_invite": "{person,select, secondOnSecond{Jij bent door jezelf uitgenodigd}secondOnThird{Jij bent uitgenodigd door {inviter}}thirdOnThird{{invitee} is uitgenodigd door {inviter}}thirdOnSecond{{invitee} is uitgenodigd door jou}}",
+  "_ChatMessage_invite": "{person,select, secondOnSecond{Je bent door jezelf uitgenodigd}secondOnThird{Je bent uitgenodigd door {inviter}}thirdOnThird{{invitee} is uitgenodigd door {inviter}}thirdOnSecond{{invitee} is uitgenodigd door jou}}",
   "@_ChatMessage_invite": {
     "type": "text",
     "placeholders": {
@@ -314,7 +314,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "_Settings_editNameDescription": "Dit is niet jouw gebruikersnaam. Deze naam is zichtbaar voor anderen.",
+  "_Settings_editNameDescription": "Dit is niet je gebruikersnaam. Deze naam is zichtbaar voor anderen.",
   "@_Settings_editNameDescription": {
     "type": "text",
     "placeholders": {}

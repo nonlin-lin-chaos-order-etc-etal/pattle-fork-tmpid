@@ -26,52 +26,52 @@ class MessageLookup extends MessageLookupByLibrary {
       "${Intl.plural(count, zero: 'Geen deelnemers', one: '${count} deelnemer', other: '${count} deelnemers')}";
 
   static m2(person, bannee, banner) => "${Intl.select(person, {
-        'secondOnSecond': 'Jij bent door jezelf verbannen',
-        'secondOnThird': 'Jij bent verbannen door ${banner}',
+        'secondOnSecond': 'Je bent door jezelf verbannen',
+        'secondOnThird': 'Je bent verbannen door ${banner}',
         'thirdOnThird': '${bannee} is verbannen door ${banner}',
         'thirdOnSecond': '${bannee} is verbannen door jou',
       })}";
 
   static m3(person, name) => "${Intl.select(person, {
-        'second': 'Jij hebt deze groep gemaakt',
+        'second': 'Je hebt deze groep gemaakt',
         'third': '${name} heeft deze groep gemaakt',
       })}";
 
   static m4(person, name) => "${Intl.select(person, {
-        'second': 'Jij hebt dit bericht verwijderd',
+        'second': 'Je hebt dit bericht verwijderd',
         'third': '${name} heeft dit bericht verwijderd',
       })}";
 
   static m5(person, name) => "${Intl.select(person, {
-        'second': 'Jij hebt de beschrijving van de groep aangepast',
+        'second': 'Je hebt de beschrijving van de groep aangepast',
         'third': '${name} heeft de beschrijving van de groep aangepast',
       })}";
 
   static m6(person, invitee, inviter) => "${Intl.select(person, {
-        'secondOnSecond': 'Jij bent door jezelf uitgenodigd',
-        'secondOnThird': 'Jij bent uitgenodigd door ${inviter}',
+        'secondOnSecond': 'Je bent door jezelf uitgenodigd',
+        'secondOnThird': 'Je bent uitgenodigd door ${inviter}',
         'thirdOnThird': '${invitee} is uitgenodigd door ${inviter}',
         'thirdOnSecond': '${invitee} is uitgenodigd door jou',
       })}";
 
   static m7(person, name) => "${Intl.select(person, {
-        'second': 'Jij bent aan het gesprek toegevoegd',
+        'second': 'Je bent aan het gesprek toegevoegd',
         'third': '${name} is aan het gesprek toegevoegd',
       })}";
 
   static m8(person, name) => "${Intl.select(person, {
-        'second': 'Jij hebt het gesprek verlaten',
+        'second': 'Je hebt het gesprek verlaten',
         'third': '${name} heeft het gesprek verlaten',
       })}";
 
   static m9(person, name) => "${Intl.select(person, {
-        'second': 'Jij hebt deze groep geüpgraded',
-        'third': '${name} heeft deze groep geüpgraded',
+        'second': 'Je hebt deze groep geüpgrade',
+        'third': '${name} heeft deze groep geüpgrade',
       })}";
 
   static m10(andMore, first, second) => "${Intl.select(andMore, {
         'false': '${first} en ${second} typen...',
-        'true': '${first}, ${second} en meer typen...',
+        'true': '${first}, ${second} en anderen typen...',
       })}";
 
   static m11(name) => "${name} typt...";
@@ -144,7 +144,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "_Settings_brightnessTileTitle":
             MessageLookupByLibrary.simpleMessage("Helderheid"),
         "_Settings_editNameDescription": MessageLookupByLibrary.simpleMessage(
-            "Dit is niet jouw gebruikersnaam. Deze naam is zichtbaar voor anderen."),
+            "Dit is niet je gebruikersnaam. Deze naam is zichtbaar voor anderen."),
         "_Settings_title": MessageLookupByLibrary.simpleMessage("Instellingen"),
         "_StartUsername_hostnameInvalidError":
             MessageLookupByLibrary.simpleMessage("Ongeldige hostnaam"),
@@ -172,7 +172,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Inloggen met gebruikersnaam"),
         "_Start_register": MessageLookupByLibrary.simpleMessage("Registreren"),
         "_Start_reportErrorsDescription": MessageLookupByLibrary.simpleMessage(
-            "Sta Pattle toe om crashrapporten te sturen om ontikkeling te helpen"),
+            "Sta Pattle toe om crashinformatie te sturen om ontikkeling te helpen"),
         "_Time_today": MessageLookupByLibrary.simpleMessage("Vandaag"),
         "_Time_yesterday": MessageLookupByLibrary.simpleMessage("Gisteren"),
         "appName": MessageLookupByLibrary.simpleMessage("Pattle")

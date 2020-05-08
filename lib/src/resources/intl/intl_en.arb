@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-05-08T23:54:31.209369",
+  "@@last_modified": "2020-03-25T20:06:47.053234",
   "appName": "Pattle",
   "@appName": {
     "type": "text",
@@ -245,11 +245,6 @@
   },
   "_Chats_channels": "Channels",
   "@_Chats_channels": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "_Chats_newChannel": "New channel",
-  "@_Chats_newChannel": {
     "type": "text",
     "placeholders": {}
   },
