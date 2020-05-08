@@ -58,7 +58,7 @@ class Matrix {
 
   Future<void> _processAuthState(AuthState state) async {
     if (state is Authenticated) {
-      _user = state.user;
+      _processUser(state.user);
       _userAvailable.complete();
       _user.startSync();
 
@@ -74,8 +74,8 @@ class Matrix {
     }
   }
 
-  void _processUpdate(Update update) {
-    _user = update.user;
+  void _processUser(MyUser user) {
+    _user = user;
 
     _chats = Map.fromEntries(
       _user.rooms.where((r) => !r.isUpgraded).map(
@@ -85,6 +85,10 @@ class Matrix {
             ),
           ),
     );
+  }
+
+  void _processUpdate(Update update) {
+    _processUser(update.user);
 
     _chatUpdatesController.add(
       ChatsUpdate(
