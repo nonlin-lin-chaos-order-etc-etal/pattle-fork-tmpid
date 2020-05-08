@@ -45,6 +45,8 @@ class ChatListState extends State<ChatList> {
   final _scrollController = ScrollController();
   final double _scrollThreshold = 80;
 
+  bool _isRequesting = false;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -55,26 +57,35 @@ class ChatListState extends State<ChatList> {
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.position.pixels;
 
-      if ((currentScroll - maxScroll).abs() <= _scrollThreshold) {
+      if (!_isRequesting &&
+          (currentScroll - maxScroll).abs() <= _scrollThreshold) {
+        _isRequesting = true;
         bloc.add(LoadMoreChats(personal: widget.personal));
       }
     });
   }
 
+  void _onStateChange(BuildContext context, ChatsState state) {
+    _isRequesting = false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
-      child: ListView.separated(
-        controller: _scrollController,
-        shrinkWrap: true,
-        separatorBuilder: (context, index) => Divider(
-          height: 1,
-          indent: 64,
+    return BlocListener<ChatsBloc, ChatsState>(
+      listener: _onStateChange,
+      child: Scrollbar(
+        child: ListView.separated(
+          controller: _scrollController,
+          shrinkWrap: true,
+          separatorBuilder: (context, index) => Divider(
+            height: 1,
+            indent: 64,
+          ),
+          itemCount: widget.chats.length,
+          itemBuilder: (context, index) {
+            return _buildChat(widget.chats[index]);
+          },
         ),
-        itemCount: widget.chats.length,
-        itemBuilder: (context, index) {
-          return _buildChat(widget.chats[index]);
-        },
       ),
     );
   }
