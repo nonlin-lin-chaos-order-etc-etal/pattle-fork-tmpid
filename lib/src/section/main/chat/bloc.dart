@@ -76,7 +76,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   @override
   Stream<ChatState> mapEventToState(ChatEvent event) async* {
     if (event is LoadMoreFromTimeline) {
-      await _room.timeline.load(count: _pageSize);
+      _room.timeline.load(count: _pageSize);
       return;
     }
 
