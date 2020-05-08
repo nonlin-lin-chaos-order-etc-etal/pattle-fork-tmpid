@@ -69,7 +69,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   @override
   ChatState get initialState => _loadMessages(
         chat: _chat,
-        delta: Room(),
+        delta: _room.delta(),
         becauseOfTimelineLoad: false,
       );
 

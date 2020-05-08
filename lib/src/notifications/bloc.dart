@@ -307,7 +307,7 @@ Future<void> _handleBackgroundMessage(Map<String, dynamic> message) async {
 
     await completer.future;
   } else {
-    final user = await MyUser.fromStore(Matrix.store);
+    final user = await MyUser.fromStore(await Matrix.storeLocation);
 
     data = await NotificationData.fromDataMessage(
       DataMessage.fromJson(message),

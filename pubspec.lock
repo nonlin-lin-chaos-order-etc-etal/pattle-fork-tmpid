@@ -309,8 +309,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "5d4e68a4413ff1283cbbe56d4e31a7c22d2b53aa"
-      resolved-ref: "5d4e68a4413ff1283cbbe56d4e31a7c22d2b53aa"
+      ref: "397752c584d3f62f796aa61b80519c86167a0cba"
+      resolved-ref: "397752c584d3f62f796aa61b80519c86167a0cba"
       url: "https://git.pattle.im/pattle/library/matrix-dart-sdk.git"
     source: git
     version: "0.0.0"
@@ -341,14 +341,14 @@ packages:
       name: moor
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.2"
+    version: "3.0.2"
   moor_ffi:
     dependency: transitive
     description:
       name: moor_ffi
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0"
+    version: "0.5.0"
   nested:
     dependency: transitive
     description:
@@ -525,7 +525,7 @@ packages:
     source: hosted
     version: "1.7.0"
   sqflite:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sqflite
       url: "https://pub.dartlang.org"

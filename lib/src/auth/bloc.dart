@@ -40,10 +40,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
     if (event is Check) {
       final user = await MyUser.fromStore(
-        Matrix.store,
+        await Matrix.storeLocation,
         roomIds: _chatOrderBloc.state.personal.keys.take(10).followedBy(
               _chatOrderBloc.state.public.keys.take(10),
             ),
+        isolated: true,
       );
 
       print('user.rooms: ${user?.rooms?.length}');

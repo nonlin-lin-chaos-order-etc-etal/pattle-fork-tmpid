@@ -58,10 +58,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final user = await state.homeserverState.value.login(
         state.usernameState.value,
         event.password,
-        store: Matrix.store,
+        store: await Matrix.storeLocation,
         device: Device(
           name: 'Pattle ${Platform.isAndroid ? 'Android' : 'iOS'}',
         ),
+        isolated: true,
       );
 
       _startBloc.add(ProgressToNextStep());

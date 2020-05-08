@@ -26,7 +26,7 @@ extension UrlResolver on Uri {
     bool thumbnail = false,
   }) {
     return toHttpsWith(
-      Matrix.of(context).user.context.homeserver,
+      Matrix.of(context).user.context.updater.homeserver,
       thumbnail: thumbnail,
     );
   }

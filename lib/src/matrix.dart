@@ -23,19 +23,22 @@ import 'package:matrix_sdk/matrix_sdk.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:moor/moor.dart';
-import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path/path.dart' as path;
 
 import 'auth/bloc.dart';
 import 'models/chat.dart';
 
 class Matrix {
-  static final MoorStore store = MoorStore(
-    LazyDatabase(() async {
-      final dataDir = await getApplicationDocumentsDirectory();
-      return VmDatabase(File(path.join(dataDir.path, 'pattle.sqlite')));
-    }),
-  );
+  static MoorStore _store;
+  static MoorStore get store => _store;
+
+  static Future<MoorStoreLocation> get storeLocation async {
+    final dataDir = await getApplicationDocumentsDirectory();
+
+    return MoorStoreLocation.file(
+      File(path.join(dataDir.path, 'pattle.sqlite')),
+    );
+  }
 
   // Used for listening to auth state changes
   final AuthBloc _authBloc;
