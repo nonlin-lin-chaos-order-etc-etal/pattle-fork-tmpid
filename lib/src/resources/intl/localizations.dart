@@ -27,7 +27,7 @@ class PattleLocalizationsDelegate
   const PattleLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => ['en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => ['en', 'nl'].contains(locale.languageCode);
 
   @override
   Future<PattleLocalizations> load(Locale locale) {
