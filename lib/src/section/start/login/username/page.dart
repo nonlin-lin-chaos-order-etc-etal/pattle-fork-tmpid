@@ -363,4 +363,10 @@ class UsernameLoginPageState extends State<UsernameLoginPage>
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _visiblityController.dispose();
+    super.dispose();
+  }
 }
