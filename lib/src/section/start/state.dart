@@ -16,4 +16,11 @@ class StartState extends Equatable {
   List<Object> get props => [currentStep];
 }
 
+class ErrorOccurred extends StartState {
+  final dynamic error;
+  final StackTrace stackTrace;
+
+  ErrorOccurred(this.error, this.stackTrace);
+}
+
 class Finished extends StartState {}

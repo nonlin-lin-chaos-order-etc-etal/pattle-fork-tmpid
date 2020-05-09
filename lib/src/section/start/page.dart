@@ -72,6 +72,14 @@ class _StartPageState extends State<StartPage> {
           }
         },
         builder: (context, state) {
+          if (state is ErrorOccurred) {
+            // TODO: Handle differently in 1.0
+            return _ErrorPage(
+              error: state.error,
+              stackTrace: state.stackTrace,
+            );
+          }
+
           return Stack(
             children: <Widget>[
               if (_logoVisible)
@@ -174,6 +182,92 @@ class _LoadingPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ErrorPage extends StatelessWidget {
+  final dynamic error;
+  final StackTrace stackTrace;
+
+  const _ErrorPage({
+    Key key,
+    @required this.error,
+    this.stackTrace,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 32,
+          vertical: 64,
+        ),
+        child: Card(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.bug_report,
+                      size: 32,
+                      color: Theme.of(context).textTheme.caption.color,
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                          style: DefaultTextStyle.of(context).style.copyWith(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                          children: [
+                            TextSpan(
+                              text:
+                                  '${context.intl.error.anErrorHasOccurred}\n',
+                            ),
+                            TextSpan(
+                              text: error.toString(),
+                              style: TextStyle(
+                                fontFamily: 'monospace',
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (stackTrace != null && stackTrace != StackTrace.empty)
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Scrollbar(
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: EdgeInsets.all(16).copyWith(top: 0),
+                          child: Text(
+                            stackTrace.toString(),
+                            style: TextStyle(
+                              fontFamily: 'monospace',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
