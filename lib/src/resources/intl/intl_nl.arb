@@ -1,0 +1,358 @@
+{
+  "@@last_modified": "2020-03-25T20:06:47.053234",
+  "appName": "Pattle",
+  "@appName": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_name": "Naam",
+  "@_Common_name": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_username": "Gebruikersnaam",
+  "@_Common_username": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_password": "Wachtwoord",
+  "@_Common_password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_confirm": "Bevestigen",
+  "@_Common_confirm": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_next": "Volgende",
+  "@_Common_next": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_photo": "Foto",
+  "@_Common_photo": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Common_you": "Jij",
+  "@_Common_you": {
+    "description": "Used to denote the user using the app instead of their name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_advanced": "Geavanceerd",
+  "@_Start_advanced": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_login": "Inloggen",
+  "@_Start_login": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_register": "Registreren",
+  "@_Start_register": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_homeserver": "Homeserver",
+  "@_Start_homeserver": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_identityServer": "Identiteitserver",
+  "@_Start_identityServer": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_loginWithPhone": "Inloggen met telefoonnummer",
+  "@_Start_loginWithPhone": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_loginWithEmail": "Inloggen met e-mail",
+  "@_Start_loginWithEmail": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_loginWithUsername": "Inloggen met gebruikersnaam",
+  "@_Start_loginWithUsername": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Start_reportErrorsDescription": "Sta Pattle toe om crashinformatie te sturen om ontikkeling te helpen",
+  "@_Start_reportErrorsDescription": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_StartUsername_title": "Vul gebruikersnaam in",
+  "@_StartUsername_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_StartUsername_usernameInvalidError": "Ongeldige gebruikersnaam. Mag alleen letters, nummers, -, ., =, _ en / bevatten",
+  "@_StartUsername_usernameInvalidError": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_StartUsername_userIdInvalidError": "Ongeldige gebruikers-ID. Moet in het formaat '@naam:server.tld'",
+  "@_StartUsername_userIdInvalidError": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_StartUsername_hostnameInvalidError": "Ongeldige hostnaam",
+  "@_StartUsername_hostnameInvalidError": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_StartUsername_unknownError": "Er is een onbekende fout opgetreden",
+  "@_StartUsername_unknownError": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_StartUsername_wrongPasswordError": "Verkeerd wachtwoord. Probeer het opnieuw",
+  "@_StartUsername_wrongPasswordError": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Chat_typeAMessage": "Typ een bericht",
+  "@_Chat_typeAMessage": {
+    "description": "Hint for the chat input",
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Chat_cantSendMessages": "Je kan geen berichten naar deze groep sturen omdat je geen deelnemer meer bent.",
+  "@_Chat_cantSendMessages": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Chat_typing": "aan het typen...",
+  "@_Chat_typing": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Chat_isTyping": "{name} typt...",
+  "@_Chat_isTyping": {
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "_Chat_areTyping": "{andMore,select, false{{first} en {second} typen...}true{{first}, {second} en anderen typen...}}",
+  "@_Chat_areTyping": {
+    "type": "text",
+    "placeholders": {
+      "andMore": {},
+      "first": {},
+      "second": {}
+    }
+  },
+  "_ChatMessage_deletion": "{person,select, second{Je hebt dit bericht verwijderd}third{{name} heeft dit bericht verwijderd}}",
+  "@_ChatMessage_deletion": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "name": {}
+    }
+  },
+  "_ChatMessage_creation": "{person,select, second{Je hebt deze groep gemaakt}third{{name} heeft deze groep gemaakt}}",
+  "@_ChatMessage_creation": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "name": {}
+    }
+  },
+  "_ChatMessage_upgrade": "{person,select, second{Je hebt deze groep geüpgrade}third{{name} heeft deze groep geüpgrade}}",
+  "@_ChatMessage_upgrade": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "name": {}
+    }
+  },
+  "_ChatMessage_descriptionChange": "{person,select, second{Je hebt de beschrijving van de groep aangepast}third{{name} heeft de beschrijving van de groep aangepast}}",
+  "@_ChatMessage_descriptionChange": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "name": {}
+    }
+  },
+  "_ChatMessage_join": "{person,select, second{Je bent aan het gesprek toegevoegd}third{{name} is aan het gesprek toegevoegd}}",
+  "@_ChatMessage_join": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "name": {}
+    }
+  },
+  "_ChatMessage_leave": "{person,select, second{Je hebt het gesprek verlaten}third{{name} heeft het gesprek verlaten}}",
+  "@_ChatMessage_leave": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "name": {}
+    }
+  },
+  "_ChatMessage_ban": "{person,select, secondOnSecond{Je bent door jezelf verbannen}secondOnThird{Je bent verbannen door {banner}}thirdOnThird{{bannee} is verbannen door {banner}}thirdOnSecond{{bannee} is verbannen door jou}}",
+  "@_ChatMessage_ban": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "bannee": {},
+      "banner": {}
+    }
+  },
+  "_ChatMessage_invite": "{person,select, secondOnSecond{Je bent door jezelf uitgenodigd}secondOnThird{Je bent uitgenodigd door {inviter}}thirdOnThird{{invitee} is uitgenodigd door {inviter}}thirdOnSecond{{invitee} is uitgenodigd door jou}}",
+  "@_ChatMessage_invite": {
+    "type": "text",
+    "placeholders": {
+      "person": {},
+      "invitee": {},
+      "inviter": {}
+    }
+  },
+  "_ChatDetails_description": "Beschrijving",
+  "@_ChatDetails_description": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_ChatDetails_noDescriptionSet": "Er is geen beschrijving ingesteld",
+  "@_ChatDetails_noDescriptionSet": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_ChatDetails_more": "{count} meer",
+  "@_ChatDetails_more": {
+    "type": "text",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "_ChatDetails_participants": "{count,plural, =0{Geen deelnemers}=1{{count} deelnemer}other{{count} deelnemers}}",
+  "@_ChatDetails_participants": {
+    "type": "text",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "_Chats_chats": "Chats",
+  "@_Chats_chats": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Chats_channels": "Kanalen",
+  "@_Chats_channels": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Chats_newChannel": "Nieuw kanaal",
+  "@_Chats_newChannel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_ChatsNewGroup_title": "Nieuwe groep",
+  "@_ChatsNewGroup_title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_ChatsNewGroup_groupName": "Groepnaam",
+  "@_ChatsNewGroup_groupName": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Participants": "Deelnemers",
+  "@Participants": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_title": "Instellingen",
+  "@_Settings_title": {
+    "description": "Settings page title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_accountTileTitle": "Account",
+  "@_Settings_accountTileTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_accountTileSubtitle": "Privacy, beveiling, wachtwoord veranderen",
+  "@_Settings_accountTileSubtitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_appearanceTileTitle": "Uiterlijk",
+  "@_Settings_appearanceTileTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_appearanceTileSubtitle": "Thema, lettergrootte",
+  "@_Settings_appearanceTileSubtitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_brightnessTileTitle": "Helderheid",
+  "@_Settings_brightnessTileTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_brightnessTileOptionLight": "Licht",
+  "@_Settings_brightnessTileOptionLight": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_brightnessTileOptionDark": "Donker",
+  "@_Settings_brightnessTileOptionDark": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Profile": "Profiel",
+  "@Profile": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Settings_editNameDescription": "Dit is niet je gebruikersnaam. Deze naam is zichtbaar voor anderen.",
+  "@_Settings_editNameDescription": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Error_connectionLost": "De verbinding is verloren.\nControleer of je telefoon een actieve internetverbinding heeft.",
+  "@_Error_connectionLost": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Error_connectionFailed": "Verbinding mislukt. Controleer je internetverbinding",
+  "@_Error_connectionFailed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Error_connectionFailedServerOverloaded": "Verbinding mislukt. De server is waarschijnlijk overbelast.",
+  "@_Error_connectionFailedServerOverloaded": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Error_anErrorHasOccurred": "Er is een fout opgetreden:",
+  "@_Error_anErrorHasOccurred": {
+    "description": "After this message the error is displayed (hence the colon)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Error_thisErrorHasBeenReported": "Deze fout is verstuurd. Herstart alsjeblieft Pattle.",
+  "@_Error_thisErrorHasBeenReported": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Time_today": "Vandaag",
+  "@_Time_today": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_Time_yesterday": "Gisteren",
+  "@_Time_yesterday": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

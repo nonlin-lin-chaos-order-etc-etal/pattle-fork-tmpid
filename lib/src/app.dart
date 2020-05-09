@@ -186,6 +186,7 @@ class App extends StatelessWidget {
                   ],
                   supportedLocales: [
                     const Locale('en', 'US'),
+                    const Locale('nl', 'NL')
                   ],
                   initialRoute: Routes.root,
                   onGenerateRoute: (settings) {
