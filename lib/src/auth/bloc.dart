@@ -47,8 +47,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         isolated: true,
       );
 
-      print('user.rooms: ${user?.rooms?.length}');
-
       if (user != null) {
         yield Authenticated(user, fromStore: true);
       } else {
