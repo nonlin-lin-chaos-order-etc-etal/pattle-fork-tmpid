@@ -51,7 +51,6 @@ class ProfileSettingTile extends StatelessWidget {
           padding: EdgeInsets.all(16),
           child: BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
-              // TODO: Use bloc?
               final me = state.me;
 
               return Row(
