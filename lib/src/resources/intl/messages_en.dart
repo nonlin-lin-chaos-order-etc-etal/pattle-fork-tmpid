@@ -107,6 +107,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("New group"),
         "_Chats_channels": MessageLookupByLibrary.simpleMessage("Channels"),
         "_Chats_chats": MessageLookupByLibrary.simpleMessage("Chats"),
+        "_Chats_newChannel":
+            MessageLookupByLibrary.simpleMessage("New channel"),
         "_Common_confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "_Common_name": MessageLookupByLibrary.simpleMessage("Name"),
         "_Common_next": MessageLookupByLibrary.simpleMessage("Next"),
