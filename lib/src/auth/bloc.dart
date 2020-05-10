@@ -55,5 +55,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else if (event is LoggedIn) {
       yield Authenticated(event.user, fromStore: false);
     }
+
+    if (event is LoggedOut) {
+      yield NotAuthenticated();
+    }
   }
 }

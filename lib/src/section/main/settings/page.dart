@@ -14,6 +14,7 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with Pattle.  If not, see <https://www.gnu.org/licenses/>.
+
 import 'package:flutter/material.dart';
 
 import 'profile/tile.dart';
@@ -23,21 +24,19 @@ import '../../../resources/theme.dart';
 
 import '../../../app.dart';
 
-class SettingsPage extends StatefulWidget {
+import 'widgets/logout_button/widget.dart';
+
+class SettingsPage extends StatelessWidget {
   SettingsPage({Key key});
 
-  @override
-  State<StatefulWidget> createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.intl.settings.title),
       ),
-      body: ListView(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           ProfileSettingTile.withBloc(),
           Divider(height: 1),
@@ -51,7 +50,14 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () => Navigator.of(context).pushNamed(
               Routes.settingsAppearance,
             ),
-          )
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: LogoutButton.withBloc(),
+            ),
+          ),
+          SizedBox(height: 24),
         ],
       ),
     );

@@ -46,10 +46,10 @@ class Matrix {
   MyUser _user;
   MyUser get user => _user;
 
-  final Completer<void> _firstSyncCompleter = Completer();
+  var _firstSyncCompleter = Completer<void>();
   Future<void> get firstSync => _firstSyncCompleter.future;
 
-  final Completer<void> _userAvailable = Completer();
+  var _userAvailable = Completer<void>();
   Future<void> get userAvaible => _userAvailable.future;
 
   var _chats = <RoomId, Chat>{};
@@ -57,6 +57,20 @@ class Matrix {
 
   Matrix(this._authBloc) {
     _authBloc.listen(_processAuthState);
+  }
+
+  Future<void> logout() async {
+    // Reset completers
+    _userAvailable = Completer<void>();
+    _firstSyncCompleter = Completer<void>();
+
+    await _user.logout();
+
+    final temp = await getTemporaryDirectory();
+    final data = await getApplicationDocumentsDirectory();
+
+    await temp.delete(recursive: true);
+    await data.delete(recursive: true);
   }
 
   Future<void> _processAuthState(AuthState state) async {

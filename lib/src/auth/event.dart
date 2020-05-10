@@ -16,3 +16,5 @@ class LoggedIn extends AuthEvent {
   @override
   List<Object> get props => [user];
 }
+
+class LoggedOut extends AuthEvent {}

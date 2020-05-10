@@ -78,6 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{
+        "Logout": MessageLookupByLibrary.simpleMessage("Logout"),
         "Participants": MessageLookupByLibrary.simpleMessage("Participants"),
         "Profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "_ChatDetails_description":

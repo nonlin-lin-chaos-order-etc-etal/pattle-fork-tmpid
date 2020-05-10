@@ -319,6 +319,11 @@
     "type": "text",
     "placeholders": {}
   },
+  "Logout": "Logout",
+  "@Logout": {
+    "type": "text",
+    "placeholders": {}
+  },
   "_Error_connectionLost": "Connection has been lost.\nMake sure your phone has an active internet connection.",
   "@_Error_connectionLost": {
     "type": "text",

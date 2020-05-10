@@ -773,6 +773,13 @@ class _Settings extends _Category {
       locale: _localeName,
     );
   }
+
+  String get logoutButton {
+    return Intl.message(
+      'Logout',
+      locale: _localeName,
+    );
+  }
 }
 
 class _Error extends _Category {
