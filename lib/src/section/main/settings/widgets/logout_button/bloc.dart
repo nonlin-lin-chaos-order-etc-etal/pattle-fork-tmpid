@@ -39,8 +39,10 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
   Stream<LogoutState> mapEventToState(LogoutEvent event) async* {
     if (event is Logout) {
       yield LoggingOut();
+
       await _matrix.logout();
       _authBloc.add(auth.LoggedOut());
+
       yield LoggedOut();
     }
   }
