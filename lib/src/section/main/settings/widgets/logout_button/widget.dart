@@ -18,6 +18,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../resources/intl/localizations.dart';
+
 import '../../../../../auth/bloc.dart' hide LoggedOut;
 import '../../../../../app.dart';
 import '../../../../../matrix.dart';
@@ -78,7 +80,7 @@ class LogoutButton extends StatelessWidget {
               ),
             ),
           ),
-          label: Text('Logout'.toUpperCase()),
+          label: Text(context.intl.settings.logoutButton.toUpperCase()),
         );
       },
     );
