@@ -67,10 +67,7 @@ class LogoutButton extends StatelessWidget {
             crossFadeState: !isLoggingOut
                 ? CrossFadeState.showFirst
                 : CrossFadeState.showSecond,
-            firstChild: SizedBox.fromSize(
-              size: Size(iconSize, iconSize),
-              child: Icon(Icons.exit_to_app, size: iconSize),
-            ),
+            firstChild: Icon(Icons.exit_to_app, size: iconSize),
             secondChild: SizedBox.fromSize(
               size: Size(iconSize, iconSize),
               child: Padding(
