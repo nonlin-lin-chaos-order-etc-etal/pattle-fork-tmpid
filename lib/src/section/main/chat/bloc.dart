@@ -54,11 +54,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ) : _chat = _matrix.chats[roomId] {
     _syncSub = _matrix.updatesFor(roomId).listen((update) {
       _chat = update.chat;
+      print('${update.type}');
       add(
         RefreshChat(
           chat: _chat,
           delta: update.delta,
-          isBecauseOfTimelineRequest: update.timelineLoad,
+          isBecauseOfTimelineRequest: update.type == RequestType.loadRoomEvents,
         ),
       );
     });

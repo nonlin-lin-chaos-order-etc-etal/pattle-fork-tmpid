@@ -114,7 +114,7 @@ class Matrix {
         delta: Map.fromEntries(
           update.delta.rooms.map((room) => MapEntry(room.id, room)),
         ),
-        timelineLoad: update is RequestUpdate<Timeline>,
+        type: update is RequestUpdate ? update.type : null,
       ),
     );
   }
@@ -126,7 +126,7 @@ class Matrix {
         (update) => ChatUpdate(
           chat: update.chats[roomId],
           delta: update.delta[roomId],
-          timelineLoad: update.timelineLoad,
+          type: update.type,
         ),
       )
       .where((update) => update.delta != null);
@@ -142,12 +142,12 @@ class ChatsUpdate {
   final Map<RoomId, Chat> chats;
   final Map<RoomId, Room> delta;
 
-  final bool timelineLoad;
+  final RequestType type;
 
   ChatsUpdate({
     @required this.chats,
     @required this.delta,
-    @required this.timelineLoad,
+    @required this.type,
   });
 }
 
@@ -155,11 +155,11 @@ class ChatUpdate {
   final Chat chat;
   final Room delta;
 
-  final bool timelineLoad;
+  final RequestType type;
 
   ChatUpdate({
     @required this.chat,
     @required this.delta,
-    @required this.timelineLoad,
+    @required this.type,
   });
 }
