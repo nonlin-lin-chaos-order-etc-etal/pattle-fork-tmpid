@@ -144,11 +144,14 @@ class _ChatPageState extends State<ChatPage> {
           onWillPop: () => _onWillPop(context, state),
           child: Scaffold(
             backgroundColor: context.pattleTheme.data.chat.backgroundColor,
-            appBar: AppBar(
-              titleSpacing: 0,
-              title: GestureDetector(
-                onTap: () => _goToChatSettings(context, state),
-                child: Row(
+            appBar: _InkWellAppbar(
+              appBar: AppBar(
+                leading: SizedBox(
+                  width: kToolbarHeight,
+                  height: kToolbarHeight,
+                ),
+                titleSpacing: 0,
+                title: Row(
                   children: <Widget>[
                     avatar,
                     SizedBox(width: 16),
@@ -158,6 +161,7 @@ class _ChatPageState extends State<ChatPage> {
                   ],
                 ),
               ),
+              onTap: () => _goToChatSettings(context, state),
             ),
             body: Column(
               children: <Widget>[
@@ -304,4 +308,59 @@ class _MessageListState extends State<_MessageList> {
       },
     );
   }
+}
+
+/// Necessary to show the ink ripples on the whole [AppBar] when tapping it.
+class _InkWellAppbar extends StatelessWidget implements PreferredSize {
+  final PreferredSizeWidget appBar;
+
+  final VoidCallback onTap;
+
+  const _InkWellAppbar({
+    Key key,
+    @required this.appBar,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        appBar,
+        Material(
+          color: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              SizedBox(
+                height: double.infinity,
+                child: InkWell(
+                  onTap: onTap,
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: SizedBox(
+                  width: kToolbarHeight,
+                  height: kToolbarHeight,
+                  child: Center(
+                    child: IconTheme(
+                      data: Theme.of(context).appBarTheme.iconTheme ??
+                          Theme.of(context).primaryIconTheme,
+                      child: BackButton(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget get child => appBar;
+
+  @override
+  Size get preferredSize => appBar.preferredSize;
 }
