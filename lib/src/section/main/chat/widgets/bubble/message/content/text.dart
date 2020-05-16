@@ -253,6 +253,10 @@ class _ContentLayoutRenderBox extends RenderBox
       }
     }
 
+    if (sender != null && width < sender.size.width) {
+      width = constraints.constrainWidth(sender.size.width);
+    }
+
     size = Size(width, height);
   }
 
